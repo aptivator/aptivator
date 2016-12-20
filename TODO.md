@@ -1,7 +1,7 @@
 # TODOs
 
+* take a look to see what variables need to be moved from vars to data-stores.js
 * when multiple views are in a state cache: auto could be a flag for one of the views
-* historySize should be declared for root state (not in vars), because it is changeable
 * add a flag that sets how hidden views are handled (hidden or detached)
 * think about dependency implementation among states not just views within a state
 * purely perfectionist, but take a look at some views that do not need to be hidden and then displayed right away
@@ -47,14 +47,15 @@
 * ability to exclude resolve value from params; this allows resolves to be used as initializers
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state
-* remember which substate was active when switching to a completely new state
-* Store instance of a first-level states (a state that goes into root)
-* Polish state loading
-* Make loading and regular state activation happen using one function
 * Sprinkle comments throughout code
 * Rewrite address module in the core
-* state holding multiple children at a time
-* should regular if/else be used instead of ||/&& idioms? (Yes, probably, to make the code more readable)
+* **DONE** Polish state loading
+* **DONE** remember which substate was active when switching to a completely new state (subsumed within activationRecords system)
+* **DONE** Store instance of a first-level states (a state that goes into root) (no need for that)
+* **DONE** Make loading and regular state activation happen using one function (required rethinking the core)
+* **DONE** state holding multiple children at a time (done via multiple flag)
+* **DONE** should regular if/else be used instead of ||/&& idioms? (Yes, probably, to make the code more readable)
+* **DONE** historySize should be declared for root state (not in vars), because it is changeable
 * **DONE** reconcile stateResolves and viewResolves processors into one processor
 * **DONE** directParams can be submitted or not, which may affect caching.  If the view is cached (without directParams), and then directParams are 
   submitted, then view has to be rerendered anew and the old instance should be destroyed (caching policy handles that)

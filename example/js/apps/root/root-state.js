@@ -4,6 +4,7 @@ var MainView = require('./main/main');
 aptivator.config({
   el: '#application',
   view: MainView,
+  historySize: 25,
   defaultStates: ['app-1'],
   showRuntime: true,
   invalidRoute: {
