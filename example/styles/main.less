@@ -1,0 +1,96 @@
+#test-form {
+  margin-top: 30px;
+}
+
+form + form {
+  margin-top: 35px;
+}
+
+form > * {
+  margin-bottom: 10px;
+}
+
+.error-message-default {
+  display: none;
+}
+
+.error-message-error {
+  display: block;
+}
+
+.error-container button {
+  pointer-events: none;
+  color: #aaa;
+  background-color: #eee;
+}
+
+.bxv-error.bxv-error-container .alert {
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
+.error-container .bxv-error.bxv-error-container > div {
+  height: 50px;
+}
+
+.valid-container .bxv-error.bxv-error-container > div {
+  padding: 0;
+  margin: 0;
+  height: 0px;
+  border-width: 0px;
+  overflow: hidden;
+  transition: height 500ms linear 500ms, 
+              border 0ms linear 1s, 
+              margin 500ms linear 500ms, 
+              padding 500ms linear 500ms;
+}
+
+.bxv-error-container.bxv-error.bxv-repeat-password .bxv-depends-on {
+  display: none;
+}
+
+/*
+
+.bxv-error.bxv-error-container .alert.alert-success {
+  display: none;
+}
+
+.bxv-error.bxv-error-container.bxv-error-depends-on {
+  display: none;
+}
+
+.error-element-container {
+  position: relative;
+}
+
+.error-element-container.bxv-error-depends-on::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-color: #ccc;
+  background-color: rgba(200, 200, 200, 0.3);
+}
+*/
+
+#app-2 {
+  .main {
+    display: flex;
+    flex-direction: column;
+    
+    .app-2-info {
+      order: 1;
+    }
+    
+    .app-2-form {
+      order: 3;
+    }
+    
+    .app-2-about {
+      order: 2;
+    }
+  }
+}

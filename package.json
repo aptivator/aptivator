@@ -1,0 +1,28 @@
+{
+  "name": "aptivator",
+  "version": "0.0.1",
+  "description": "Aptivator is a state manager and activator for single-page web applications",
+  "main": "./build/aptivator",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "backbone": "~1.3.3",
+    "backbone.marionette": "~2.4.0",
+    "jquery": "^2.0.0",
+    "lodash": "~4.16.4",
+    "underscore": "~1.8.3",
+    "jquery-directives": "file:../jquery.directives"
+  },
+  "devDependencies": {
+    "babel-cli": "~6.11.4",
+    "babel-polyfill": "~6.9.1",
+    "babel-preset-es2015": "~6.9.0"
+  },
+  "scripts": {
+    "build": "babel src --out-dir build",
+    "build-with-example": "babel src --out-dir build && cd ./example && npm run build && cd .."
+  },
+  "author": "aptivator",
+  "licnese": "GPLv3"
+}
