@@ -2,6 +2,7 @@ import _                  from 'lodash';
 import addresser          from '../../../libs/addresser';
 import relations          from '../../../libs/relations';
 import vars               from '../../../libs/vars';
+import fullAddressMaker   from './libs/full-address-maker';
 import resolvesNormalizer from './libs/resolves-normalizer';
 
 export default (callback, stateParams) => {
@@ -41,8 +42,7 @@ export default (callback, stateParams) => {
     }
     
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
-      console.log(viewAddress);
-      let viewAddressFull = addresser.full(viewAddress, stateName);
+      let viewAddressFull = fullAddressMaker(viewAddress, stateName);
       let viewStateName = addresser.stateName(viewAddressFull);
       let viewAddressUnique = viewConfigs.main ? `${stateName}@${viewStateName}` : viewAddressFull;
       

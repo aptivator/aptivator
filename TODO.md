@@ -50,7 +50,7 @@
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state
 * Sprinkle comments throughout code
-* Rewrite address module in the core
+* **DONE** Rewrite address module in the core (addresser.full() was moved as part of the preprocessor code)
 * **DONE** Polish state loading
 * **DONE** remember which substate was active when switching to a completely new state (subsumed within activationRecords system)
 * **DONE** Store instance of a first-level states (a state that goes into root) (no need for that)

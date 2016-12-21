@@ -7,8 +7,7 @@ let comparator = (viewAddress1, viewAddress2) =>
   relations.family(addresser.stateName(viewAddress2)).length;
 
 export default viewAddresses => {
-  let roots = viewAddresses.filter(viewAddress => 
-    relations.isRoot(addresser.stateName(viewAddress)));
+  let roots = viewAddresses.filter(viewAddress => relations.isRoot(addresser.stateName(viewAddress)));
   viewAddresses = _.difference(viewAddresses, roots);
   viewAddresses.sort(comparator);
   return roots.concat(viewAddresses);

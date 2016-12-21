@@ -20,6 +20,10 @@ var _vars = require('../../../libs/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _fullAddressMaker = require('./libs/full-address-maker');
+
+var _fullAddressMaker2 = _interopRequireDefault(_fullAddressMaker);
+
 var _resolvesNormalizer = require('./libs/resolves-normalizer');
 
 var _resolvesNormalizer2 = _interopRequireDefault(_resolvesNormalizer);
@@ -69,8 +73,7 @@ exports.default = function (callback, stateParams) {
     }
 
     _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewAddress) {
-      console.log(viewAddress);
-      var viewAddressFull = _addresser2.default.full(viewAddress, stateName);
+      var viewAddressFull = (0, _fullAddressMaker2.default)(viewAddress, stateName);
       var viewStateName = _addresser2.default.stateName(viewAddressFull);
       var viewAddressUnique = viewConfigs.main ? stateName + '@' + viewStateName : viewAddressFull;
 

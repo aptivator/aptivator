@@ -1,18 +1,13 @@
-import relations from './relations';
-import vars      from './vars';
+let addresser = {
+  parts: address => address.split('@'),
 
-export default {
-  region: address => address.split('@')[0],
-  
-  stateName: (viewAddress, containerStateName) => {
-    let stateName = viewAddress.split('@')[1];
-    return !containerStateName ? stateName : 
-           stateName === '' ? vars.rootStateName : 
-           !stateName ? relations.parent(containerStateName) : 
-           stateName;
+  region(viewAddress) {
+    return this.parts(viewAddress)[0];
   },
   
-  full(viewAddress, containerStateName) {
-    return `${this.region(viewAddress)}@${this.stateName(viewAddress, containerStateName)}`;
+  stateName(viewAddress) {
+    return this.parts(viewAddress)[1];
   }
 };
+
+export default addresser;
