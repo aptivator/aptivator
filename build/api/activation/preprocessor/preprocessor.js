@@ -43,7 +43,6 @@ exports.default = function (callback, stateParams) {
       if (prevSequence) {
         _lodash2.default.extend(prevSequence, activationSequence);
       }
-
       return;
     }
 
@@ -70,6 +69,7 @@ exports.default = function (callback, stateParams) {
     }
 
     _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewAddress) {
+      console.log(viewAddress);
       var viewAddressFull = _addresser2.default.full(viewAddress, stateName);
       var viewStateName = _addresser2.default.stateName(viewAddressFull);
       var viewAddressUnique = viewConfigs.main ? stateName + '@' + viewStateName : viewAddressFull;

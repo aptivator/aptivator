@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = {
-  clone: function clone(o) {
-    return JSON.parse(JSON.stringify(o));
-  },
-
   waterfall: function waterfall(funcs, callback) {
     return !function waterfall() {
       for (var _len = arguments.length, rest = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {

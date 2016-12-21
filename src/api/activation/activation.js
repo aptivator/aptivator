@@ -1,11 +1,11 @@
 import _            from 'lodash';
-import aptivator    from '../libs/instance';
-import utils        from '../libs/utils';
-import initializer  from './activation/initializer/initializer';
-import preprocessor from './activation/preprocessor/preprocessor';
-import resolver     from './activation/resolver/resolver';
-import renderer     from './activation/renderer/renderer';
-import finalizer    from './activation/finalizer/finalizer';
+import aptivator    from '../../libs/instance';
+import utils        from '../../libs/utils';
+import initializer  from './initializer/initializer';
+import preprocessor from './preprocessor/preprocessor';
+import resolver     from './resolver/resolver';
+import renderer     from './renderer/renderer';
+import finalizer    from './finalizer/finalizer';
 
 aptivator.activate = (stateParams = {}) => {
   utils.waterfall([

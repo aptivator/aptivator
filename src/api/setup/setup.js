@@ -1,8 +1,8 @@
 import _         from 'underscore';
-import aptivator from '../libs/instance';
-import relations from '../libs/relations';
-import route     from '../libs/route';
-import vars      from '../libs/vars';
+import aptivator from '../../libs/instance';
+import relations from '../../libs/relations';
+import route     from '../../libs/route';
+import vars      from '../../libs/vars';
 
 aptivator.config = rootConfigs => {
   _.isUndefined(rootConfigs.persistResolves) && (rootConfigs.persistResolves = true);

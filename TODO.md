@@ -1,5 +1,7 @@
 # TODOs
 
+* add parallel flag on activate() to indicate other states to load parallel to the focal state
+* think about whether to have a caching policy variables
 * take a look to see what variables need to be moved from vars to data-stores.js
 * when multiple views are in a state cache: auto could be a flag for one of the views
 * add a flag that sets how hidden views are handled (hidden or detached)

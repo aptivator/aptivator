@@ -2,13 +2,15 @@
 
 require('./libs/storage');
 
-require('./api/setup');
+require('./api/setup/setup');
 
-require('./api/start');
+require('./api/start/start');
 
-require('./api/utils');
+require('./api/utils/utils');
 
-require('./api/activation');
+require('./api/activation/activation');
+
+require('./api/deactivation/deactivation');
 
 var _instance = require('./libs/instance');
 

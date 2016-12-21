@@ -1,10 +1,10 @@
 import Backbone   from 'backbone';
 import Marionette from 'backbone.marionette';
-import aptivator  from '../libs/instance';
-import error      from '../libs/error';
-import fragment   from '../libs/fragment';
-import utils      from '../libs/utils';
-import vars       from '../libs/vars';
+import aptivator  from '../../libs/instance';
+import error      from '../../libs/error';
+import fragment   from '../../libs/fragment';
+import utils      from '../../libs/utils';
+import vars       from '../../libs/vars';
 
 aptivator.start = () => utils.waterfall([
   function checkStatesQueue(callback) {

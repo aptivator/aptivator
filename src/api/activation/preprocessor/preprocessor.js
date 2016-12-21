@@ -41,6 +41,7 @@ export default (callback, stateParams) => {
     }
     
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
+      console.log(viewAddress);
       let viewAddressFull = addresser.full(viewAddress, stateName);
       let viewStateName = addresser.stateName(viewAddressFull);
       let viewAddressUnique = viewConfigs.main ? `${stateName}@${viewStateName}` : viewAddressFull;

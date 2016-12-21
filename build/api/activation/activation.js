@@ -4,31 +4,31 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../libs/instance');
+var _instance = require('../../libs/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _utils = require('../libs/utils');
+var _utils = require('../../libs/utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _initializer = require('./activation/initializer/initializer');
+var _initializer = require('./initializer/initializer');
 
 var _initializer2 = _interopRequireDefault(_initializer);
 
-var _preprocessor = require('./activation/preprocessor/preprocessor');
+var _preprocessor = require('./preprocessor/preprocessor');
 
 var _preprocessor2 = _interopRequireDefault(_preprocessor);
 
-var _resolver = require('./activation/resolver/resolver');
+var _resolver = require('./resolver/resolver');
 
 var _resolver2 = _interopRequireDefault(_resolver);
 
-var _renderer = require('./activation/renderer/renderer');
+var _renderer = require('./renderer/renderer');
 
 var _renderer2 = _interopRequireDefault(_renderer);
 
-var _finalizer = require('./activation/finalizer/finalizer');
+var _finalizer = require('./finalizer/finalizer');
 
 var _finalizer2 = _interopRequireDefault(_finalizer);
 
