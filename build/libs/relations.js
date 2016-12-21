@@ -23,11 +23,17 @@ exports.default = {
     if (!stateName) {
       return [];
     }
+
     var family = stateName.split('.');
+
     family = _underscore2.default.range(1, family.length + 1).map(function (end) {
       return family.slice(0, end).join('.');
     });
-    this.isRoot(stateName) || family.unshift(_vars2.default.rootStateName);
+
+    if (!this.isRoot(stateName)) {
+      family.unshift(_vars2.default.rootStateName);
+    }
+
     return family;
   },
   parent: function parent(stateName) {

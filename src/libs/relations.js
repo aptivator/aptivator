@@ -5,10 +5,18 @@ export default {
   isRoot: stateName => stateName === vars.rootStateName,
   
   family(stateName) {
-    if(!stateName) { return []; }
+    if(!stateName) { 
+      return []; 
+    }
+    
     let family = stateName.split('.');
+    
     family = _.range(1, family.length + 1).map(end => family.slice(0, end).join('.'));
-    this.isRoot(stateName) || family.unshift(vars.rootStateName);
+    
+    if(!this.isRoot(stateName)) {
+      family.unshift(vars.rootStateName);
+    }
+    
     return family;
   },
   
