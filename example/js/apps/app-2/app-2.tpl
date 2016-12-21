@@ -1,5 +1,5 @@
 <div id = "app-2">
-  <h3>Application 2 <%= resolves.random %></h3>
+  <h3>Application 2 <%= resolves.random1 %></h3>
   <div class = "row">
     <div class = "col-md-12">
       <ul class = "nav navbar-nav">

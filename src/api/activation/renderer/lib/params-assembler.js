@@ -1,5 +1,5 @@
-import params    from '../../../../libs/params';
-import relations from '../../../../libs/relations';
+import params    from '../../../../lib/params';
+import relations from '../../../../lib/relations';
 
 export default (viewConfigs, stateParams) => {
   let {stateName, viewAddressUnique} = viewConfigs;

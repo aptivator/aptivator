@@ -8,19 +8,19 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fragment = require('../../../libs/fragment');
+var _fragment = require('../../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);
 
-var _route = require('../../../libs/route');
+var _route = require('../../../lib/route');
 
 var _route2 = _interopRequireDefault(_route);
 
-var _vars = require('../../../libs/vars');
+var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _dataStores = require('./libs/data-stores');
+var _dataStores = require('./lib/data-stores');
 
 var _dataStores2 = _interopRequireDefault(_dataStores);
 

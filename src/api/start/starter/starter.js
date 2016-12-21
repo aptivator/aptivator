@@ -1,8 +1,8 @@
 import Backbone        from 'backbone';
-import aptivator       from '../../../libs/instance';
-import error           from '../../../libs/error';
-import fragment        from '../../../libs/fragment';
-import vars            from '../../../libs/vars';
+import aptivator       from '../../../lib/instance';
+import error           from '../../../lib/error';
+import fragment        from '../../../lib/fragment';
+import vars            from '../../../lib/vars';
 
 export default err => {
   if(err) { 

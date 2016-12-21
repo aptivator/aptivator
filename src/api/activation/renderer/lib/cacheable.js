@@ -1,7 +1,7 @@
 import _         from 'lodash';
-import relations from '../../../../libs/relations';
-import params    from '../../../../libs/params';
-import vars      from '../../../../libs/vars';
+import relations from '../../../../lib/relations';
+import params    from '../../../../lib/params';
+import vars      from '../../../../lib/vars';
 
 let paramsMap = {};
 

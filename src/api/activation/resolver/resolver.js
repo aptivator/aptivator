@@ -1,20 +1,23 @@
-import _                 from 'lodash';
-import addresser         from '../../../libs/addresser';
-import params            from '../../../libs/params';
-import relations         from '../../../libs/relations';
-import resolvesProcessor from './libs/resolves-processor';
-import statesTreeBuilder from './libs/states-tree-builder';
+import _                   from 'lodash';
+import addresser           from '../../../lib/addresser';
+import params              from '../../../lib/params';
+import relations           from '../../../lib/relations';
+import vars                from '../../../lib/vars';
+import entitiesTreeBuilder from './lib/entities-tree-builder';
+import resolvesProcessor   from './lib/resolves-processor';
 
 export default (callback, stateParams) => {
-  let {resolveParams, resolveDefinitions} = stateParams;
-  let tree = statesTreeBuilder(_.keys(resolveDefinitions));
+  let {stateName, resolveParams, resolveDefinitions} = stateParams;
+  let resolveAddresses = relations.family(stateName).reduce((resolveAddresses, relation) => 
+    resolveAddresses.concat(vars.states.registry[relation].resolveAddresses), []);
+  let tree = entitiesTreeBuilder(resolveAddresses);
 
   !function processResolves(node = tree) {
     return new Promise((resolve, reject) => {
       let promises = [];
       _.keys(node).forEach(entityName => {
         let hasAt = entityName.includes('@');
-        let stateName = hasAt ? addresser.region(entityName): entityName;
+        let stateName = hasAt ? addresser.stateName(entityName): entityName;
         let family = relations.family(stateName).concat(hasAt ? entityName : []);
         let resolverParams = params.assemble(family, stateParams);
         let promise = resolvesProcessor(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);

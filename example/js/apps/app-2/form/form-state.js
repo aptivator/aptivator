@@ -16,7 +16,7 @@ aptivator.state('app-2.form', {
     'plus@app-2.form': {
       view: PlusView,
       resolve: {
-        something: function() {
+        something: function(p) {
           return 'something';
         },
         random: {

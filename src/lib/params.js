@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default {
   assemble: (family, stateParams, clone = true) => {
-    let {stateName: targetStateName, dataParams, routeParams, directParams, resolveParams} = stateParams;
+    let {stateName, dataParams, routeParams, directParams, resolveParams} = stateParams;
     let data = {};
     let resolves = {};
 
@@ -13,7 +13,7 @@ export default {
     
     let allParams = {data, resolves, route: routeParams};
     
-    if(family.includes(targetStateName) && directParams) {
+    if(family.includes(stateName) && directParams) {
       allParams.direct = directParams;
     }
     

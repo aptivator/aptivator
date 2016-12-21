@@ -1,9 +1,9 @@
 import _                  from 'lodash';
-import addresser          from '../../../libs/addresser';
-import relations          from '../../../libs/relations';
-import vars               from '../../../libs/vars';
-import fullAddressMaker   from './libs/full-address-maker';
-import resolvesNormalizer from './libs/resolves-normalizer';
+import addresser          from '../../../lib/addresser';
+import relations          from '../../../lib/relations';
+import vars               from '../../../lib/vars';
+import fullAddressMaker   from './lib/full-address-maker';
+import resolvesNormalizer from './lib/resolves-normalizer';
 
 export default (callback, stateParams) => {
   let {stateName, activationSequences, dataParams, resolveDefinitions} = stateParams;
@@ -20,6 +20,7 @@ export default (callback, stateParams) => {
     }
     
     let stateConfigs = vars.states.registry[stateName];
+    let resolveAddresses = stateConfigs.resolveAddresses = [];
     
     if(!stateConfigs) {
       callback(`state [${stateName}] has not been declared`);
@@ -29,6 +30,7 @@ export default (callback, stateParams) => {
     
     if(stateConfigs.resolve) {
       resolveDefinitions[stateName] = resolvesNormalizer(stateConfigs, stateName);
+      resolveAddresses.push(stateName);
     }
     
     if(relations.isRoot(stateName)) {
@@ -44,7 +46,6 @@ export default (callback, stateParams) => {
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
       let viewAddressFull = fullAddressMaker(viewAddress, stateName);
       let viewStateName = addresser.stateName(viewAddressFull);
-      let viewAddressUnique = viewConfigs.main ? `${stateName}@${viewStateName}` : viewAddressFull;
       
       if(activationSequence[viewAddressFull]) {
         callback(`view [${viewAddressFull}] already exists for [${activationSequence[viewAddressFull].stateName}] state`);
@@ -55,8 +56,11 @@ export default (callback, stateParams) => {
         viewConfigs.main = true;
       }
       
+      let viewAddressUnique = viewConfigs.main ? `${stateName}@${stateName}` : viewAddressFull;
+      
       if(viewConfigs.resolve) {
         resolveDefinitions[viewAddressUnique] = resolvesNormalizer(viewConfigs, stateName);
+        resolveAddresses.push(viewAddressUnique);
       }
       
       dataParams[viewAddressUnique] = viewConfigs.data;

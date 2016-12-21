@@ -1,10 +1,10 @@
-import addresser from '../../../../libs/addresser';
-import relations from '../../../../libs/relations';
+import addresser from '../../../../lib/addresser';
+import relations from '../../../../lib/relations';
 
 export default (entityNames, tree = {}) => 
   entityNames.reduce((tree, entityName) => {
     let hasAt = entityName.includes('@');
-    let stateName = hasAt ? addresser.region(entityName) : entityName;
+    let stateName = hasAt ? addresser.stateName(entityName) : entityName;
     let family = relations.family(stateName);
     let current = tree;
     

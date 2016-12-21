@@ -1,5 +1,5 @@
-import addresser     from '../../../../libs/addresser';
-import vars          from '../../../../libs/vars';
+import addresser     from '../../../../lib/addresser';
+import vars          from '../../../../lib/vars';
 import hideClassName from './hide-class';
 
 let {activationRecords} = vars.states;

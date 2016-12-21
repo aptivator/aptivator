@@ -1,6 +1,6 @@
-import addresser from '../../../../libs/addresser';
-import relations from '../../../../libs/relations';
-import vars      from '../../../../libs/vars';
+import addresser from '../../../../lib/addresser';
+import relations from '../../../../lib/relations';
+import vars      from '../../../../lib/vars';
 
 export default (viewAddress, containerStateName) => {
   let [region, stateName] = addresser.parts(viewAddress);

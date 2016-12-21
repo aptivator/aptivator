@@ -1,6 +1,6 @@
 import _         from 'lodash';
-import relations from '../../../../libs/relations';
-import vars      from '../../../../libs/vars'; 
+import relations from '../../../../lib/relations';
+import vars      from '../../../../lib/vars'; 
 
 export default (configs, stateName) => {
   let resolves = configs.resolve;

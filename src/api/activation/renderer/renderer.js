@@ -1,13 +1,13 @@
 import _               from 'lodash';
-import addresser       from '../../../libs/addresser';
-import vars            from '../../../libs/vars';
-import addressOrderer  from './libs/address-orderer';
-import cacheable       from './libs/cacheable';
-import multiplesTester from './libs/multiples-tester';
-import paramsAssembler from './libs/params-assembler';
-import remover         from './libs/remover';
-import viewApi         from './libs/view-api';
-import viewsDisplayer  from './libs/views-displayer';
+import addresser       from '../../../lib/addresser';
+import vars            from '../../../lib/vars';
+import addressOrderer  from './lib/address-orderer';
+import cacheable       from './lib/cacheable';
+import multiplesTester from './lib/multiples-tester';
+import paramsAssembler from './lib/params-assembler';
+import remover         from './lib/remover';
+import viewApi         from './lib/view-api';
+import viewsDisplayer  from './lib/views-displayer';
 
 let {activationRecords} = vars.states;
 

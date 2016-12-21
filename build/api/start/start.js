@@ -1,10 +1,10 @@
 'use strict';
 
-var _instance = require('../../libs/instance');
+var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _utils = require('../../libs/utils');
+var _utils = require('../../lib/utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 

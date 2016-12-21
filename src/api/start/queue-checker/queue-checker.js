@@ -1,11 +1,13 @@
-import vars from '../../../libs/vars';
+import vars from '../../../lib/vars';
+
+let {queue} = vars.states;
 
 export default callback => {
-  if(!vars.states.queue.length) {
+  if(!queue.length) {
     return callback();
   }
   
-  let undefinedStateNames = vars.states.queue.map(stateDefinition => stateDefinition[0]).join(', ');
+  let undefinedStateNames = queue.map(stateDefinition => stateDefinition[0]).join(', ');
   
   callback(`unable to initialize [${undefinedStateNames}] states`);
 };

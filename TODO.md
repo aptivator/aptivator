@@ -1,5 +1,8 @@
 # TODOs
 
+* Documentation
+* Tutorial
+* resolves policy should have persist and store flags
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about whether to have a caching policy variables
 * take a look to see what variables need to be moved from vars to data-stores.js
@@ -11,11 +14,8 @@
 * defaultState should be defaultStates and an array containing a number of states that can be activated at the outset
 * parent state receives its own route params
 * distinguish between route error state and error state when software error occurs...
-* in preprocessor make sure that each state is processed once
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * some resolves need to run but do not need to return value (this will influence caching)
-* clean up preprocessor() some more
-* make addressing scheme implementation clearer
 * in ```aptivator.state()``` handle navigation to error state
 * figure out variable naming conventions
 * figure out function naming conventions
@@ -27,14 +27,12 @@
 * instead of using 'pending' think about activate() returning a promise and then queueing the next activate() call
 * place history object back
 * add state names to transient states library?
-* Documentation
-* Tutorial
 * Think about whether parallel states are necessary
 * In history object create a flexibile get() method
 * Should intermediate be just a state? (that would fit into a general state mechanisms - declaration, loading, unloading) (*DEFINITELY*)
 * Caching of intermediate views (thinking of this as transient states that are activated and deactivated, changes it)
 * Transient state deactivation should be done automatically
-* Then intermediates are just loaded and unloaded with caching or no caching...
+* Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
 * Write a documentation note about source structure
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
@@ -45,11 +43,18 @@
 * figure out what to do with parent route having an optional param
 * finalize procedures on defaultRouteValues
 * there are receivers that always get data, think about adding methods that simply trigger without data
-* expand error messaging procedures
 * ability to exclude resolve value from params; this allows resolves to be used as initializers
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state
 * Sprinkle comments throughout code
+* **DONE** move history from libs to api (moved it into utils)
+* **DONE** change libs to lib
+* **DONE** move storage from lib to api (moved it under utils)
+* **DONE** fix resolves order data structures and processing
+* **DONE** in preprocessor make sure that each state is processed once
+* **DONE** clean up preprocessor() some more (preprocessor was completely rewritten)
+* **DONE** make addressing scheme implementation clearer (eliminated addresser.full and moved it to preprocessor module)
+* **DONE** expand error messaging procedures (callbacks are used instead of error.throw())
 * **DONE** Rewrite address module in the core (addresser.full() was moved as part of the preprocessor code)
 * **DONE** Polish state loading
 * **DONE** remember which substate was active when switching to a completely new state (subsumed within activationRecords system)

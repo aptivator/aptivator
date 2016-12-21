@@ -1,5 +1,5 @@
-import error from '../../../libs/error';
-import vars  from '../../../libs/vars';
+import error from '../../../lib/error';
+import vars  from '../../../lib/vars';
 
 export default (err, stateParams) => {
   let rootStateConfigs = vars.states.registry[vars.rootStateName];

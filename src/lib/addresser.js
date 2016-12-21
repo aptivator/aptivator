@@ -1,4 +1,4 @@
-let addresser = {
+export default {
   parts: address => address.split('@'),
 
   region(viewAddress) {
@@ -9,5 +9,3 @@ let addresser = {
     return this.parts(viewAddress)[1];
   }
 };
-
-export default addresser;

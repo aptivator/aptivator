@@ -4,11 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _error = require('../../../libs/error');
+var _error = require('../../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
-var _vars = require('../../../libs/vars');
+var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 

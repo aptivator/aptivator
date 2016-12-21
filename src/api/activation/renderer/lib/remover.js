@@ -1,5 +1,5 @@
 import _             from 'lodash';
-import vars          from '../../../../libs/vars';
+import vars          from '../../../../lib/vars';
 import hideClassName from './hide-class';
 
 let remover = {

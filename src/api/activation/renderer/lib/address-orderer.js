@@ -1,6 +1,6 @@
 import _         from 'lodash';
-import addresser from '../../../../libs/addresser';
-import relations from '../../../../libs/relations';
+import addresser from '../../../../lib/addresser';
+import relations from '../../../../lib/relations';
 
 let comparator = (viewAddress1, viewAddress2) => 
   relations.family(addresser.stateName(viewAddress1)).length >

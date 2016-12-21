@@ -1,24 +1,22 @@
 import Marionette from 'backbone.marionette';
-import vars       from '../../../libs/vars';
+import vars       from '../../../lib/vars';
 
 export default callback => {
   let rootStateConfigs = vars.states.registry[vars.rootStateName];
-  let RootView = Marionette.LayoutView.extend({
+  let rootView = new (Marionette.LayoutView.extend({
     el: 'html',
     regions: {
       main: rootStateConfigs.el || 'body'
     }
-  });
-  
-  let rootView = new RootView();
-  let mainView = rootView;
+  }))();
+  let instance = rootView;
   
   if(rootStateConfigs.view) {
-    mainView = new rootStateConfigs.view();
-    rootView.main.show(mainView);
+    instance = new rootStateConfigs.view();
+    rootView.main.show(instance);
   }
   
-  vars.states.activationRecords[vars.rootStateName] = {instance: mainView};
+  vars.states.activationRecords[vars.rootStateName] = {instance};
   
   callback();
 };

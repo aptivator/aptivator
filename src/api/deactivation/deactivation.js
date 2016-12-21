@@ -1,4 +1,4 @@
-import aptivator from '../../libs/instance';
+import aptivator from '../../lib/instance';
 
 aptivator.deactivate = stateName => {
   

@@ -1,8 +1,8 @@
 import _          from 'lodash';
-import fragment   from '../../../libs/fragment';
-import route      from '../../../libs/route';
-import vars       from '../../../libs/vars';
-import dataStores from './libs/data-stores';
+import fragment   from '../../../lib/fragment';
+import route      from '../../../lib/route';
+import vars       from '../../../lib/vars';
+import dataStores from './lib/data-stores';
 
 let {registry} = vars.states;
 

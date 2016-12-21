@@ -20,6 +20,7 @@ exports.default = function (entityNames) {
     var hasAt = entityName.includes('@');
     var stateName = hasAt ? _addresser2.default.region(entityName) : entityName;
     var family = _relations2.default.family(stateName);
+
     var current = tree;
 
     family.reduce(function (tree, relation) {

@@ -8,39 +8,39 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _addresser = require('../../../libs/addresser');
+var _addresser = require('../../../lib/addresser');
 
 var _addresser2 = _interopRequireDefault(_addresser);
 
-var _vars = require('../../../libs/vars');
+var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _addressOrderer = require('./libs/address-orderer');
+var _addressOrderer = require('./lib/address-orderer');
 
 var _addressOrderer2 = _interopRequireDefault(_addressOrderer);
 
-var _cacheable = require('./libs/cacheable');
+var _cacheable = require('./lib/cacheable');
 
 var _cacheable2 = _interopRequireDefault(_cacheable);
 
-var _multiplesTester = require('./libs/multiples-tester');
+var _multiplesTester = require('./lib/multiples-tester');
 
 var _multiplesTester2 = _interopRequireDefault(_multiplesTester);
 
-var _paramsAssembler = require('./libs/params-assembler');
+var _paramsAssembler = require('./lib/params-assembler');
 
 var _paramsAssembler2 = _interopRequireDefault(_paramsAssembler);
 
-var _remover = require('./libs/remover');
+var _remover = require('./lib/remover');
 
 var _remover2 = _interopRequireDefault(_remover);
 
-var _viewApi = require('./libs/view-api');
+var _viewApi = require('./lib/view-api');
 
 var _viewApi2 = _interopRequireDefault(_viewApi);
 
-var _viewsDisplayer = require('./libs/views-displayer');
+var _viewsDisplayer = require('./lib/views-displayer');
 
 var _viewsDisplayer2 = _interopRequireDefault(_viewsDisplayer);
 

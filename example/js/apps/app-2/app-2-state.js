@@ -10,11 +10,16 @@ aptivator.state('app-2', {
   abstract: true,
   states: ['header'],
   //multiples: ['main'],
+  resolve: {
+    murmansk: function() {
+      return 'murmansk';
+    }
+  },
   views: {
     main: {
       view: App2View,
       resolve: {
-        random: {
+        random1: {
           resolver: function() {
             return Math.random();
           },
