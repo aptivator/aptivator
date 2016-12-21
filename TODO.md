@@ -2,6 +2,7 @@
 
 * Documentation
 * Tutorial
+* change underscore to lodash
 * resolves policy should have persist and store flags
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about whether to have a caching policy variables
