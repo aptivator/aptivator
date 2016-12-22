@@ -18,17 +18,20 @@ var _hideClass2 = _interopRequireDefault(_hideClass);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var remover = {
+exports.default = {
   destroy: function destroy(activationRecord, multiple) {
+    var _this = this;
+
     if (!multiple) {
       _lodash2.default.each(activationRecord.regions, function (targetRegion) {
-        return remover.hide({ targetRegion: targetRegion, detach: true });
+        return _this.hide({ targetRegion: targetRegion, detach: true });
       });
     }
     activationRecord.instance.destroy();
   },
-
   hide: function hide(params) {
+    var _this2 = this;
+
     var targetRegion = params.targetRegion,
         cacheAddress = params.cacheAddress,
         detach = params.detach;
@@ -60,10 +63,8 @@ var remover = {
       }
 
       _lodash2.default.each(record.regions, function (targetRegion) {
-        return remover.hide({ targetRegion: targetRegion });
+        return _this2.hide({ targetRegion: targetRegion });
       });
     });
   }
 };
-
-exports.default = remover;

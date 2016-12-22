@@ -61,7 +61,8 @@ exports.default = function (callback, stateParams) {
     var targetRegion = parentRegions[regionName] || (parentRegions[regionName] = {});
     var viewConfigs = activationSequence[viewAddressFull];
     var stateName = viewConfigs.stateName,
-        main = viewConfigs.main;
+        main = viewConfigs.main,
+        detachHidden = viewConfigs.detachHidden;
 
     var cacheAddress = main ? stateName : viewAddressFull;
     var activationRecord = activationRecords[cacheAddress];
@@ -88,7 +89,7 @@ exports.default = function (callback, stateParams) {
     }
 
     if (hide) {
-      _remover2.default.hide({ targetRegion: targetRegion, cacheAddress: cacheAddress });
+      _remover2.default.hide({ targetRegion: targetRegion, cacheAddress: cacheAddress, detach: detachHidden });
     }
 
     targetRegion.current.add(cacheAddress);

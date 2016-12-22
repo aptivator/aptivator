@@ -22,7 +22,7 @@ export default (callback, stateParams) => {
     let parentRegions = parentRecord.regions || (parentRecord.regions = {});
     let targetRegion = parentRegions[regionName] || (parentRegions[regionName] = {});
     let viewConfigs = activationSequence[viewAddressFull];
-    let {stateName, main} = viewConfigs;
+    let {stateName, main, detachHidden} = viewConfigs;
     let cacheAddress = main ? stateName : viewAddressFull;
     let activationRecord = activationRecords[cacheAddress];
     let cache = cacheable.total(viewConfigs, stateParams, cacheAddress);
@@ -48,7 +48,7 @@ export default (callback, stateParams) => {
     }
     
     if(hide) {
-      remover.hide({targetRegion, cacheAddress});
+      remover.hide({targetRegion, cacheAddress, detach: detachHidden});
     }
     
     targetRegion.current.add(cacheAddress);

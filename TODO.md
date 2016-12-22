@@ -8,7 +8,6 @@
 * think about whether to have a caching policy variables
 * take a look to see what variables need to be moved from vars to data-stores.js
 * when multiple views are in a state cache: auto could be a flag for one of the views
-* add a flag that sets how hidden views are handled (hidden or detached)
 * think about dependency implementation among states not just views within a state
 * purely perfectionist, but take a look at some views that do not need to be hidden and then displayed right away
 * appropriate routeParams should be given to a respective state or view.  If stateConfigs does not include route, then no routeParams should be given. (not critical)
@@ -41,6 +40,7 @@
 * there are receivers that always get data, think about adding methods that simply trigger without data
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state
+* **DONE** add a flag that sets how hidden views are handled (hidden or detached) (added detachHidden flag)
 * **DONE** resolves policy should have persist and store flags
 * **DONE** figure out variable naming conventions
 * **DONE** figure out function naming conventions

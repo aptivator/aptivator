@@ -20,16 +20,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+var registry = _vars2.default.states.registry;
+
+
 _instance2.default.state = function (stateName, stateConfigs) {
   var parentStateName = _relations2.default.parent(stateName);
-  var parentConfigs = _vars2.default.states.registry[parentStateName];
+  var parentConfigs = registry[parentStateName];
 
   if (!_relations2.default.isRoot(parentStateName) && !parentConfigs) {
     _vars2.default.states.queue.push([stateName, stateConfigs]);
     return _instance2.default;
   }
 
-  _vars2.default.states.registry[stateName] = stateConfigs;
+  registry[stateName] = stateConfigs;
 
   if (stateConfigs.route) {
     stateConfigs.route = _route2.default.make(parentConfigs.route, stateConfigs.route);

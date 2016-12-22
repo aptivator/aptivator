@@ -3,16 +3,18 @@ import relations from '../../../lib/relations';
 import route     from '../../../lib/route';
 import vars      from '../../../lib/vars';
 
+let {registry} = vars.states;
+
 aptivator.state = (stateName, stateConfigs) => {
   let parentStateName = relations.parent(stateName);
-  let parentConfigs = vars.states.registry[parentStateName];
+  let parentConfigs = registry[parentStateName];
   
   if(!relations.isRoot(parentStateName) && !parentConfigs) {
     vars.states.queue.push([stateName, stateConfigs]);
     return aptivator;
   }
   
-  vars.states.registry[stateName] = stateConfigs;
+  registry[stateName] = stateConfigs;
   
   if(stateConfigs.route) {
     stateConfigs.route = route.make(parentConfigs.route, stateConfigs.route);
@@ -27,6 +29,6 @@ aptivator.state = (stateName, stateConfigs) => {
       });
     }
   }
-  
+
   return vars.states.queue.length ? aptivator.state(...vars.states.queue.pop()) : aptivator;
 };

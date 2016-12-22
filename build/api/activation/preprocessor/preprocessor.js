@@ -28,6 +28,10 @@ var _resolvesNormalizer = require('./lib/resolves-normalizer');
 
 var _resolvesNormalizer2 = _interopRequireDefault(_resolvesNormalizer);
 
+var _viewNormalizer = require('./lib/view-normalizer');
+
+var _viewNormalizer2 = _interopRequireDefault(_viewNormalizer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (callback, stateParams) {
@@ -97,6 +101,8 @@ exports.default = function (callback, stateParams) {
       dataParams[viewAddressUnique] = viewConfigs.data;
 
       activationSequence[viewAddressFull] = _lodash2.default.extend(viewConfigs, { viewAddress: viewAddress, viewAddressFull: viewAddressFull, stateName: stateName, viewAddressUnique: viewAddressUnique });
+
+      (0, _viewNormalizer2.default)(viewConfigs);
 
       if (viewConfigs.main) {
         preprocess(viewStateName, activationSequence);

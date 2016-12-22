@@ -4,6 +4,7 @@ import relations          from '../../../lib/relations';
 import vars               from '../../../lib/vars';
 import fullAddressMaker   from './lib/full-address-maker';
 import resolvesNormalizer from './lib/resolves-normalizer';
+import viewNormalizer     from './lib/view-normalizer';
 
 export default (callback, stateParams) => {
   let {stateName, activationSequences, dataParams, resolveDefinitions} = stateParams;
@@ -67,6 +68,8 @@ export default (callback, stateParams) => {
       
       activationSequence[viewAddressFull] = _.extend(viewConfigs, 
         {viewAddress, viewAddressFull, stateName, viewAddressUnique});
+
+      viewNormalizer(viewConfigs);
 
       if(viewConfigs.main) {
         preprocess(viewStateName, activationSequence);

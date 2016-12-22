@@ -2,15 +2,15 @@ import _             from 'lodash';
 import vars          from '../../../../lib/vars';
 import hideClassName from './hide-class';
 
-let remover = {
-  destroy: (activationRecord, multiple) => {
+export default {
+  destroy(activationRecord, multiple) {
     if(!multiple) {
-      _.each(activationRecord.regions, targetRegion => remover.hide({targetRegion, detach: true}));
+      _.each(activationRecord.regions, targetRegion => this.hide({targetRegion, detach: true}));
     }
     activationRecord.instance.destroy();
   },
   
-  hide: params => {
+  hide(params) {
     let {targetRegion, cacheAddress, detach} = params;
     targetRegion.current.forEach(entityName => {
       let record = vars.states.activationRecords[entityName];
@@ -37,9 +37,7 @@ let remover = {
         targetRegion.current.delete(entityName);
       }
       
-      _.each(record.regions, targetRegion => remover.hide({targetRegion}));
+      _.each(record.regions, targetRegion => this.hide({targetRegion}));
     });
   }
 };
-
-export default remover;

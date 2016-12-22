@@ -5,6 +5,11 @@ aptivator.config({
   el: '#application',
   view: MainView,
   historySize: 25,
+  resolveConfigs: {
+    persist: true,
+    store: true,
+  },
+  detachHidden: true,
   defaultStates: ['app-1'],
   showRuntime: true,
   invalidRoute: {
