@@ -90,7 +90,7 @@ exports.default = function (callback, stateParams) {
       var viewAddressUnique = viewConfigs.main ? stateName + '@' + stateName : viewAddressFull;
 
       if (viewConfigs.resolve) {
-        resolveDefinitions[viewAddressUnique] = (0, _resolvesNormalizer2.default)(viewConfigs, stateName);
+        resolveDefinitions[viewAddressUnique] = (0, _resolvesNormalizer2.default)(viewConfigs, viewAddressUnique);
         resolveAddresses.push(viewAddressUnique);
       }
 

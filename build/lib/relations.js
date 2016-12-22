@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _underscore = require('underscore');
+var _lodash = require('lodash');
 
-var _underscore2 = _interopRequireDefault(_underscore);
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _vars = require('./vars');
 
@@ -26,7 +26,7 @@ exports.default = {
 
     var family = stateName.split('.');
 
-    family = _underscore2.default.range(1, family.length + 1).map(function (end) {
+    family = _lodash2.default.range(1, family.length + 1).map(function (end) {
       return family.slice(0, end).join('.');
     });
 

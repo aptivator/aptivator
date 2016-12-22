@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _underscore = require('underscore');
+var _lodash = require('lodash');
 
-var _underscore2 = _interopRequireDefault(_underscore);
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _backbone = require('backbone');
 
@@ -31,7 +31,7 @@ exports.default = {
   toState: function toState() {
     var fragment = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get();
 
-    return _underscore2.default.keys(_vars2.default.states.registry).filter(function (stateName) {
+    return _lodash2.default.keys(_vars2.default.states.registry).filter(function (stateName) {
       var routeRx = _vars2.default.states.registry[stateName].routeRx;
       return routeRx && routeRx.test(fragment);
     })[0];

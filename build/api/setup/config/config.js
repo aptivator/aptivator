@@ -11,8 +11,11 @@ var _vars2 = _interopRequireDefault(_vars);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _instance2.default.config = function (rootConfigs) {
-  if (!rootConfigs.persistResolves) {
-    rootConfigs.persistResolves = true;
+  if (!rootConfigs.resolveConfigs) {
+    rootConfigs.resolveConfigs = {
+      persist: true,
+      store: true
+    };
   }
 
   _vars2.default.states.registry[_vars2.default.rootStateName] = rootConfigs;

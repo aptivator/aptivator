@@ -17,11 +17,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (err, stateParams) {
   var rootStateConfigs = _vars2.default.states.registry[_vars2.default.rootStateName];
 
-  if (err) {
-    console.error(_error2.default.message(err));
-  }
-
   if (rootStateConfigs.showRuntime) {
     console.log('runtime: ' + (Date.now() - stateParams.time) + 'ms');
+  }
+
+  if (err) {
+    _error2.default.throw(err);
   }
 };

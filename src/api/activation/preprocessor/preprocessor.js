@@ -59,7 +59,7 @@ export default (callback, stateParams) => {
       let viewAddressUnique = viewConfigs.main ? `${stateName}@${stateName}` : viewAddressFull;
       
       if(viewConfigs.resolve) {
-        resolveDefinitions[viewAddressUnique] = resolvesNormalizer(viewConfigs, stateName);
+        resolveDefinitions[viewAddressUnique] = resolvesNormalizer(viewConfigs, viewAddressUnique);
         resolveAddresses.push(viewAddressUnique);
       }
       

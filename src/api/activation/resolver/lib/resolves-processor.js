@@ -9,8 +9,9 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
     let processedResolves = [];
     
     let storeResult = (resolve, resolveName, result) => {
+      resolve.processed = true;
       processedResolves.push(resolveName);
-      if(resolve.persist || resolve.store) {
+      if(resolve.store) {
         results[resolveName] = result;
       }
     };
@@ -21,7 +22,7 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
       let dependents = {};
       
       _.each(resolves, (resolve, resolveName) => {
-        if(resolve.persist && results[resolveName]) {
+        if(resolve.persist && resolve.processed) {
           return processedResolves.push(resolveName);
         }
         

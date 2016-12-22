@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _underscore = require('underscore');
+var _lodash = require('lodash');
 
-var _underscore2 = _interopRequireDefault(_underscore);
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _backbone = require('backbone');
 
@@ -43,7 +43,7 @@ exports.default = {
       var index = -1;
       var routeObj = { params: {} };
 
-      _underscore2.default.isEmpty(routeValues) && (routeValues = stateConfig.routeValues || []);
+      _lodash2.default.isEmpty(routeValues) && (routeValues = stateConfig.routeValues || []);
 
       routeParts.forEach(function (routePart) {
         if (!/[\:\*]/.test(routePart)) {

@@ -37,7 +37,7 @@ aptivator.state('app-1', {
             });
           },
           persist: false,
-          store: true
+          store: false
         }
       }
     }

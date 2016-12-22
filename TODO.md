@@ -1,9 +1,9 @@
 # TODOs
 
 * Documentation
+* Write a documentation note about source structure
+* Sprinkle comments throughout code
 * Tutorial
-* change underscore to lodash
-* resolves policy should have persist and store flags
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about whether to have a caching policy variables
 * take a look to see what variables need to be moved from vars to data-stores.js
@@ -16,10 +16,7 @@
 * parent state receives its own route params
 * distinguish between route error state and error state when software error occurs...
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
-* some resolves need to run but do not need to return value (this will influence caching)
 * in ```aptivator.state()``` handle navigation to error state
-* figure out variable naming conventions
-* figure out function naming conventions
 * put back parallel states (if necessary)
 * think through the process for handling  invalid routes include history.replace(), etc.
 * put back the code to handle invalid routes
@@ -34,20 +31,23 @@
 * Caching of intermediate views (thinking of this as transient states that are activated and deactivated, changes it)
 * Transient state deactivation should be done automatically
 * Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
-* Write a documentation note about source structure
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
 * for animation think about adding class operations performed when views are activated and inactivated
-* route/state mappings (?)
 * modals/notifiers (A state that loads parallel to current state)
 * route with parent route having a param
 * figure out what to do with parent route having an optional param
-* finalize procedures on defaultRouteValues
+* finalize procedures on default routeValues (these could be concatenated when state() is called)
 * there are receivers that always get data, think about adding methods that simply trigger without data
-* ability to exclude resolve value from params; this allows resolves to be used as initializers
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state
-* Sprinkle comments throughout code
+* **DONE** resolves policy should have persist and store flags
+* **DONE** figure out variable naming conventions
+* **DONE** figure out function naming conventions
+* **DONE** ability to exclude resolve value from params; this allows resolves to be used as initializers (via store flag)
+* **DONE** some resolves need to run but do not need to return value (this will influence caching) (handled via store flag)
+* **DONE** ~~route/state mappings (?)~~ (put on the backburner)
+* **DONE** change underscore to lodash
 * **DONE** move history from libs to api (moved it into utils)
 * **DONE** change libs to lib
 * **DONE** move storage from lib to api (moved it under utils)

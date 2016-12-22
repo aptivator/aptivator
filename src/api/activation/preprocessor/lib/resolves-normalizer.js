@@ -1,27 +1,56 @@
 import _         from 'lodash';
+import addresser from '../../../../lib/addresser';
 import relations from '../../../../lib/relations';
 import vars      from '../../../../lib/vars'; 
 
-export default (configs, stateName) => {
+const [persistFlag, storeFlag, bothFlags] = [1, 2, 1 | 2];
+
+export default (configs, entityName) => {
   let resolves = configs.resolve;
+  let hasAt = entityName.includes('@');
+  let stateName = hasAt ? addresser.stateName(entityName) : entityName;
   let family = relations.family(stateName).reverse();
 
   _.each(resolves, (resolveConfigs, resolveName) => {
-    _.isFunction(resolveConfigs) && (resolveConfigs = {resolver: resolveConfigs});
+    var status;
     
-    if(_.isUndefined(resolveConfigs.persist)) {
-      for(let relation of family) {
-        let stateConfigs = vars.states.registry[relation];
-        if(!_.isUndefined(stateConfigs.persistResolves)) {
-          resolveConfigs.persist = stateConfigs.persistResolves;
-          break;
+    if(_.isFunction(resolveConfigs)) {
+      resolveConfigs = {resolver: resolveConfigs};
+    }
+  
+    if(!_.isUndefined(resolveConfigs.persist)) {
+      status |= persistFlag;
+    }
+    
+    if(!_.isUndefined(resolveConfigs.store)) {
+      status |= storeFlag;
+    }
+
+    !function normalizeResolves(index = 0, viewConfigs = hasAt && configs) {
+      if(index >= family.length || status === bothFlags) {
+        return;
+      }
+      
+      let stateConfigs = viewConfigs;
+      
+      if(!stateConfigs) {
+        stateConfigs = vars.states.registry[family[index++]];
+      }
+      
+      if(stateConfigs.resolveConfigs) {
+        if(!(status & persistFlag) && !_.isUndefined(stateConfigs.resolveConfigs.persist)) {
+          resolveConfigs.persist = stateConfigs.resolveConfigs.persist;
+          status |= persistFlag;
+        }
+        
+        if(!(status & storeFlag) && !_.isUndefined(stateConfigs.resolveConfigs.store)) {
+          resolveConfigs.store = stateConfigs.resolveConfigs.store;
+          status |= storeFlag;
         }
       }
-    }
-    
-    if(_.isUndefined(configs.changingResolves) && !resolveConfigs.persist && resolveConfigs.store) {
-      configs.changingResolves = true;
-    }
+      
+      normalizeResolves(index, null);
+    }();
     
     resolves[resolveName] = resolveConfigs;
   });

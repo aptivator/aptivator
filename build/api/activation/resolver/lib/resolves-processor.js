@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _underscore = require('underscore');
+var _lodash = require('lodash');
 
-var _underscore2 = _interopRequireDefault(_underscore);
+var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21,8 +21,9 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
     var processedResolves = [];
 
     var storeResult = function storeResult(resolve, resolveName, result) {
+      resolve.processed = true;
       processedResolves.push(resolveName);
-      if (resolve.persist || resolve.store) {
+      if (resolve.store) {
         results[resolveName] = result;
       }
     };
@@ -32,16 +33,16 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
       var promiseNames = [];
       var dependents = {};
 
-      _underscore2.default.each(resolves, function (resolve, resolveName) {
-        if (resolve.persist && results[resolveName]) {
+      _lodash2.default.each(resolves, function (resolve, resolveName) {
+        if (resolve.persist && resolve.processed) {
           return processedResolves.push(resolveName);
         }
 
         if (resolve.deps) {
-          if (_underscore2.default.difference(resolve.deps, processedResolves).length) {
+          if (_lodash2.default.difference(resolve.deps, processedResolves).length) {
             return dependents[resolveName] = resolve;
           }
-          _underscore2.default.extend(resolverParams.resolves, _underscore2.default.pick(resolveParams[storeKey], resolve.deps));
+          _lodash2.default.extend(resolverParams.resolves, _lodash2.default.pick(resolveParams[storeKey], resolve.deps));
         }
 
         var result = resolve.resolver(resolverParams);
@@ -62,12 +63,12 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
           storeResult(resolve, resolveName, result);
         });
 
-        if (!_underscore2.default.keys(dependents).length) {
+        if (!_lodash2.default.keys(dependents).length) {
           return resolve();
         }
 
-        if (deps && _underscore2.default.isEqual(deps, dependents)) {
-          dependents = _underscore2.default.keys(dependents).join(', ');
+        if (deps && _lodash2.default.isEqual(deps, dependents)) {
+          dependents = _lodash2.default.keys(dependents).join(', ');
           return reject('some dependencies specified for [' + dependents + '] resolve(s) are not found');
         }
 
