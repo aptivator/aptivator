@@ -34,23 +34,27 @@ exports.default = {
 
   params: {
     assemble: function assemble(stateName, routeValues) {
-      var stateConfig = _vars2.default.states.registry[stateName];
-      if (!stateConfig.route) {
+      var stateConfigs = _vars2.default.states.registry[stateName];
+      if (!stateConfigs.route) {
         return;
       }
       var fragmentParts = [];
-      var routeParts = stateConfig.route.split(/[\/]|(?:\s*(?=\*))/);
+      var routeParts = stateConfigs.route.split(/[\/]|(?:\s*(?=\*))/);
       var index = -1;
       var routeObj = { params: {} };
 
-      _lodash2.default.isEmpty(routeValues) && (routeValues = stateConfig.routeValues || []);
+      if (_lodash2.default.isEmpty(routeValues)) {
+        routeValues = stateConfigs.routeValues || [];
+      }
+
+      console.log(stateName, stateConfigs.routeParams, routeParts, routeValues);
 
       routeParts.forEach(function (routePart) {
         if (!/[\:\*]/.test(routePart)) {
           return fragmentParts.push(routePart.replace(paramCleanRx, ''));
         }
 
-        var param = stateConfig.routeParams[++index];
+        var param = stateConfigs.routeParams[++index];
 
         if (param.required && !routeValues[index]) {
           _error2.default.throw('Expecting a value for [' + param.name + '] parameter');
@@ -63,7 +67,6 @@ exports.default = {
       });
 
       routeObj.fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
-      routeObj.stateName = stateName;
       return routeObj;
     },
 

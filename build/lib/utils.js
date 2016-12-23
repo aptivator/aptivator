@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -20,5 +20,9 @@ exports.default = {
         return error ? callback(error) : ++index < funcs.length ? waterfall.apply(undefined, [index].concat(rest)) : callback.apply(undefined, [null].concat(rest));
       }].concat(rest));
     }();
+  },
+
+  hasAt: function hasAt(entityName) {
+    return entityName.includes('@');
   }
 };

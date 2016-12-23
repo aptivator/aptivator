@@ -37,21 +37,23 @@ _instance2.default.state = function (stateName, stateConfigs) {
   if (stateConfigs.route) {
     stateConfigs.route = _route2.default.make(parentConfigs.route, stateConfigs.route);
 
-    if (!stateConfigs.abstract) {
-      stateConfigs.routeParams = _route2.default.params.parse(stateConfigs.route);
-      stateConfigs.routeRx = _route2.default.toRx(stateConfigs.route);
-      _vars2.default.router.route(stateConfigs.route, stateName, function () {
-        for (var _len = arguments.length, routeValues = Array(_len), _key = 0; _key < _len; _key++) {
-          routeValues[_key] = arguments[_key];
-        }
-
-        routeValues = routeValues.filter(function (value) {
-          return value;
-        });
-        var routeParams = _route2.default.params.assemble(stateName, routeValues);
-        _instance2.default.activate({ stateName: stateName, routeParams: routeParams });
-      });
+    if (parentConfigs.routeValues) {
+      stateConfigs.routeValues = parentConfigs.routeValues.concat(stateConfigs.routeValues || []);
     }
+
+    stateConfigs.routeParams = _route2.default.params.parse(stateConfigs.route);
+    stateConfigs.routeRx = _route2.default.toRx(stateConfigs.route);
+    _vars2.default.router.route(stateConfigs.route, stateName, function () {
+      for (var _len = arguments.length, routeValues = Array(_len), _key = 0; _key < _len; _key++) {
+        routeValues[_key] = arguments[_key];
+      }
+
+      routeValues = routeValues.filter(function (value) {
+        return value;
+      });
+      var routeParams = _route2.default.params.assemble(stateName, routeValues);
+      _instance2.default.activate({ stateName: stateName, routeParams: routeParams });
+    });
   }
 
   return _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, _toConsumableArray(_vars2.default.states.queue.pop())) : _instance2.default;

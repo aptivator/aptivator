@@ -5,5 +5,7 @@ export default {
         error ? callback(error) : 
         ++index < funcs.length ? waterfall(...[index, ...rest]) :
         callback(...[null, ...rest]), ...rest]);
-    }()
+    }(),
+    
+  hasAt: entityName => entityName.includes('@')
 };

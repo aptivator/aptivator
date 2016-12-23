@@ -13,21 +13,23 @@ export default {
   
   params: {
     assemble: (stateName, routeValues) => {
-      let stateConfig = vars.states.registry[stateName];
-      if(!stateConfig.route) { return; }
+      let stateConfigs = vars.states.registry[stateName];
+      if(!stateConfigs.route) { return; }
       let fragmentParts = [];
-      let routeParts = stateConfig.route.split(/[\/]|(?:\s*(?=\*))/);
+      let routeParts = stateConfigs.route.split(/[\/]|(?:\s*(?=\*))/);
       let index = -1;
       let routeObj = {params: {}};
       
-      _.isEmpty(routeValues) && (routeValues = stateConfig.routeValues || []);
+      if(_.isEmpty(routeValues)) {
+        routeValues = stateConfigs.routeValues || [];
+      }
       
       routeParts.forEach(routePart => {
         if(!/[\:\*]/.test(routePart)) {
           return fragmentParts.push(routePart.replace(paramCleanRx, ''));
         }
         
-        let param = stateConfig.routeParams[++index];
+        let param = stateConfigs.routeParams[++index];
         
         if(param.required && !routeValues[index]) {
           error.throw(`Expecting a value for [${param.name}] parameter`);
@@ -40,7 +42,6 @@ export default {
       });
       
       routeObj.fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
-      routeObj.stateName = stateName;
       return routeObj;
     },
     

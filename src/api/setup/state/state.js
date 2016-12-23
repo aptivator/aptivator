@@ -19,15 +19,17 @@ aptivator.state = (stateName, stateConfigs) => {
   if(stateConfigs.route) {
     stateConfigs.route = route.make(parentConfigs.route, stateConfigs.route);
     
-    if(!stateConfigs.abstract) {
-      stateConfigs.routeParams = route.params.parse(stateConfigs.route);
-      stateConfigs.routeRx = route.toRx(stateConfigs.route);
-      vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
-        routeValues = routeValues.filter(value => value);
-        let routeParams = route.params.assemble(stateName, routeValues);
-        aptivator.activate({stateName, routeParams});
-      });
+    if(parentConfigs.routeValues) {
+      stateConfigs.routeValues = parentConfigs.routeValues.concat(stateConfigs.routeValues || []);
     }
+    
+    stateConfigs.routeParams = route.params.parse(stateConfigs.route);
+    stateConfigs.routeRx = route.toRx(stateConfigs.route);
+    vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
+      routeValues = routeValues.filter(value => value);
+      let routeParams = route.params.assemble(stateName, routeValues);
+      aptivator.activate({stateName, routeParams});
+    });
   }
 
   return vars.states.queue.length ? aptivator.state(...vars.states.queue.pop()) : aptivator;

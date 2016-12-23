@@ -16,3 +16,9 @@
   <button class = "btn btn-default" bxv-deps = "{selector: 'input', silent: true, disable: true}">Send info</button>
 </form>
 <div class = "plus"></div>
+<h4>Route Params</h4>
+<ul>
+  <% _.each(route.params, function(value, key) { %>
+    <li><%= key %>:<%= value %></li>
+  <% }); %>
+</ul>
