@@ -26,10 +26,10 @@ exports.default = function (viewAddress, containerStateName) {
       region = _addresser$parts2[0],
       stateName = _addresser$parts2[1];
 
-  if (!stateName) {
-    stateName = _relations2.default.parent(containerStateName);
-  } else if (stateName === '') {
+  if (stateName === '') {
     stateName = _vars2.default.rootStateName;
+  } else if (!stateName) {
+    stateName = _relations2.default.parent(containerStateName);
   }
 
   return region + '@' + stateName;

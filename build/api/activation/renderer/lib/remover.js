@@ -41,7 +41,7 @@ exports.default = {
       var $el = record.instance.$el;
 
 
-      if (_lodash2.default.isBoolean(detach)) {
+      if (detach) {
         record.detached = detach;
       } else {
         detach = record.detached;

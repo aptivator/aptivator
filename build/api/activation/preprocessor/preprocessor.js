@@ -81,6 +81,7 @@ exports.default = function (callback, stateParams) {
     _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewAddress) {
       var viewAddressFull = (0, _fullAddressMaker2.default)(viewAddress, stateName);
       var viewStateName = _addresser2.default.stateName(viewAddressFull);
+      var viewAddressUnique = _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
 
       if (activationSequence[viewAddressFull]) {
         callback('view [' + viewAddressFull + '] already exists for [' + activationSequence[viewAddressFull].stateName + '] state');
@@ -90,8 +91,6 @@ exports.default = function (callback, stateParams) {
         stateConfigs.viewAddressFull = viewAddressFull;
         viewConfigs.main = true;
       }
-
-      var viewAddressUnique = viewConfigs.main ? stateName + '@' + stateName : viewAddressFull;
 
       if (viewConfigs.resolve) {
         resolveDefinitions[viewAddressUnique] = (0, _resolvesNormalizer2.default)(viewConfigs, viewAddressUnique);

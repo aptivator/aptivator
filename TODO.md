@@ -1,5 +1,12 @@
 # TODOs
 
+* animate change from state to state - make it look less sharp
+* regarding the above one, place a class that makes application container invisible and then remove it after rendering
+* for animation think about adding class operations performed when views are activated and inactivated
+* for animation spec also provide a way to define a selector to which the animation class is applied
+* this also affects transient states, the animation on state change should run after the transient state is removed
+* also, transients are states, should that animation be applied to them also?
+
 * Documentation
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
@@ -12,7 +19,7 @@
 * purely perfectionist, but take a look at some views that do not need to be hidden and then displayed right away
 * appropriate routeParams should be given to a respective state or view.  If stateConfigs does not include route, then no routeParams should be given. (not critical)
 * defaultState should be defaultStates and an array containing a number of states that can be activated at the outset
-* parent state receives its own route params
+* parent state receives only its own route params
 * distinguish between route error state and error state when software error occurs...
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * in ```aptivator.state()``` handle navigation to error state
@@ -30,9 +37,6 @@
 * Caching of intermediate views (thinking of this as transient states that are activated and deactivated, changes it)
 * Transient state deactivation should be done automatically
 * Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
-* animate change from state to state - make it look less sharp
-* regarding the above one, place a class that makes application container invisible and then remove it after rendering
-* for animation think about adding class operations performed when views are activated and inactivated
 * modals/notifiers (A state that loads parallel to current state)
 * route with parent route having a param
 * figure out what to do with parent route having an optional param

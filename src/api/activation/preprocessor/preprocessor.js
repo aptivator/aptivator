@@ -47,6 +47,7 @@ export default (callback, stateParams) => {
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
       let viewAddressFull = fullAddressMaker(viewAddress, stateName);
       let viewStateName = addresser.stateName(viewAddressFull);
+      let viewAddressUnique = `${_.uniqueId('aptivator-id-')}@${stateName}`;
       
       if(activationSequence[viewAddressFull]) {
         callback(`view [${viewAddressFull}] already exists for [${activationSequence[viewAddressFull].stateName}] state`);
@@ -56,8 +57,6 @@ export default (callback, stateParams) => {
         stateConfigs.viewAddressFull = viewAddressFull;
         viewConfigs.main = true;
       }
-      
-      let viewAddressUnique = viewConfigs.main ? `${stateName}@${stateName}` : viewAddressFull;
       
       if(viewConfigs.resolve) {
         resolveDefinitions[viewAddressUnique] = resolvesNormalizer(viewConfigs, viewAddressUnique);

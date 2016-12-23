@@ -16,7 +16,7 @@ export default {
       let record = vars.states.activationRecords[entityName];
       let {$el} = record.instance;
       
-      if(_.isBoolean(detach)) {
+      if(detach) {
         record.detached = detach;
       } else {
         detach = record.detached;

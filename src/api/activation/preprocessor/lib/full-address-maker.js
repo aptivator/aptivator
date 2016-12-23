@@ -5,10 +5,10 @@ import vars      from '../../../../lib/vars';
 export default (viewAddress, containerStateName) => {
   let [region, stateName] = addresser.parts(viewAddress);
   
-  if(!stateName) {
-    stateName = relations.parent(containerStateName);
-  } else if(stateName === '') {
+  if(stateName === '') {
     stateName = vars.rootStateName;
+  } else if(!stateName) {
+    stateName = relations.parent(containerStateName);
   }
   
   return `${region}@${stateName}`;
