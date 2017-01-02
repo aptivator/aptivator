@@ -27,13 +27,8 @@ var routePartCleanRx = /[\(\/\:\)\*]/g;
 exports.default = {
   configure: function configure(parentConfigs, stateConfigs) {
     stateConfigs.routeParts = this.parts.parse(parentConfigs, stateConfigs);
-
+    stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
     stateConfigs.route = '' + (parentConfigs.route && parentConfigs.route + '/' || '') + stateConfigs.route;
-
-    if (parentConfigs.routeValues) {
-      stateConfigs.routeValues = parentConfigs.routeValues.concat(stateConfigs.routeValues || []);
-    }
-
     stateConfigs.routeParts = (parentConfigs.routeParts || []).concat(stateConfigs.routeParts);
     stateConfigs.routeRx = _backbone2.default.Router.prototype._routeToRegExp(stateConfigs.route);
   },
@@ -74,9 +69,7 @@ exports.default = {
     },
 
     parse: function parse(parentConfigs, stateConfigs) {
-      var route = stateConfigs.route;
-
-      var routeParts = route.match(/\/?[^\/]+/g);
+      var routeParts = stateConfigs.route.match(/\/?[^\/]+/g);
       var hasSplat = parentConfigs.hasSplat,
           hasOptional = parentConfigs.hasOptional;
 
@@ -92,7 +85,7 @@ exports.default = {
 
         if (!routePart.match(/[\*\:]/g)) {
           if (hasSplat || hasOptional) {
-            _error2.default.throw('cannot declare a regular route part after a' + (hasSplat ? '' : 'n') + ' ' + (hasSplat ? 'splat' : 'optional') + ' parameter', 'routing');
+            _error2.default.throw('cannot declare a regular route part after a splat or optional parameter', 'routing');
           }
 
           return {
@@ -102,7 +95,7 @@ exports.default = {
 
         var paramParts = routePart.split(':');
         var isSplat = routePart.startsWith('*');
-        var required = !/\)/.test(routePart);
+        var required = !routePart.includes(')');
 
         if (isSplat) {
           if (hasSplat) {
@@ -116,7 +109,7 @@ exports.default = {
 
         if (required) {
           if (hasSplat || hasOptional) {
-            _error2.default.throw('required parameter cannot be declared after a' + (hasSplat ? '' : 'n') + ' ' + (hasSplat ? 'splat' : 'optional') + ' parameter', 'routing');
+            _error2.default.throw('required parameter cannot be declared after a splat or optional parameter', 'routing');
           }
         }
 

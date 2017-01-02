@@ -8,13 +8,8 @@ const routePartCleanRx = /[\(\/\:\)\*]/g;
 export default {
   configure(parentConfigs, stateConfigs) {
     stateConfigs.routeParts = this.parts.parse(parentConfigs, stateConfigs);
-    
+    stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
     stateConfigs.route = `${parentConfigs.route && parentConfigs.route + '/' || ''}${stateConfigs.route}`;
-    
-    if(parentConfigs.routeValues) {
-      stateConfigs.routeValues = parentConfigs.routeValues.concat(stateConfigs.routeValues || []);
-    }
-    
     stateConfigs.routeParts = (parentConfigs.routeParts || []).concat(stateConfigs.routeParts);
     stateConfigs.routeRx = Backbone.Router.prototype._routeToRegExp(stateConfigs.route);
   },
@@ -68,7 +63,7 @@ export default {
         
         if(!routePart.match(/[\*\:]/g)) {
           if(hasSplat || hasOptional) {
-            error.throw(`cannot declare a regular route part after a${hasSplat ? '' : 'n'} ${hasSplat ? 'splat' : 'optional'} parameter`, 'routing');
+            error.throw(`cannot declare a regular route part after a splat or optional parameter`, 'routing');
           }
           
           return {
@@ -78,7 +73,7 @@ export default {
         
         let paramParts = routePart.split(':');
         let isSplat = routePart.startsWith('*');
-        let required = !/\)/.test(routePart);
+        let required = !routePart.includes(')');
         
         if(isSplat) {
           if(hasSplat) {
@@ -92,7 +87,7 @@ export default {
         
         if(required) {
           if(hasSplat || hasOptional) {
-            error.throw(`required parameter cannot be declared after a${hasSplat ? '' : 'n'} ${hasSplat ? 'splat' : 'optional'} parameter`, 'routing');
+            error.throw(`required parameter cannot be declared after a splat or optional parameter`, 'routing');
           }
         }
         
