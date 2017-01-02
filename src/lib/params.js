@@ -13,9 +13,14 @@ export default {
     targetStateName = utils.hasAt(targetStateName) ? addresser.stateName(targetStateName) : targetStateName;
     let stateConfigs = vars.states.registry[targetStateName];
     
-    if(stateConfigs.routeParams) {
-      var routeParamsNames = stateConfigs.routeParams.reduce((names, routeParamsConfigs) => 
-        (names.push(routeParamsConfigs.name), names), []);
+    if(stateConfigs.routeParts) {
+      var routeParamsNames = stateConfigs.routeParts.reduce((names, routePart) => {
+        if(!_.isUndefined(routePart.required)) {
+          names.push(routePart.name);
+        }
+        
+        return names;
+      }, []);
     }
 
     let routeValues = _.values(_.pick(routeParams.params, routeParamsNames));
@@ -29,7 +34,7 @@ export default {
     
     if(stateConfigs.route) {
       _.extend(allParams, {
-        route: route.params.assemble(targetStateName, routeValues)
+        route: route.parts.assemble(targetStateName, routeValues)
       });
     }
     

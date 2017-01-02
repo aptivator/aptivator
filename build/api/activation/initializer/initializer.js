@@ -54,7 +54,7 @@ exports.default = function (callback, stateParams) {
   }
 
   if (!routeParams || _lodash2.default.isEmpty(routeParams)) {
-    stateParams.routeParams = _route2.default.params.assemble(stateName, routeValues);
+    stateParams.routeParams = _route2.default.parts.assemble(stateName, routeValues);
 
     if (!silent) {
       _fragment2.default.set(stateParams.routeParams.fragment);

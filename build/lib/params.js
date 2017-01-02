@@ -41,9 +41,13 @@ exports.default = {
     targetStateName = _utils2.default.hasAt(targetStateName) ? _addresser2.default.stateName(targetStateName) : targetStateName;
     var stateConfigs = _vars2.default.states.registry[targetStateName];
 
-    if (stateConfigs.routeParams) {
-      var routeParamsNames = stateConfigs.routeParams.reduce(function (names, routeParamsConfigs) {
-        return names.push(routeParamsConfigs.name), names;
+    if (stateConfigs.routeParts) {
+      var routeParamsNames = stateConfigs.routeParts.reduce(function (names, routePart) {
+        if (!_lodash2.default.isUndefined(routePart.required)) {
+          names.push(routePart.name);
+        }
+
+        return names;
       }, []);
     }
 
@@ -58,7 +62,7 @@ exports.default = {
 
     if (stateConfigs.route) {
       _lodash2.default.extend(allParams, {
-        route: _route2.default.params.assemble(targetStateName, routeValues)
+        route: _route2.default.parts.assemble(targetStateName, routeValues)
       });
     }
 

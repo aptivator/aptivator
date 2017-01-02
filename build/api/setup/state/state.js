@@ -35,14 +35,8 @@ _instance2.default.state = function (stateName, stateConfigs) {
   registry[stateName] = stateConfigs;
 
   if (stateConfigs.route) {
-    stateConfigs.route = _route2.default.make(parentConfigs.route, stateConfigs.route);
+    _route2.default.configure(parentConfigs, stateConfigs);
 
-    if (parentConfigs.routeValues) {
-      stateConfigs.routeValues = parentConfigs.routeValues.concat(stateConfigs.routeValues || []);
-    }
-
-    stateConfigs.routeParams = _route2.default.params.parse(stateConfigs.route);
-    stateConfigs.routeRx = _route2.default.toRx(stateConfigs.route);
     _vars2.default.router.route(stateConfigs.route, stateName, function () {
       for (var _len = arguments.length, routeValues = Array(_len), _key = 0; _key < _len; _key++) {
         routeValues[_key] = arguments[_key];
@@ -51,7 +45,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
       routeValues = routeValues.filter(function (value) {
         return value;
       });
-      var routeParams = _route2.default.params.assemble(stateName, routeValues);
+      var routeParams = _route2.default.parts.assemble(stateName, routeValues);
       _instance2.default.activate({ stateName: stateName, routeParams: routeParams });
     });
   }

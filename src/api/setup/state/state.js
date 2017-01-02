@@ -17,17 +17,11 @@ aptivator.state = (stateName, stateConfigs) => {
   registry[stateName] = stateConfigs;
   
   if(stateConfigs.route) {
-    stateConfigs.route = route.make(parentConfigs.route, stateConfigs.route);
+    route.configure(parentConfigs, stateConfigs);
     
-    if(parentConfigs.routeValues) {
-      stateConfigs.routeValues = parentConfigs.routeValues.concat(stateConfigs.routeValues || []);
-    }
-    
-    stateConfigs.routeParams = route.params.parse(stateConfigs.route);
-    stateConfigs.routeRx = route.toRx(stateConfigs.route);
     vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
       routeValues = routeValues.filter(value => value);
-      let routeParams = route.params.assemble(stateName, routeValues);
+      let routeParams = route.parts.assemble(stateName, routeValues);
       aptivator.activate({stateName, routeParams});
     });
   }

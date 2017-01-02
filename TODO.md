@@ -1,8 +1,7 @@
 # TODOs
 
-* figure out what to do with parent route having an optional param
-* regarding above, route values should be added into a url fragment from last to first
-* fix route.params.assemble() to use results of route.params.parse() rather than using regexes again
+* objectify related variables (e.g., route variables [routeParts, route, routeRx, routeValues])
+* make error messages clearer throughout the code
 
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
@@ -43,11 +42,18 @@
 * Transient state deactivation should be done automatically
 * Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
 * modals/notifiers (A state that loads parallel to current state)
-
 * there are receivers that always get data, think about adding methods that simply trigger without data
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state (views or states)
 * assure that abstract states cannot be reached directly
+* **DONE** for error messages, provide an option to specify a module name from where the error is being generated
+* **DONE** assure that named params are unique in the route
+* **DONE** avoid parsing an entire child route when parent params are already parsed
+* **DONE** figure out what to do with parent route having an optional param
+* **DONE** regarding above, route values should be added into a url fragment from last to first (no need for that)
+* **DONE** fix route.params.assemble() to use results of route.params.parse() rather than using regexes again (No need, part of route is not a param, so regexes are necessary)
+* **DONE** make sure that splat parsing is on point (splat should be listed last)
+* **DONE** for now, enforce required parameters being listed first and optional after that
 * **DONE** parent state receives only its own route params (and its own url fragment)
 * **DONE** finalize procedures on default routeValues (these could be concatenated when state() is called)
 * **DONE** route with parent route having a param

@@ -28,7 +28,7 @@ export default (callback, stateParams) => {
   }
   
   if(!routeParams || _.isEmpty(routeParams)) {
-    stateParams.routeParams = route.params.assemble(stateName, routeValues);
+    stateParams.routeParams = route.parts.assemble(stateName, routeValues);
     
     if(!silent) {
       fragment.set(stateParams.routeParams.fragment);

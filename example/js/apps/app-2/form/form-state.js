@@ -3,8 +3,7 @@ var App2FormView = require('./form');
 var PlusView = require('./plus');
 
 aptivator.state('app-2.form', {
-  route: 'form/:two',
-  routeValues: [2],
+  route: 'form',
   resolve: {
     main: function() {
       return 'main';

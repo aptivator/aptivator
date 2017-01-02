@@ -36,7 +36,7 @@ _instance2.default.href = function (stateName) {
     _error2.default.throw('state [' + stateName + '] does not have a route');
   }
 
-  return '#' + _route2.default.params.assemble(stateName, routeValues).fragment;
+  return '#' + _route2.default.parts.assemble(stateName, routeValues).fragment;
 };
 
 var storageAction = function storageAction(storage, setter) {

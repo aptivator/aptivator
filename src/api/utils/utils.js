@@ -16,7 +16,7 @@ aptivator.href = (stateName, ...routeValues) => {
     error.throw(`state [${stateName}] does not have a route`);
   }
   
-  return `#${route.params.assemble(stateName, routeValues).fragment}`;
+  return `#${route.parts.assemble(stateName, routeValues).fragment}`;
 };
 
 let storageAction = (storage, setter) => 
