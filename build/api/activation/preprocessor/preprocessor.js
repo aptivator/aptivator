@@ -12,6 +12,10 @@ var _addresser = require('../../../lib/addresser');
 
 var _addresser2 = _interopRequireDefault(_addresser);
 
+var _error = require('../../../lib/error');
+
+var _error2 = _interopRequireDefault(_error);
+
 var _relations = require('../../../lib/relations');
 
 var _relations2 = _interopRequireDefault(_relations);
@@ -41,7 +45,7 @@ exports.default = function (callback, stateParams) {
       resolveDefinitions = stateParams.resolveDefinitions;
 
 
-  !function preprocess(stateName, prevSequence) {
+  function preprocess(stateName, prevSequence) {
     var existingRecord = activationSequences[stateName];
 
     var _ref = existingRecord || (activationSequences[stateName] = { activationSequence: {} }),
@@ -58,7 +62,7 @@ exports.default = function (callback, stateParams) {
     var resolveAddresses = stateConfigs.resolveAddresses = [];
 
     if (!stateConfigs) {
-      callback('state [' + stateName + '] has not been declared');
+      _error2.default.throw('state [' + stateName + '] has not been declared', 'preprocessor');
     }
 
     dataParams[stateName] = stateConfigs.data;
@@ -84,7 +88,9 @@ exports.default = function (callback, stateParams) {
       var viewAddressUnique = _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
 
       if (activationSequence[viewAddressFull]) {
-        callback('view [' + viewAddressFull + '] already exists for [' + activationSequence[viewAddressFull].stateName + '] state');
+        var _stateName = activationSequence[viewAddressFull].stateName;
+
+        _error2.default.throw('view [' + viewAddressFull + '] already exists for [' + _stateName + '] state', 'preprocessor');
       }
 
       if (viewAddress === 'main') {
@@ -111,7 +117,12 @@ exports.default = function (callback, stateParams) {
     if (prevSequence) {
       _lodash2.default.extend(prevSequence, activationSequence);
     }
-  }(stateName);
+  }
 
-  callback();
+  try {
+    preprocess(stateName);
+    callback();
+  } catch (e) {
+    callback(e);
+  }
 };

@@ -1,12 +1,15 @@
-import _ from 'lodash';
+import _     from 'lodash';
+import error from '../../../../lib/error';
 
 export default (resolves, resolveParams, storeKey, resolverParams) => 
   new Promise((resolve, reject) => {
-    if(!resolves) { return resolve(); }
+    if(!resolves) { 
+      return resolve();
+    }
     
-    let results = resolveParams[storeKey] || (resolveParams[storeKey] = {});
     let deps;
     let processedResolves = [];
+    let results = resolveParams[storeKey] || (resolveParams[storeKey] = {});
     
     let storeResult = (resolve, resolveName, result) => {
       resolve.processed = true;
@@ -30,6 +33,7 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
           if(_.difference(resolve.deps, processedResolves).length) {
             return dependents[resolveName] = resolve;
           }
+          
           _.extend(resolverParams.resolves, _.pick(resolveParams[storeKey], resolve.deps));
         }
         
@@ -57,10 +61,10 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
         
         if(deps && _.isEqual(deps, dependents)) {
           dependents = _.keys(dependents).join(', ');
-          return reject(`some dependencies specified for [${dependents}] resolve(s) are not found`);
+          error.throw(`some dependencies specified for [${dependents}] resolve(s) are not found`, 'resolver');
         }
         
         processResolves((deps = dependents));
-      });
+      }).catch(reject);
     }(resolves);
   }); 

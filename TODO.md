@@ -1,7 +1,11 @@
 # TODOs
 
+* some functions error out while in promise, see if that can be addressed
+* regarding above, see if aptivator.error() general function may be useful
+
 * objectify related variables (e.g., route variables [routeParts, route, routeRx, routeValues])
 * make error messages clearer throughout the code
+* update errors in promises
 
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
@@ -10,7 +14,8 @@
 * this also affects transient states, the animation on state change should run after the transient state is removed
 * also, transients are states, should that animation be applied to them also?
 
-* replace hasAt variable code with utils.hasAt() function
+* split utils api module into submodules
+
 * for invalid url, activate an error state, but there is no need to replace the url with error url (let the invalid url remain)
 * Documentation
 * Write a documentation note about source structure
@@ -46,6 +51,7 @@
 * think about use cases that may need sessionStorage or localStorage
 * error views within a certain state (views or states)
 * assure that abstract states cannot be reached directly
+* **DONE** replace hasAt variable code with utils.hasAt() function (no need, includes('@') works well)
 * **DONE** for error messages, provide an option to specify a module name from where the error is being generated
 * **DONE** assure that named params are unique in the route
 * **DONE** avoid parsing an entire child route when parent params are already parsed

@@ -16,10 +16,6 @@ var _route = require('./route');
 
 var _route2 = _interopRequireDefault(_route);
 
-var _utils = require('./utils');
-
-var _utils2 = _interopRequireDefault(_utils);
-
 var _vars = require('./vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -38,7 +34,7 @@ exports.default = {
     var data = {};
     var resolves = {};
     var targetStateName = family[family.length - 1];
-    targetStateName = _utils2.default.hasAt(targetStateName) ? _addresser2.default.stateName(targetStateName) : targetStateName;
+    targetStateName = targetStateName.includes('@') ? _addresser2.default.stateName(targetStateName) : targetStateName;
     var stateConfigs = _vars2.default.states.registry[targetStateName];
 
     if (stateConfigs.routeParts) {

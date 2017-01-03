@@ -38,6 +38,10 @@ aptivator.state('app-1', {
           },
           persist: false,
           store: false
+        },
+        
+        rejected: function() {
+          return Promise.resolve('rejecting...');
         }
       }
     }

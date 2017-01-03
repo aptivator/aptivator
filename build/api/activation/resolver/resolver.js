@@ -44,7 +44,7 @@ exports.default = function (callback, stateParams) {
   }, []);
   var tree = (0, _entitiesTreeBuilder2.default)(resolveAddresses);
 
-  !function processResolves() {
+  function processResolves() {
     var node = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : tree;
 
     return new Promise(function (resolve, reject) {
@@ -61,7 +61,13 @@ exports.default = function (callback, stateParams) {
       });
       Promise.all(promises).then(resolve).catch(reject);
     });
-  }().then(function () {
-    return callback();
-  }).catch(callback);
+  }
+
+  try {
+    processResolves().then(function () {
+      return callback();
+    }).catch(callback);
+  } catch (e) {
+    callback(e);
+  }
 };

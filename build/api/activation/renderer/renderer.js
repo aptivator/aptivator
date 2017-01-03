@@ -12,6 +12,10 @@ var _addresser = require('../../../lib/addresser');
 
 var _addresser2 = _interopRequireDefault(_addresser);
 
+var _error = require('../../../lib/error');
+
+var _error2 = _interopRequireDefault(_error);
+
 var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -52,7 +56,7 @@ exports.default = function (callback, stateParams) {
   var activationSequence = stateParams.activationSequences[stateParams.stateName].activationSequence;
 
 
-  (0, _addressOrderer2.default)(_lodash2.default.keys(activationSequence)).forEach(function (viewAddressFull) {
+  function viewRenderer(viewAddressFull) {
     var parentStateName = _addresser2.default.stateName(viewAddressFull);
     var parentConfigs = _vars2.default.states.registry[parentStateName];
     var parentRecord = activationRecords[parentStateName];
@@ -79,7 +83,7 @@ exports.default = function (callback, stateParams) {
     }
 
     if (!regionInstance) {
-      callback('region [' + regionName + '] does not exist for [' + parentStateName + '] state');
+      _error2.default.throw('region [' + regionName + '] does not exist for [' + parentStateName + '] state');
     }
 
     regionInstance._ensureElement();
@@ -97,7 +101,7 @@ exports.default = function (callback, stateParams) {
     if (unhide) {
       if (!_cacheable2.default.implicit.cache) {
         if (!_lodash2.default.isObject(cache) || !cache.receiver) {
-          callback('receiver function for variable parameters has not been provided');
+          _error2.default.throw('receiver function for variable parameters has not been provided');
         }
 
         var _parameters = (0, _paramsAssembler2.default)(viewConfigs, stateParams);
@@ -113,6 +117,15 @@ exports.default = function (callback, stateParams) {
     var instance = new viewConfigs.view(parameters);
     var serializeData = instance.serializeData;
 
+    instance.serializeData = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var data = serializeData && serializeData.apply(this, args);
+      return _lodash2.default.extend(this.options, data, { aptivator: _viewApi2.default });
+    };
+
     if (!main) {
       if (!parentRecord.immediates) {
         parentRecord.immediates = new Set();
@@ -125,20 +138,15 @@ exports.default = function (callback, stateParams) {
       instance: instance
     });
 
-    instance.serializeData = function () {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var data = serializeData && serializeData.apply(this, args);
-      return _lodash2.default.extend(this.options, data, { aptivator: _viewApi2.default });
-    };
-
     (0, _viewsDisplayer2.default)({ cacheAddresses: targetRegion.current, regionInstance: regionInstance, excludes: [cacheAddress] });
-
     instance.render();
     regionInstance.$el.append(instance.$el);
-  });
+  }
 
-  callback();
+  try {
+    (0, _addressOrderer2.default)(_lodash2.default.keys(activationSequence)).forEach(viewRenderer);
+    callback();
+  } catch (e) {
+    callback(e);
+  }
 };

@@ -1,7 +1,7 @@
 export default {
-  message: (error, moduleName) => `aptivator: ${moduleName && moduleName + ':' || ''} ${error}`,
+  message: (error, moduleName) => new Error(`aptivator: ${moduleName && moduleName + ': ' || ''}${error}`),
   
   'throw'(error, moduleName) {
-    throw new Error(this.message(error, moduleName));
+    throw this.message(error, moduleName);
   }
 };

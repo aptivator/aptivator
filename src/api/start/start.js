@@ -4,7 +4,9 @@ import queueChecker    from './queue-checker/queue-checker';
 import rootViewBuilder from './root-view-builder/root-view-builder';
 import starter         from './starter/starter';
 
-aptivator.start = () => utils.waterfall([
-  queueChecker,
-  rootViewBuilder
-], starter);
+aptivator.start = () => {
+  utils.waterfall([
+    queueChecker,
+    rootViewBuilder
+  ], starter);
+};

@@ -1,5 +1,6 @@
 import _                  from 'lodash';
 import addresser          from '../../../lib/addresser';
+import error              from '../../../lib/error';
 import relations          from '../../../lib/relations';
 import vars               from '../../../lib/vars';
 import fullAddressMaker   from './lib/full-address-maker';
@@ -9,7 +10,7 @@ import viewNormalizer     from './lib/view-normalizer';
 export default (callback, stateParams) => {
   let {stateName, activationSequences, dataParams, resolveDefinitions} = stateParams;
   
-  !function preprocess(stateName, prevSequence) {
+  function preprocess(stateName, prevSequence) {
     let existingRecord = activationSequences[stateName];
     let {activationSequence} = existingRecord || (activationSequences[stateName] = {activationSequence: {}});
     
@@ -24,7 +25,7 @@ export default (callback, stateParams) => {
     let resolveAddresses = stateConfigs.resolveAddresses = [];
     
     if(!stateConfigs) {
-      callback(`state [${stateName}] has not been declared`);
+      error.throw(`state [${stateName}] has not been declared`, 'preprocessor');
     }
     
     dataParams[stateName] = stateConfigs.data;
@@ -50,7 +51,8 @@ export default (callback, stateParams) => {
       let viewAddressUnique = `${_.uniqueId('aptivator-id-')}@${stateName}`;
       
       if(activationSequence[viewAddressFull]) {
-        callback(`view [${viewAddressFull}] already exists for [${activationSequence[viewAddressFull].stateName}] state`);
+        let {stateName} = activationSequence[viewAddressFull];
+        error.throw(`view [${viewAddressFull}] already exists for [${stateName}] state`, 'preprocessor');
       }
       
       if(viewAddress === 'main') {
@@ -78,7 +80,12 @@ export default (callback, stateParams) => {
     if(prevSequence) {
       _.extend(prevSequence, activationSequence);
     }
-  }(stateName);
-
-  callback();
+  }
+  
+  try {
+    preprocess(stateName);
+    callback();
+  } catch(e) {
+    callback(e);
+  }
 };

@@ -1,14 +1,11 @@
-import error from '../../../lib/error';
 import vars  from '../../../lib/vars';
 
-export default (err, stateParams) => {
-  let rootStateConfigs = vars.states.registry[vars.rootStateName];
-  
-  if(rootStateConfigs.showRuntime) {
-    console.log(`runtime: ${Date.now() - stateParams.time}ms`);
+export default (e, stateParams) => {
+  if(e) {
+    console.error(e);
   }
-  
-  if(err) {
-    error.throw(err);
+
+  if(vars.states.registry[vars.rootStateName].showRuntime) {
+    console.log(`%cruntime: ${Date.now() - stateParams.time}ms`, 'color: green;');
   }
 };

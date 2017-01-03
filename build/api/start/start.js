@@ -23,5 +23,5 @@ var _starter2 = _interopRequireDefault(_starter);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _instance2.default.start = function () {
-  return _utils2.default.waterfall([_queueChecker2.default, _rootViewBuilder2.default], _starter2.default);
+  _utils2.default.waterfall([_queueChecker2.default, _rootViewBuilder2.default], _starter2.default);
 };

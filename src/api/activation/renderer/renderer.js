@@ -1,5 +1,6 @@
 import _               from 'lodash';
 import addresser       from '../../../lib/addresser';
+import error           from '../../../lib/error';
 import vars            from '../../../lib/vars';
 import addressOrderer  from './lib/address-orderer';
 import cacheable       from './lib/cacheable';
@@ -13,8 +14,8 @@ let {activationRecords} = vars.states;
 
 export default (callback, stateParams) => {
   let {activationSequence} = stateParams.activationSequences[stateParams.stateName];
-  
-  addressOrderer(_.keys(activationSequence)).forEach(viewAddressFull => {
+
+  function viewRenderer(viewAddressFull) {
     let parentStateName = addresser.stateName(viewAddressFull);
     let parentConfigs = vars.states.registry[parentStateName];
     let parentRecord = activationRecords[parentStateName];
@@ -38,7 +39,7 @@ export default (callback, stateParams) => {
     }
     
     if(!regionInstance) {
-      callback(`region [${regionName}] does not exist for [${parentStateName}] state`);
+      error.throw(`region [${regionName}] does not exist for [${parentStateName}] state`);
     }
     
     regionInstance._ensureElement();
@@ -56,7 +57,7 @@ export default (callback, stateParams) => {
     if(unhide) {
       if(!cacheable.implicit.cache) {
         if(!_.isObject(cache) || !cache.receiver) {
-          callback(`receiver function for variable parameters has not been provided`);
+          error.throw(`receiver function for variable parameters has not been provided`);
         }
         
         let parameters = paramsAssembler(viewConfigs, stateParams);
@@ -72,6 +73,11 @@ export default (callback, stateParams) => {
     let instance = new viewConfigs.view(parameters);
     let serializeData = instance.serializeData;
     
+    instance.serializeData = function(...args) {
+      var data = serializeData && serializeData.apply(this, args);
+      return _.extend(this.options, data, {aptivator: viewApi});
+    };
+    
     if(!main) {
       if(!parentRecord.immediates) {
         parentRecord.immediates = new Set();
@@ -84,16 +90,15 @@ export default (callback, stateParams) => {
       instance
     });
     
-    instance.serializeData = function(...args) {
-      var data = serializeData && serializeData.apply(this, args);
-      return _.extend(this.options, data, {aptivator: viewApi});
-    };
-    
     viewsDisplayer({cacheAddresses: targetRegion.current, regionInstance, excludes: [cacheAddress]});
-    
     instance.render();
-    regionInstance.$el.append(instance.$el);
-  });
-
-  callback();
+    regionInstance.$el.append(instance.$el);    
+  }
+  
+  try {
+    addressOrderer(_.keys(activationSequence)).forEach(viewRenderer);
+    callback();
+  } catch(e) {
+    callback(e);
+  }
 };

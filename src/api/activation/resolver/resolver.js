@@ -12,7 +12,7 @@ export default (callback, stateParams) => {
     resolveAddresses.concat(vars.states.registry[relation].resolveAddresses), []);
   let tree = entitiesTreeBuilder(resolveAddresses);
 
-  !function processResolves(node = tree) {
+  function processResolves(node = tree) {
     return new Promise((resolve, reject) => {
       let promises = [];
       _.keys(node).forEach(entityName => {
@@ -25,5 +25,11 @@ export default (callback, stateParams) => {
       });
       Promise.all(promises).then(resolve).catch(reject);
     });
-  }().then(() => callback()).catch(callback);
+  }
+  
+  try {
+    processResolves().then(() => callback()).catch(callback);
+  } catch(e) {
+    callback(e);
+  }
 };

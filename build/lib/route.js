@@ -27,9 +27,9 @@ var routePartCleanRx = /[\(\/\:\)\*]/g;
 exports.default = {
   configure: function configure(parentConfigs, stateConfigs) {
     stateConfigs.routeParts = this.parts.parse(parentConfigs, stateConfigs);
+    stateConfigs.routeParts = (parentConfigs.routeParts || []).concat(stateConfigs.routeParts);
     stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
     stateConfigs.route = '' + (parentConfigs.route && parentConfigs.route + '/' || '') + stateConfigs.route;
-    stateConfigs.routeParts = (parentConfigs.routeParts || []).concat(stateConfigs.routeParts);
     stateConfigs.routeRx = _backbone2.default.Router.prototype._routeToRegExp(stateConfigs.route);
   },
 

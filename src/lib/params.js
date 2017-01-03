@@ -1,7 +1,6 @@
 import _         from 'lodash';
 import addresser from './addresser';
 import route     from './route';
-import utils     from './utils';
 import vars      from './vars';
 
 export default {
@@ -10,7 +9,7 @@ export default {
     let data = {};
     let resolves = {};
     let targetStateName = family[family.length - 1];
-    targetStateName = utils.hasAt(targetStateName) ? addresser.stateName(targetStateName) : targetStateName;
+    targetStateName = targetStateName.includes('@') ? addresser.stateName(targetStateName) : targetStateName;
     let stateConfigs = vars.states.registry[targetStateName];
     
     if(stateConfigs.routeParts) {

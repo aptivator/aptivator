@@ -8,6 +8,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _error = require('../../../../lib/error');
+
+var _error2 = _interopRequireDefault(_error);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
@@ -16,9 +20,9 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
       return resolve();
     }
 
-    var results = resolveParams[storeKey] || (resolveParams[storeKey] = {});
     var deps = void 0;
     var processedResolves = [];
+    var results = resolveParams[storeKey] || (resolveParams[storeKey] = {});
 
     var storeResult = function storeResult(resolve, resolveName, result) {
       resolve.processed = true;
@@ -42,6 +46,7 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
           if (_lodash2.default.difference(resolve.deps, processedResolves).length) {
             return dependents[resolveName] = resolve;
           }
+
           _lodash2.default.extend(resolverParams.resolves, _lodash2.default.pick(resolveParams[storeKey], resolve.deps));
         }
 
@@ -69,11 +74,11 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
 
         if (deps && _lodash2.default.isEqual(deps, dependents)) {
           dependents = _lodash2.default.keys(dependents).join(', ');
-          return reject('some dependencies specified for [' + dependents + '] resolve(s) are not found');
+          _error2.default.throw('some dependencies specified for [' + dependents + '] resolve(s) are not found', 'resolver');
         }
 
         processResolves(deps = dependents);
-      });
+      }).catch(reject);
     }(resolves);
   });
 };

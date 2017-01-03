@@ -24,31 +24,38 @@ var registry = _vars2.default.states.registry;
 
 
 _instance2.default.state = function (stateName, stateConfigs) {
-  var parentStateName = _relations2.default.parent(stateName);
-  var parentConfigs = registry[parentStateName];
+  function state() {
+    var parentStateName = _relations2.default.parent(stateName);
+    var parentConfigs = registry[parentStateName];
 
-  if (!_relations2.default.isRoot(parentStateName) && !parentConfigs) {
-    _vars2.default.states.queue.push([stateName, stateConfigs]);
-    return _instance2.default;
-  }
+    if (!_relations2.default.isRoot(parentStateName) && !parentConfigs) {
+      _vars2.default.states.queue.push([stateName, stateConfigs]);
+      return _instance2.default;
+    }
 
-  registry[stateName] = stateConfigs;
+    registry[stateName] = stateConfigs;
 
-  if (stateConfigs.route) {
-    _route2.default.configure(parentConfigs, stateConfigs);
+    if (stateConfigs.route) {
+      _route2.default.configure(parentConfigs, stateConfigs);
+      _vars2.default.router.route(stateConfigs.route, stateName, function () {
+        for (var _len = arguments.length, routeValues = Array(_len), _key = 0; _key < _len; _key++) {
+          routeValues[_key] = arguments[_key];
+        }
 
-    _vars2.default.router.route(stateConfigs.route, stateName, function () {
-      for (var _len = arguments.length, routeValues = Array(_len), _key = 0; _key < _len; _key++) {
-        routeValues[_key] = arguments[_key];
-      }
-
-      routeValues = routeValues.filter(function (value) {
-        return value;
+        routeValues = routeValues.filter(function (value) {
+          return value;
+        });
+        var routeParams = _route2.default.parts.assemble(stateName, routeValues);
+        _instance2.default.activate({ stateName: stateName, routeParams: routeParams });
       });
-      var routeParams = _route2.default.parts.assemble(stateName, routeValues);
-      _instance2.default.activate({ stateName: stateName, routeParams: routeParams });
-    });
+    }
+
+    return _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, _toConsumableArray(_vars2.default.states.queue.pop())) : _instance2.default;
   }
 
-  return _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, _toConsumableArray(_vars2.default.states.queue.pop())) : _instance2.default;
+  try {
+    return state();
+  } catch (e) {
+    console.error(e);
+  }
 };
