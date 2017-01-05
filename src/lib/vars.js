@@ -10,6 +10,11 @@ export default {
   states: {
     activationRecords: {},
     queue: [],
-    registry: {}
+    registry: {},
+    error: {
+      root: [],
+      nested: []
+    },
+    transient: []
   }
 };

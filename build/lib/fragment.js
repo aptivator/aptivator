@@ -20,7 +20,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   get: function get() {
-    return _backbone2.default.history.fragment;
+    return _backbone2.default.history.getFragment();
   },
 
   set: function set(route) {
@@ -32,8 +32,9 @@ exports.default = {
     var fragment = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get();
 
     return _lodash2.default.keys(_vars2.default.states.registry).filter(function (stateName) {
-      var routeRx = _vars2.default.states.registry[stateName].routeRx;
-      return routeRx && routeRx.test(fragment);
+      var stateConfigs = _vars2.default.states.registry[stateName];
+      var routeRx = stateConfigs.routeRx;
+      return !stateConfigs.abstract && routeRx && routeRx.test(fragment);
     })[0];
   }
 };

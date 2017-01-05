@@ -3,14 +3,15 @@ import Backbone from 'backbone';
 import vars     from './vars';
 
 export default {
-  get: () => Backbone.history.fragment,
+  get: () => Backbone.history.getFragment(),
   
   set: (route, options = {}) => vars.router.navigate(route, options),
   
   toState(fragment = this.get()) {
     return _.keys(vars.states.registry).filter(stateName => {
-      let routeRx = vars.states.registry[stateName].routeRx;
-      return routeRx && routeRx.test(fragment);
+      let stateConfigs = vars.states.registry[stateName];
+      let routeRx = stateConfigs.routeRx;
+      return !stateConfigs.abstract && routeRx && routeRx.test(fragment);
     })[0];
   }
 };

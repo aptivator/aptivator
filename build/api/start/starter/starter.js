@@ -12,10 +12,6 @@ var _instance = require('../../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _error = require('../../../lib/error');
-
-var _error2 = _interopRequireDefault(_error);
-
 var _fragment = require('../../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);
@@ -26,9 +22,9 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (err) {
-  if (err) {
-    return _error2.default.throw(err);
+exports.default = function (e) {
+  if (e) {
+    return console.error(e);
   }
 
   var rootStateConfigs = _vars2.default.states.registry[_vars2.default.rootStateName];
@@ -37,7 +33,7 @@ exports.default = function (err) {
 
   _backbone2.default.history.start();
 
-  if (!_fragment2.default.toState() && defaultStates) {
+  if (!_fragment2.default.get() && defaultStates) {
     defaultStates.forEach(function (stateName) {
       return _instance2.default.activate({ stateName: stateName, directParams: { running: true } });
     });

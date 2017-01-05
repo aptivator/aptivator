@@ -7,12 +7,12 @@ import dataStores from './lib/data-stores';
 
 let {registry} = vars.states;
 
-export default (callback, stateParams) => {
-  let {stateName, routeParams, routeValues, silent} = stateParams;
-  let stateConfigs = registry[stateName];
-  let rootStateConfigs = registry[vars.rootStateName];
-
-  function initializer() {
+export default stateParams => 
+  new Promise((resolve, reject) => {
+    let {stateName, routeParams, routeValues, silent} = stateParams;
+    let stateConfigs = registry[stateName];
+    let rootStateConfigs = registry[vars.rootStateName];
+    
     if(rootStateConfigs.showRuntime) {
       stateParams.time = Date.now();
     }
@@ -38,12 +38,6 @@ export default (callback, stateParams) => {
     }
     
     _.extend(stateParams, dataStores);
-  }
-  
-  try {
-    initializer();
-    callback();
-  } catch(e) {
-    callback(e);
-  }
-};
+    
+    resolve(stateParams);
+  });

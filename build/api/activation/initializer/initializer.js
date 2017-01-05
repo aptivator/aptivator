@@ -32,16 +32,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var registry = _vars2.default.states.registry;
 
-exports.default = function (callback, stateParams) {
-  var stateName = stateParams.stateName,
-      routeParams = stateParams.routeParams,
-      routeValues = stateParams.routeValues,
-      silent = stateParams.silent;
+exports.default = function (stateParams) {
+  return new Promise(function (resolve, reject) {
+    var stateName = stateParams.stateName,
+        routeParams = stateParams.routeParams,
+        routeValues = stateParams.routeValues,
+        silent = stateParams.silent;
 
-  var stateConfigs = registry[stateName];
-  var rootStateConfigs = registry[_vars2.default.rootStateName];
+    var stateConfigs = registry[stateName];
+    var rootStateConfigs = registry[_vars2.default.rootStateName];
 
-  function initializer() {
     if (rootStateConfigs.showRuntime) {
       stateParams.time = Date.now();
     }
@@ -67,12 +67,7 @@ exports.default = function (callback, stateParams) {
     }
 
     _lodash2.default.extend(stateParams, _dataStores2.default);
-  }
 
-  try {
-    initializer();
-    callback();
-  } catch (e) {
-    callback(e);
-  }
+    resolve(stateParams);
+  });
 };

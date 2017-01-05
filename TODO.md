@@ -1,11 +1,6 @@
 # TODOs
 
-* some functions error out while in promise, see if that can be addressed
-* regarding above, see if aptivator.error() general function may be useful
-
 * objectify related variables (e.g., route variables [routeParts, route, routeRx, routeValues])
-* make error messages clearer throughout the code
-* update errors in promises
 
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
@@ -17,6 +12,8 @@
 * split utils api module into submodules
 
 * for invalid url, activate an error state, but there is no need to replace the url with error url (let the invalid url remain)
+* think through the process for handling  invalid routes include history.replace(), etc.
+
 * Documentation
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
@@ -27,13 +24,11 @@
 * when multiple views are in a state cache: auto could be a flag for one of the views
 * think about dependency implementation among states not just views within a state
 * purely perfectionist, but take a look at some views that do not need to be hidden and then displayed right away
-* appropriate routeParams should be given to a respective state or view.  If stateConfigs does not include route, then no routeParams should be given. (not critical)
 * defaultState should be defaultStates and an array containing a number of states that can be activated at the outset
 * distinguish between route error state and error state when software error occurs...
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * in ```aptivator.state()``` handle navigation to error state
 * put back parallel states (if necessary)
-* think through the process for handling  invalid routes include history.replace(), etc.
 * put back the code to handle invalid routes
 * put back the code to handle exit from error state
 * handle 'pending' status when activate() is invoked
@@ -48,9 +43,14 @@
 * Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
 * modals/notifiers (A state that loads parallel to current state)
 * there are receivers that always get data, think about adding methods that simply trigger without data
-* think about use cases that may need sessionStorage or localStorage
 * error views within a certain state (views or states)
-* assure that abstract states cannot be reached directly
+* **DONE** think about use cases that may need sessionStorage or localStorage (those are available, it's up to the user)
+* **DONE** assure that abstract states cannot be reached directly
+* **DONE** appropriate routeParams should be given to a respective state or view.  If stateConfigs does not include route, then no routeParams should be given. (not critical)
+* **DONE** make error messages clearer throughout the code
+* **DONE** update errors in promises
+* **DONE** some functions error out while in promise, see if that can be addressed
+* **DONE** regarding above, see if aptivator.error() general function may be useful (no need, try/catch should suffice)
 * **DONE** replace hasAt variable code with utils.hasAt() function (no need, includes('@') works well)
 * **DONE** for error messages, provide an option to specify a module name from where the error is being generated
 * **DONE** assure that named params are unique in the route

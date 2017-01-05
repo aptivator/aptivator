@@ -7,6 +7,4 @@ require('./apps/header/header-state');
 require('./apps/app-2/app-2-state');
 require('./apps/error/error-state');
 
-var aptivator = require('aptivator');
-
-aptivator.start();
+require('aptivator').start();

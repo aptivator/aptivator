@@ -47,7 +47,7 @@ exports.default = {
       }, []);
     }
 
-    var routeValues = _lodash2.default.values(_lodash2.default.pick(routeParams.params, routeParamsNames));
+    var routeValues = !routeParams ? [] : _lodash2.default.values(_lodash2.default.pick(routeParams.params, routeParamsNames));
 
     family.forEach(function (relation) {
       _lodash2.default.extend(data, dataParams[relation]);

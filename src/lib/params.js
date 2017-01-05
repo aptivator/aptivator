@@ -22,7 +22,7 @@ export default {
       }, []);
     }
 
-    let routeValues = _.values(_.pick(routeParams.params, routeParamsNames));
+    let routeValues = !routeParams ? [] : _.values(_.pick(routeParams.params, routeParamsNames));
     
     family.forEach(relation => {
       _.extend(data, dataParams[relation]);

@@ -1,12 +1,11 @@
 import Backbone        from 'backbone';
 import aptivator       from '../../../lib/instance';
-import error           from '../../../lib/error';
 import fragment        from '../../../lib/fragment';
 import vars            from '../../../lib/vars';
 
-export default err => {
-  if(err) { 
-    return error.throw(err);
+export default e => {
+  if(e) { 
+    return console.error(e);
   }
   
   let rootStateConfigs = vars.states.registry[vars.rootStateName];
@@ -14,7 +13,7 @@ export default err => {
   
   Backbone.history.start();
   
-  if(!fragment.toState() && defaultStates) {
+  if(!fragment.get() && defaultStates) {
     defaultStates.forEach(stateName => 
       aptivator.activate({stateName, directParams: {running: true}}));
   }

@@ -10,5 +10,20 @@ exports.default = {
 
   'throw': function _throw(error, moduleName) {
     throw this.message(error, moduleName);
-  }
+  },
+
+
+  console: function (_console) {
+    function console(_x) {
+      return _console.apply(this, arguments);
+    }
+
+    console.toString = function () {
+      return _console.toString();
+    };
+
+    return console;
+  }(function (e) {
+    return console.error(e);
+  })
 };
