@@ -37,9 +37,7 @@ export default {
       });
     }
     
-    if(family.includes(stateName) && directParams) {
-      allParams.direct = directParams;
-    }
+    allParams.direct = family.includes(stateName) ? directParams : undefined;
     
     return clone ? _.cloneDeep(allParams) : allParams;
   }

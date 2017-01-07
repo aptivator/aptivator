@@ -8,7 +8,13 @@ import dataStores from './lib/data-stores';
 let {registry} = vars.states;
 
 export default stateParams => 
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
+    stateParams.directParams = stateParams.direct;
+    stateParams.routeParams = stateParams.route;
+    
+    delete stateParams.direct;
+    delete stateParams.route;
+    
     let {stateName, routeParams, routeValues, silent} = stateParams;
     let stateConfigs = registry[stateName];
     let rootStateConfigs = registry[vars.rootStateName];

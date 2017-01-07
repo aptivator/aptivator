@@ -1,10 +1,14 @@
 'use strict';
 
+require('./api/history/history');
+
+require('./api/storage/storage');
+
+require('./api/utils/utils');
+
 require('./api/setup/setup');
 
 require('./api/start/start');
-
-require('./api/utils/utils');
 
 require('./api/activation/activation');
 

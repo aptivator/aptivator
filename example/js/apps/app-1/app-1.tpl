@@ -34,7 +34,7 @@
   </div>
   <p><strong><%= route.fragment %> <%= route.stateName %></strong></p>
   <% if(_.keys(route.params).length) { %>
-  <h4>Params</h4>
+  <h4>Route params</h4>
   <div class = "row">
     <div class = "col-md-12">
       <% _.each(route.params, function(value, name) { %>
@@ -43,4 +43,12 @@
     </div>
   </div>
   <% } %>
+  <h4>Direct params</h4>
+  <div class = "row">
+    <div class = "col-md-12">
+      <% direct && _.each(direct, function(value, name) { %>
+        <p><%= name %>: <%= value %></p>
+      <% }); %>
+    </div>
+  </div>
 </div>

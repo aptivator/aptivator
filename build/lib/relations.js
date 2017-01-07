@@ -19,12 +19,15 @@ exports.default = {
     return stateName === _vars2.default.rootStateName;
   },
 
+  parts: function parts(stateName) {
+    return stateName.split('.');
+  },
   family: function family(stateName) {
     if (!stateName) {
       return [];
     }
 
-    var family = stateName.split('.');
+    var family = this.parts(stateName);
 
     family = _lodash2.default.range(1, family.length + 1).map(function (end) {
       return family.slice(0, end).join('.');

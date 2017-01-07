@@ -39,7 +39,7 @@ var _viewNormalizer2 = _interopRequireDefault(_viewNormalizer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (stateParams) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     var stateName = stateParams.stateName,
         activationSequences = stateParams.activationSequences,
         dataParams = stateParams.dataParams,

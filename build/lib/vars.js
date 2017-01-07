@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   historySize: 25,
 
-  rootStateName: 'aptivator-root-state',
+  rootStateName: 'root',
 
   router: new _backbone2.default.Router(),
 
@@ -21,10 +21,7 @@ exports.default = {
     activationRecords: {},
     queue: [],
     registry: {},
-    error: {
-      root: [],
-      nested: []
-    },
+    error: [],
     transient: []
   }
 };

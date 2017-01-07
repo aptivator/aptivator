@@ -8,7 +8,7 @@ import resolvesNormalizer from './lib/resolves-normalizer';
 import viewNormalizer     from './lib/view-normalizer';
 
 export default stateParams => 
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     let {stateName, activationSequences, dataParams, resolveDefinitions} = stateParams;
     
     !function preprocess(stateName, prevSequence) {

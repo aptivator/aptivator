@@ -33,7 +33,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var registry = _vars2.default.states.registry;
 
 exports.default = function (stateParams) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
+    stateParams.directParams = stateParams.direct;
+    stateParams.routeParams = stateParams.route;
+
+    delete stateParams.direct;
+    delete stateParams.route;
+
     var stateName = stateParams.stateName,
         routeParams = stateParams.routeParams,
         routeValues = stateParams.routeValues,

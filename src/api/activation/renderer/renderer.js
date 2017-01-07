@@ -13,7 +13,7 @@ import viewsDisplayer  from './lib/views-displayer';
 let {activationRecords} = vars.states;
 
 export default stateParams => 
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     let {activationSequence} = stateParams.activationSequences[stateParams.stateName];
   
     addressOrderer(_.keys(activationSequence)).forEach(viewAddressFull => {

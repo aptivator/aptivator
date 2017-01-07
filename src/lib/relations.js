@@ -4,12 +4,16 @@ import vars from './vars';
 export default {
   isRoot: stateName => stateName === vars.rootStateName,
   
+  parts(stateName) {
+    return stateName.split('.');
+  },
+  
   family(stateName) {
     if(!stateName) { 
       return []; 
     }
     
-    let family = stateName.split('.');
+    let family = this.parts(stateName);
     
     family = _.range(1, family.length + 1).map(end => family.slice(0, end).join('.'));
     

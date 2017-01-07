@@ -1,19 +1,10 @@
 import _        from 'lodash';
-import Backbone from 'backbone';
 import error    from './error';
 import vars     from './vars';
 
 const routePartCleanRx = /[\(\/\:\)\*]/g;
 
 export default {
-  configure(parentConfigs, stateConfigs) {
-    stateConfigs.routeParts = this.parts.parse(parentConfigs, stateConfigs);
-    stateConfigs.routeParts = (parentConfigs.routeParts || []).concat(stateConfigs.routeParts);
-    stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
-    stateConfigs.route = `${parentConfigs.route && parentConfigs.route + '/' || ''}${stateConfigs.route}`;
-    stateConfigs.routeRx = Backbone.Router.prototype._routeToRegExp(stateConfigs.route);
-  },
-  
   parts: {
     assemble: (stateName, routeValues) => {
       let stateConfigs = vars.states.registry[stateName];
@@ -58,12 +49,12 @@ export default {
         return paramNames;
       }, []);
       
-      return !routeParts ? [] : routeParts.map(routePart => {
+      routeParts = !routeParts ? [] : routeParts.map(routePart => {
         routePart = routePart.replace(/[\s\/]+/g, '');
         
         if(!routePart.match(/[\*\:]/g)) {
           if(hasSplat || hasOptional) {
-            error.throw(`cannot declare a regular route part after a splat or optional parameter`, 'routing');
+            error.throw('cannot declare a regular route part after a splat or optional parameter', 'routing');
           }
           
           return {
@@ -87,7 +78,7 @@ export default {
         
         if(required) {
           if(hasSplat || hasOptional) {
-            error.throw(`required parameter cannot be declared after a splat or optional parameter`, 'routing');
+            error.throw('required parameter cannot be declared after a splat or optional parameter', 'routing');
           }
         }
         
@@ -114,6 +105,8 @@ export default {
         
         return {required, prefix, name};
       });
+      
+      return (parentConfigs.routeParts || []).concat(routeParts);
     }
   }
 };

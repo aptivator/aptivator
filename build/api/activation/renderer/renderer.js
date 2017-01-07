@@ -53,7 +53,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var activationRecords = _vars2.default.states.activationRecords;
 
 exports.default = function (stateParams) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     var activationSequence = stateParams.activationSequences[stateParams.stateName].activationSequence;
 
 

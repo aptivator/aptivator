@@ -3,15 +3,12 @@ import vars  from '../../../lib/vars';
 
 let {queue} = vars.states;
 
-export default callback => {
-  try {
+export default () => 
+  new Promise(resolve => {
     if(!queue.length) {
-      return callback();
+      return resolve();
     }
     
     let undefinedStateNames = queue.map(stateDefinition => stateDefinition[0]).join(', ');
     error.throw(`unable to initialize [${undefinedStateNames}] states`);
-  } catch(e) {
-    callback(e);
-  }
-};
+  });

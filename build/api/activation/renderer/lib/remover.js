@@ -47,10 +47,9 @@ exports.default = {
         detach = record.detached;
       }
 
-      var operation = detach ? 'detach' : 'addClass';
-      var parameter = detach ? null : _hideClass2.default;
-
-      if (targetRegion.current !== cacheAddress) {
+      if (!targetRegion.current.has(cacheAddress)) {
+        var operation = detach ? 'detach' : 'addClass';
+        var parameter = detach ? null : _hideClass2.default;
         $el[operation](parameter);
       }
 

@@ -3,7 +3,7 @@ import Backbone from 'backbone';
 export default {
   historySize: 25,
   
-  rootStateName: 'aptivator-root-state',
+  rootStateName: 'root',
   
   router: new Backbone.Router(),
   
@@ -11,10 +11,7 @@ export default {
     activationRecords: {},
     queue: [],
     registry: {},
-    error: {
-      root: [],
-      nested: []
-    },
+    error: [],
     transient: []
   }
 };

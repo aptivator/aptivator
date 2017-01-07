@@ -43,7 +43,8 @@
 * Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
 * modals/notifiers (A state that loads parallel to current state)
 * there are receivers that always get data, think about adding methods that simply trigger without data
-* error views within a certain state (views or states)
+* **DONE** error views within a certain state (views or states)
+* **DONE** enforce that no state name is named root
 * **DONE** think about use cases that may need sessionStorage or localStorage (those are available, it's up to the user)
 * **DONE** assure that abstract states cannot be reached directly
 * **DONE** appropriate routeParams should be given to a respective state or view.  If stateConfigs does not include route, then no routeParams should be given. (not critical)

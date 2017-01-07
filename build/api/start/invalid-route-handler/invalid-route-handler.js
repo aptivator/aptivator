@@ -20,6 +20,10 @@ var _fragment = require('../../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);
 
+var _relations = require('../../../lib/relations');
+
+var _relations2 = _interopRequireDefault(_relations);
+
 var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -49,78 +53,50 @@ var findNearestStateName = function findNearestStateName(hash) {
   return findNearestStateName(hash.split('/').slice(0, -1).join('/'));
 };
 
-var determineErrorStateName = function determineErrorStateName(stateName) {
-  if (!stateName || !_vars2.default.states.error.nested.length) {
-    return _vars2.default.states.error.root[0];
+var determineOtherStateName = function determineOtherStateName(stateName, registeredStateNames) {
+  if (!stateName) {
+    return registeredStateNames.root;
   }
 
-  var stateNameParts = stateName.split('.');
-  var partsCount = 0;
+  var stateNameParts = _relations2.default.parts(stateName);
+  var max = 0;
 
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
-
-  try {
-    for (var _iterator = _vars2.default.states.error.nested[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var errorStateName = _step.value;
-
-      var errorStateNameParts = errorStateName.split('.');
-      var intersection = _lodash2.default.intersection(stateNameParts, errorStateNameParts);
-      if (intersection.length > partsCount) {
-        stateName = errorStateName;
-        partsCount = intersection.length;
-      }
+  registeredStateNames.forEach(function (errorStateName) {
+    var intersection = _lodash2.default.intersection(stateNameParts, _relations2.default.parts(errorStateName));
+    if (intersection.length > max) {
+      stateName = errorStateName;
+      max = intersection.length;
     }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
-  }
+  });
 
-  return partsCount ? stateName : determineErrorStateName();
+  return max ? stateName : determineOtherStateName(null, registeredStateNames);
 };
 
-var invalidRouteListener = function invalidRouteListener(evt) {
+var invalidRouteListener = function invalidRouteListener() {
   if (_fragment2.default.toState()) {
     return;
   }
 
   var hash = _fragment2.default.get();
-
-  console.log(hash);
-
   var stateName = findNearestStateName(hash);
-
-  console.log(stateName);
-
-  stateName = determineErrorStateName(stateName);
-
-  console.log(stateName);
+  stateName = determineOtherStateName(stateName, _vars2.default.states.error);
 
   if (!stateName) {
     return alert('Provided route [' + hash + '] is invalid');
   }
 
-  _instance2.default.activate({ stateName: stateName, directParams: { fragment: hash } });
+  _instance2.default.activate({ stateName: stateName, direct: { fragment: hash } });
 };
 
-exports.default = function (callback) {
-  (0, _jquery2.default)(function () {
-    invalidRouteListener();
-    setTimeout(function () {
-      return (0, _jquery2.default)(window).on('hashchange', invalidRouteListener);
+exports.default = function () {
+  return new Promise(function (resolve) {
+    (0, _jquery2.default)(function () {
+      invalidRouteListener();
+      setTimeout(function () {
+        return (0, _jquery2.default)(window).on('hashchange', invalidRouteListener);
+      });
     });
-  });
 
-  callback();
+    resolve();
+  });
 };

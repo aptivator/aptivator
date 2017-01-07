@@ -8,10 +8,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _backbone = require('backbone');
-
-var _backbone2 = _interopRequireDefault(_backbone);
-
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -25,15 +21,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var routePartCleanRx = /[\(\/\:\)\*]/g;
 
 exports.default = {
-  configure: function configure(parentConfigs, stateConfigs) {
-    stateConfigs.routeParts = this.parts.parse(parentConfigs, stateConfigs);
-    stateConfigs.routeParts = (parentConfigs.routeParts || []).concat(stateConfigs.routeParts);
-    stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
-    stateConfigs.route = '' + (parentConfigs.route && parentConfigs.route + '/' || '') + stateConfigs.route;
-    stateConfigs.routeRx = _backbone2.default.Router.prototype._routeToRegExp(stateConfigs.route);
-  },
-
-
   parts: {
     assemble: function assemble(stateName, routeValues) {
       var stateConfigs = _vars2.default.states.registry[stateName];
@@ -80,7 +67,7 @@ exports.default = {
         return paramNames;
       }, []);
 
-      return !routeParts ? [] : routeParts.map(function (routePart) {
+      routeParts = !routeParts ? [] : routeParts.map(function (routePart) {
         routePart = routePart.replace(/[\s\/]+/g, '');
 
         if (!routePart.match(/[\*\:]/g)) {
@@ -136,6 +123,8 @@ exports.default = {
 
         return { required: required, prefix: prefix, name: name };
       });
+
+      return (parentConfigs.routeParts || []).concat(routeParts);
     }
   }
 };

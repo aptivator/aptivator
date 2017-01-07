@@ -62,9 +62,7 @@ exports.default = {
       });
     }
 
-    if (family.includes(stateName) && directParams) {
-      allParams.direct = directParams;
-    }
+    allParams.direct = family.includes(stateName) ? directParams : undefined;
 
     return clone ? _lodash2.default.cloneDeep(allParams) : allParams;
   }

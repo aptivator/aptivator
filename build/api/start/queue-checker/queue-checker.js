@@ -16,17 +16,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var queue = _vars2.default.states.queue;
 
-exports.default = function (callback) {
-  try {
+exports.default = function () {
+  return new Promise(function (resolve) {
     if (!queue.length) {
-      return callback();
+      return resolve();
     }
 
     var undefinedStateNames = queue.map(function (stateDefinition) {
       return stateDefinition[0];
     }).join(', ');
     _error2.default.throw('unable to initialize [' + undefinedStateNames + '] states');
-  } catch (e) {
-    callback(e);
-  }
+  });
 };
