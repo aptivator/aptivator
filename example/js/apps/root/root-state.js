@@ -9,14 +9,10 @@ aptivator.config({
     persist: true,
     store: true,
   },
-  detachHidden: true,
-  defaultStates: ['app-1'],
+  detachHidden: false,
+  //multiples: ['main'],
+  defaultState: 'app-1',
   showRuntime: true,
-  invalidRoute: {
-    state: 'error',
-    clearViews: false,
-    clearExcept: []
-  },
   resolve: {
     dmitriy: function() {
       return 'dmitriy';

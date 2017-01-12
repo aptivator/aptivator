@@ -4,6 +4,7 @@ var App1View = require('./app-1');
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
+  states: ['header'],
   resolve: {
     run: function() {
       return 'run';

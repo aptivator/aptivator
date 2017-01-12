@@ -1,18 +1,20 @@
 'use strict';
 
-require('./api/history/history');
+require('./history/history');
 
-require('./api/storage/storage');
+require('./storage/storage');
 
-require('./api/utils/utils');
+require('./utils/utils');
 
-require('./api/setup/setup');
+require('./setup/setup');
 
-require('./api/start/start');
+require('./start/start');
 
-require('./api/activation/activation');
+require('./activation/activation');
 
-require('./api/deactivation/deactivation');
+require('./deactivation/deactivation');
+
+require('./destruction/destruction');
 
 var _instance = require('./lib/instance');
 

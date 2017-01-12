@@ -1,11 +1,11 @@
-import './api/history/history';
-import './api/storage/storage';
-import './api/utils/utils';
-
-import './api/setup/setup';
-import './api/start/start';
-import './api/activation/activation';
-import './api/deactivation/deactivation';
+import './history/history';
+import './storage/storage';
+import './utils/utils';
+import './setup/setup';
+import './start/start';
+import './activation/activation';
+import './deactivation/deactivation';
+import './destruction/destruction';
 
 import instance from './lib/instance';
 

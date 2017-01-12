@@ -19,9 +19,12 @@ exports.default = {
 
   states: {
     activationRecords: {},
+    activationSequences: {},
+    error: [],
     queue: [],
     registry: {},
-    error: [],
     transient: []
-  }
+  },
+
+  viewsRegistry: {}
 };

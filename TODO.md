@@ -1,48 +1,51 @@
 # TODOs
 
-* objectify related variables (e.g., route variables [routeParts, route, routeRx, routeValues])
-
-* animate change from state to state - make it look less sharp
-* regarding the above one, place a class that makes application container invisible and then remove it after rendering
-* for animation think about adding class operations performed when views are activated and inactivated
-* for animation spec also provide a way to define a selector to which the animation class is applied
-* this also affects transient states, the animation on state change should run after the transient state is removed
-* also, transients are states, should that animation be applied to them also?
-
-* split utils api module into submodules
-
-* for invalid url, activate an error state, but there is no need to replace the url with error url (let the invalid url remain)
-* think through the process for handling  invalid routes include history.replace(), etc.
-
 * Documentation
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* animate change from state to state - make it look less sharp
+* regarding the above one, place a class that makes application container invisible and then remove it after rendering
+* for animation think about adding class operations performed when views are activated and inactivated
+* for animation spec also provide a way to define a selector to which the animation class is applied
+* for animation, a class to add at the activation of a state
+* this also affects transient states, the animation on state change should run after the transient state is removed
+* also, transients are states, should that animation be applied to them also?
+* whether animation is applied can be defined by animation object on a given state
+* think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
-* think about whether to have a caching policy variables
-* take a look to see what variables need to be moved from vars to data-stores.js
-* when multiple views are in a state cache: auto could be a flag for one of the views
-* think about dependency implementation among states not just views within a state
-* purely perfectionist, but take a look at some views that do not need to be hidden and then displayed right away
-* defaultState should be defaultStates and an array containing a number of states that can be activated at the outset
 * distinguish between route error state and error state when software error occurs...
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
-* in ```aptivator.state()``` handle navigation to error state
-* put back parallel states (if necessary)
-* put back the code to handle invalid routes
-* put back the code to handle exit from error state
-* handle 'pending' status when activate() is invoked
-* instead of using 'pending' think about activate() returning a promise and then queueing the next activate() call
-* place history object back
-* add state names to transient states library?
-* Think about whether parallel states are necessary
-* In history object create a flexibile get() method
-* Should intermediate be just a state? (that would fit into a general state mechanisms - declaration, loading, unloading) (*DEFINITELY*)
-* Caching of intermediate views (thinking of this as transient states that are activated and deactivated, changes it)
 * Transient state deactivation should be done automatically
-* Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
 * modals/notifiers (A state that loads parallel to current state)
-* there are receivers that always get data, think about adding methods that simply trigger without data
+* **DONE** handle 'pending' status when activate() is invoked (Some states may need be loaded while other states are still running)
+* **DONE** instead of using 'pending' think about activate() returning a promise and then queueing the next activate() call
+* **DONE** defaultState should be defaultStates and an array containing a number of states that can be activated at the outset (No, activate() should be used by a developer)
+* **DONE** put back parallel states (if necessary) (these were put back)
+* **DONE** Think about whether parallel states are necessary (why not, low cost and it allows for state composition)
+* **DONE** put back the code to handle exit from error state (supported by framework internally; error states are in history and are deactivated automatically)
+* **DONE** when multiple views are in a state cache: auto could be a flag for one of the views (caching is on a view by view basis)
+* **DONE** take a look to see what variables need to be moved from vars to data-stores.js (moved activationSequences to vars.states)
+* **DONE** address setting when 'main' region is designated as main holder
+* **DONE** prevent more than one main view
+* **DONE** assure that main view for a state has a state's parent in view's address
+* **DONE** add state names to transient states library? (transient states are stores in the same registry, their names go under transient array)
+* **DONE** In history object create a flexibile get() method
+* **DONE** place history object back
+* **DONE** Should intermediate be just a state? (that would fit into a general state mechanisms - declaration, loading, unloading) (*DEFINITELY*)
+* **DONE** Then intermediates are just loaded and unloaded with caching or no caching... (they should be treated like states)
+* **DONE** Caching of intermediate views (thinking of this as transient states that are activated and deactivated, changes it)
+* **DONE** purely perfectionist, but take a look at some views that do not need to be hidden and then displayed right away (maybe later)
+* **DONE** think about dependency implementation among states not just views within a state (not quite, states may be deactivated and dependencies would need reactivation)
+* **DONE** in ```aptivator.state()``` handle navigation to error state
+* **DONE** put back the code to handle invalid routes
+* **DONE** when deactivating a state use both activationSequence and activationRecord (not quiet, activationRecord plus new viewsRegistry for each stateConfigs)
+* **DONE** think about whether to have a caching policy variables (for now caching is done on a state-by-state basis)
+* **DONE** objectify related variables (e.g., route variables [routeParts, route, routeRx, routeValues]) (not now)
+* **DONE** for invalid url, activate an error state, but there is no need to replace the url with error url (let the invalid url remain)
+* **DONE** think through the process for handling invalid routes include history.replace(), etc.
+* **DONE** split utils api module into submodules
+* **DONE** there are receivers that always get data, think about adding methods that simply trigger without data (no need for now)
 * **DONE** error views within a certain state (views or states)
 * **DONE** enforce that no state name is named root
 * **DONE** think about use cases that may need sessionStorage or localStorage (those are available, it's up to the user)
