@@ -31,11 +31,7 @@ exports.default = function () {
     _backbone2.default.history.start();
 
     if (!_fragment2.default.get() && defaultState) {
-      _instance2.default.activate({ name: defaultState, direct: { running: true } }).then(function () {
-        setTimeout(function () {
-          return _instance2.default.deactivate({ name: 'header' });
-        }, 2000);
-      });
+      _instance2.default.activate({ name: defaultState, direct: { running: true } });
     }
 
     resolve();

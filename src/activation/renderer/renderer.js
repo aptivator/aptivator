@@ -27,10 +27,10 @@ export default stateParams =>
       let viewConfigs = activationSequence[viewAddressFull];
       let {stateName, main, viewAddressUnique} = viewConfigs;
       let cacheAddress = main ? stateName : viewAddressFull;
-      let activationRecord = activationRecords[cacheAddress];
+      let activationRecord = activationRecords[cacheAddress] || (activationRecords[cacheAddress] = {});
       let cache = cacheable.total(viewConfigs, stateParams, cacheAddress);
-      let destroy = !cache && activationRecord && activationRecord.instance;
-      let unhide = !destroy && activationRecord;
+      let destroy = !cache && activationRecord.instance;
+      let unhide = !destroy && !_.isEmpty(activationRecord);
       let family = relations.family(stateName).concat(viewAddressUnique);
       let viewParameters = params.assemble(family, stateParams);
 
@@ -78,12 +78,15 @@ export default stateParams =>
       
       siblingsDisplayer({targetRegion, regionInstance, multiple, excludes: [cacheAddress]});
       
-      _.extend((activationRecords[cacheAddress] || (activationRecords[cacheAddress] = {})), {
-        active: true,
-        instance
-      });
+      _.extend(activationRecord, {active: true, instance});
       
-      instance.on('destroy', () => targetRegion.current.delete(cacheAddress));
+      instance.on('destroy', () => {
+        activationRecord.instance = null;
+        targetRegion.current.delete(cacheAddress);
+        _.each(activationRecord.regions, regionObj => {
+          regionObj.current.forEach(name => aptivator.deactivate({name, detach: true, focal: true}));
+        });
+      });
       
       instance.render();
       regionInstance.$el.append(instance.$el);    

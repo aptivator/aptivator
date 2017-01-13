@@ -4,6 +4,7 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* make sure error states receive route object and not direct params
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
 * for animation think about adding class operations performed when views are activated and inactivated
@@ -14,10 +15,11 @@
 * whether animation is applied can be defined by animation object on a given state
 * think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
-* distinguish between route error state and error state when software error occurs...
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
-* Transient state deactivation should be done automatically
+* Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)
 * modals/notifiers (A state that loads parallel to current state)
+* **DONE** distinguish between route error state and error state when software error occurs... (when error occurs in aptivator, it goes to console;
+  when an error occurs in developer code, then they can communicate it to the user via their own-created states)
 * **DONE** handle 'pending' status when activate() is invoked (Some states may need be loaded while other states are still running)
 * **DONE** instead of using 'pending' think about activate() returning a promise and then queueing the next activate() call
 * **DONE** defaultState should be defaultStates and an array containing a number of states that can be activated at the outset (No, activate() should be used by a developer)

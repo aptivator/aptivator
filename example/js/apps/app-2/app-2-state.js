@@ -10,7 +10,7 @@ aptivator.state('app-2', {
   route: 'app-2/:one',
   routeValues: [1],
   abstract: true,
-  states: ['header'],
+  //states: ['header'],
   //multiples: ['main'],
   resolve: {
     murmansk: function() {

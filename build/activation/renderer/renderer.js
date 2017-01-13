@@ -80,10 +80,10 @@ exports.default = function (stateParams) {
           viewAddressUnique = viewConfigs.viewAddressUnique;
 
       var cacheAddress = main ? stateName : viewAddressFull;
-      var activationRecord = activationRecords[cacheAddress];
+      var activationRecord = activationRecords[cacheAddress] || (activationRecords[cacheAddress] = {});
       var cache = _cacheable2.default.total(viewConfigs, stateParams, cacheAddress);
-      var destroy = !cache && activationRecord && activationRecord.instance;
-      var unhide = !destroy && activationRecord;
+      var destroy = !cache && activationRecord.instance;
+      var unhide = !destroy && !_lodash2.default.isEmpty(activationRecord);
       var family = _relations2.default.family(stateName).concat(viewAddressUnique);
       var viewParameters = _params2.default.assemble(family, stateParams);
 
@@ -135,13 +135,16 @@ exports.default = function (stateParams) {
 
       (0, _siblingsDisplayer2.default)({ targetRegion: targetRegion, regionInstance: regionInstance, multiple: multiple, excludes: [cacheAddress] });
 
-      _lodash2.default.extend(activationRecords[cacheAddress] || (activationRecords[cacheAddress] = {}), {
-        active: true,
-        instance: instance
-      });
+      _lodash2.default.extend(activationRecord, { active: true, instance: instance });
 
       instance.on('destroy', function () {
-        return targetRegion.current.delete(cacheAddress);
+        activationRecord.instance = null;
+        targetRegion.current.delete(cacheAddress);
+        _lodash2.default.each(activationRecord.regions, function (regionObj) {
+          regionObj.current.forEach(function (name) {
+            return _instance2.default.deactivate({ name: name, detach: true, focal: true });
+          });
+        });
       });
 
       instance.render();
