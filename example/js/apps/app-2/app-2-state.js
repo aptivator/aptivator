@@ -2,6 +2,7 @@ require('./about/about-state');
 require('./form/form-state');
 require('./info/info-state');
 require('./error/error-state');
+require('./loading/loading-state');
 
 var aptivator = require('aptivator');
 var App2View = require('./app-2');

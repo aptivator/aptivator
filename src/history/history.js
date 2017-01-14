@@ -4,7 +4,7 @@ import vars      from '../lib/vars';
 let statesCache = [];
 
 aptivator.history = {
-  set(state) {
+  add(state) {
     statesCache.push(state);
     statesCache = statesCache.slice(-vars.historySize);
   },

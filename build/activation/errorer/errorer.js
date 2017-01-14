@@ -4,8 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, reject) {
-  console.log(e instanceof Error);
-  console.error(e);
-  reject(e);
+exports.default = function (e, stateParams) {
+  console.error(stateParams.stateName, e);
+  return Promise.reject(e);
 };

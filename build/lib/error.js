@@ -10,5 +10,10 @@ exports.default = {
 
   'throw': function _throw(error, moduleName) {
     throw this.message(error, moduleName);
+  },
+
+
+  errorer: function errorer(e) {
+    return console.error(e);
   }
 };

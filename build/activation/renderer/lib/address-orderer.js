@@ -24,7 +24,7 @@ exports.default = function (viewAddresses) {
   });
   viewAddresses = _lodash2.default.difference(viewAddresses, roots);
   viewAddresses.sort(function (viewAddress1, viewAddress2) {
-    return _relations2.default.family(_addresser2.default.stateName(viewAddress1)).length > _relations2.default.family(_addresser2.default.stateName(viewAddress2)).length;
+    return _relations2.default.parts(_addresser2.default.stateName(viewAddress1)).length > _relations2.default.parts(_addresser2.default.stateName(viewAddress2)).length;
   });
   return roots.concat(viewAddresses);
 };

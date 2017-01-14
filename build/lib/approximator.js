@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _relations = require('./relations');
 
 var _relations2 = _interopRequireDefault(_relations);
@@ -49,10 +45,21 @@ exports.default = {
     var max = 0;
 
     states[stateType].forEach(function (stateName) {
-      var intersection = _lodash2.default.intersection(searchStateNameParts, _relations2.default.parts(stateName));
-      if (intersection.length > max) {
+      var stateNameParts = _relations2.default.parts(stateName);
+
+      if (stateNameParts.length > searchStateNameParts.length) {
+        return;
+      }
+
+      for (var i = 0, l = stateNameParts.length; i < l; i++) {
+        if (stateNameParts[i] !== searchStateNameParts[i]) {
+          break;
+        }
+      }
+
+      if (i > max) {
         searchStateName = stateName;
-        max = intersection.length;
+        max = i;
       }
     });
 

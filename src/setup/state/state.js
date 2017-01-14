@@ -1,3 +1,4 @@
+import _                   from 'lodash';
 import Backbone            from 'backbone';
 import aptivator           from '../../lib/instance';
 import error               from '../../lib/error';
@@ -43,7 +44,7 @@ aptivator.state = (stateName, stateConfigs) => {
         vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
           routeValues = routeValues.filter(value => value);
           let routeParams = route.parts.assemble(stateName, routeValues);
-          aptivator.activate({name: stateName, route: routeParams});
+          aptivator.activate({name: stateName, route: routeParams}).catch(_.noop);
         });
       }
     }

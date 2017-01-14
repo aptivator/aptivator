@@ -1,5 +1,4 @@
-export default (e, reject) => {
-  console.log(e instanceof Error);
-  console.error(e);
-  reject(e);
+export default (e, stateParams) => {
+  console.error(stateParams.stateName, e);
+  return Promise.reject(e);
 };

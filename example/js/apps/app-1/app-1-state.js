@@ -17,12 +17,15 @@ aptivator.state('app-1', {
     main: {
       view: App1View,
       resolve: {
-        test: function() {
-          return new Promise(function(resolve, reject) {
-            setTimeout(function() {
-              resolve(true);
+        test: {
+          resolver: function() {
+            return new Promise(function(resolve, reject) {
+              setTimeout(function() {
+                resolve(true);
+              }, 2000);
             });
-          });
+          },
+          persist: false
         },
         
         success: function() {

@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var statesCache = [];
 
 _instance2.default.history = {
-  set: function set(state) {
+  add: function add(state) {
     statesCache.push(state);
     statesCache = statesCache.slice(-_vars2.default.historySize);
   },

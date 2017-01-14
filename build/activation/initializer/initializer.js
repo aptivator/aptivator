@@ -8,6 +8,14 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _approximator = require('../../lib/approximator');
+
+var _approximator2 = _interopRequireDefault(_approximator);
+
+var _instance = require('../../lib/instance');
+
+var _instance2 = _interopRequireDefault(_instance);
+
 var _error = require('../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -33,7 +41,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var registry = _vars2.default.states.registry;
 
 exports.default = function (stateParams) {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     stateParams.directParams = stateParams.direct;
     stateParams.routeParams = stateParams.route;
     stateParams.stateName = stateParams.name;
@@ -52,6 +60,29 @@ exports.default = function (stateParams) {
 
     if (!stateConfigs) {
       _error2.default.throw('invalid [' + stateName + '] state name', 'initializer');
+    }
+
+    var transientStateName = _approximator2.default.fromStateName('transient', stateName);
+
+    if (transientStateName && transientStateName !== stateName) {
+      (function () {
+        var activationPromise = { promise: undefined };
+        var defaults = { useResolves: false, keepLast: false };
+        var immutableDefaults = { noHistory: true, name: transientStateName };
+        var transientStateConfigs = registry[transientStateName];
+        var transient = transientStateConfigs.transient;
+
+        var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
+        var delay = transientConfigs.delay || rootStateConfigs.transientDelay || 300;
+        var activationParams = _lodash2.default.extend(defaults, _lodash2.default.pick(transientConfigs, _lodash2.default.keys(defaults)), immutableDefaults);
+        var timeoutHandle = setTimeout(function () {
+          return (activationPromise.promise = _instance2.default.activate(activationParams).then(_lodash2.default.noop, function (e) {
+            return Promise.reject(e);
+          })).catch(_lodash2.default.noop);
+        }, delay);
+
+        stateParams.transient = { activationPromise: activationPromise, activationParams: activationParams, timeoutHandle: timeoutHandle };
+      })();
     }
 
     if (!routeValues) {

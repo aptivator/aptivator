@@ -17,15 +17,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (stateName, registeredStateNames) {
   var parentStateName = _relations2.default.parent(stateName);
 
+  if (_relations2.default.isRoot(_relations2.default.parent(stateName))) {
+    return registeredStateNames.root = stateName;
+  }
+
   registeredStateNames.forEach(function (registeredStateName) {
     if (_relations2.default.parent(registeredStateName) === parentStateName) {
       _error2.default.throw('already registered [' + registeredStateName + '] under [' + parentStateName + ']', 'state declaration');
     }
   });
-
-  if (_relations2.default.isRoot(_relations2.default.parent(stateName))) {
-    registeredStateNames.root = stateName;
-  }
 
   registeredStateNames.push(stateName);
 };

@@ -5,5 +5,6 @@ require('./apps/app-1/app-1-state');
 require('./apps/header/header-state');
 require('./apps/app-2/app-2-state');
 require('./apps/error/error-state');
+require('./apps/loading/loading-state');
 
 require('aptivator').start();

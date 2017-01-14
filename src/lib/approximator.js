@@ -1,4 +1,3 @@
-import _         from 'lodash';
 import relations from './relations';
 import vars      from './vars';
 
@@ -35,10 +34,21 @@ export default {
     let max = 0;
     
     states[stateType].forEach(stateName => {
-      let intersection = _.intersection(searchStateNameParts, relations.parts(stateName));
-      if(intersection.length > max) {
+      let stateNameParts = relations.parts(stateName);
+      
+      if(stateNameParts.length > searchStateNameParts.length) {
+        return;
+      }
+      
+      for(var i = 0, l = stateNameParts.length; i < l; i++) {
+        if(stateNameParts[i] !== searchStateNameParts[i]) {
+          break;
+        }
+      }
+      
+      if(i > max) {
         searchStateName = stateName;
-        max = intersection.length;
+        max = i;
       }
     });
     

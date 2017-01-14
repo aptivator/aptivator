@@ -9,6 +9,7 @@ aptivator.config({
     persist: true,
     store: true,
   },
+  transientDelay: 300,
   detachHidden: false,
   //multiples: ['main'],
   defaultState: 'app-1',

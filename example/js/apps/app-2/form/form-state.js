@@ -21,7 +21,11 @@ aptivator.state('app-2.form', {
         },
         random: {
           resolver: function() {
-            return Math.random();
+            return new Promise(function(resolve, reject) {
+              setTimeout(function() {
+                resolve(Math.random());
+              }, 1500);
+            });
           },
           persist: false,
           store: true

@@ -1,5 +1,9 @@
 'use strict';
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
@@ -76,7 +80,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
             return value;
           });
           var routeParams = _route2.default.parts.assemble(stateName, routeValues);
-          _instance2.default.activate({ name: stateName, route: routeParams });
+          _instance2.default.activate({ name: stateName, route: routeParams }).catch(_lodash2.default.noop);
         });
       }
     }

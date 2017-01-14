@@ -3,5 +3,7 @@ export default {
   
   'throw'(error, moduleName) {
     throw this.message(error, moduleName);
-  }
+  },
+  
+  errorer: e => console.error(e)
 };

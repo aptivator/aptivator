@@ -35,9 +35,7 @@ exports.default = function () {
     _backbone2.default.history.start();
 
     if (!_fragment2.default.get() && defaultState) {
-      _instance2.default.activate({ name: defaultState, direct: { running: true } }).then(function () {
-        return console.log('activated...');
-      }).catch(_lodash2.default.noop);
+      _instance2.default.activate({ name: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
     }
 
     resolve();

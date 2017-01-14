@@ -4,6 +4,8 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* it is possible for parent states using route data meant for the children, so that may need to be put back in
+* it is possible for parallel states to share views, so change duplicate error checking in preprocessor
 * make sure error states receive route object and not direct params
 * animate change from state to state - make it look less sharp
 * regarding the above one, place a class that makes application container invisible and then remove it after rendering
@@ -18,6 +20,8 @@
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)
 * modals/notifiers (A state that loads parallel to current state)
+* in preprocessor, when checking for duplicate views, pass the duplicate if the view objects are the same (this will help with overlapping parallel states)
+* **DONE** in activation, move history code before resolves, in case resolve fails and the state is still vailable on the history stack
 * **DONE** distinguish between route error state and error state when software error occurs... (when error occurs in aptivator, it goes to console;
   when an error occurs in developer code, then they can communicate it to the user via their own-created states)
 * **DONE** handle 'pending' status when activate() is invoked (Some states may need be loaded while other states are still running)

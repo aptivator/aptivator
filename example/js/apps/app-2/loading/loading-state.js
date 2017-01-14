@@ -1,14 +1,20 @@
 var aptivator = require('aptivator');
 var LoadingView = require('./loading');
 
-aptivator.state('loading', {
+aptivator.state('app-2.loading', {
   transient: {
-    keepLast: true,
+    keepLast: false,
     delay: 100
   },
   view: LoadingView,
-  parentRegion: 'extra',
   data: {
     loadingMessage: 'Loading...'
+  },
+  resolve: {
+    cool: {
+      resolver: function() {
+        return Promise.reject('failed...');
+      }
+    }
   }
 });
