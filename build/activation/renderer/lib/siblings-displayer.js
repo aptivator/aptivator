@@ -19,22 +19,22 @@ var activationRecords = _vars2.default.states.activationRecords;
 exports.default = function (params) {
   var targetRegion = params.targetRegion,
       regionInstance = params.regionInstance,
-      multiple = params.multiple,
+      transient = params.transient,
       excludes = params.excludes,
       includes = params.includes;
 
-  targetRegion.current.forEach(function (cacheAddress) {
-    if ((excludes || []).includes(cacheAddress)) {
+  targetRegion.current.forEach(function (viewAddressUnique) {
+    if ((excludes || []).includes(viewAddressUnique) || !(includes || []).includes(viewAddressUnique)) {
       return;
     }
 
-    if (!multiple && !(includes || []).includes(cacheAddress)) {
-      return;
-    }
-
-    var activationRecord = activationRecords[cacheAddress];
+    var activationRecord = activationRecords[viewAddressUnique];
     var $el = activationRecord.instance.$el;
 
+
+    if (activationRecord.transient !== transient) {
+      return;
+    }
 
     activationRecord.active = true;
     $el.removeClass(_hideClass2.default);

@@ -30,7 +30,7 @@ exports.default = {
     return this.explicit.cache = !_lodash2.default.isUndefined(viewConfigs.cache) ? viewConfigs.cache : !_lodash2.default.isUndefined(stateConfigs.cache) ? stateConfigs.cache : undefined;
   },
 
-  implicit: function implicit(viewConfigs, stateParams, cacheAddress) {
+  implicit: function implicit(viewConfigs, stateParams) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique;
 
@@ -44,17 +44,17 @@ exports.default = {
       delete parameters.route.stateName;
     }
 
-    if (_lodash2.default.isEqual(paramsMap[cacheAddress], parameters)) {
+    if (_lodash2.default.isEqual(paramsMap[viewAddressUnique], parameters)) {
       return this.implicit.cache = true;
     }
 
-    paramsMap[cacheAddress] = parameters;
+    paramsMap[viewAddressUnique] = parameters;
 
     return this.implicit.cache = false;
   },
 
-  total: function total(viewConfigs, stateParams, cacheAddress) {
-    this.implicit(viewConfigs, stateParams, cacheAddress);
+  total: function total(viewConfigs, stateParams) {
+    this.implicit(viewConfigs, stateParams);
 
     if (!_lodash2.default.isUndefined(this.explicit(viewConfigs))) {
       return this.explicit.cache;

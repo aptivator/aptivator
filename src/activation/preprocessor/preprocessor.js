@@ -30,6 +30,7 @@ export default stateParams => {
     
     let parentStateName = relations.parent(stateName);
     let resolveAddresses = stateConfigs.resolveAddresses = [];
+    let transient = !!stateConfigs.transient;
     let mainViews = [];
     
     dataParams[stateName] = stateConfigs.data;
@@ -54,12 +55,11 @@ export default stateParams => {
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
       let viewAddressFull = fullAddressMaker(viewAddress, stateName);
       let [viewRegionName, viewStateName] = addresser.parts(viewAddressFull);
-      let multiple = (registry[viewStateName].multiple || []).includes(viewRegionName);
+      let multiple = (registry[viewStateName].multiples || []).includes(viewRegionName);
       let viewAddressUnique = `${_.uniqueId('aptivator-id-')}@${stateName}`;
       let duplicateViewConfigs = (previousSequence || []).concat(activationSequence)
         .filter(viewConfigs => viewConfigs.viewAddressFull === viewAddressFull);
       let otherView = (duplicateViewConfigs[0] || {}).view;
-      let viewConfigsExtension = {viewAddress, viewAddressFull, stateName, viewAddressUnique, multiple, viewRegionName, viewStateName};
       
       if(!multiple && otherView) {
         if(otherView === viewConfigs.view) {
@@ -104,7 +104,8 @@ export default stateParams => {
       
       viewNormalizer(viewConfigs);
       stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;
-      activationSequence.push(_.extend(viewConfigs, viewConfigsExtension));
+      _.extend(viewConfigs, {viewAddressFull, stateName, viewAddressUnique, multiple, viewRegionName, viewStateName, transient});
+      activationSequence.push(viewConfigs);
 
       if(viewConfigs.main) {
         preprocess(viewStateName, activationSequence);

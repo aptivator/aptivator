@@ -11,7 +11,6 @@ aptivator.state('app-2', {
   route: 'app-2/:one',
   routeValues: [1],
   abstract: true,
-  //states: ['app-2.about'],
   //multiples: ['main'],
   resolve: {
     murmansk: function() {

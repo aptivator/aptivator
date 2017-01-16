@@ -32,9 +32,9 @@ var _cacheable = require('./lib/cacheable');
 
 var _cacheable2 = _interopRequireDefault(_cacheable);
 
-var _siblingsDisplayer = require('./lib/siblings-displayer');
+var _displayer = require('./lib/displayer');
 
-var _siblingsDisplayer2 = _interopRequireDefault(_siblingsDisplayer);
+var _displayer2 = _interopRequireDefault(_displayer);
 
 var _viewApi = require('./lib/view-api');
 
@@ -51,17 +51,18 @@ exports.default = function (stateParams) {
   activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique,
-        multiple = viewConfigs.multiple,
         viewRegionName = viewConfigs.viewRegionName,
-        viewStateName = viewConfigs.viewStateName;
+        viewStateName = viewConfigs.viewStateName,
+        multiple = viewConfigs.multiple,
+        transient = viewConfigs.transient;
 
     var parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];
     var parentInstance = parentRecord.instance;
     var regionInstance = parentInstance[viewRegionName];
     var parentRegions = parentRecord.regions || (parentRecord.regions = {});
-    var targetRegion = parentRegions[viewRegionName] || (parentRegions[viewRegionName] = {});
+    var targetRegion = parentRegions[viewRegionName] || (parentRegions[viewRegionName] = { current: new Set() });
     var activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
-    var cache = _cacheable2.default.total(viewConfigs, stateParams, viewAddressUnique);
+    var cache = _cacheable2.default.total(viewConfigs, stateParams);
     var destroy = !cache && activationRecord.instance;
     var unhide = !destroy && !_lodash2.default.isEmpty(activationRecord);
     var family = _relations2.default.family(stateName).concat(viewAddressUnique);
@@ -71,11 +72,10 @@ exports.default = function (stateParams) {
       _error2.default.throw('region [' + viewRegionName + '] does not exist for [' + viewStateName + '] state');
     }
 
-    if (!targetRegion.current) {
-      targetRegion.current = new Set();
+    if (!regionInstance._aptivatorEnsuredElement) {
+      regionInstance._aptivatorEnsuredElement = true;
+      regionInstance._ensureElement();
     }
-
-    regionInstance._ensureElement();
 
     if (destroy) {
       _instance2.default.destroy({ name: viewAddressUnique });
@@ -84,14 +84,18 @@ exports.default = function (stateParams) {
     targetRegion.current.add(viewAddressUnique);
 
     if (unhide) {
-      (0, _siblingsDisplayer2.default)({ targetRegion: targetRegion, regionInstance: regionInstance, multiple: multiple, includes: [viewAddressUnique] });
-
       if (!_cacheable2.default.implicit.cache) {
         if (!_lodash2.default.isObject(cache) || !cache.receiver) {
           _error2.default.throw('receiver function for variable parameters has not been provided');
         }
 
         activationRecord.instance[cache.receiver](viewParameters);
+      }
+
+      _displayer2.default.single(activationRecord, regionInstance);
+
+      if (multiple) {
+        _displayer2.default.multiple({ targetRegion: targetRegion, regionInstance: regionInstance, transient: transient, exclude: [viewAddressUnique] });
       }
 
       return;
@@ -109,16 +113,18 @@ exports.default = function (stateParams) {
       return _lodash2.default.extend(this.options, data, { aptivator: _viewApi2.default });
     };
 
-    (0, _siblingsDisplayer2.default)({ targetRegion: targetRegion, regionInstance: regionInstance, multiple: multiple, excludes: [viewAddressUnique] });
+    if (multiple) {
+      _displayer2.default.multiple({ targetRegion: targetRegion, regionInstance: regionInstance, transient: transient, exclude: [viewAddressUnique] });
+    }
 
-    _lodash2.default.extend(activationRecord, { active: true, instance: instance });
+    _lodash2.default.extend(activationRecord, { active: true, instance: instance, transient: transient });
 
     instance.on('destroy', function () {
-      activationRecord.instance = null;
+      delete activationRecord.instance;
       targetRegion.current.delete(viewAddressUnique);
       _lodash2.default.each(activationRecord.regions, function (regionObj) {
         regionObj.current.forEach(function (name) {
-          return _instance2.default.deactivate({ name: name, detach: true, ignoreMultiple: true, focal: true });
+          _instance2.default.deactivate({ name: name, detach: true, ignoreMultiple: true, focal: true });
         });
       });
     });

@@ -70,6 +70,7 @@ exports.default = function (stateParams) {
 
     var parentStateName = _relations2.default.parent(stateName);
     var resolveAddresses = stateConfigs.resolveAddresses = [];
+    var transient = !!stateConfigs.transient;
     var mainViews = [];
 
     dataParams[stateName] = stateConfigs.data;
@@ -99,13 +100,12 @@ exports.default = function (stateParams) {
           viewRegionName = _addresser$parts2[0],
           viewStateName = _addresser$parts2[1];
 
-      var multiple = (registry[viewStateName].multiple || []).includes(viewRegionName);
+      var multiple = (registry[viewStateName].multiples || []).includes(viewRegionName);
       var viewAddressUnique = _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
       var duplicateViewConfigs = (previousSequence || []).concat(activationSequence).filter(function (viewConfigs) {
         return viewConfigs.viewAddressFull === viewAddressFull;
       });
       var otherView = (duplicateViewConfigs[0] || {}).view;
-      var viewConfigsExtension = { viewAddress: viewAddress, viewAddressFull: viewAddressFull, stateName: stateName, viewAddressUnique: viewAddressUnique, multiple: multiple, viewRegionName: viewRegionName, viewStateName: viewStateName };
 
       if (!multiple && otherView) {
         if (otherView === viewConfigs.view) {
@@ -171,7 +171,8 @@ exports.default = function (stateParams) {
 
       (0, _viewNormalizer2.default)(viewConfigs);
       stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;
-      activationSequence.push(_lodash2.default.extend(viewConfigs, viewConfigsExtension));
+      _lodash2.default.extend(viewConfigs, { viewAddressFull: viewAddressFull, stateName: stateName, viewAddressUnique: viewAddressUnique, multiple: multiple, viewRegionName: viewRegionName, viewStateName: viewStateName, transient: transient });
+      activationSequence.push(viewConfigs);
 
       if (viewConfigs.main) {
         preprocess(viewStateName, activationSequence);

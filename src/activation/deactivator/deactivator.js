@@ -9,12 +9,12 @@ export default stateParams =>
       let {activationParams, activationPromise, timeoutHandle} = transient;
       if(!(activationPromise.promise instanceof Promise)) {
         clearTimeout(timeoutHandle);
-        lastStateName && aptivator.deactivate({name: lastStateName, ignoreMultiple: true});
+        lastStateName && aptivator.deactivate({name: lastStateName});
         resolve(stateParams);
       } else {
         activationPromise.promise.then(() => {
           let {keepLast, name} = activationParams;
-
+          
           aptivator.deactivate({name, ignoreMultiple: true});
           
           if(keepLast && lastStateName) {
@@ -26,7 +26,7 @@ export default stateParams =>
       }
     } else {
       if(!keepLast && lastStateName) {
-        aptivator.deactivate({name: lastStateName, ignoreMultiple: true});
+        aptivator.deactivate({name: lastStateName});
       }
       
       resolve(stateParams);
