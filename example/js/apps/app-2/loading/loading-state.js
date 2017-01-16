@@ -13,7 +13,7 @@ aptivator.state('app-2.loading', {
   resolve: {
     cool: {
       resolver: function() {
-        return Promise.reject('failed...');
+        return Promise.resolve('failed...');
       }
     }
   }

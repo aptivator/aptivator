@@ -8,7 +8,12 @@ import resolvesProcessor   from './lib/resolves-processor';
 
 export default stateParams => 
   new Promise((resolve, reject) => {
-    let {stateName, resolveParams, resolveDefinitions} = stateParams;
+    let {stateName, resolveParams, resolveDefinitions, noResolves} = stateParams;
+    
+    if(noResolves) {
+      return resolve(stateParams);
+    }
+    
     let resolveAddresses = relations.family(stateName).reduce((resolveAddresses, relation) => 
       resolveAddresses.concat(vars.states.registry[relation].resolveAddresses), []);
     let tree = entitiesTreeBuilder(resolveAddresses);

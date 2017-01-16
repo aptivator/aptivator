@@ -1,10 +1,5 @@
-import vars      from '../../lib/vars';
-
-export default stateParams => 
-  new Promise(resolve => {
-    if(vars.states.registry[vars.rootStateName].showRuntime) {
-      console.log(`%cruntime: ${Date.now() - stateParams.time}ms`, 'color: green;');
-    }
-    
-    resolve();
-  });
+export default stateParams => {
+  if(stateParams.time) {
+    console.log(`%cruntime: ${Date.now() - stateParams.time}ms`, 'color: green;');
+  }
+};

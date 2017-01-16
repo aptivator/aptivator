@@ -1,10 +1,12 @@
 var aptivator = require('aptivator');
 var App1View = require('./app-1');
 
+var HeaderView = require('../header/header');
+
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
-  //states: ['header'],
+  states: ['header'],
   resolve: {
     run: function() {
       return 'run';
@@ -22,7 +24,7 @@ aptivator.state('app-1', {
             return new Promise(function(resolve, reject) {
               setTimeout(function() {
                 resolve(true);
-              }, 2000);
+              }, 1000);
             });
           },
           persist: false

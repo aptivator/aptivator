@@ -15,11 +15,13 @@ export default stateParams =>
     stateParams.routeParams = stateParams.route;
     stateParams.stateName = stateParams.name;
     
+    delete stateParams.useResolves;
+    
     let {stateName, routeParams, routeValues, silent} = stateParams;
     let stateConfigs = registry[stateName];
     let rootStateConfigs = registry[vars.rootStateName];
     
-    if(rootStateConfigs.showRuntime) {
+    if(rootStateConfigs.showRuntime && !stateConfigs.transient) {
       stateParams.time = Date.now();
     }
   
@@ -27,16 +29,20 @@ export default stateParams =>
       error.throw(`invalid [${stateName}] state name`, 'initializer');
     }
     
+    if(_.isObject(stateConfigs.transient)) {
+      _.extend(stateParams, _.pick(stateConfigs.transient, ['noResolves']));
+    }
+    
     let transientStateName = approximator.fromStateName('transient', stateName);
     
     if(transientStateName && transientStateName !== stateName) {
       let activationPromise = {promise: undefined};
-      let defaults = {useResolves: false, keepLast: false};
+      let defaults = {keepLast: false, overlay: false};
       let immutableDefaults = {noHistory: true, name: transientStateName};
       let transientStateConfigs = registry[transientStateName];
       let {transient} = transientStateConfigs;
       let transientConfigs = _.isObject(transient) ? transient : {};
-      let delay = transientConfigs.delay || rootStateConfigs.transientDelay || 300;
+      let delay = _.isNumber(transientConfigs.delay) ? transientConfigs.delay : _.isNumber(rootStateConfigs.transientDelay) ? rootStateConfigs.transientDelay : 300;
       let activationParams = _.extend(defaults, _.pick(transientConfigs, _.keys(defaults)), immutableDefaults);
       let timeoutHandle = setTimeout(() => (activationPromise.promise = aptivator.activate(activationParams).then(_.noop, e => Promise.reject(e))).catch(_.noop), delay);
       

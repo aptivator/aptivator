@@ -26,7 +26,7 @@ exports.default = function (stateParams) {
 
         if (!(activationPromise.promise instanceof Promise)) {
           clearTimeout(timeoutHandle);
-          lastStateName && _instance2.default.deactivate({ name: lastStateName });
+          lastStateName && _instance2.default.deactivate({ name: lastStateName, ignoreMultiple: true });
           resolve(stateParams);
         } else {
           activationPromise.promise.then(function () {
@@ -34,7 +34,7 @@ exports.default = function (stateParams) {
                 name = activationParams.name;
 
 
-            _instance2.default.deactivate({ name: name });
+            _instance2.default.deactivate({ name: name, ignoreMultiple: true });
 
             if (keepLast && lastStateName) {
               _instance2.default.deactivate({ name: lastStateName });
@@ -46,7 +46,7 @@ exports.default = function (stateParams) {
       })();
     } else {
       if (!keepLast && lastStateName) {
-        _instance2.default.deactivate({ name: lastStateName });
+        _instance2.default.deactivate({ name: lastStateName, ignoreMultiple: true });
       }
 
       resolve(stateParams);

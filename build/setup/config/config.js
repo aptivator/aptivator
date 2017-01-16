@@ -26,7 +26,7 @@ _instance2.default.config = function (rootConfigs) {
     rootConfigs.detachHidden = false;
   }
 
-  _vars2.default.states.registry[_vars2.default.rootStateName] = rootConfigs;
+  _vars2.default.states.registry[_vars2.default.rootStateName] = _lodash2.default.extend(rootConfigs, { viewAddressUnique: _vars2.default.rootStateName });
 
   return _instance2.default;
 };

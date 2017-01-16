@@ -14,7 +14,7 @@ aptivator.config = rootConfigs => {
     rootConfigs.detachHidden = false;
   }
 
-  vars.states.registry[vars.rootStateName] = rootConfigs;
+  vars.states.registry[vars.rootStateName] = _.extend(rootConfigs, {viewAddressUnique: vars.rootStateName});
   
   return aptivator;
 };

@@ -38,7 +38,13 @@ exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
     var stateName = stateParams.stateName,
         resolveParams = stateParams.resolveParams,
-        resolveDefinitions = stateParams.resolveDefinitions;
+        resolveDefinitions = stateParams.resolveDefinitions,
+        noResolves = stateParams.noResolves;
+
+
+    if (noResolves) {
+      return resolve(stateParams);
+    }
 
     var resolveAddresses = _relations2.default.family(stateName).reduce(function (resolveAddresses, relation) {
       return resolveAddresses.concat(_vars2.default.states.registry[relation].resolveAddresses);

@@ -3,11 +3,23 @@ var LoadingView = require('./loading');
 
 aptivator.state('loading', {
   transient: {
-    keepLast: true,
-    delay: 100
+    keepLast: false,
+    noResolves: true,
+    delay: 0
   },
   view: LoadingView,
   parentRegion: 'extra',
+  resolve: {
+    delayer: {
+      resolver: function() {
+        return new Promise(function(resolve, reject) {
+          setTimeout(function() {
+            resolve('resolved');
+          }, 1000);
+        });
+      }
+    }
+  },
   data: {
     loadingMessage: 'Loading...'
   }

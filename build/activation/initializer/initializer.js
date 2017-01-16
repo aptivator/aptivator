@@ -46,6 +46,8 @@ exports.default = function (stateParams) {
     stateParams.routeParams = stateParams.route;
     stateParams.stateName = stateParams.name;
 
+    delete stateParams.useResolves;
+
     var stateName = stateParams.stateName,
         routeParams = stateParams.routeParams,
         routeValues = stateParams.routeValues,
@@ -54,7 +56,7 @@ exports.default = function (stateParams) {
     var stateConfigs = registry[stateName];
     var rootStateConfigs = registry[_vars2.default.rootStateName];
 
-    if (rootStateConfigs.showRuntime) {
+    if (rootStateConfigs.showRuntime && !stateConfigs.transient) {
       stateParams.time = Date.now();
     }
 
@@ -62,18 +64,22 @@ exports.default = function (stateParams) {
       _error2.default.throw('invalid [' + stateName + '] state name', 'initializer');
     }
 
+    if (_lodash2.default.isObject(stateConfigs.transient)) {
+      _lodash2.default.extend(stateParams, _lodash2.default.pick(stateConfigs.transient, ['noResolves']));
+    }
+
     var transientStateName = _approximator2.default.fromStateName('transient', stateName);
 
     if (transientStateName && transientStateName !== stateName) {
       (function () {
         var activationPromise = { promise: undefined };
-        var defaults = { useResolves: false, keepLast: false };
+        var defaults = { keepLast: false, overlay: false };
         var immutableDefaults = { noHistory: true, name: transientStateName };
         var transientStateConfigs = registry[transientStateName];
         var transient = transientStateConfigs.transient;
 
         var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
-        var delay = transientConfigs.delay || rootStateConfigs.transientDelay || 300;
+        var delay = _lodash2.default.isNumber(transientConfigs.delay) ? transientConfigs.delay : _lodash2.default.isNumber(rootStateConfigs.transientDelay) ? rootStateConfigs.transientDelay : 300;
         var activationParams = _lodash2.default.extend(defaults, _lodash2.default.pick(transientConfigs, _lodash2.default.keys(defaults)), immutableDefaults);
         var timeoutHandle = setTimeout(function () {
           return (activationPromise.promise = _instance2.default.activate(activationParams).then(_lodash2.default.noop, function (e) {

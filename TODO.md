@@ -4,6 +4,9 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* activationSequence should be an array to allow for multiple views per region (two different views can have the same address)
+* when rendering, hide root views using hide-class and then remove the class the state is rendered
+* regarding above, this is how animations can be added without any special api
 * it is possible for parent states using route data meant for the children, so that may need to be put back in
 * it is possible for parallel states to share views, so change duplicate error checking in preprocessor
 * make sure error states receive route object and not direct params
@@ -21,6 +24,8 @@
 * Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)
 * modals/notifiers (A state that loads parallel to current state)
 * in preprocessor, when checking for duplicate views, pass the duplicate if the view objects are the same (this will help with overlapping parallel states)
+* simplify variable declarations in renderer()
+* **DONE** do not show runtime for transient states
 * **DONE** in activation, move history code before resolves, in case resolve fails and the state is still vailable on the history stack
 * **DONE** distinguish between route error state and error state when software error occurs... (when error occurs in aptivator, it goes to console;
   when an error occurs in developer code, then they can communicate it to the user via their own-created states)
