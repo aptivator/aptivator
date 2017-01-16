@@ -2,13 +2,7 @@ var Marionette = require('backbone.marionette');
 var headerTpl = require('./header.tpl');
 
 module.exports = Marionette.ItemView.extend({
-  initialize: function(params) {
-    this.params = params;
-  },
+  className: 'aptivator-fade-in',
   
-  template: headerTpl,
-  
-  serializeData: function() {
-    return this.options;
-  }  
+  template: headerTpl
 });

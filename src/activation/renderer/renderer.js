@@ -1,16 +1,18 @@
-import _         from 'lodash';
-import aptivator from '../../lib/instance';
-import error     from '../../lib/error';
-import params    from '../../lib/params';
-import relations from '../../lib/relations';
-import vars      from '../../lib/vars';
-import cacheable from './lib/cacheable';
-import displayer from './lib/displayer';
-import viewApi   from './lib/view-api';
+import _             from 'lodash';
+import aptivator     from '../../lib/instance';
+import error         from '../../lib/error';
+import params        from '../../lib/params';
+import relations     from '../../lib/relations';
+import vars          from '../../lib/vars';
+import cacheable     from './lib/cacheable';
+import displayer     from './lib/displayer';
+import viewApi       from './lib/view-api';
 
 let {activationRecords, activationSequences, registry} = vars.states;
 
 export default stateParams => {
+  let root$els = [];
+  
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
     let {stateName, viewAddressUnique, viewRegionName, viewStateName, multiple, transient} = viewConfigs;
     let parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];
@@ -41,6 +43,14 @@ export default stateParams => {
     targetRegion.current.add(viewAddressUnique);
     
     if(unhide) {
+      if(relations.isRoot(viewStateName)) {
+        displayer.roots.add(activationRecord.instance.$el);
+      }
+      
+      if(relations.isRoot(viewStateName)) {
+        root$els.push(activationRecord.instance.$el);
+      }
+      
       if(!cacheable.implicit.cache) {
         if(!_.isObject(cache) || !cache.receiver) {
           error.throw(`receiver function for variable parameters has not been provided`);
@@ -61,16 +71,20 @@ export default stateParams => {
     let instance = new viewConfigs.view(viewParameters);
     let serializeData = instance.serializeData;
     
+    _.extend(activationRecord, {active: true, instance, transient});
+    
     instance.serializeData = function(...args) {
       var data = serializeData && serializeData.apply(this, args);
       return _.extend(this.options, data, {aptivator: viewApi});
     };
     
+    if(relations.isRoot(viewStateName)) {
+      displayer.roots.add(activationRecord.instance.$el);
+    }
+    
     if(multiple) {
       displayer.multiple({targetRegion, regionInstance, transient, exclude: [viewAddressUnique]});
     }
-    
-    _.extend(activationRecord, {active: true, instance, transient});
     
     instance.on('destroy', () => {
       delete activationRecord.instance;
@@ -85,6 +99,8 @@ export default stateParams => {
     instance.render();
     regionInstance.$el.append(instance.$el);    
   });
+
+  displayer.roots.display();
 
   return stateParams;
 };

@@ -4,27 +4,35 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
-* activationSequence should be an array to allow for multiple views per region (two different views can have the same address)
-* when rendering, hide root views using hide-class and then remove the class the state is rendered
-* regarding above, this is how animations can be added without any special api
+* views declaration in a state could be an array, if multiple views with the same address are used
+* or better, let hash in views {} to be either an altName or address.  If address is specified in the configs, then hash is altName
+* for above, when specifying dependencies among views with the same address, altName property should be used
 * it is possible for parent states using route data meant for the children, so that may need to be put back in
 * it is possible for parallel states to share views, so change duplicate error checking in preprocessor
 * make sure error states receive route object and not direct params
-* animate change from state to state - make it look less sharp
-* regarding the above one, place a class that makes application container invisible and then remove it after rendering
-* for animation think about adding class operations performed when views are activated and inactivated
-* for animation spec also provide a way to define a selector to which the animation class is applied
-* for animation, a class to add at the activation of a state
-* this also affects transient states, the animation on state change should run after the transient state is removed
-* also, transients are states, should that animation be applied to them also?
-* whether animation is applied can be defined by animation object on a given state
 * think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
-* Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)
+* regarding above, overlay spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
 * in preprocessor, when checking for duplicate views, pass the duplicate if the view objects are the same (this will help with overlapping parallel states)
 * simplify variable declarations in renderer()
+* make sure that immediate views (non-main ones) are not hidden within an activationRecord
+* focal flag should also apply when it comes to the removal of immediates (take a look)
+* iron out all the edge use cases involving multiples and transient and error states
+* when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
+* **DONE** Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)
+* **DONE** animate change from state to state - make it look less sharp (possible just by assigning a class to a state's view)
+* **DONE** regarding the above one, place a class that makes application container invisible and then remove it after rendering (root $els are hidden, then displayed)
+* **DONE** for animation think about adding class operations performed when views are activated and inactivated
+* **DONE** for animation spec also provide a way to define a selector to which the animation class is applied (no need, keeping it simple at this time)
+* **DONE** for animation, a class to add at the activation of a state
+* **DONE** this also affects transient states, the animation on state change should run after the transient state is removed
+* **DONE** also, transients are states, should that animation be applied to them also? (sure, these could be animated also)
+* **DONE** whether animation is applied can be defined by animation object on a given state (no, keeping it simple at this time, just class assignments)
+* **DONE** when rendering, hide root views using hide-class and then remove the class the state is rendered
+* **DONE** regarding above, this is how animations can be added without any special api
+* **DONE** activationSequence should be an array to allow for multiple views per region (two different views can have the same address)
 * **DONE** do not show runtime for transient states
 * **DONE** in activation, move history code before resolves, in case resolve fails and the state is still vailable on the history stack
 * **DONE** distinguish between route error state and error state when software error occurs... (when error occurs in aptivator, it goes to console;

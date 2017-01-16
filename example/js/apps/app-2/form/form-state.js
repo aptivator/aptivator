@@ -10,10 +10,12 @@ aptivator.state('app-2.form', {
       return 'main';
     }
   },
+  
   views: {
     main: {
       view: App2FormView
     },
+    
     'plus@app-2.form': {
       view: PlusView,
       resolve: {

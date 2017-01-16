@@ -15,6 +15,9 @@ var _vars2 = _interopRequireDefault(_vars);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var activationRecords = _vars2.default.states.activationRecords;
+
+var $rootElements = [];
+
 exports.default = {
   single: function single(activationRecord, regionInstance) {
     var $el = activationRecord.instance.$el;
@@ -51,5 +54,18 @@ exports.default = {
 
       _this.single(activationRecord, regionInstance);
     });
+  },
+
+
+  roots: {
+    add: function add($el) {
+      $rootElements.push($el.addClass(_hideClass2.default));
+    },
+    display: function display() {
+      $rootElements.forEach(function ($el) {
+        return $el.removeClass(_hideClass2.default);
+      });
+      $rootElements = [];
+    }
   }
 };

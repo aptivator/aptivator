@@ -48,6 +48,8 @@ var _vars$states = _vars2.default.states,
     registry = _vars$states.registry;
 
 exports.default = function (stateParams) {
+  var root$els = [];
+
   activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique,
@@ -84,6 +86,14 @@ exports.default = function (stateParams) {
     targetRegion.current.add(viewAddressUnique);
 
     if (unhide) {
+      if (_relations2.default.isRoot(viewStateName)) {
+        _displayer2.default.roots.add(activationRecord.instance.$el);
+      }
+
+      if (_relations2.default.isRoot(viewStateName)) {
+        root$els.push(activationRecord.instance.$el);
+      }
+
       if (!_cacheable2.default.implicit.cache) {
         if (!_lodash2.default.isObject(cache) || !cache.receiver) {
           _error2.default.throw('receiver function for variable parameters has not been provided');
@@ -104,6 +114,8 @@ exports.default = function (stateParams) {
     var instance = new viewConfigs.view(viewParameters);
     var serializeData = instance.serializeData;
 
+    _lodash2.default.extend(activationRecord, { active: true, instance: instance, transient: transient });
+
     instance.serializeData = function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -113,11 +125,13 @@ exports.default = function (stateParams) {
       return _lodash2.default.extend(this.options, data, { aptivator: _viewApi2.default });
     };
 
+    if (_relations2.default.isRoot(viewStateName)) {
+      _displayer2.default.roots.add(activationRecord.instance.$el);
+    }
+
     if (multiple) {
       _displayer2.default.multiple({ targetRegion: targetRegion, regionInstance: regionInstance, transient: transient, exclude: [viewAddressUnique] });
     }
-
-    _lodash2.default.extend(activationRecord, { active: true, instance: instance, transient: transient });
 
     instance.on('destroy', function () {
       delete activationRecord.instance;
@@ -132,6 +146,8 @@ exports.default = function (stateParams) {
     instance.render();
     regionInstance.$el.append(instance.$el);
   });
+
+  _displayer2.default.roots.display();
 
   return stateParams;
 };

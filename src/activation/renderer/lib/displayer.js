@@ -2,6 +2,7 @@ import hideClassName from '../../../lib/hide-class';
 import vars          from '../../../lib/vars';
 
 let {activationRecords} = vars.states;
+let $rootElements = [];
 
 export default {
   single(activationRecord, regionInstance) {
@@ -33,5 +34,16 @@ export default {
       
       this.single(activationRecord, regionInstance);
     });
+  },
+  
+  roots: {
+    add($el) {
+      $rootElements.push($el.addClass(hideClassName));
+    },
+    
+    display() {
+      $rootElements.forEach($el => $el.removeClass(hideClassName));
+      $rootElements = [];
+    }
   }
 };
