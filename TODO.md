@@ -4,23 +4,28 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* put back all callbacks that ui-router supports
+* put back all trigers that ui-router supports
+* for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
+* when activating from within Backbone router, save the origin url fragment
+* add back non-views to states (useful when setting up dependencies)
 * views declaration in a state could be an array, if multiple views with the same address are used
 * or better, let hash in views {} to be either an altName or address.  If address is specified in the configs, then hash is altName
 * for above, when specifying dependencies among views with the same address, altName property should be used
 * it is possible for parent states using route data meant for the children, so that may need to be put back in
-* it is possible for parallel states to share views, so change duplicate error checking in preprocessor
 * make sure error states receive route object and not direct params
 * think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * regarding above, overlay spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
-* in preprocessor, when checking for duplicate views, pass the duplicate if the view objects are the same (this will help with overlapping parallel states)
 * simplify variable declarations in renderer()
 * make sure that immediate views (non-main ones) are not hidden within an activationRecord
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * iron out all the edge use cases involving multiples and transient and error states
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
+* **DONE** it is possible for parallel states to share views, so change duplicate error checking in preprocessor
+* **DONE** in preprocessor, when checking for duplicate views, pass the duplicate if the view objects are the same (this will help with overlapping parallel states)
 * **DONE** Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)
 * **DONE** animate change from state to state - make it look less sharp (possible just by assigning a class to a state's view)
 * **DONE** regarding the above one, place a class that makes application container invisible and then remove it after rendering (root $els are hidden, then displayed)
