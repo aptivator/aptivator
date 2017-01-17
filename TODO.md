@@ -4,11 +4,19 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* Get rid of using regions, simply use selector as part of the view address (e.g., '.main@auth')
+* Get rid of multiple - it really has no use
+* For the multiple allow multiple views to have the same view address
+* should utils be moved from api under renderer?
 * put back all callbacks that ui-router supports
 * put back all trigers that ui-router supports
+* keep thinking about the animation object declared on the state
+* start exploring how to write tests
+* start exploring how to rollup and bundle the frameweork for distribution
+* test transiet states that consist of multiple views that go to different root regions
 * for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
 * when activating from within Backbone router, save the origin url fragment
-* add back non-views to states (useful when setting up dependencies)
+* add back non-views to states (useful when setting up dependencies), but first implement dependencies
 * views declaration in a state could be an array, if multiple views with the same address are used
 * or better, let hash in views {} to be either an altName or address.  If address is specified in the configs, then hash is altName
 * for above, when specifying dependencies among views with the same address, altName property should be used
