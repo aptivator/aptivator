@@ -1,9 +1,9 @@
 import _            from 'lodash';
-import historyAdder from '../../history/adder';
+import historyAdder from '../../history/history-adder';
 
 export default stateParams => {
   if(!stateParams.noHistory) {
-    historyAdder(_.cloneDeep(_.pick(stateParams, ['stateName'])));
+    historyAdder(_.cloneDeep(stateParams));
   }
   
   return stateParams;

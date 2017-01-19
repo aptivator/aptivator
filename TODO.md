@@ -4,6 +4,7 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* split displayer in lib into modules that would go under renderer and deactivation
 * while in transient state and clicking back and still being taken to the transient state
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * if state has no view or views, then delete everything except states and route
@@ -11,7 +12,6 @@
 * in activation initializer, clean transient state activation
 * place function parameters and variable names in alphabetical order
 * see if more of the lodash functions can be used
-* take a look at deactivation as a process of combining appropriate activation sequences and then running through them
 * finalize state deactivation api
 * finalize state destruction api
 * add ignorePending flag to activate() to bypass pending states
@@ -19,17 +19,7 @@
 * should utils be moved from api under renderer?
 * put back all callbacks that ui-router supports
 * put back all trigers that ui-router supports
-* keep thinking about the animation object declared on the state
-  ```javascript
-  aptivator.state('some-state', {
-    route: 'some-route',
-    view: SomeView,
-    animate: {
-      'root': 'animation-class-1 animation-class-2',
-      'another-state': 'animation-class-23'
-    }
-  });
-  ```
+* keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution
 * for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
@@ -42,9 +32,10 @@
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
-* make sure that immediate views (non-main ones) are not hidden within an activationRecord
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
+* **DONE** make sure that immediate views (non-main ones) are not hidden within an activationRecord (mattered for when I had multiples flag)
+* **DONE** take a look at deactivation as a process of combining appropriate activation sequences and then running through them
 * **DONE** fix stateName comparator in preprocessor
 * **DONE** add() function in history() should not be available to users of framework
 * **DONE** Should root state be declared just like any other state with parallel states, resolves, etc. (yes, with some exceptions - no parallel states, etc.)

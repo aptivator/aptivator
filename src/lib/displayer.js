@@ -5,8 +5,24 @@ import vars          from './vars';
 let {activationRecords} = vars.states;
 
 export default {
-  display(activationRecord, $regionEl) {
+  display(viewAddressUnique, $regionEl) {
+    let activationRecord = activationRecords[viewAddressUnique];
+    let {detached, instance} = activationRecord;
     
+    if(!instance.isRendered) {
+      instance.render();
+    }
+    
+    let {$el} = instance;
+    
+    activationRecord.active = true;
+    
+    if(!detached) {
+      return $el.removeClass(hideClassName);
+    }
+    
+    activationRecord.detached = false;
+    $regionEl.append($el);
   },
   
   hide(viewAddressUnique, detach) {

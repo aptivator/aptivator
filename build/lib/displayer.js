@@ -20,7 +20,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var activationRecords = _vars2.default.states.activationRecords;
 exports.default = {
-  display: function display(activationRecord, $regionEl) {},
+  display: function display(viewAddressUnique, $regionEl) {
+    var activationRecord = activationRecords[viewAddressUnique];
+    var detached = activationRecord.detached,
+        instance = activationRecord.instance;
+
+
+    if (!instance.isRendered) {
+      instance.render();
+    }
+
+    var $el = instance.$el;
+
+
+    activationRecord.active = true;
+
+    if (!detached) {
+      return $el.removeClass(_hideClass2.default);
+    }
+
+    activationRecord.detached = false;
+    $regionEl.append($el);
+  },
   hide: function hide(viewAddressUnique, detach) {
     var activationRecord = activationRecords[viewAddressUnique];
     var $el = activationRecord.instance.$el;

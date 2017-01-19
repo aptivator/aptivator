@@ -30,7 +30,7 @@ aptivator.state('app-2.form', {
             return new Promise(function(resolve, reject) {
               setTimeout(function() {
                 resolve(Math.random());
-              });
+              }, 1000);
             });
           },
           persist: false,

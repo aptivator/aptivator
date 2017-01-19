@@ -31,7 +31,7 @@ aptivator.state('app-1', {
             return new Promise(function(resolve, reject) {
               setTimeout(function() {
                 resolve(true);
-              });
+              }, 1500);
             });
           },
           persist: false

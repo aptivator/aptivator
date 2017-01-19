@@ -1,12 +1,12 @@
-import _             from 'lodash';
-import aptivator     from '../../lib/instance';
-import error         from '../../lib/error';
-import params        from '../../lib/params';
-import relations     from '../../lib/relations';
-import vars          from '../../lib/vars';
-import cacheable     from './lib/cacheable';
-import displayer     from './lib/displayer';
-import viewApi       from './lib/view-api';
+import _         from 'lodash';
+import aptivator from '../../lib/instance';
+import displayer from '../../lib/displayer';
+import error     from '../../lib/error';
+import params    from '../../lib/params';
+import relations from '../../lib/relations';
+import vars      from '../../lib/vars';
+import cacheable from './lib/cacheable';
+import viewApi   from './lib/view-api';
 
 let {activationRecords, activationSequences, registry} = vars.states;
 
@@ -37,10 +37,6 @@ export default stateParams => {
     targetRegion.current.add(viewAddressUnique);
     
     if(unhide) {
-      if(relations.isRoot(viewStateName)) {
-        displayer.roots.add(activationRecord.instance.$el);
-      }
-      
       if(!cacheable.implicit.cache) {
         if(!_.isObject(cache) || !cache.receiver) {
           error.throw(`receiver function for variable parameters has not been provided`);
@@ -49,7 +45,7 @@ export default stateParams => {
         activationRecord.instance[cache.receiver](viewParameters); 
       }
       
-      return displayer.single(activationRecord, $regionEl);
+      return displayer.display(viewAddressUnique, $regionEl);
     }
 
     let instance = new viewConfigs.view(viewParameters);
@@ -67,10 +63,8 @@ export default stateParams => {
       targetRegion.current.delete(viewAddressUnique);
       delete activationRecord.instance;
     });
-    
-    instance.render();
-    
-    displayer.single(activationRecord, $regionEl);   
+
+    displayer.display(viewAddressUnique, $regionEl);   
   });
 
   return stateParams;

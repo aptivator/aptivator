@@ -12,6 +12,10 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
+var _displayer = require('../../lib/displayer');
+
+var _displayer2 = _interopRequireDefault(_displayer);
+
 var _error = require('../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -31,10 +35,6 @@ var _vars2 = _interopRequireDefault(_vars);
 var _cacheable = require('./lib/cacheable');
 
 var _cacheable2 = _interopRequireDefault(_cacheable);
-
-var _displayer = require('./lib/displayer');
-
-var _displayer2 = _interopRequireDefault(_displayer);
 
 var _viewApi = require('./lib/view-api');
 
@@ -79,10 +79,6 @@ exports.default = function (stateParams) {
     targetRegion.current.add(viewAddressUnique);
 
     if (unhide) {
-      if (_relations2.default.isRoot(viewStateName)) {
-        _displayer2.default.roots.add(activationRecord.instance.$el);
-      }
-
       if (!_cacheable2.default.implicit.cache) {
         if (!_lodash2.default.isObject(cache) || !cache.receiver) {
           _error2.default.throw('receiver function for variable parameters has not been provided');
@@ -91,7 +87,7 @@ exports.default = function (stateParams) {
         activationRecord.instance[cache.receiver](viewParameters);
       }
 
-      return _displayer2.default.single(activationRecord, $regionEl);
+      return _displayer2.default.display(viewAddressUnique, $regionEl);
     }
 
     var instance = new viewConfigs.view(viewParameters);
@@ -114,9 +110,7 @@ exports.default = function (stateParams) {
       delete activationRecord.instance;
     });
 
-    instance.render();
-
-    _displayer2.default.single(activationRecord, $regionEl);
+    _displayer2.default.display(viewAddressUnique, $regionEl);
   });
 
   return stateParams;
