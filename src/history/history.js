@@ -1,14 +1,7 @@
-import aptivator from '../lib/instance';
-import vars      from '../lib/vars';
-
-let statesCache = [];
+import aptivator   from '../lib/instance';
+import statesCache from './lib/states-cache';
 
 aptivator.history = {
-  add(state) {
-    statesCache.push(state);
-    statesCache = statesCache.slice(-vars.configs.historySize);
-  },
-  
   get(start, end) {
     return statesCache.slice(start, end);
   },

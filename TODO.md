@@ -32,6 +32,7 @@
 * make sure that immediate views (non-main ones) are not hidden within an activationRecord
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
+* **DONE** add() function in history() should not be available to users of framework
 * **DONE** Should root state be declared just like any other state with parallel states, resolves, etc. (yes, with some exceptions - no parallel states, etc.)
 * **DONE** simplify variable declarations in renderer()
 * **DONE** test transiet states that consist of multiple views that go to different root regions (works very well)

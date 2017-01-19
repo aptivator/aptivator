@@ -11,6 +11,9 @@ aptivator.state('app-1', {
       return 'run';
     }
   },
+  animate: {
+    'root': 'aptivator-fade-in'
+  },
   views: {
     'main': {
       address: '.main',

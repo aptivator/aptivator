@@ -11,7 +11,6 @@ export default stateParams =>
         clearTimeout(timeoutHandle);
         
         if(lastStateName) {
-          console.log(`deactivating ${lastStateName} (no transient)`);
           aptivator.deactivate({name: lastStateName});
         }
         

@@ -28,7 +28,6 @@ exports.default = function (stateParams) {
           clearTimeout(timeoutHandle);
 
           if (lastStateName) {
-            console.log('deactivating ' + lastStateName + ' (no transient)');
             _instance2.default.deactivate({ name: lastStateName });
           }
 

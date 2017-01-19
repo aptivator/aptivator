@@ -5,7 +5,7 @@ export default queue => {
   let stateNames = queue.map(stateDefinition => stateDefinition[0]);
   
   stateNames.sort((stateName1, stateName2) => 
-    stateName2.split('.').length - stateName1.split('.').length);
+    relations.parts(stateName2).length - relations.parts(stateName1).length);
   
   for(let [i, stateName] of stateNames.entries()) {
     if(relations.isRoot(stateName)) {

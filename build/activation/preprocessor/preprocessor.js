@@ -169,7 +169,7 @@ exports.default = function (stateParams) {
     }
 
     activationSequence.sort(function (viewConfigs1, viewConfigs2) {
-      return _relations2.default.parts(_addresser2.default.stateName(viewConfigs1.viewAddressUnique)).length > _relations2.default.parts(_addresser2.default.stateName(viewConfigs2.viewAddressUnique)).length;
+      return _relations2.default.parts(_addresser2.default.stateName(viewConfigs1.viewAddressUnique)).length - _relations2.default.parts(_addresser2.default.stateName(viewConfigs2.viewAddressUnique)).length;
     });
   }(stateName);
 

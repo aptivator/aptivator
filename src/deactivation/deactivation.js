@@ -8,6 +8,27 @@ import vars          from '../lib/vars';
 let {activationRecords, activationSequences, registry} = vars.states;
 
 aptivator.deactivate = params => {
+  let {name} = params;
+  let activationSequence = activationSequences[name];
+
+  _.each(activationSequence, viewConfigs => {
+    let {viewAddressUnique, detachHidden} = viewConfigs;
+    let activationRecord = activationRecords[viewAddressUnique];
+    let {$el} = activationRecord.instance;
+    
+    if(detachHidden) {
+      $el.removeClass(hideClassName).detach();
+    } else {
+      $el.addClass(hideClassName);
+    }
+    
+    activationRecord.detached = detachHidden;
+    activationRecord.active = false;
+  });
+};
+
+/*
+aptivator.deactivate = params => {
   let {name, forward, focal, processed, detach, count} = params;
   let hasAt = name.includes('@');
   let stateName = hasAt ? addresser.stateName(name) : focal || forward ? name : relations.family(name).slice(1, 2)[0];
@@ -17,8 +38,6 @@ aptivator.deactivate = params => {
   let {detachHidden} = viewsRegistry[viewAddressUnique];
   let activationRecord = activationRecords[viewAddressUnique];
   let {$el} = activationRecord.instance;
-
-  console.log(activationSequences[name]);
 
   if(!count) {
     count = 0;
@@ -75,3 +94,4 @@ aptivator.deactivate = params => {
   
   _.each(stateConfigs.states, stateName => aptivator.deactivate({name: stateName, processed, count}));
 };
+*/

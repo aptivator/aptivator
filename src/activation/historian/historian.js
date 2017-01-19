@@ -1,9 +1,9 @@
-import _         from 'lodash';
-import aptivator from '../../lib/instance';
+import _            from 'lodash';
+import historyAdder from '../../history/adder';
 
 export default stateParams => {
   if(!stateParams.noHistory) {
-    aptivator.history.add(_.cloneDeep(_.pick(stateParams, ['stateName'])));
+    historyAdder(_.cloneDeep(_.pick(stateParams, ['stateName'])));
   }
   
   return stateParams;

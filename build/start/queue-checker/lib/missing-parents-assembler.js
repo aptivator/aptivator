@@ -19,7 +19,7 @@ exports.default = function (queue) {
   });
 
   stateNames.sort(function (stateName1, stateName2) {
-    return stateName2.split('.').length - stateName1.split('.').length;
+    return _relations2.default.parts(stateName2).length - _relations2.default.parts(stateName1).length;
   });
 
   var _iteratorNormalCompletion = true;

@@ -33,82 +33,94 @@ var _vars$states = _vars2.default.states,
 
 
 _instance2.default.deactivate = function (params) {
-  var name = params.name,
-      forward = params.forward,
-      focal = params.focal,
-      processed = params.processed,
-      detach = params.detach,
-      count = params.count;
+  var name = params.name;
 
-  var hasAt = name.includes('@');
-  var stateName = hasAt ? _addresser2.default.stateName(name) : focal || forward ? name : _relations2.default.family(name).slice(1, 2)[0];
-  var stateConfigs = registry[stateName];
-  var viewsRegistry = stateConfigs.viewsRegistry;
+  var activationSequence = activationSequences[name];
 
-  var viewAddressUnique = hasAt ? name : stateConfigs.viewAddressUnique;
-  var detachHidden = viewsRegistry[viewAddressUnique].detachHidden;
+  _lodash2.default.each(activationSequence, function (viewConfigs) {
+    var viewAddressUnique = viewConfigs.viewAddressUnique,
+        detachHidden = viewConfigs.detachHidden;
 
-  var activationRecord = activationRecords[viewAddressUnique];
-  var $el = activationRecord.instance.$el;
+    var activationRecord = activationRecords[viewAddressUnique];
+    var $el = activationRecord.instance.$el;
 
 
-  console.log(activationSequences[name]);
+    if (detachHidden) {
+      $el.removeClass(_hideClass2.default).detach();
+    } else {
+      $el.addClass(_hideClass2.default);
+    }
 
-  if (!count) {
+    activationRecord.detached = detachHidden;
+    activationRecord.active = false;
+  });
+};
+
+/*
+aptivator.deactivate = params => {
+  let {name, forward, focal, processed, detach, count} = params;
+  let hasAt = name.includes('@');
+  let stateName = hasAt ? addresser.stateName(name) : focal || forward ? name : relations.family(name).slice(1, 2)[0];
+  let stateConfigs = registry[stateName];
+  let {viewsRegistry} = stateConfigs;
+  let viewAddressUnique = hasAt ? name : stateConfigs.viewAddressUnique;
+  let {detachHidden} = viewsRegistry[viewAddressUnique];
+  let activationRecord = activationRecords[viewAddressUnique];
+  let {$el} = activationRecord.instance;
+
+  if(!count) {
     count = 0;
   }
-
-  if (++count > 100) {
+  
+  if(++count > 100) {
     throw 'break recursion';
   }
-
-  if (!processed) {
+  
+  if(!processed) {
     params.processed = new Set();
   }
-
+  
   params.processed.add(viewAddressUnique);
-
-  if (detach) {
+  
+  if(detach) {
     detachHidden = true;
   }
-
-  if (detachHidden) {
-    $el.removeClass(_hideClass2.default).detach();
+  
+  if(detachHidden) {
+    $el.removeClass(hideClassName).detach();
   } else {
-    $el.addClass(_hideClass2.default);
+    $el.addClass(hideClassName);
   }
-
+  
   activationRecord.detached = detachHidden;
   activationRecord.active = false;
 
-  if (focal) {
+  if(focal) {
     return;
   }
-
-  _lodash2.default.each(activationRecord.regions, function (regionObj) {
-    regionObj.current.forEach(function (viewAddressUnique) {
-      if (params.processed.has(viewAddressUnique)) {
+  
+  _.each(activationRecord.regions, regionObj => {
+    regionObj.current.forEach(viewAddressUnique => {
+      if(params.processed.has(viewAddressUnique)) {
         return;
       }
-
-      if (viewsRegistry[viewAddressUnique]) {
+      
+      if(viewsRegistry[viewAddressUnique]) {
         params.processed.add(viewAddressUnique);
         return;
       }
-
-      _instance2.default.deactivate({ name: viewAddressUnique, forward: true, processed: processed, count: count });
+      
+      aptivator.deactivate({name: viewAddressUnique, forward: true, processed, count});
     });
   });
-
-  _lodash2.default.each(viewsRegistry, function (viewConfigs) {
-    var viewAddressUnique = viewConfigs.viewAddressUnique;
-
-    if (!params.processed.has(viewAddressUnique)) {
-      _instance2.default.deactivate({ name: viewAddressUnique, focal: true, stateName: stateName, processed: processed, count: count });
+  
+  _.each(viewsRegistry, viewConfigs => {
+    let {viewAddressUnique} = viewConfigs;
+    if(!params.processed.has(viewAddressUnique)) {
+      aptivator.deactivate({name: viewAddressUnique, focal: true, stateName, processed, count});
     }
   });
-
-  _lodash2.default.each(stateConfigs.states, function (stateName) {
-    return _instance2.default.deactivate({ name: stateName, processed: processed, count: count });
-  });
+  
+  _.each(stateConfigs.states, stateName => aptivator.deactivate({name: stateName, processed, count}));
 };
+*/

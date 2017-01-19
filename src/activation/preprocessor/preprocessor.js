@@ -123,7 +123,7 @@ export default stateParams => {
     }
     
     activationSequence.sort((viewConfigs1, viewConfigs2) => 
-      relations.parts(addresser.stateName(viewConfigs1.viewAddressUnique)).length >
+      relations.parts(addresser.stateName(viewConfigs1.viewAddressUnique)).length -
       relations.parts(addresser.stateName(viewConfigs2.viewAddressUnique)).length);
   }(stateName);
   
