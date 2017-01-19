@@ -28,6 +28,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _vars$states = _vars2.default.states,
     activationRecords = _vars$states.activationRecords,
+    activationSequences = _vars$states.activationSequences,
     registry = _vars$states.registry;
 
 
@@ -37,23 +38,28 @@ _instance2.default.deactivate = function (params) {
       focal = params.focal,
       processed = params.processed,
       detach = params.detach,
-      ignoreMultiple = params.ignoreMultiple;
+      count = params.count;
 
   var hasAt = name.includes('@');
   var stateName = hasAt ? _addresser2.default.stateName(name) : focal || forward ? name : _relations2.default.family(name).slice(1, 2)[0];
   var stateConfigs = registry[stateName];
-  var viewAddressUnique = hasAt ? name : stateConfigs.viewAddressUnique;
   var viewsRegistry = stateConfigs.viewsRegistry;
-  var _viewsRegistry$viewAd = viewsRegistry[viewAddressUnique],
-      detachHidden = _viewsRegistry$viewAd.detachHidden,
-      multiple = _viewsRegistry$viewAd.multiple;
+
+  var viewAddressUnique = hasAt ? name : stateConfigs.viewAddressUnique;
+  var detachHidden = viewsRegistry[viewAddressUnique].detachHidden;
 
   var activationRecord = activationRecords[viewAddressUnique];
   var $el = activationRecord.instance.$el;
 
 
-  if (hasAt) {
-    focal = true;
+  console.log(activationSequences[name]);
+
+  if (!count) {
+    count = 0;
+  }
+
+  if (++count > 100) {
+    throw 'break recursion';
   }
 
   if (!processed) {
@@ -61,10 +67,6 @@ _instance2.default.deactivate = function (params) {
   }
 
   params.processed.add(viewAddressUnique);
-
-  if (multiple && !ignoreMultiple) {
-    return;
-  }
 
   if (detach) {
     detachHidden = true;
@@ -84,13 +86,17 @@ _instance2.default.deactivate = function (params) {
   }
 
   _lodash2.default.each(activationRecord.regions, function (regionObj) {
-    regionObj.current.forEach(function (name) {
-      if (name.includes('@')) {
-        params.processed.add(name);
+    regionObj.current.forEach(function (viewAddressUnique) {
+      if (params.processed.has(viewAddressUnique)) {
         return;
       }
 
-      _instance2.default.deactivate(_lodash2.default.extend(params, { name: name, forward: true }));
+      if (viewsRegistry[viewAddressUnique]) {
+        params.processed.add(viewAddressUnique);
+        return;
+      }
+
+      _instance2.default.deactivate({ name: viewAddressUnique, forward: true, processed: processed, count: count });
     });
   });
 
@@ -98,11 +104,11 @@ _instance2.default.deactivate = function (params) {
     var viewAddressUnique = viewConfigs.viewAddressUnique;
 
     if (!params.processed.has(viewAddressUnique)) {
-      _instance2.default.deactivate(_lodash2.default.extend(params, { name: viewAddressUnique, focal: true, stateName: stateName }));
+      _instance2.default.deactivate({ name: viewAddressUnique, focal: true, stateName: stateName, processed: processed, count: count });
     }
   });
 
   _lodash2.default.each(stateConfigs.states, function (stateName) {
-    return _instance2.default.deactivate({ name: stateName });
+    return _instance2.default.deactivate({ name: stateName, processed: processed, count: count });
   });
 };

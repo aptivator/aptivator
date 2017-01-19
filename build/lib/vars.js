@@ -11,7 +11,7 @@ var _backbone2 = _interopRequireDefault(_backbone);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-  historySize: 25,
+  configs: {},
 
   rootStateName: 'root',
 

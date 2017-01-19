@@ -1,5 +1,6 @@
-import error from '../../lib/error';
-import vars  from '../../lib/vars';
+import error                   from '../../lib/error';
+import vars                    from '../../lib/vars';
+import missingParentsAssembler from './lib/missing-parents-assembler'; 
 
 let {queue} = vars.states;
 
@@ -9,6 +10,7 @@ export default () =>
       return resolve();
     }
     
-    let undefinedStateNames = queue.map(stateDefinition => stateDefinition[0]).join(', ');
-    error.throw(`unable to initialize [${undefinedStateNames}] states`);
+    let missingParents = missingParentsAssembler(queue);
+    
+    error.throw(`undeclared parent states: [${missingParents}]`, 'starter');
   });

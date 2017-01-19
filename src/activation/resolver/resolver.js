@@ -6,16 +6,17 @@ import vars                from '../../lib/vars';
 import entitiesTreeBuilder from './lib/entities-tree-builder';
 import resolvesProcessor   from './lib/resolves-processor';
 
+let {registry} = vars.states;
+
 export default stateParams => 
   new Promise((resolve, reject) => {
-    let {stateName, resolveParams, resolveDefinitions, noResolves} = stateParams;
-    
-    if(noResolves) {
+    if(stateParams.noResolves) {
       return resolve(stateParams);
     }
     
+    let {stateName, resolveParams, resolveDefinitions} = stateParams;
     let resolveAddresses = relations.family(stateName).reduce((resolveAddresses, relation) => 
-      resolveAddresses.concat(vars.states.registry[relation].resolveAddresses), []);
+      resolveAddresses.concat(registry[relation].resolveAddresses), []);
     let tree = entitiesTreeBuilder(resolveAddresses);
   
     !function processResolves(node = tree) {

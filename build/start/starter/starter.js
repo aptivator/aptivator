@@ -27,17 +27,12 @@ var _vars2 = _interopRequireDefault(_vars);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
-  return new Promise(function (resolve) {
-    var rootStateConfigs = _vars2.default.states.registry[_vars2.default.rootStateName];
-    var defaultState = rootStateConfigs.defaultState;
+  var defaultState = _vars2.default.configs.defaultState;
 
 
-    _backbone2.default.history.start();
+  _backbone2.default.history.start();
 
-    if (!_fragment2.default.get() && defaultState) {
-      _instance2.default.activate({ name: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
-    }
-
-    resolve();
-  });
+  if (!_fragment2.default.get() && defaultState) {
+    _instance2.default.activate({ name: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
+  }
 };

@@ -15,7 +15,7 @@ var statesCache = [];
 _instance2.default.history = {
   add: function add(state) {
     statesCache.push(state);
-    statesCache = statesCache.slice(-_vars2.default.historySize);
+    statesCache = statesCache.slice(-_vars2.default.configs.historySize);
   },
   get: function get(start, end) {
     return statesCache.slice(start, end);

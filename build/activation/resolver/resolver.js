@@ -34,20 +34,20 @@ var _resolvesProcessor2 = _interopRequireDefault(_resolvesProcessor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var registry = _vars2.default.states.registry;
+
 exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
-    var stateName = stateParams.stateName,
-        resolveParams = stateParams.resolveParams,
-        resolveDefinitions = stateParams.resolveDefinitions,
-        noResolves = stateParams.noResolves;
-
-
-    if (noResolves) {
+    if (stateParams.noResolves) {
       return resolve(stateParams);
     }
 
+    var stateName = stateParams.stateName,
+        resolveParams = stateParams.resolveParams,
+        resolveDefinitions = stateParams.resolveDefinitions;
+
     var resolveAddresses = _relations2.default.family(stateName).reduce(function (resolveAddresses, relation) {
-      return resolveAddresses.concat(_vars2.default.states.registry[relation].resolveAddresses);
+      return resolveAddresses.concat(registry[relation].resolveAddresses);
     }, []);
     var tree = (0, _entitiesTreeBuilder2.default)(resolveAddresses);
 

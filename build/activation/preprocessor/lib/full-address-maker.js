@@ -23,7 +23,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (viewAddress, containerStateName) {
   var _addresser$parts = _addresser2.default.parts(viewAddress),
       _addresser$parts2 = _slicedToArray(_addresser$parts, 2),
-      region = _addresser$parts2[0],
+      selector = _addresser$parts2[0],
       stateName = _addresser$parts2[1];
 
   if (stateName === '') {
@@ -32,5 +32,5 @@ exports.default = function (viewAddress, containerStateName) {
     stateName = _relations2.default.parent(containerStateName);
   }
 
-  return region + '@' + stateName;
+  return selector + '@' + stateName;
 };

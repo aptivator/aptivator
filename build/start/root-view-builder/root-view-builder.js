@@ -4,33 +4,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _backbone = require('backbone.marionette');
-
-var _backbone2 = _interopRequireDefault(_backbone);
-
 var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var rootStateName = _vars2.default.rootStateName,
+    states = _vars2.default.states;
+var registry = states.registry,
+    activationRecords = states.activationRecords;
+
 exports.default = function () {
-  return new Promise(function (resolve) {
-    var rootStateConfigs = _vars2.default.states.registry[_vars2.default.rootStateName];
-    var rootView = new (_backbone2.default.LayoutView.extend({
-      el: 'html',
-      regions: {
-        main: rootStateConfigs.el || 'body'
-      }
-    }))();
-    var instance = rootView;
+  var view = registry[rootStateName].view;
 
-    if (rootStateConfigs.view) {
-      instance = new rootStateConfigs.view();
-      rootView.main.show(instance);
-    }
+  var instance = new view();
 
-    _vars2.default.states.activationRecords[_vars2.default.rootStateName] = { instance: instance };
-    resolve();
-  });
+  instance.render();
+  activationRecords[rootStateName] = { instance: instance };
 };

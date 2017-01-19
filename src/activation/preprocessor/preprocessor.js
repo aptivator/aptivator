@@ -23,15 +23,17 @@ export default stateParams => {
     
     if(!_.isEmpty(activationSequence)) {
       if(previousSequence) {
-        previousSequence.splice(previousSequence.length, 0, ...activationSequence);
+        let uniqueValues = _.uniq(previousSequence.concat(activationSequence));
+        previousSequence.splice(0, previousSequence.length, ...uniqueValues);
       }
       return;
     }
     
-    let parentStateName = relations.parent(stateName);
+    if(stateConfigs.resolveAddresses) {
+      return;
+    }
+    
     let resolveAddresses = stateConfigs.resolveAddresses = [];
-    let transient = !!stateConfigs.transient;
-    let mainViews = [];
     
     dataParams[stateName] = stateConfigs.data;
     
@@ -49,39 +51,35 @@ export default stateParams => {
     if(stateConfigs.view && !stateConfigs.views) {
       stateConfigs.views = {};
       stateConfigs.main = true;
-      stateConfigs.views[stateConfigs.parentRegion || 'main'] = _.pick(stateConfigs, ['view', 'main']);
+      stateConfigs.views[stateConfigs.parentSelector || ''] = _.pick(stateConfigs, ['view', 'cache']);
     }
     
+    let parentStateName = relations.parent(stateName);
+    let viewCount = _.keys(stateConfigs.views).length;
+    let mainViews = [];
+    
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
+      if(viewConfigs.address) {
+        viewAddress = viewConfigs.address;
+      }
+      
       let viewAddressFull = fullAddressMaker(viewAddress, stateName);
-      let [viewRegionName, viewStateName] = addresser.parts(viewAddressFull);
-      let multiple = (registry[viewStateName].multiples || []).includes(viewRegionName);
+      let [viewSelector, viewStateName] = addresser.parts(viewAddressFull);
       let viewAddressUnique = `${_.uniqueId('aptivator-id-')}@${stateName}`;
       let duplicateViewConfigs = (previousSequence || []).concat(activationSequence)
         .filter(viewConfigs => viewConfigs.viewAddressFull === viewAddressFull);
       let otherView = (duplicateViewConfigs[0] || {}).view;
       
-      if(!multiple && otherView) {
-        if(otherView === viewConfigs.view) {
-          return;
-        }
-        
-        error.throw(`two different views are trying to use [${viewAddressFull}] address`, 'preprocessor');
-      }
-      
-      if(multiple) {
-        for(let duplicateViewConfig of duplicateViewConfigs) {
-          if(duplicateViewConfig.view === viewConfigs.view) {
-            return;
-          }
-        }
+      if(otherView === viewConfigs.view) {
+        console.log(viewAddressFull);
+        return;
       }
       
       if(viewStateName !== parentStateName) {
         delete viewConfigs.main;
       }
       
-      if(viewAddress === 'main') {
+      if(viewCount === 1) {
         viewConfigs.main = true;
       }
       
@@ -104,15 +102,21 @@ export default stateParams => {
       
       viewNormalizer(viewConfigs);
       stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;
-      _.extend(viewConfigs, {viewAddressFull, stateName, viewAddressUnique, multiple, viewRegionName, viewStateName, transient});
+      _.extend(viewConfigs, {viewAddressFull, stateName, viewAddressUnique, viewSelector, viewStateName});
       activationSequence.push(viewConfigs);
 
       if(viewConfigs.main) {
-        preprocess(viewStateName, activationSequence);
+        return preprocess(viewStateName, activationSequence);
       }
     });
     
-    _.each(stateConfigs.states, stateName => preprocess(stateName, activationSequence));
+    if(!mainViews.length) {
+      error.throw(`main view should be specified for [${stateName}]`);
+    }
+    
+    _.each(stateConfigs.states, parallelStateName => {
+      preprocess(parallelStateName, activationSequence);
+    });
     
     if(previousSequence) {
       preprocess(stateName, previousSequence);

@@ -5,21 +5,27 @@ import hideClassName from '../lib/hide-class';
 import relations     from '../lib/relations';
 import vars          from '../lib/vars';
 
-let {activationRecords, registry} = vars.states;
+let {activationRecords, activationSequences, registry} = vars.states;
 
 aptivator.deactivate = params => {
-  let {name, forward, focal, processed, detach, ignoreMultiple} = params;
+  let {name, forward, focal, processed, detach, count} = params;
   let hasAt = name.includes('@');
   let stateName = hasAt ? addresser.stateName(name) : focal || forward ? name : relations.family(name).slice(1, 2)[0];
   let stateConfigs = registry[stateName];
-  let viewAddressUnique = hasAt ? name : stateConfigs.viewAddressUnique;
   let {viewsRegistry} = stateConfigs;
-  let {detachHidden, multiple} = viewsRegistry[viewAddressUnique];
+  let viewAddressUnique = hasAt ? name : stateConfigs.viewAddressUnique;
+  let {detachHidden} = viewsRegistry[viewAddressUnique];
   let activationRecord = activationRecords[viewAddressUnique];
   let {$el} = activationRecord.instance;
+
+  console.log(activationSequences[name]);
+
+  if(!count) {
+    count = 0;
+  }
   
-  if(hasAt) {
-    focal = true;
+  if(++count > 100) {
+    throw 'break recursion';
   }
   
   if(!processed) {
@@ -27,11 +33,7 @@ aptivator.deactivate = params => {
   }
   
   params.processed.add(viewAddressUnique);
-
-  if(multiple && !ignoreMultiple) {
-    return;
-  }
-
+  
   if(detach) {
     detachHidden = true;
   }
@@ -48,24 +50,28 @@ aptivator.deactivate = params => {
   if(focal) {
     return;
   }
-
+  
   _.each(activationRecord.regions, regionObj => {
-    regionObj.current.forEach(name => { 
-      if(name.includes('@')) {
-        params.processed.add(name);
+    regionObj.current.forEach(viewAddressUnique => {
+      if(params.processed.has(viewAddressUnique)) {
         return;
       }
       
-      aptivator.deactivate(_.extend(params, {name, forward: true}));
+      if(viewsRegistry[viewAddressUnique]) {
+        params.processed.add(viewAddressUnique);
+        return;
+      }
+      
+      aptivator.deactivate({name: viewAddressUnique, forward: true, processed, count});
     });
   });
   
   _.each(viewsRegistry, viewConfigs => {
     let {viewAddressUnique} = viewConfigs;
     if(!params.processed.has(viewAddressUnique)) {
-      aptivator.deactivate(_.extend(params, {name: viewAddressUnique, focal: true, stateName}));
+      aptivator.deactivate({name: viewAddressUnique, focal: true, stateName, processed, count});
     }
   });
   
-  _.each(stateConfigs.states, stateName => aptivator.deactivate({name: stateName}));
+  _.each(stateConfigs.states, stateName => aptivator.deactivate({name: stateName, processed, count}));
 };

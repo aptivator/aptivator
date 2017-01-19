@@ -1,10 +1,11 @@
 require('../styles/main.less');
-require('./apps/root/root-state');
-require('./apps/extra/extra-state');
-require('./apps/app-1/app-1-state');
-require('./apps/header/header-state');
-require('./apps/app-2/app-2-state');
-require('./apps/error/error-state');
-require('./apps/loading/loading-state');
+require('./config/config');
+require('./root/root-state');
+require('./extra/extra-state');
+require('./app-1/app-1-state');
+require('./header/header-state');
+require('./app-2/app-2-state');
+require('./error/error-state');
+require('./loading/loading-state');
 
 require('aptivator').start();

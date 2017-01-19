@@ -63,15 +63,17 @@ exports.default = function (stateParams) {
 
     if (!_lodash2.default.isEmpty(activationSequence)) {
       if (previousSequence) {
-        previousSequence.splice.apply(previousSequence, [previousSequence.length, 0].concat(_toConsumableArray(activationSequence)));
+        var uniqueValues = _lodash2.default.uniq(previousSequence.concat(activationSequence));
+        previousSequence.splice.apply(previousSequence, [0, previousSequence.length].concat(_toConsumableArray(uniqueValues)));
       }
       return;
     }
 
-    var parentStateName = _relations2.default.parent(stateName);
+    if (stateConfigs.resolveAddresses) {
+      return;
+    }
+
     var resolveAddresses = stateConfigs.resolveAddresses = [];
-    var transient = !!stateConfigs.transient;
-    var mainViews = [];
 
     dataParams[stateName] = stateConfigs.data;
 
@@ -89,66 +91,41 @@ exports.default = function (stateParams) {
     if (stateConfigs.view && !stateConfigs.views) {
       stateConfigs.views = {};
       stateConfigs.main = true;
-      stateConfigs.views[stateConfigs.parentRegion || 'main'] = _lodash2.default.pick(stateConfigs, ['view', 'main']);
+      stateConfigs.views[stateConfigs.parentSelector || ''] = _lodash2.default.pick(stateConfigs, ['view', 'cache']);
     }
 
+    var parentStateName = _relations2.default.parent(stateName);
+    var viewCount = _lodash2.default.keys(stateConfigs.views).length;
+    var mainViews = [];
+
     _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewAddress) {
+      if (viewConfigs.address) {
+        viewAddress = viewConfigs.address;
+      }
+
       var viewAddressFull = (0, _fullAddressMaker2.default)(viewAddress, stateName);
 
       var _addresser$parts = _addresser2.default.parts(viewAddressFull),
           _addresser$parts2 = _slicedToArray(_addresser$parts, 2),
-          viewRegionName = _addresser$parts2[0],
+          viewSelector = _addresser$parts2[0],
           viewStateName = _addresser$parts2[1];
 
-      var multiple = (registry[viewStateName].multiples || []).includes(viewRegionName);
       var viewAddressUnique = _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
       var duplicateViewConfigs = (previousSequence || []).concat(activationSequence).filter(function (viewConfigs) {
         return viewConfigs.viewAddressFull === viewAddressFull;
       });
       var otherView = (duplicateViewConfigs[0] || {}).view;
 
-      if (!multiple && otherView) {
-        if (otherView === viewConfigs.view) {
-          return;
-        }
-
-        _error2.default.throw('two different views are trying to use [' + viewAddressFull + '] address', 'preprocessor');
-      }
-
-      if (multiple) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = duplicateViewConfigs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var duplicateViewConfig = _step.value;
-
-            if (duplicateViewConfig.view === viewConfigs.view) {
-              return;
-            }
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
+      if (otherView === viewConfigs.view) {
+        console.log(viewAddressFull);
+        return;
       }
 
       if (viewStateName !== parentStateName) {
         delete viewConfigs.main;
       }
 
-      if (viewAddress === 'main') {
+      if (viewCount === 1) {
         viewConfigs.main = true;
       }
 
@@ -171,16 +148,20 @@ exports.default = function (stateParams) {
 
       (0, _viewNormalizer2.default)(viewConfigs);
       stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;
-      _lodash2.default.extend(viewConfigs, { viewAddressFull: viewAddressFull, stateName: stateName, viewAddressUnique: viewAddressUnique, multiple: multiple, viewRegionName: viewRegionName, viewStateName: viewStateName, transient: transient });
+      _lodash2.default.extend(viewConfigs, { viewAddressFull: viewAddressFull, stateName: stateName, viewAddressUnique: viewAddressUnique, viewSelector: viewSelector, viewStateName: viewStateName });
       activationSequence.push(viewConfigs);
 
       if (viewConfigs.main) {
-        preprocess(viewStateName, activationSequence);
+        return preprocess(viewStateName, activationSequence);
       }
     });
 
-    _lodash2.default.each(stateConfigs.states, function (stateName) {
-      return preprocess(stateName, activationSequence);
+    if (!mainViews.length) {
+      _error2.default.throw('main view should be specified for [' + stateName + ']');
+    }
+
+    _lodash2.default.each(stateConfigs.states, function (parallelStateName) {
+      preprocess(parallelStateName, activationSequence);
     });
 
     if (previousSequence) {

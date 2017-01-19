@@ -38,7 +38,9 @@ var _dataStores2 = _interopRequireDefault(_dataStores);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var registry = _vars2.default.states.registry;
+var configs = _vars2.default.configs,
+    states = _vars2.default.states;
+var registry = states.registry;
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
@@ -54,9 +56,8 @@ exports.default = function (stateParams) {
         silent = stateParams.silent;
 
     var stateConfigs = registry[stateName];
-    var rootStateConfigs = registry[_vars2.default.rootStateName];
 
-    if (rootStateConfigs.showRuntime && !stateConfigs.transient) {
+    if (configs.showRuntime && !stateConfigs.transient) {
       stateParams.time = Date.now();
     }
 
@@ -79,7 +80,7 @@ exports.default = function (stateParams) {
         var transient = transientStateConfigs.transient;
 
         var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
-        var delay = _lodash2.default.isNumber(transientConfigs.delay) ? transientConfigs.delay : _lodash2.default.isNumber(rootStateConfigs.transientDelay) ? rootStateConfigs.transientDelay : 300;
+        var delay = _lodash2.default.isNumber(transientConfigs.delay) ? transientConfigs.delay : _lodash2.default.isNumber(configs.transientDelay) ? configs.transientDelay : 300;
         var activationParams = _lodash2.default.extend(defaults, _lodash2.default.pick(transientConfigs, _lodash2.default.keys(defaults)), immutableDefaults);
         var timeoutHandle = setTimeout(function () {
           return (activationPromise.promise = _instance2.default.activate(activationParams).then(_lodash2.default.noop, function (e) {

@@ -11,15 +11,18 @@ import viewApi       from './lib/view-api';
 let {activationRecords, activationSequences, registry} = vars.states;
 
 export default stateParams => {
-  let root$els = [];
-  
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
-    let {stateName, viewAddressUnique, viewRegionName, viewStateName, multiple, transient} = viewConfigs;
+    let {stateName, viewAddressUnique, viewSelector, viewStateName} = viewConfigs;
     let parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];
-    let parentInstance = parentRecord.instance;
-    let regionInstance = parentInstance[viewRegionName];
+    let $parentEl = parentRecord.instance.$el;
+    let $regionEl = !viewSelector ? $parentEl : $parentEl.find(viewSelector).eq(0);
+    
+    if(!$regionEl.length) {
+      error.throw(`region [${viewSelector}] does not exist for [${viewStateName}] state`);
+    }
+    
     let parentRegions = parentRecord.regions || (parentRecord.regions = {});
-    let targetRegion = parentRegions[viewRegionName] || (parentRegions[viewRegionName] = {current: new Set()});
+    let targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = {current: new Set()});
     let activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
     let cache = cacheable.total(viewConfigs, stateParams);
     let destroy = !cache && activationRecord.instance;
@@ -27,15 +30,6 @@ export default stateParams => {
     let family = relations.family(stateName).concat(viewAddressUnique);
     let viewParameters = params.assemble(family, stateParams);
 
-    if(!regionInstance) {
-      error.throw(`region [${viewRegionName}] does not exist for [${viewStateName}] state`);
-    }
-    
-    if(!regionInstance._aptivatorEnsuredElement) {
-      regionInstance._aptivatorEnsuredElement = true;
-      regionInstance._ensureElement();
-    }
-    
     if(destroy) {
       aptivator.destroy({name: viewAddressUnique});
     }
@@ -47,10 +41,6 @@ export default stateParams => {
         displayer.roots.add(activationRecord.instance.$el);
       }
       
-      if(relations.isRoot(viewStateName)) {
-        root$els.push(activationRecord.instance.$el);
-      }
-      
       if(!cacheable.implicit.cache) {
         if(!_.isObject(cache) || !cache.receiver) {
           error.throw(`receiver function for variable parameters has not been provided`);
@@ -59,19 +49,13 @@ export default stateParams => {
         activationRecord.instance[cache.receiver](viewParameters); 
       }
       
-      displayer.single(activationRecord, regionInstance);
-      
-      if(multiple) {
-        displayer.multiple({targetRegion, regionInstance, transient, exclude: [viewAddressUnique]});
-      }
-
-      return;
+      return displayer.single(activationRecord, $regionEl);
     }
 
     let instance = new viewConfigs.view(viewParameters);
     let serializeData = instance.serializeData;
     
-    _.extend(activationRecord, {active: true, instance, transient});
+    _.extend(activationRecord, {active: true, instance, detached: true});
     
     instance.serializeData = function(...args) {
       var data = serializeData && serializeData.apply(this, args);
@@ -82,22 +66,19 @@ export default stateParams => {
       displayer.roots.add(activationRecord.instance.$el);
     }
     
-    if(multiple) {
-      displayer.multiple({targetRegion, regionInstance, transient, exclude: [viewAddressUnique]});
-    }
-    
     instance.on('destroy', () => {
       delete activationRecord.instance;
       targetRegion.current.delete(viewAddressUnique);
       _.each(activationRecord.regions, regionObj => {
         regionObj.current.forEach(name => {
-          aptivator.deactivate({name, detach: true, ignoreMultiple: true, focal: true});
+          aptivator.deactivate({name, detach: true, focal: true});
         });
       });
     });
     
     instance.render();
-    regionInstance.$el.append(instance.$el);    
+    
+    displayer.single(activationRecord, $regionEl);   
   });
 
   displayer.roots.display();

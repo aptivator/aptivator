@@ -7,23 +7,37 @@ import route               from '../../lib/route';
 import vars                from '../../lib/vars';
 import otherStateRegistrar from './lib/other-state-registrar';
 
-let {registry} = vars.states;
+let {registry, queue} = vars.states;
+let rootStateProperties = ['view', 'resolve', 'data', 'route', 'resolveConfigs', 'detachHidden'];
 
 aptivator.state = (stateName, stateConfigs) => {
-  function state() {
-    let parentStateName = relations.parent(stateName);
-    let parentConfigs = registry[parentStateName];
-    
-    if(relations.isRoot(stateName)) {
-      error.throw(`state name [${stateName}] is reserved`);
-    }
-    
+  try {
     if(registry[stateName]) {
       error.throw(`state [${stateName}] has already been declared`, 'state declaration');
     }
     
-    if(!relations.isRoot(parentStateName) && !parentConfigs) {
-      vars.states.queue.push([stateName, stateConfigs]);
+    if(relations.isRoot(stateName)) {
+      var root = true;
+      stateConfigs = _.pick(stateConfigs, rootStateProperties);
+      _.extend(stateConfigs, {viewAddressUnique: stateName});
+      
+      if(!stateConfigs.resolveConfigs) {
+        stateConfigs.resolveConfigs = {
+          persist: true,
+          store: true
+        };
+      }
+      
+      if(_.isUndefined(stateConfigs.detachHidden)) {
+        stateConfigs.detachHidden = false;
+      }
+    }
+    
+    let parentStateName = root ? null : relations.parent(stateName);
+    let parentConfigs = root ? {} : registry[parentStateName];    
+    
+    if(!parentConfigs) {
+      queue.push([stateName, stateConfigs]);
       return aptivator;
     }
     
@@ -50,11 +64,7 @@ aptivator.state = (stateName, stateConfigs) => {
     }
   
     return vars.states.queue.length ? aptivator.state(...vars.states.queue.pop()) : aptivator;
-  }
-  
-  try {
-    state();
   } catch(e) {
-    console.error(e);
+    error.errorer(e);
   }
 };

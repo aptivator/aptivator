@@ -14,19 +14,7 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_instance2.default.config = function (rootConfigs) {
-  if (!rootConfigs.resolveConfigs) {
-    rootConfigs.resolveConfigs = {
-      persist: true,
-      store: true
-    };
-  }
-
-  if (_lodash2.default.isUndefined(rootConfigs.detachHidden)) {
-    rootConfigs.detachHidden = false;
-  }
-
-  _vars2.default.states.registry[_vars2.default.rootStateName] = _lodash2.default.extend(rootConfigs, { viewAddressUnique: _vars2.default.rootStateName });
-
+_instance2.default.config = function (configs) {
+  _lodash2.default.extend(_vars2.default.configs, configs);
   return _instance2.default;
 };

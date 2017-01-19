@@ -1,4 +1,4 @@
 export default (e, stateParams) => {
-  console.error(stateParams.stateName, e);
+  console.error(e);
   return Promise.reject(e);
 };

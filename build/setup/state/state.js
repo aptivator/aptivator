@@ -36,24 +36,40 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var registry = _vars2.default.states.registry;
+var _vars$states = _vars2.default.states,
+    registry = _vars$states.registry,
+    queue = _vars$states.queue;
 
+var rootStateProperties = ['view', 'resolve', 'data', 'route', 'resolveConfigs', 'detachHidden'];
 
 _instance2.default.state = function (stateName, stateConfigs) {
-  function state() {
-    var parentStateName = _relations2.default.parent(stateName);
-    var parentConfigs = registry[parentStateName];
-
-    if (_relations2.default.isRoot(stateName)) {
-      _error2.default.throw('state name [' + stateName + '] is reserved');
-    }
-
+  try {
     if (registry[stateName]) {
       _error2.default.throw('state [' + stateName + '] has already been declared', 'state declaration');
     }
 
-    if (!_relations2.default.isRoot(parentStateName) && !parentConfigs) {
-      _vars2.default.states.queue.push([stateName, stateConfigs]);
+    if (_relations2.default.isRoot(stateName)) {
+      var root = true;
+      stateConfigs = _lodash2.default.pick(stateConfigs, rootStateProperties);
+      _lodash2.default.extend(stateConfigs, { viewAddressUnique: stateName });
+
+      if (!stateConfigs.resolveConfigs) {
+        stateConfigs.resolveConfigs = {
+          persist: true,
+          store: true
+        };
+      }
+
+      if (_lodash2.default.isUndefined(stateConfigs.detachHidden)) {
+        stateConfigs.detachHidden = false;
+      }
+    }
+
+    var parentStateName = root ? null : _relations2.default.parent(stateName);
+    var parentConfigs = root ? {} : registry[parentStateName];
+
+    if (!parentConfigs) {
+      queue.push([stateName, stateConfigs]);
       return _instance2.default;
     }
 
@@ -86,11 +102,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
     }
 
     return _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, _toConsumableArray(_vars2.default.states.queue.pop())) : _instance2.default;
-  }
-
-  try {
-    state();
   } catch (e) {
-    console.error(e);
+    _error2.default.errorer(e);
   }
 };

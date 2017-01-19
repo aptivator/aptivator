@@ -7,7 +7,8 @@ import route        from '../../lib/route';
 import vars         from '../../lib/vars';
 import dataStores   from './lib/data-stores';
 
-let {registry} = vars.states;
+let {configs, states} = vars;
+let {registry} = states;
 
 export default stateParams => 
   new Promise((resolve, reject) => {
@@ -19,9 +20,8 @@ export default stateParams =>
     
     let {stateName, routeParams, routeValues, silent} = stateParams;
     let stateConfigs = registry[stateName];
-    let rootStateConfigs = registry[vars.rootStateName];
     
-    if(rootStateConfigs.showRuntime && !stateConfigs.transient) {
+    if(configs.showRuntime && !stateConfigs.transient) {
       stateParams.time = Date.now();
     }
   
@@ -42,7 +42,7 @@ export default stateParams =>
       let transientStateConfigs = registry[transientStateName];
       let {transient} = transientStateConfigs;
       let transientConfigs = _.isObject(transient) ? transient : {};
-      let delay = _.isNumber(transientConfigs.delay) ? transientConfigs.delay : _.isNumber(rootStateConfigs.transientDelay) ? rootStateConfigs.transientDelay : 300;
+      let delay = _.isNumber(transientConfigs.delay) ? transientConfigs.delay : _.isNumber(configs.transientDelay) ? configs.transientDelay : 300;
       let activationParams = _.extend(defaults, _.pick(transientConfigs, _.keys(defaults)), immutableDefaults);
       let timeoutHandle = setTimeout(() => (activationPromise.promise = aptivator.activate(activationParams).then(_.noop, e => Promise.reject(e))).catch(_.noop), delay);
       

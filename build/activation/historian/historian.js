@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = function (stateParams) {
   if (!stateParams.noHistory) {
-    _instance2.default.history.add(_lodash2.default.cloneDeep(stateParams));
+    _instance2.default.history.add(_lodash2.default.cloneDeep(_lodash2.default.pick(stateParams, ['stateName'])));
   }
 
   return stateParams;

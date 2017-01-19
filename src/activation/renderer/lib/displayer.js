@@ -1,39 +1,19 @@
 import hideClassName from '../../../lib/hide-class';
-import vars          from '../../../lib/vars';
 
-let {activationRecords} = vars.states;
 let $rootElements = [];
 
 export default {
-  single(activationRecord, regionInstance) {
+  single(activationRecord, $regionEl) {
     let {$el} = activationRecord.instance;
     
     activationRecord.active = true;
     
-    if(activationRecord.detached) {
-      activationRecord.detached = false;
-      return regionInstance.$el.append($el);
+    if(!activationRecord.detached) {
+      return $el.removeClass(hideClassName);
     }
     
-    $el.removeClass(hideClassName);
-  },
-  
-  multiple(params) {
-    let {targetRegion, regionInstance, transient, exclude} = params;
-    
-    targetRegion.current.forEach(viewAddressUnique => {
-      if(exclude.includes(viewAddressUnique)) {
-        return;
-      }
-      
-      let activationRecord = activationRecords[viewAddressUnique];
-      
-      if(activationRecord.transient !== transient) {
-        return;
-      }
-      
-      this.single(activationRecord, regionInstance);
-    });
+    activationRecord.detached = false;
+    $regionEl.append($el);
   },
   
   roots: {

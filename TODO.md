@@ -4,34 +4,48 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
-* Get rid of using regions, simply use selector as part of the view address (e.g., '.main@auth')
-* Get rid of multiple - it really has no use
-* For the multiple allow multiple views to have the same view address
+* in activation initializer, clean transient state activation
+* place function parameters and variable names in alphabetical order
+* fix stateName comparator in preprocessor
+* see if more of the lodash functions can be used
+* take a look at deactivation as a process of combining appropriate activation sequences and then running through them
+* finalize state deactivation api
+* finalize state destruction api
+* add ignorePending flag to activate() to bypass pending states
+* what about adding routeEnums to make sure that some route values are constrained
 * should utils be moved from api under renderer?
 * put back all callbacks that ui-router supports
 * put back all trigers that ui-router supports
 * keep thinking about the animation object declared on the state
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution
-* test transiet states that consist of multiple views that go to different root regions
 * for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
 * when activating from within Backbone router, save the origin url fragment
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* views declaration in a state could be an array, if multiple views with the same address are used
-* or better, let hash in views {} to be either an altName or address.  If address is specified in the configs, then hash is altName
-* for above, when specifying dependencies among views with the same address, altName property should be used
 * it is possible for parent states using route data meant for the children, so that may need to be put back in
 * make sure error states receive route object and not direct params
 * think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
-* regarding above, overlay spec can be used to designate if part of the activationSequence is already active, then it is kept
+* regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
-* simplify variable declarations in renderer()
 * make sure that immediate views (non-main ones) are not hidden within an activationRecord
 * focal flag should also apply when it comes to the removal of immediates (take a look)
-* iron out all the edge use cases involving multiples and transient and error states
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
+* **DONE** Should root state be declared just like any other state with parallel states, resolves, etc. (yes, with some exceptions - no parallel states, etc.)
+* **DONE** simplify variable declarations in renderer()
+* **DONE** test transiet states that consist of multiple views that go to different root regions (works very well)
+* **DONE** views declaration in a state could be an array, if multiple views with the same address are used
+* **DONE** or better, let hash in views {} to be either an altName or address.  If address is specified in the configs, then hash is altName
+* **DONE** for above, when specifying dependencies among views with the same address, altName property should be used (see above)
+* **DONE** Get rid of using regions, simply use selector as part of the view address (e.g., '.main@auth')
+* **DONE** For the multiple allow multiple views to have the same view address
+* **DONE** parentRegion should be parentSelector
+* **DONE** iron out all the edge use cases involving multiples and transient and error states 
+  (multiples are gone and instead many views can go into the same parent space)
+* **DONE** should main flag be explicitly specified now for a view, or if a view address is '', then it means that it is a main view 
+  (If view is one, then it is main, otherwise a main flag has to be used)
+* **DONE** Get rid of multiple - it really has no use (states can be combined and that new state is then accessed)
 * **DONE** it is possible for parallel states to share views, so change duplicate error checking in preprocessor
 * **DONE** in preprocessor, when checking for duplicate views, pass the duplicate if the view objects are the same (this will help with overlapping parallel states)
 * **DONE** Transient state deactivation should be done automatically (duh, it is activated automatically and should be deactivated samely)

@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 
 export default {
-  historySize: 25,
+  configs: {},
   
   rootStateName: 'root',
   

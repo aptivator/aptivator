@@ -8,52 +8,23 @@ var _hideClass = require('../../../lib/hide-class');
 
 var _hideClass2 = _interopRequireDefault(_hideClass);
 
-var _vars = require('../../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var activationRecords = _vars2.default.states.activationRecords;
 
 var $rootElements = [];
 
 exports.default = {
-  single: function single(activationRecord, regionInstance) {
+  single: function single(activationRecord, $regionEl) {
     var $el = activationRecord.instance.$el;
 
 
     activationRecord.active = true;
 
-    if (activationRecord.detached) {
-      activationRecord.detached = false;
-      return regionInstance.$el.append($el);
+    if (!activationRecord.detached) {
+      return $el.removeClass(_hideClass2.default);
     }
 
-    $el.removeClass(_hideClass2.default);
-  },
-  multiple: function multiple(params) {
-    var _this = this;
-
-    var targetRegion = params.targetRegion,
-        regionInstance = params.regionInstance,
-        transient = params.transient,
-        exclude = params.exclude;
-
-
-    targetRegion.current.forEach(function (viewAddressUnique) {
-      if (exclude.includes(viewAddressUnique)) {
-        return;
-      }
-
-      var activationRecord = activationRecords[viewAddressUnique];
-
-      if (activationRecord.transient !== transient) {
-        return;
-      }
-
-      _this.single(activationRecord, regionInstance);
-    });
+    activationRecord.detached = false;
+    $regionEl.append($el);
   },
 
 

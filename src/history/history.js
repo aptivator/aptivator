@@ -6,7 +6,7 @@ let statesCache = [];
 aptivator.history = {
   add(state) {
     statesCache.push(state);
-    statesCache = statesCache.slice(-vars.historySize);
+    statesCache = statesCache.slice(-vars.configs.historySize);
   },
   
   get(start, end) {
