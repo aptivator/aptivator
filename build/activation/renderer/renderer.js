@@ -52,7 +52,8 @@ exports.default = function (stateParams) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique,
         viewSelector = viewConfigs.viewSelector,
-        viewStateName = viewConfigs.viewStateName;
+        viewStateName = viewConfigs.viewStateName,
+        detachHidden = viewConfigs.detachHidden;
 
     var parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];
     var $parentEl = parentRecord.instance.$el;
@@ -96,7 +97,7 @@ exports.default = function (stateParams) {
     var instance = new viewConfigs.view(viewParameters);
     var serializeData = instance.serializeData;
 
-    _lodash2.default.extend(activationRecord, { active: true, instance: instance, detached: true });
+    _lodash2.default.extend(activationRecord, { active: true, instance: instance, detached: true, detach: detachHidden });
 
     instance.serializeData = function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -107,26 +108,16 @@ exports.default = function (stateParams) {
       return _lodash2.default.extend(this.options, data, { aptivator: _viewApi2.default });
     };
 
-    if (_relations2.default.isRoot(viewStateName)) {
-      _displayer2.default.roots.add(activationRecord.instance.$el);
-    }
-
     instance.on('destroy', function () {
-      delete activationRecord.instance;
+      _instance2.default.deactivate({ name: viewAddressUnique, forward: true, detach: { children: true } });
       targetRegion.current.delete(viewAddressUnique);
-      _lodash2.default.each(activationRecord.regions, function (regionObj) {
-        regionObj.current.forEach(function (name) {
-          _instance2.default.deactivate({ name: name, detach: true, focal: true });
-        });
-      });
+      delete activationRecord.instance;
     });
 
     instance.render();
 
     _displayer2.default.single(activationRecord, $regionEl);
   });
-
-  _displayer2.default.roots.display();
 
   return stateParams;
 };

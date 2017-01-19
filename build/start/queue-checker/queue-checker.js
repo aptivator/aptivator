@@ -26,8 +26,6 @@ exports.default = function () {
       return resolve();
     }
 
-    var missingParents = (0, _missingParentsAssembler2.default)(queue);
-
-    _error2.default.throw('undeclared parent states: [' + missingParents + ']', 'starter');
+    _error2.default.throw('undeclared parent states: [' + (0, _missingParentsAssembler2.default)(queue) + ']', 'starter');
   });
 };

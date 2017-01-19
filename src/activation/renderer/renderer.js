@@ -12,7 +12,7 @@ let {activationRecords, activationSequences, registry} = vars.states;
 
 export default stateParams => {
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
-    let {stateName, viewAddressUnique, viewSelector, viewStateName} = viewConfigs;
+    let {stateName, viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
     let parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];
     let $parentEl = parentRecord.instance.$el;
     let $regionEl = !viewSelector ? $parentEl : $parentEl.find(viewSelector).eq(0);
@@ -55,33 +55,23 @@ export default stateParams => {
     let instance = new viewConfigs.view(viewParameters);
     let serializeData = instance.serializeData;
     
-    _.extend(activationRecord, {active: true, instance, detached: true});
+    _.extend(activationRecord, {active: true, instance, detached: true, detach: detachHidden});
     
     instance.serializeData = function(...args) {
       var data = serializeData && serializeData.apply(this, args);
       return _.extend(this.options, data, {aptivator: viewApi});
     };
     
-    if(relations.isRoot(viewStateName)) {
-      displayer.roots.add(activationRecord.instance.$el);
-    }
-    
     instance.on('destroy', () => {
-      delete activationRecord.instance;
+      aptivator.deactivate({name: viewAddressUnique, forward: true, detach: {children: true}});
       targetRegion.current.delete(viewAddressUnique);
-      _.each(activationRecord.regions, regionObj => {
-        regionObj.current.forEach(name => {
-          aptivator.deactivate({name, detach: true, focal: true});
-        });
-      });
+      delete activationRecord.instance;
     });
     
     instance.render();
     
     displayer.single(activationRecord, $regionEl);   
   });
-
-  displayer.roots.display();
 
   return stateParams;
 };

@@ -9,8 +9,6 @@ export default () =>
     if(!queue.length) {
       return resolve();
     }
-    
-    let missingParents = missingParentsAssembler(queue);
-    
-    error.throw(`undeclared parent states: [${missingParents}]`, 'starter');
+
+    error.throw(`undeclared parent states: [${missingParentsAssembler(queue)}]`, 'starter');
   });

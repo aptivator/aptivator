@@ -117,7 +117,6 @@ exports.default = function (stateParams) {
       var otherView = (duplicateViewConfigs[0] || {}).view;
 
       if (otherView === viewConfigs.view) {
-        console.log(viewAddressFull);
         return;
       }
 
@@ -156,7 +155,7 @@ exports.default = function (stateParams) {
       }
     });
 
-    if (!mainViews.length) {
+    if (!mainViews.length && stateConfigs.views) {
       _error2.default.throw('main view should be specified for [' + stateName + ']');
     }
 

@@ -71,7 +71,6 @@ export default stateParams => {
       let otherView = (duplicateViewConfigs[0] || {}).view;
       
       if(otherView === viewConfigs.view) {
-        console.log(viewAddressFull);
         return;
       }
       
@@ -110,7 +109,7 @@ export default stateParams => {
       }
     });
     
-    if(!mainViews.length) {
+    if(!mainViews.length && stateConfigs.views) {
       error.throw(`main view should be specified for [${stateName}]`);
     }
     
