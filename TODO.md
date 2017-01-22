@@ -18,6 +18,7 @@
 * what about also adding routeRxs to set a regex pattern for a parameter
 * put back all callbacks that ui-router supports
 * put back all trigers that ui-router supports
+* for triggers, put more specific state triggers (e.g., state-change-start and state-change-start-auth.forgot)
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution

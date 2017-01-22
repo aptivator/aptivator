@@ -7,17 +7,14 @@ import vars                 from '../../lib/vars';
 import dataStores           from './lib/data-stores';
 import transientInitializer from './lib/transient-initializer';
 
-let {configs, states} = vars;
-let {registry} = states;
-
 export default stateParams => 
   new Promise((resolve, reject) => {
     let {direct: directParams, route: routeParams, name: stateName, routeValues, silent} = stateParams;
-    let stateConfigs = registry[stateName];
+    let stateConfigs = vars.states.registry[stateName];
     
     delete stateParams.useResolves;
     
-    if(configs.showRuntime && !stateConfigs.transient) {
+    if(vars.configs.showRuntime && !stateConfigs.transient) {
       stateParams.time = _.now();
     }
   

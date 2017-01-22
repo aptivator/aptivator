@@ -1,7 +1,27 @@
 var aptivator = require('aptivator');
 var App1View = require('./app-1');
 var HeaderView = require('../header/header');
-
+/*
+route = {
+  path: 'app-1(/:one)(/:two)',
+  params: {
+    one: {
+      value: 'one',
+      assert: ['test', 'another']
+    },
+    
+    two: {
+      value: 22,
+      assert: /^d+$/i
+    }
+  },
+  values: ['one', 22],
+  assert: {
+    one: ['test', 'another'],
+    two: /^d+$/i
+  }
+};
+*/
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
@@ -14,6 +34,8 @@ aptivator.state('app-1', {
   animate: {
     'root': 'aptivator-fade-in'
   },
+  onEnter: function() {},
+  onExit: function() {},
   views: {
     'main': {
       address: '.main',
