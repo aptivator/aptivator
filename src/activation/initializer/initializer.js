@@ -8,7 +8,7 @@ import dataStores           from './lib/data-stores';
 import transientInitializer from './lib/transient-initializer';
 
 export default stateParams => 
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     let {direct: directParams, route: routeParams, name: stateName, routeValues, silent} = stateParams;
     let stateConfigs = vars.states.registry[stateName];
     
