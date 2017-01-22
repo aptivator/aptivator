@@ -4,8 +4,6 @@ require('./history/history');
 
 require('./storage/storage');
 
-require('./utils/utils');
-
 require('./setup/setup');
 
 require('./start/start');

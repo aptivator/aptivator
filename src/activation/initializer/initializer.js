@@ -1,28 +1,24 @@
-import _            from 'lodash';
-import approximator from '../../lib/approximator';
-import aptivator    from '../../lib/instance';
-import error        from '../../lib/error';
-import fragment     from '../../lib/fragment';
-import route        from '../../lib/route';
-import vars         from '../../lib/vars';
-import dataStores   from './lib/data-stores';
+import _                    from 'lodash';
+import approximator         from '../../lib/approximator';
+import error                from '../../lib/error';
+import fragment             from '../../lib/fragment';
+import route                from '../../lib/route';
+import vars                 from '../../lib/vars';
+import dataStores           from './lib/data-stores';
+import transientInitializer from './lib/transient-initializer';
 
 let {configs, states} = vars;
 let {registry} = states;
 
 export default stateParams => 
   new Promise((resolve, reject) => {
-    stateParams.directParams = stateParams.direct;
-    stateParams.routeParams = stateParams.route;
-    stateParams.stateName = stateParams.name;
+    let {direct: directParams, route: routeParams, name: stateName, routeValues, silent} = stateParams;
+    let stateConfigs = registry[stateName];
     
     delete stateParams.useResolves;
     
-    let {stateName, routeParams, routeValues, silent} = stateParams;
-    let stateConfigs = registry[stateName];
-    
     if(configs.showRuntime && !stateConfigs.transient) {
-      stateParams.time = Date.now();
+      stateParams.time = _.now();
     }
   
     if(!stateConfigs) {
@@ -36,17 +32,7 @@ export default stateParams =>
     let transientStateName = approximator.fromStateName('transient', stateName);
     
     if(transientStateName && transientStateName !== stateName) {
-      let activationPromise = {promise: undefined};
-      let defaults = {keepLast: false, overlay: false};
-      let immutableDefaults = {noHistory: true, name: transientStateName};
-      let transientStateConfigs = registry[transientStateName];
-      let {transient} = transientStateConfigs;
-      let transientConfigs = _.isObject(transient) ? transient : {};
-      let delay = _.isNumber(transientConfigs.delay) ? transientConfigs.delay : _.isNumber(configs.transientDelay) ? configs.transientDelay : 300;
-      let activationParams = _.extend(defaults, _.pick(transientConfigs, _.keys(defaults)), immutableDefaults);
-      let timeoutHandle = setTimeout(() => (activationPromise.promise = aptivator.activate(activationParams).then(_.noop, e => Promise.reject(e))).catch(_.noop), delay);
-      
-      stateParams.transient = {activationPromise, activationParams, timeoutHandle};
+      stateParams.transient = transientInitializer(transientStateName);
     }
   
     if(!routeValues) {
@@ -65,7 +51,7 @@ export default stateParams =>
       }
     }
     
-    _.extend(stateParams, dataStores);
+    _.extend(stateParams, dataStores, {directParams, routeParams, stateName});
     
     resolve(stateParams);
   });

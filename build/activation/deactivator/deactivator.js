@@ -18,42 +18,37 @@ exports.default = function (stateParams) {
     var _ref = _instance2.default.history.prev() || {},
         lastStateName = _ref.stateName;
 
-    if (transient) {
-      (function () {
-        var activationParams = transient.activationParams,
-            activationPromise = transient.activationPromise,
-            timeoutHandle = transient.timeoutHandle;
+    var deactivate = function deactivate() {
+      var keepLast = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : keepLast;
 
-        if (!(activationPromise.promise instanceof Promise)) {
-          clearTimeout(timeoutHandle);
-
-          if (lastStateName) {
-            _instance2.default.deactivate({ name: lastStateName });
-          }
-
-          resolve(stateParams);
-        } else {
-          activationPromise.promise.then(function () {
-            var keepLast = activationParams.keepLast,
-                name = activationParams.name;
-
-
-            _instance2.default.deactivate({ name: name });
-
-            if (keepLast && lastStateName) {
-              _instance2.default.deactivate({ name: lastStateName });
-            }
-
-            resolve(stateParams);
-          }).catch(reject);
-        }
-      })();
-    } else {
       if (!keepLast && lastStateName) {
         _instance2.default.deactivate({ name: lastStateName });
       }
-
       resolve(stateParams);
+    };
+
+    var _deactivate = deactivate;
+
+    var _ref2 = transient || { activation: {} },
+        activation = _ref2.activation;
+
+    if (activation.promise instanceof Promise) {
+      deactivate = function deactivate() {
+        var _activation$params = activation.params,
+            keepLast = _activation$params.keepLast,
+            name = _activation$params.name;
+
+        _instance2.default.deactivate({ name: name });
+        _deactivate(!keepLast);
+      };
+    } else {
+      activation.promise = Promise.resolve();
+      deactivate = function deactivate() {
+        clearTimeout(activation.timeout);
+        _deactivate();
+      };
     }
+
+    activation.promise.then(deactivate).catch(reject);
   });
 };

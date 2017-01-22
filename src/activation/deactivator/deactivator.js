@@ -4,35 +4,29 @@ export default stateParams =>
   new Promise((resolve, reject) => {
     let {transient, keepLast} = stateParams;
     let {stateName: lastStateName} = aptivator.history.prev() || {};
-
-    if(transient) {
-      let {activationParams, activationPromise, timeoutHandle} = transient;
-      if(!(activationPromise.promise instanceof Promise)) {
-        clearTimeout(timeoutHandle);
-        
-        if(lastStateName) {
-          aptivator.deactivate({name: lastStateName});
-        }
-        
-        resolve(stateParams);
-      } else {
-        activationPromise.promise.then(() => {
-          let {keepLast, name} = activationParams;
-          
-          aptivator.deactivate({name});
-          
-          if(keepLast && lastStateName) {
-            aptivator.deactivate({name: lastStateName});
-          }
-          
-          resolve(stateParams);
-        }).catch(reject);
-      }
-    } else {
+    let deactivate = (keepLast = keepLast) => {
       if(!keepLast && lastStateName) {
         aptivator.deactivate({name: lastStateName});
       }
-      
       resolve(stateParams);
+    };
+    
+    let _deactivate = deactivate;
+    let {activation} = transient || {activation: {}};
+    
+    if(activation.promise instanceof Promise) {
+      deactivate = () => {
+        let {keepLast, name} = activation.params;
+        aptivator.deactivate({name});
+        _deactivate(!keepLast);
+      };
+    } else {
+      activation.promise = Promise.resolve();
+      deactivate = () => {
+        clearTimeout(activation.timeout);
+        _deactivate();
+      };
     }
+    
+    activation.promise.then(deactivate).catch(reject);
   });

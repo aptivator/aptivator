@@ -20,9 +20,9 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _detachAssessor = require('./detach-assessor');
+var _detachCalculator = require('./detach-calculator');
 
-var _detachAssessor2 = _interopRequireDefault(_detachAssessor);
+var _detachCalculator2 = _interopRequireDefault(_detachCalculator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56,12 +56,12 @@ exports.default = {
         detachChildren = _ref.children,
         detachFull = _ref.full;
 
-    _displayer2.default.hide(viewAddressUnique, (0, _detachAssessor2.default)(detachFocal, detachFull));
+    _displayer2.default.hide(viewAddressUnique, (0, _detachCalculator2.default)(detachFocal, detachFull));
 
     _lodash2.default.each(activationRecords[viewAddressUnique].regions, function (regionObj) {
       regionObj.current.forEach(function (viewAddressUnique) {
         if (focal) {
-          return _displayer2.default.hide(viewAddressUnique, (0, _detachAssessor2.default)(detachChildren, detachFull));
+          return _displayer2.default.hide(viewAddressUnique, (0, _detachCalculator2.default)(detachChildren, detachFull));
         }
 
         var detach = { focal: detachChildren, full: detachFull };

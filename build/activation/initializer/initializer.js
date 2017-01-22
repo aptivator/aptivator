@@ -12,10 +12,6 @@ var _approximator = require('../../lib/approximator');
 
 var _approximator2 = _interopRequireDefault(_approximator);
 
-var _instance = require('../../lib/instance');
-
-var _instance2 = _interopRequireDefault(_instance);
-
 var _error = require('../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -36,6 +32,10 @@ var _dataStores = require('./lib/data-stores');
 
 var _dataStores2 = _interopRequireDefault(_dataStores);
 
+var _transientInitializer = require('./lib/transient-initializer');
+
+var _transientInitializer2 = _interopRequireDefault(_transientInitializer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var configs = _vars2.default.configs,
@@ -44,21 +44,18 @@ var registry = states.registry;
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
-    stateParams.directParams = stateParams.direct;
-    stateParams.routeParams = stateParams.route;
-    stateParams.stateName = stateParams.name;
-
-    delete stateParams.useResolves;
-
-    var stateName = stateParams.stateName,
-        routeParams = stateParams.routeParams,
+    var directParams = stateParams.direct,
+        routeParams = stateParams.route,
+        stateName = stateParams.name,
         routeValues = stateParams.routeValues,
         silent = stateParams.silent;
 
     var stateConfigs = registry[stateName];
 
+    delete stateParams.useResolves;
+
     if (configs.showRuntime && !stateConfigs.transient) {
-      stateParams.time = Date.now();
+      stateParams.time = _lodash2.default.now();
     }
 
     if (!stateConfigs) {
@@ -72,24 +69,7 @@ exports.default = function (stateParams) {
     var transientStateName = _approximator2.default.fromStateName('transient', stateName);
 
     if (transientStateName && transientStateName !== stateName) {
-      (function () {
-        var activationPromise = { promise: undefined };
-        var defaults = { keepLast: false, overlay: false };
-        var immutableDefaults = { noHistory: true, name: transientStateName };
-        var transientStateConfigs = registry[transientStateName];
-        var transient = transientStateConfigs.transient;
-
-        var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
-        var delay = _lodash2.default.isNumber(transientConfigs.delay) ? transientConfigs.delay : _lodash2.default.isNumber(configs.transientDelay) ? configs.transientDelay : 300;
-        var activationParams = _lodash2.default.extend(defaults, _lodash2.default.pick(transientConfigs, _lodash2.default.keys(defaults)), immutableDefaults);
-        var timeoutHandle = setTimeout(function () {
-          return (activationPromise.promise = _instance2.default.activate(activationParams).then(_lodash2.default.noop, function (e) {
-            return Promise.reject(e);
-          })).catch(_lodash2.default.noop);
-        }, delay);
-
-        stateParams.transient = { activationPromise: activationPromise, activationParams: activationParams, timeoutHandle: timeoutHandle };
-      })();
+      stateParams.transient = (0, _transientInitializer2.default)(transientStateName);
     }
 
     if (!routeValues) {
@@ -108,7 +88,7 @@ exports.default = function (stateParams) {
       }
     }
 
-    _lodash2.default.extend(stateParams, _dataStores2.default);
+    _lodash2.default.extend(stateParams, _dataStores2.default, { directParams: directParams, routeParams: routeParams, stateName: stateName });
 
     resolve(stateParams);
   });

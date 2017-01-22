@@ -16,5 +16,7 @@ export default {
     transient: []
   },
   
+  transientDelay: 300,
+  
   viewsRegistry: {}
 };

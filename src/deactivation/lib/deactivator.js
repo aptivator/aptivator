@@ -1,8 +1,8 @@
-import _              from 'lodash';
-import addresser      from '../../lib/addresser';
-import displayer      from '../../lib/displayer';
-import vars           from '../../lib/vars';
-import detachAssessor from './detach-assessor';
+import _                from 'lodash';
+import addresser        from '../../lib/addresser';
+import displayer        from '../../lib/displayer';
+import vars             from '../../lib/vars';
+import detachCalculator from './detach-calculator';
 
 let {activationRecords, activationSequences} = vars.states;
 
@@ -24,12 +24,12 @@ export default {
     let viewAddressUnique = hasAt ? name : addresser.uniqueStateAddress(name);
     let {focal: detachFocal, children: detachChildren, full: detachFull} = detach || {};
 
-    displayer.hide(viewAddressUnique, detachAssessor(detachFocal, detachFull));
+    displayer.hide(viewAddressUnique, detachCalculator(detachFocal, detachFull));
     
     _.each(activationRecords[viewAddressUnique].regions, regionObj => {
       regionObj.current.forEach(viewAddressUnique => {
         if(focal) {
-          return displayer.hide(viewAddressUnique, detachAssessor(detachChildren, detachFull));
+          return displayer.hide(viewAddressUnique, detachCalculator(detachChildren, detachFull));
         }
         
         let detach = {focal: detachChildren, full: detachFull};
