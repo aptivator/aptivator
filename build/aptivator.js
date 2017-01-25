@@ -2,6 +2,8 @@
 
 require('./history/history');
 
+require('./events/events');
+
 require('./storage/storage');
 
 require('./setup/setup');

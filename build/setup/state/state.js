@@ -1,5 +1,9 @@
 'use strict';
 
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -33,8 +37,6 @@ var _otherStateRegistrar = require('./lib/other-state-registrar');
 var _otherStateRegistrar2 = _interopRequireDefault(_otherStateRegistrar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var _vars$states = _vars2.default.states,
     registry = _vars$states.registry,
@@ -101,7 +103,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
       }
     }
 
-    return _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, _toConsumableArray(_vars2.default.states.queue.pop())) : _instance2.default;
+    return _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, (0, _toConsumableArray3.default)(_vars2.default.states.queue.pop())) : _instance2.default;
   } catch (e) {
     _error2.default.errorer(e);
   }

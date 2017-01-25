@@ -22,5 +22,5 @@ export default stateName => {
     activation.promise.catch(_.noop);
   }, delay);
 
-  return {activation};
+  return activation;
 };

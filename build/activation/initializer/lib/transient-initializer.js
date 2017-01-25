@@ -43,5 +43,5 @@ exports.default = function (stateName) {
     activation.promise.catch(_lodash2.default.noop);
   }, delay);
 
-  return { activation: activation };
+  return activation;
 };

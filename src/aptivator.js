@@ -1,4 +1,5 @@
 import './history/history';
+import './events/events';
 import './storage/storage';
 import './setup/setup';
 import './start/start';

@@ -1,32 +1,24 @@
-import aptivator     from '../../lib/instance';
+import aptivator from '../../lib/instance';
 
-export default stateParams =>
-  new Promise((resolve, reject) => {
-    let {transient, keepLast} = stateParams;
-    let {stateName: lastStateName} = aptivator.history.prev() || {};
-    let deactivate = (keepLast = keepLast) => {
-      if(!keepLast && lastStateName) {
-        aptivator.deactivate({name: lastStateName});
-      }
-      resolve(stateParams);
-    };
-    
-    let _deactivate = deactivate;
-    let {activation} = transient || {activation: {}};
-    
-    if(activation.promise instanceof Promise) {
-      deactivate = () => {
-        let {keepLast, name} = activation.params;
-        aptivator.deactivate({name});
-        _deactivate(!keepLast);
-      };
-    } else {
-      activation.promise = Promise.resolve();
-      deactivate = () => {
-        clearTimeout(activation.timeout);
-        _deactivate();
-      };
+export default async stateParams => {
+  let {transient, keepLast} = stateParams;
+  let {stateName: lastStateName} = aptivator.history.prev() || {};
+  let {promise, params: transientParams, timeout} = transient || {};
+  let deactivate = keepLast => {
+    if(!keepLast && lastStateName) {
+      aptivator.deactivate({name: lastStateName});
     }
-    
-    activation.promise.then(deactivate).catch(reject);
-  });
+    return stateParams;
+  };
+  
+  if(promise) {
+    await promise;
+    let {name} = transientParams;
+    keepLast = !transientParams.keepLast;
+    aptivator.deactivate({name});
+  } else {
+    clearTimeout(timeout);
+  }
+  
+  return deactivate(keepLast);
+};

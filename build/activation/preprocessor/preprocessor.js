@@ -4,7 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 var _lodash = require('lodash');
 
@@ -40,8 +46,6 @@ var _viewNormalizer2 = _interopRequireDefault(_viewNormalizer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 var _vars$states = _vars2.default.states,
     activationSequences = _vars$states.activationSequences,
     registry = _vars$states.registry;
@@ -64,7 +68,7 @@ exports.default = function (stateParams) {
     if (!_lodash2.default.isEmpty(activationSequence)) {
       if (previousSequence) {
         var uniqueValues = _lodash2.default.uniq(previousSequence.concat(activationSequence));
-        previousSequence.splice.apply(previousSequence, [0, previousSequence.length].concat(_toConsumableArray(uniqueValues)));
+        previousSequence.splice.apply(previousSequence, [0, previousSequence.length].concat((0, _toConsumableArray3.default)(uniqueValues)));
       }
       return;
     }
@@ -106,7 +110,7 @@ exports.default = function (stateParams) {
       var viewAddressFull = (0, _fullAddressMaker2.default)(viewAddress, stateName);
 
       var _addresser$parts = _addresser2.default.parts(viewAddressFull),
-          _addresser$parts2 = _slicedToArray(_addresser$parts, 2),
+          _addresser$parts2 = (0, _slicedToArray3.default)(_addresser$parts, 2),
           viewSelector = _addresser$parts2[0],
           viewStateName = _addresser$parts2[1];
 

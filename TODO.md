@@ -4,10 +4,11 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* parent state that does not have a view, just resolves and data
+* clean up routeParams handling in the initializer()
 * split displayer in lib into modules that would go under renderer and deactivation
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * if state has no view or views, then delete everything except states and route
-* explore using const initializer
 * while in transient state and clicking back and still being taken to the transient state
 * place function parameters and variable names in alphabetical order
 * see if more of the lodash functions can be used
@@ -16,6 +17,7 @@
 * add ignorePending flag to activate() to bypass pending states
 * what about adding routeEnums to make sure that some route values are constrained
 * what about also adding routeRxs to set a regex pattern for a parameter
+* think about grouping state's route configs in one object
 * put back all callbacks that ui-router supports
 * put back all trigers that ui-router supports
 * for triggers, put more specific state triggers (e.g., state-change-start and state-change-start-auth.forgot)
@@ -35,6 +37,7 @@
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
 * deactivate() function, defined on a state, that controls how a state is deactivated
+* **DONE** explore using const initializer (don't see a clear use case at this time)
 * **DONE** in activation(), clean deactivator()
 * **DONE** in activation initializer, clean transient state activation
 * **DONE** should utils be moved from api under renderer? (yes, I don't see where href() and possible other functions could be used except within templates)
