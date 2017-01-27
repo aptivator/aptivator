@@ -6,7 +6,7 @@ const routePartCleanRx = /[\(\/\:\)\*]/g;
 
 export default {
   parts: {
-    assemble: (stateName, routeValues) => {
+    assemble(stateName, routeValues) {
       let stateConfigs = vars.states.registry[stateName];
       let fragmentParts = [];
       let index = -1;
@@ -35,8 +35,9 @@ export default {
         }
       });
       
-      routeObj.fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
-      return routeObj;
+      let fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
+      
+      return _.extend(routeObj, {fragment, stateName});
     },
     
     parse: (parentConfigs, stateConfigs) => {

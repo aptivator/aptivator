@@ -1,8 +1,8 @@
 <div id = "app-2">
-  <h3>Application 2 <%= resolves.random1 %></h3>
+  <h3>Application 2 <%= resolveParams.random1 %></h3>
   <h4>Route Params</h4>
   <ul>
-    <% _.each(route.params, function(value, key) { %>
+    <% _.each((routeParams || {}).params, function(value, key) { %>
       <li><%= key %>:<%= value %></li>
     <% }); %>
   </ul>

@@ -44,6 +44,11 @@ exports.default = {
   },
   hide: function hide(viewAddressUnique, detach) {
     var activationRecord = activationRecords[viewAddressUnique];
+
+    if (!activationRecord) {
+      return;
+    }
+
     var $el = activationRecord.instance.$el;
 
 

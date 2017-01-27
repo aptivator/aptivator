@@ -24,7 +24,7 @@ exports.default = function (stateName) {
   var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
   var baseParams = { keepLast: false, overlay: false };
   var setParams = _lodash2.default.pick(transientConfigs, _lodash2.default.keys(baseParams));
-  var immutableParams = { noHistory: true, name: stateName };
+  var immutableParams = { noHistory: true, stateName: stateName, ignorePending: true };
   var activation = { params: _lodash2.default.extend(baseParams, setParams, immutableParams) };
   var delay = transientConfigs.delay;
 

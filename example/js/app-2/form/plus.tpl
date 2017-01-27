@@ -1,8 +1,8 @@
 <p>
-  Extra text below the form <strong><%= resolves.random %></strong>
+  Extra text below the form <strong><%= resolveParams.random %></strong>
 </p>
 <ul>
-  <% _.each(resolves, function(resolveValue, resolveName) { %>
+  <% _.each(resolveParams, function(resolveValue, resolveName) { %>
     <li><strong><%= resolveName %></strong>: <%= resolveValue %></li>
   <% }); %>
 </ul>

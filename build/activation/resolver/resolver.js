@@ -34,7 +34,10 @@ var _resolvesProcessor2 = _interopRequireDefault(_resolvesProcessor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var registry = _vars2.default.states.registry;
+var resolveDefinitions = _vars2.default.resolveDefinitions,
+    resolveParams = _vars2.default.resolveParams,
+    states = _vars2.default.states;
+var registry = states.registry;
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
@@ -42,9 +45,7 @@ exports.default = function (stateParams) {
       return resolve(stateParams);
     }
 
-    var stateName = stateParams.stateName,
-        resolveParams = stateParams.resolveParams,
-        resolveDefinitions = stateParams.resolveDefinitions;
+    var stateName = stateParams.stateName;
 
     var resolveAddresses = _relations2.default.family(stateName).reduce(function (resolveAddresses, relation) {
       return resolveAddresses.concat(registry[relation].resolveAddresses);

@@ -20,6 +20,10 @@ var _error = require('../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _fragment = require('../../lib/fragment');
+
+var _fragment2 = _interopRequireDefault(_fragment);
+
 var _relations = require('../../lib/relations');
 
 var _relations2 = _interopRequireDefault(_relations);
@@ -94,11 +98,10 @@ _instance2.default.state = function (stateName, stateConfigs) {
             routeValues[_key] = arguments[_key];
           }
 
-          routeValues = routeValues.filter(function (value) {
+          var routeParams = _route2.default.parts.assemble(stateName, routeValues.filter(function (value) {
             return value;
-          });
-          var routeParams = _route2.default.parts.assemble(stateName, routeValues);
-          _instance2.default.activate({ name: stateName, route: routeParams }).catch(_lodash2.default.noop);
+          }));
+          _instance2.default.activate({ stateName: stateName, routeParams: routeParams }).catch(_lodash2.default.noop);
         });
       }
     }

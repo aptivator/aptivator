@@ -76,8 +76,6 @@ exports.default = function (stateParams) {
       _instance2.default.destroy({ name: viewAddressUnique });
     }
 
-    targetRegion.current.add(viewAddressUnique);
-
     if (unhide) {
       if (!_cacheable2.default.implicit.cache) {
         if (!_lodash2.default.isObject(cache) || !cache.receiver) {
@@ -92,6 +90,8 @@ exports.default = function (stateParams) {
 
     var instance = new viewConfigs.view(viewParameters);
     var serializeData = instance.serializeData;
+
+    targetRegion.current.add(viewAddressUnique);
 
     _lodash2.default.extend(activationRecord, { active: true, instance: instance, detached: true, detach: detachHidden });
 

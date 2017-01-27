@@ -9,6 +9,10 @@ _.extend(aptivator, {
     handlers.push({callback, context});
   },
   
+  has(handle) {
+    return events[handle];
+  },
+  
   trigger(name, ...args) {
     let promises = [];
     let results = {};

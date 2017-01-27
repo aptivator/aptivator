@@ -2,8 +2,9 @@ import _                   from 'lodash';
 import Backbone            from 'backbone';
 import aptivator           from '../../lib/instance';
 import error               from '../../lib/error';
+import fragment_           from '../../lib/fragment';
 import relations           from '../../lib/relations';
-import route               from '../../lib/route';
+import route_              from '../../lib/route';
 import vars                from '../../lib/vars';
 import otherStateRegistrar from './lib/other-state-registrar';
 
@@ -49,16 +50,15 @@ aptivator.state = (stateName, stateConfigs) => {
     registry[stateName] = stateConfigs;
     
     if(stateConfigs.route) {
-      stateConfigs.routeParts = route.parts.parse(parentConfigs, stateConfigs);
+      stateConfigs.routeParts = route_.parts.parse(parentConfigs, stateConfigs);
       stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
       stateConfigs.route = `${parentConfigs.route && parentConfigs.route + '/' || ''}${stateConfigs.route}`;
       stateConfigs.routeRx = Backbone.Router.prototype._routeToRegExp(stateConfigs.route);
       
       if(!stateConfigs.abstract) {
         vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
-          routeValues = routeValues.filter(value => value);
-          let routeParams = route.parts.assemble(stateName, routeValues);
-          aptivator.activate({name: stateName, route: routeParams}).catch(_.noop);
+          let routeParams = route_.parts.assemble(stateName, routeValues.filter(value => value));
+          aptivator.activate({stateName, routeParams}).catch(_.noop);
         });
       }
     }

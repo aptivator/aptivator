@@ -17,6 +17,9 @@ _lodash2.default.extend(_instance2.default, {
     var handlers = events[name] || (events[name] = []);
     handlers.push({ callback: callback, context: context });
   },
+  has: function has(handle) {
+    return events[handle];
+  },
   trigger: function trigger(name) {
     for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       args[_key - 1] = arguments[_key];

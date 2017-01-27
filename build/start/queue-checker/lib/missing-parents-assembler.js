@@ -15,13 +15,13 @@ var _relations2 = _interopRequireDefault(_relations);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (queue) {
-  var missingParents = [];
+  var missingParentsNames = [];
   var stateNames = queue.map(function (stateDefinition) {
     return stateDefinition[0];
   });
 
-  stateNames.sort(function (stateName1, stateName2) {
-    return _relations2.default.parts(stateName2).length - _relations2.default.parts(stateName1).length;
+  stateNames.sort(function () {
+    return _relations2.default.parts(arguments.length <= 1 ? undefined : arguments[1]).length - _relations2.default.parts(arguments.length <= 0 ? undefined : arguments[0]).length;
   });
 
   var _iteratorNormalCompletion = true;
@@ -38,14 +38,14 @@ exports.default = function (queue) {
         continue;
       }
 
-      var parent = _relations2.default.parent(stateName);
+      var parentName = _relations2.default.parent(stateName);
 
-      if (missingParents.includes(parent)) {
+      if (missingParentsNames.includes(parentName)) {
         continue;
       }
 
-      if (!stateNames.includes(parent, i + 1)) {
-        missingParents.push(parent);
+      if (!stateNames.includes(parentName, i + 1)) {
+        missingParentsNames.push(parentName);
       }
     }
   } catch (err) {
@@ -63,5 +63,5 @@ exports.default = function (queue) {
     }
   }
 
-  return missingParents.reverse().join(', ');
+  return missingParentsNames.reverse().join(', ');
 };

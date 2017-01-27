@@ -21,5 +21,5 @@ export default () => {
     return alert(`Provided route [${hash}] is invalid`);
   } 
   
-  aptivator.activate({name: stateName, direct: {fragment: hash}}).catch(_.noop);
+  aptivator.activate({stateName, directParams: {fragment: hash}}).catch(_.noop);
 };

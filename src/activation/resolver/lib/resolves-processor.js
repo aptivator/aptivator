@@ -34,7 +34,7 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
             return dependents[resolveName] = resolve;
           }
           
-          _.extend(resolverParams.resolves, _.pick(resolveParams[storeKey], resolve.deps));
+          _.extend(resolverParams.resolveParams, _.pick(resolveParams[storeKey], resolve.deps));
         }
         
         let result = resolve.resolver(resolverParams);

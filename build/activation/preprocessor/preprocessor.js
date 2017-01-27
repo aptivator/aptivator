@@ -46,14 +46,14 @@ var _viewNormalizer2 = _interopRequireDefault(_viewNormalizer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _vars$states = _vars2.default.states,
-    activationSequences = _vars$states.activationSequences,
-    registry = _vars$states.registry;
+var dataParams = _vars2.default.dataParams,
+    resolveDefinitions = _vars2.default.resolveDefinitions,
+    states = _vars2.default.states;
+var activationSequences = states.activationSequences,
+    registry = states.registry;
 
 exports.default = function (stateParams) {
-  var stateName = stateParams.stateName,
-      dataParams = stateParams.dataParams,
-      resolveDefinitions = stateParams.resolveDefinitions;
+  var stateName = stateParams.stateName;
 
 
   !function preprocess(stateName, previousSequence) {
@@ -79,7 +79,9 @@ exports.default = function (stateParams) {
 
     var resolveAddresses = stateConfigs.resolveAddresses = [];
 
-    dataParams[stateName] = stateConfigs.data;
+    if (stateConfigs.data) {
+      dataParams[stateName] = stateConfigs.data;
+    }
 
     if (stateConfigs.resolve) {
       resolveDefinitions[stateName] = (0, _resolvesNormalizer2.default)(stateConfigs, stateName);
@@ -147,7 +149,9 @@ exports.default = function (stateParams) {
         resolveAddresses.push(viewAddressUnique);
       }
 
-      dataParams[viewAddressUnique] = viewConfigs.data;
+      if (viewConfigs.data) {
+        dataParams[viewAddressUnique] = viewConfigs.data;
+      }
 
       (0, _viewNormalizer2.default)(viewConfigs);
       stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;

@@ -27,6 +27,11 @@ export default {
   
   hide(viewAddressUnique, detach) {
     let activationRecord = activationRecords[viewAddressUnique];
+    
+    if(!activationRecord) {
+      return;
+    }
+    
     let {$el} = activationRecord.instance;
     
     if(!detach) {

@@ -13,6 +13,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   configs: {},
 
+  dataParams: {},
+
   rootStateName: 'root',
 
   router: new _backbone2.default.Router(),
@@ -20,11 +22,17 @@ exports.default = {
   states: {
     activationRecords: {},
     activationSequences: {},
+    activeTransient: undefined,
     error: [],
+    pending: new Set(),
     queue: [],
     registry: {},
     transient: []
   },
+
+  resolveDefinitions: {},
+
+  resolveParams: {},
 
   transientDelay: 300,
 

@@ -7,10 +7,11 @@ import fullAddressMaker   from './lib/full-address-maker';
 import resolvesNormalizer from './lib/resolves-normalizer';
 import viewNormalizer     from './lib/view-normalizer';
 
-let {activationSequences, registry} = vars.states;
+let {dataParams, resolveDefinitions, states} = vars;
+let {activationSequences, registry} = states;
 
 export default stateParams => {
-  let {stateName, dataParams, resolveDefinitions} = stateParams;
+  let {stateName} = stateParams;
   
   !function preprocess(stateName, previousSequence) {
     let stateConfigs = registry[stateName];
@@ -35,7 +36,9 @@ export default stateParams => {
     
     let resolveAddresses = stateConfigs.resolveAddresses = [];
     
-    dataParams[stateName] = stateConfigs.data;
+    if(stateConfigs.data) {
+      dataParams[stateName] = stateConfigs.data;
+    }
     
     if(stateConfigs.resolve) {
       resolveDefinitions[stateName] = resolvesNormalizer(stateConfigs, stateName);
@@ -97,7 +100,9 @@ export default stateParams => {
         resolveAddresses.push(viewAddressUnique);
       }
       
-      dataParams[viewAddressUnique] = viewConfigs.data;
+      if(viewConfigs.data) {
+        dataParams[viewAddressUnique] = viewConfigs.data;
+      }
       
       viewNormalizer(viewConfigs);
       stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;

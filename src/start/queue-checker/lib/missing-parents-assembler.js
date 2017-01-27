@@ -1,27 +1,27 @@
 import relations from '../../../lib/relations';
 
 export default queue => {
-  let missingParents = [];
+  let missingParentsNames = [];
   let stateNames = queue.map(stateDefinition => stateDefinition[0]);
   
-  stateNames.sort((stateName1, stateName2) => 
-    relations.parts(stateName2).length - relations.parts(stateName1).length);
+  stateNames.sort((...args) => 
+    relations.parts(args[1]).length - relations.parts(args[0]).length);
   
   for(let [i, stateName] of stateNames.entries()) {
     if(relations.isRoot(stateName)) {
       continue;
     }
     
-    let parent = relations.parent(stateName);
+    let parentName = relations.parent(stateName);
     
-    if(missingParents.includes(parent)) {
+    if(missingParentsNames.includes(parentName)) {
       continue;
     }
     
-    if(!stateNames.includes(parent, i + 1)) {
-      missingParents.push(parent);
+    if(!stateNames.includes(parentName, i + 1)) {
+      missingParentsNames.push(parentName);
     }
   }
   
-  return missingParents.reverse().join(', ');
+  return missingParentsNames.reverse().join(', ');
 };

@@ -34,8 +34,6 @@ export default stateParams => {
       aptivator.destroy({name: viewAddressUnique});
     }
     
-    targetRegion.current.add(viewAddressUnique);
-    
     if(unhide) {
       if(!cacheable.implicit.cache) {
         if(!_.isObject(cache) || !cache.receiver) {
@@ -50,6 +48,8 @@ export default stateParams => {
 
     let instance = new viewConfigs.view(viewParameters);
     let serializeData = instance.serializeData;
+    
+    targetRegion.current.add(viewAddressUnique);
     
     _.extend(activationRecord, {active: true, instance, detached: true, detach: detachHidden});
     

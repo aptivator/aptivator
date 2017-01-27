@@ -4,15 +4,19 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* delete unnecessary properties from stateParams: isTransient, time, transient
+* change order of activation(), put loading hook right before deactivator()
+* change routeParams, dataParams, resolveParams, and directParams to route, data, resolve, and direct, respectively
+* what about allow for duplicate views if they originate within different states?
+* is it a good idea to define on object on the state to provide callbacks for various state hooks?
+* what about directives to tell to bypass state event hooks (e.g., noHooks: true)
+* noHooks spec can also be more granular (e.g., noHooks for state-change or state-exit)
 * parent state that does not have a view, just resolves and data
-* clean up routeParams handling in the initializer()
 * split displayer in lib into modules that would go under renderer and deactivation
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * if state has no view or views, then delete everything except states and route
-* while in transient state and clicking back and still being taken to the transient state
 * place function parameters and variable names in alphabetical order
 * see if more of the lodash functions can be used
-* finalize state deactivation api
 * finalize state destruction api
 * add ignorePending flag to activate() to bypass pending states
 * what about adding routeEnums to make sure that some route values are constrained
@@ -27,7 +31,6 @@
 * for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
 * when activating from within Backbone router, save the origin url fragment
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* it is possible for parent states using route data meant for the children, so that may need to be put back in
 * make sure error states receive route object and not direct params
 * think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
@@ -37,6 +40,12 @@
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
 * deactivate() function, defined on a state, that controls how a state is deactivated
+* **DONE** it is possible for parent states using route data meant for the children, so that may need to be put back in
+* **DONE** clean up routeParams handling in the initializer()
+* **DONE** clean up stateParams passed within activate()
+* **DONE** while in transient state and clicking back and still being taken to the transient state (instead a state gets aborted)
+* **DONE** finalize state deactivation api
+* **DONE** make state activation event hooks support asynchronous callbacks
 * **DONE** explore using const initializer (don't see a clear use case at this time)
 * **DONE** in activation(), clean deactivator()
 * **DONE** in activation initializer, clean transient state activation

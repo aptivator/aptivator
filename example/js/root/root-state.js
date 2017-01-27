@@ -25,7 +25,7 @@ aptivator.state('root', {
       resolver: function(params) {
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
-            resolve(params.resolves.one + 1);
+            resolve(params.resolveParams.one + 1);
           });
         });
       }
@@ -34,7 +34,7 @@ aptivator.state('root', {
     three: {
       deps: ['two', 'one'],
       resolver: function(params) {
-        return params.resolves.two + 1;
+        return params.resolveParams.two + 1;
       }
     },
     
@@ -43,7 +43,7 @@ aptivator.state('root', {
       resolver: function(params) {
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
-            resolve(params.data.loadingMessage);
+            resolve(params.dataParams.loadingMessage);
           });
         });
       }

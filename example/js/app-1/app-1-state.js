@@ -22,6 +22,42 @@ route = {
   }
 };
 */
+
+aptivator.on('state-change-start-app-1', function() {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      console.log('resolving...');
+      resolve();
+    }, 2000);
+  });
+});
+
+aptivator.on('start-app-1', function() {
+  console.log('starting app-1');
+});
+
+aptivator.on('loading-app-1', function() {
+  console.log('loading app-1');
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      console.log('finished pausing for 2000ms');
+      resolve();
+    }, 500);
+  });
+});
+
+aptivator.on('loaded-app-1', function() {
+  console.log('loaded app-1');
+});
+
+aptivator.on('enter-app-1', function() {
+  console.log('entered app-1');
+});
+
+aptivator.on('error-app-1', function() {
+  console.log('error in app-1');
+});
+
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
@@ -34,8 +70,6 @@ aptivator.state('app-1', {
   animate: {
     'root': 'aptivator-fade-in'
   },
-  onEnter: function() {},
-  onExit: function() {},
   views: {
     'main': {
       address: '.main',
