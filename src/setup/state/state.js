@@ -2,17 +2,16 @@ import _                   from 'lodash';
 import Backbone            from 'backbone';
 import aptivator           from '../../lib/instance';
 import error               from '../../lib/error';
-import fragment_           from '../../lib/fragment';
 import relations           from '../../lib/relations';
 import route_              from '../../lib/route';
 import vars                from '../../lib/vars';
 import otherStateRegistrar from './lib/other-state-registrar';
 
 let {registry, queue} = vars.states;
-let rootStateProperties = ['view', 'resolve', 'data', 'route', 'resolveConfigs', 'detachHidden'];
+let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden'];
 
-aptivator.state = (stateName, stateConfigs) => {
-  try {
+aptivator.state = (stateName, stateConfigs) => 
+  !async function() {
     if(registry[stateName]) {
       error.throw(`state [${stateName}] has already been declared`, 'state declaration');
     }
@@ -50,21 +49,21 @@ aptivator.state = (stateName, stateConfigs) => {
     registry[stateName] = stateConfigs;
     
     if(stateConfigs.route) {
-      stateConfigs.routeParts = route_.parts.parse(parentConfigs, stateConfigs);
-      stateConfigs.routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
-      stateConfigs.route = `${parentConfigs.route && parentConfigs.route + '/' || ''}${stateConfigs.route}`;
-      stateConfigs.routeRx = Backbone.Router.prototype._routeToRegExp(stateConfigs.route);
+      {
+        let routeParts = route_.parts.parse(parentConfigs, stateConfigs);
+        let routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
+        let route = `${parentConfigs.route && parentConfigs.route + '/' || ''}${stateConfigs.route}`;
+        let routeRx = Backbone.Router.prototype._routeToRegExp(route);
+        _.extend(stateConfigs, {route, routeParts, routeRx, routeValues});
+      }
       
       if(!stateConfigs.abstract) {
         vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
-          let routeParams = route_.parts.assemble(stateName, routeValues.filter(value => value));
-          aptivator.activate({stateName, routeParams}).catch(_.noop);
+          let route = route_.parts.assemble(stateName, routeValues.filter(value => value));
+          aptivator.activate({stateName, route}).catch(_.noop);
         });
       }
     }
   
     return vars.states.queue.length ? aptivator.state(...vars.states.queue.pop()) : aptivator;
-  } catch(e) {
-    error.errorer(e);
-  }
-};
+  }().catch(error.errorer);

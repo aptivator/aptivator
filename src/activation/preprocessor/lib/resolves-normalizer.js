@@ -6,7 +6,7 @@ import vars      from '../../../lib/vars';
 const [persistFlag, storeFlag, bothFlags] = [1, 2, 1 | 2];
 
 export default (configs, entityName) => {
-  let resolves = configs.resolve;
+  let {resolves} = configs;
   let hasAt = entityName.includes('@');
   let stateName = hasAt ? addresser.stateName(entityName) : entityName;
   let family = relations.family(stateName).reverse();
@@ -55,5 +55,5 @@ export default (configs, entityName) => {
     resolves[resolveName] = resolveConfigs;
   });
   
-  return _.clone(resolves);
+  return resolves;
 };

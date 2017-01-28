@@ -4,11 +4,9 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
-* delete unnecessary properties from stateParams: isTransient, time, transient
+* keep record of active states
 * change order of activation(), put loading hook right before deactivator()
-* change routeParams, dataParams, resolveParams, and directParams to route, data, resolve, and direct, respectively
 * what about allow for duplicate views if they originate within different states?
-* is it a good idea to define on object on the state to provide callbacks for various state hooks?
 * what about directives to tell to bypass state event hooks (e.g., noHooks: true)
 * noHooks spec can also be more granular (e.g., noHooks for state-change or state-exit)
 * parent state that does not have a view, just resolves and data
@@ -17,8 +15,7 @@
 * if state has no view or views, then delete everything except states and route
 * place function parameters and variable names in alphabetical order
 * see if more of the lodash functions can be used
-* finalize state destruction api
-* add ignorePending flag to activate() to bypass pending states
+* finalize state destruction api (can be useful when login out and wanting to clear states from memory)
 * what about adding routeEnums to make sure that some route values are constrained
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
@@ -26,20 +23,21 @@
 * put back all trigers that ui-router supports
 * for triggers, put more specific state triggers (e.g., state-change-start and state-change-start-auth.forgot)
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
-* start exploring how to write tests
-* start exploring how to rollup and bundle the frameweork for distribution
 * for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
-* when activating from within Backbone router, save the origin url fragment
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* make sure error states receive route object and not direct params
-* think about adding callbacks triggered when state is rendered anew
 * add parallel flag on activate() to indicate other states to load parallel to the focal state
 * think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
 * focal flag should also apply when it comes to the removal of immediates (take a look)
-* when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
-* deactivate() function, defined on a state, that controls how a state is deactivated
+* **DONE** is it a good idea to define on object on the state to provide callbacks for various state hooks? (for now use hooks api)
+* **DONE** when activating from within Backbone router, save the origin url fragment (works fine as it is)
+* **DONE** create cancelation asserter
+* **DONE** make sure error states receive route object and not direct params
+* **DONE** delete unnecessary properties from stateParams: isTransient, time, transient
+* **DONE** think about adding callbacks triggered when state is rendered anew (don't see a clear use case yet)
+* **DONE** add ignorePending flag to activate() to bypass pending states
+* **DONE** change routeParams, dataParams, resolveParams, and directParams to route, data, resolve, and direct, respectively
 * **DONE** it is possible for parent states using route data meant for the children, so that may need to be put back in
 * **DONE** clean up routeParams handling in the initializer()
 * **DONE** clean up stateParams passed within activate()

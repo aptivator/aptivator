@@ -25,19 +25,19 @@
   <h4>Resolves</h4>
   <div class = "row">
     <div class = "col-md-12">
-      <% _.each(resolveParams, function(value, name) { %>
+      <% _.each(resolves, function(value, name) { %>
         <p><%= name %>: <%= value %></p>
       <% }); %>
       <p><a href = "<%= aptivator.href('app-1', 'test', 'test') %>">App-1 Link (with different parameters)</a></p>
       <p><a href = "<%= aptivator.href('app-2.form') %>">App-2 Form Link (generated from within a template)</a></p>
     </div>
   </div>
-  <p><strong><%= routeParams.fragment %> <%= routeParams.stateName %></strong></p>
-  <% if(_.keys(routeParams.params).length) { %>
+  <p><strong><%= route.fragment %> <%= route.stateName %></strong></p>
+  <% if(_.keys(route.params).length) { %>
   <h4>Route params</h4>
   <div class = "row">
     <div class = "col-md-12">
-      <% _.each(routeParams.params, function(value, name) { %>
+      <% _.each(route.params, function(value, name) { %>
         <p><%= name %>: <%= value %></p>
       <% }); %>
     </div>
@@ -46,7 +46,7 @@
   <h4>Direct params</h4>
   <div class = "row">
     <div class = "col-md-12">
-      <% _.each(directParams, function(value, name) { %>
+      <% _.each(direct, function(value, name) { %>
         <p><%= name %>: <%= value %></p>
       <% }); %>
     </div>

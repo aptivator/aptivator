@@ -47,7 +47,7 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
             return dependents[resolveName] = resolve;
           }
 
-          _lodash2.default.extend(resolverParams.resolveParams, _lodash2.default.pick(resolveParams[storeKey], resolve.deps));
+          _lodash2.default.extend(resolverParams.resolves, _lodash2.default.pick(resolveParams[storeKey], resolve.deps));
         }
 
         var result = resolve.resolver(resolverParams);

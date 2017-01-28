@@ -1,3 +1,3 @@
 <div class = "loading">
-  <h1><%= dataParams.loadingMessage || "Please wait... Loading..." %></h1>
+  <h1><%= data.loadingMessage || "Please wait... Loading..." %></h1>
 </div>

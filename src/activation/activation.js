@@ -12,9 +12,9 @@ import finalizer    from './finalizer/finalizer';
 import errorer      from './errorer/errorer'; 
 
 aptivator.activate = stateParams => 
-  initializer(stateParams)
+  historian(stateParams)
+    .then(initializer)
     .then(preprocessor)
-    .then(historian)
     .then(resolver)
     .then(deactivator)
     .then(renderer)

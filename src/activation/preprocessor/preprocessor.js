@@ -3,6 +3,7 @@ import addresser          from '../../lib/addresser';
 import error              from '../../lib/error';
 import relations          from '../../lib/relations';
 import vars               from '../../lib/vars';
+import canceler           from '../canceler/canceler';
 import fullAddressMaker   from './lib/full-address-maker';
 import resolvesNormalizer from './lib/resolves-normalizer';
 import viewNormalizer     from './lib/view-normalizer';
@@ -11,6 +12,8 @@ let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
 
 export default stateParams => {
+  canceler(stateParams);
+  
   let {stateName} = stateParams;
   
   !function preprocess(stateName, previousSequence) {
@@ -40,7 +43,7 @@ export default stateParams => {
       dataParams[stateName] = stateConfigs.data;
     }
     
-    if(stateConfigs.resolve) {
+    if(stateConfigs.resolves) {
       resolveDefinitions[stateName] = resolvesNormalizer(stateConfigs, stateName);
       resolveAddresses.push(stateName);
     }
@@ -95,7 +98,7 @@ export default stateParams => {
         _.extend(stateConfigs, {viewAddressUnique});
       }
       
-      if(viewConfigs.resolve) {
+      if(viewConfigs.resolves) {
         resolveDefinitions[viewAddressUnique] = resolvesNormalizer(viewConfigs, viewAddressUnique);
         resolveAddresses.push(viewAddressUnique);
       }

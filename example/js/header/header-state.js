@@ -4,7 +4,7 @@ var HeaderView = require('./header');
 aptivator.state('header', {
   view: HeaderView,
   parentSelector: '.header',
-  resolve: {
+  resolves: {
     another: function() {
       return 'another';
     }

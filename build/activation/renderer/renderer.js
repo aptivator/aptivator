@@ -32,6 +32,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 var _cacheable = require('./lib/cacheable');
 
 var _cacheable2 = _interopRequireDefault(_cacheable);
@@ -48,6 +52,8 @@ var _vars$states = _vars2.default.states,
     registry = _vars$states.registry;
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique,

@@ -40,5 +40,5 @@ exports.default = function () {
     return alert('Provided route [' + hash + '] is invalid');
   }
 
-  _instance2.default.activate({ stateName: stateName, directParams: { fragment: hash } }).catch(_lodash2.default.noop);
+  _instance2.default.activate({ stateName: stateName, route: { fragment: hash } }).catch(_lodash2.default.noop);
 };

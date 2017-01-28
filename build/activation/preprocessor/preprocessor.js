@@ -32,6 +32,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 var _fullAddressMaker = require('./lib/full-address-maker');
 
 var _fullAddressMaker2 = _interopRequireDefault(_fullAddressMaker);
@@ -53,6 +57,8 @@ var activationSequences = states.activationSequences,
     registry = states.registry;
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   var stateName = stateParams.stateName;
 
 
@@ -83,7 +89,7 @@ exports.default = function (stateParams) {
       dataParams[stateName] = stateConfigs.data;
     }
 
-    if (stateConfigs.resolve) {
+    if (stateConfigs.resolves) {
       resolveDefinitions[stateName] = (0, _resolvesNormalizer2.default)(stateConfigs, stateName);
       resolveAddresses.push(stateName);
     }
@@ -144,7 +150,7 @@ exports.default = function (stateParams) {
         _lodash2.default.extend(stateConfigs, { viewAddressUnique: viewAddressUnique });
       }
 
-      if (viewConfigs.resolve) {
+      if (viewConfigs.resolves) {
         resolveDefinitions[viewAddressUnique] = (0, _resolvesNormalizer2.default)(viewConfigs, viewAddressUnique);
         resolveAddresses.push(viewAddressUnique);
       }

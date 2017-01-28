@@ -10,6 +10,6 @@ export default () => {
   Backbone.history.start();
   
   if(!fragment.get() && defaultState) {
-    aptivator.activate({stateName: defaultState, directParams: {running: true}}).catch(_.noop);
+    aptivator.activate({stateName: defaultState, direct: {running: true}}).catch(_.noop);
   }
 };

@@ -1,6 +1,6 @@
 import historyAdder from '../../history/history-adder';
 
-export default stateParams => {
+export default async stateParams => {
   if(!stateParams.noHistory) {
     historyAdder(stateParams);
   }

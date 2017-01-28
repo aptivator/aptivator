@@ -9,7 +9,7 @@ aptivator.state('loading', {
   },
   view: LoadingView,
   parentSelector: '.extra',
-  resolve: {
+  resolves: {
     delayer: {
       resolver: function() {
         return new Promise(function(resolve, reject) {

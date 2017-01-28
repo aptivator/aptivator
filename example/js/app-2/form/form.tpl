@@ -19,7 +19,7 @@
 <div class = "main"></div>
 <h4>Route Params</h4>
 <ul>
-  <% _.each(routeParams.params, function(value, key) { %>
+  <% _.each(route.params, function(value, key) { %>
     <li><%= key %>:<%= value %></li>
   <% }); %>
 </ul>

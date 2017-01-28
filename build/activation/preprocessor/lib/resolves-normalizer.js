@@ -27,7 +27,8 @@ var persistFlag = 1,
     bothFlags = 1 | 2;
 
 exports.default = function (configs, entityName) {
-  var resolves = configs.resolve;
+  var resolves = configs.resolves;
+
   var hasAt = entityName.includes('@');
   var stateName = hasAt ? _addresser2.default.stateName(entityName) : entityName;
   var family = _relations2.default.family(stateName).reverse();
@@ -79,5 +80,5 @@ exports.default = function (configs, entityName) {
     resolves[resolveName] = resolveConfigs;
   });
 
-  return _lodash2.default.clone(resolves);
+  return resolves;
 };

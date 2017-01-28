@@ -11,7 +11,7 @@ aptivator.state('app-2', {
   route: 'app-2/:one',
   routeValues: [1],
   abstract: true,
-  resolve: {
+  resolves: {
     murmansk: function() {
       return 'murmansk';
     }
@@ -19,7 +19,7 @@ aptivator.state('app-2', {
   views: {
     '.main': {
       view: App2View,
-      resolve: {
+      resolves: {
         random1: {
           resolver: function() {
             return Math.random();

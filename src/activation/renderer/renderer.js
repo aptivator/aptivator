@@ -5,12 +5,15 @@ import error     from '../../lib/error';
 import params    from '../../lib/params';
 import relations from '../../lib/relations';
 import vars      from '../../lib/vars';
+import canceler  from '../canceler/canceler';
 import cacheable from './lib/cacheable';
 import viewApi   from './lib/view-api';
 
 let {activationRecords, activationSequences, registry} = vars.states;
 
 export default stateParams => {
+  canceler(stateParams);
+  
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
     let {stateName, viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
     let parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];

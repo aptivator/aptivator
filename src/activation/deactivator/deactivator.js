@@ -1,9 +1,12 @@
 import aptivator from '../../lib/instance';
+import canceler  from '../canceler/canceler';
 
 let pause = async ms => 
   new Promise(resolve => setTimeout(resolve, ms));
 
 export default async stateParams => {
+  canceler(stateParams);
+  
   if(stateParams.abort) {
     throw 'abort';
   }
@@ -27,6 +30,6 @@ export default async stateParams => {
   }
   
   deactivate(keepLast);
-  await pause(100);
+  await pause(20);
   return stateParams;
 };

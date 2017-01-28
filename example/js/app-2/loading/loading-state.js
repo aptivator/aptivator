@@ -11,7 +11,7 @@ aptivator.state('app-2.loading', {
   data: {
     loadingMessage: 'Loading...'
   },
-  resolve: {
+  resolves: {
     cool: {
       resolver: function() {
         return Promise.resolve('failed...');

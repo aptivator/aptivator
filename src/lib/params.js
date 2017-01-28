@@ -4,21 +4,22 @@ import vars from './vars';
 let {dataParams, resolveParams} = vars;
 
 export default {
-  assemble(family, stateParams, clone = true) {
-    let {stateName, routeParams, directParams} = stateParams;
-    let params = {dataParams: {}, resolveParams: {}, routeParams};
+  assemble(family, stateParams) {
+    let {direct, route, stateName} = stateParams;
+    let params = {data: {}, resolves: {}, route};
+    let {data, resolves} = params;
     
     family.forEach(relation => {
-      _.extend(params.dataParams, dataParams[relation]);
-      _.extend(params.resolveParams, resolveParams[relation]);
+      _.extend(data, dataParams[relation]);
+      _.extend(resolves, resolveParams[relation]);
     });
     
 
     if(family.includes(stateName)) {
-      _.extend(params, {directParams});
-      _.extend(stateParams, {resolveParams: params.resolveParams, dataParams: params.dataParams});
+      _.extend(params, {direct});
+      _.extend(stateParams, {data, resolves});
     }
     
-    return params;
+    return _.cloneDeep(params);
   }
 };

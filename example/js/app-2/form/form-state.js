@@ -7,7 +7,7 @@ var PlusView = require('./plus');
 aptivator.state('app-2.form', {
   route: 'form',
   states: ['app-2.about', 'header'],
-  resolve: {
+  resolves: {
     main: function() {
       return 'main';
     }
@@ -21,7 +21,7 @@ aptivator.state('app-2.form', {
     
     '.plus@app-2.form': {
       view: PlusView,
-      resolve: {
+      resolves: {
         something: function(p) {
           return 'something';
         },

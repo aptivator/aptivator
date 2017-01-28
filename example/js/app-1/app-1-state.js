@@ -23,46 +23,59 @@ route = {
 };
 */
 
-aptivator.on('state-change-start-app-1', function() {
-  return new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      console.log('resolving...');
-      resolve();
-    }, 2000);
-  });
+
+aptivator.on({
+  start: {
+    callbacks: function() {},
+    sub: {
+      'app-1': {
+        sub: {
+          'error': [function() {
+            
+          }]
+        }
+      }
+    }
+  },
+  
+  enter: [function tester() {
+    
+  }, function() {
+    
+  }]
 });
 
-aptivator.on('start-app-1', function() {
-  console.log('starting app-1');
+aptivator.on({
+  start: {
+    sub: {
+      'app-1': function tester() {
+        
+      }
+    }
+  }
 });
 
-aptivator.on('loading-app-1', function() {
-  console.log('loading app-1');
-  return new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      console.log('finished pausing for 2000ms');
-      resolve();
-    }, 500);
-  });
+aptivator.on('start', function tester1() {
+  
 });
 
-aptivator.on('loaded-app-1', function() {
-  console.log('loaded app-1');
-});
+console.log(aptivator.events());
 
-aptivator.on('enter-app-1', function() {
-  console.log('entered app-1');
+/*
+aptivator.trigger({
+  paths: [{
+    path: 'start:app-1',
+    focal: true
+  }, 'start:app-2'],
+  args: console
 });
-
-aptivator.on('error-app-1', function() {
-  console.log('error in app-1');
-});
+*/
 
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
   states: ['header'],
-  resolve: {
+  resolves: {
     run: function() {
       return 'run';
     }
@@ -81,7 +94,7 @@ aptivator.state('app-1', {
       cache: {
         receiver: 'receiver'  
       },
-      resolve: {
+      resolves: {
         test: {
           resolver: function() {
             return new Promise(function(resolve, reject) {

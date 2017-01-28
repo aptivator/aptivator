@@ -16,6 +16,10 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var pause = function () {
@@ -49,14 +53,16 @@ exports.default = function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            (0, _canceler2.default)(stateParams);
+
             if (!stateParams.abort) {
-              _context2.next = 2;
+              _context2.next = 3;
               break;
             }
 
             throw 'abort';
 
-          case 2:
+          case 3:
             transient = stateParams.transient, keepLast = stateParams.keepLast;
             _ref3 = _instance2.default.history.prev() || {}, lastStateName = _ref3.stateName;
             _ref4 = transient || {}, promise = _ref4.promise, transientParams = _ref4.params, timeout = _ref4.timeout;
@@ -68,35 +74,35 @@ exports.default = function () {
             };
 
             if (!promise) {
-              _context2.next = 14;
+              _context2.next = 15;
               break;
             }
 
-            _context2.next = 9;
+            _context2.next = 10;
             return promise;
 
-          case 9:
+          case 10:
             stateName = transientParams.stateName;
 
             keepLast = !transientParams.keepLast;
             _instance2.default.deactivate({ name: stateName });
-            _context2.next = 15;
+            _context2.next = 16;
             break;
 
-          case 14:
+          case 15:
             if (timeout) {
               clearTimeout(timeout);
             }
 
-          case 15:
+          case 16:
             deactivate(keepLast);
-            _context2.next = 18;
-            return pause(100);
-
-          case 18:
-            return _context2.abrupt('return', stateParams);
+            _context2.next = 19;
+            return pause(20);
 
           case 19:
+            return _context2.abrupt('return', stateParams);
+
+          case 20:
           case 'end':
             return _context2.stop();
         }

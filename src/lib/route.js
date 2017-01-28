@@ -36,7 +36,6 @@ export default {
       });
       
       let fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
-      
       return _.extend(routeObj, {fragment, stateName});
     },
     

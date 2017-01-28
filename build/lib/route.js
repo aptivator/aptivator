@@ -52,7 +52,6 @@ exports.default = {
       });
 
       var fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
-
       return _lodash2.default.extend(routeObj, { fragment: fragment, stateName: stateName });
     },
 

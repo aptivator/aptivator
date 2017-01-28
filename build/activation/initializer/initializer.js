@@ -4,14 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -50,83 +42,69 @@ var states = _vars2.default.states;
 var pending = states.pending,
     registry = states.registry;
 
-exports.default = function () {
-  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
-    var ignorePending, routeParams, routeValues, silent, stateName, stateConfigs, transient, isTransient, transientStateName;
-    return _regenerator2.default.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            ignorePending = stateParams.ignorePending, routeParams = stateParams.routeParams, routeValues = stateParams.routeValues, silent = stateParams.silent, stateName = stateParams.stateName;
-            stateConfigs = registry[stateName];
+exports.default = function (stateParams) {
+  var ignorePending = stateParams.ignorePending,
+      route = stateParams.route,
+      routeValues = stateParams.routeValues,
+      silent = stateParams.silent,
+      stateName = stateParams.stateName;
+
+  var stateConfigs = registry[stateName];
+
+  if (!stateConfigs) {
+    _error2.default.throw('invalid [' + stateName + '] state name', 'initializer');
+  }
+
+  delete stateParams.noResolves;
+
+  var transient = stateConfigs.transient;
 
 
-            if (!stateConfigs) {
-              _error2.default.throw('invalid [' + stateName + '] state name', 'initializer');
-            }
+  stateParams.isTransient = !!transient;
 
-            delete stateParams.noResolves;
+  if (_vars2.default.configs.showRuntime && !transient) {
+    stateParams.time = _lodash2.default.now();
+  }
 
-            transient = stateConfigs.transient;
-            isTransient = !!transient;
+  if (!ignorePending) {
+    pending.forEach(function (stateParams) {
+      var stateName = stateParams.stateName;
 
+      stateParams.cancel = true;
+      _instance2.default.deactivate({ name: stateName });
+    });
 
-            if (_vars2.default.configs.showRuntime && !transient) {
-              stateParams.time = _lodash2.default.now();
-            }
+    if (states.activeTransient) {
+      _instance2.default.deactivate({ name: states.activeTransient });
+    }
+  }
 
-            if (!ignorePending) {
-              pending.forEach(function (stateParams) {
-                var stateName = stateParams.stateName;
+  if (!transient) {
+    var transientStateName = _approximator2.default.fromStateName('transient', stateName);
+    if (transientStateName) {
+      stateParams.transient = (0, _transientInitializer2.default)(transientStateName);
+    }
+  }
 
-                stateParams.abort = true;
-                _instance2.default.deactivate({ name: stateName });
-              });
+  if (_lodash2.default.isObject(transient)) {
+    _lodash2.default.extend(stateParams, _lodash2.default.pick(transient, ['noResolves']));
+  }
 
-              if (states.activeTransient) {
-                _instance2.default.deactivate({ name: states.activeTransient });
-              }
-            }
+  if (stateConfigs.route && !route) {
+    if (!routeValues) {
+      routeValues = stateConfigs.routeValues;
+    }
 
-            if (!transient) {
-              transientStateName = _approximator2.default.fromStateName('transient', stateName);
+    route = _route2.default.parts.assemble(stateName, routeValues);
 
-              if (transientStateName) {
-                stateParams.transient = (0, _transientInitializer2.default)(transientStateName);
-              }
-            }
+    if (!silent) {
+      _fragment2.default.set(route.fragment);
+    }
 
-            if (_lodash2.default.isObject(transient)) {
-              _lodash2.default.extend(stateParams, _lodash2.default.pick(transient, ['noResolves']));
-            }
+    _lodash2.default.extend(stateParams, { route: route });
+  }
 
-            if (stateConfigs.route && !routeParams) {
-              if (!routeValues) {
-                routeValues = stateConfigs.routeValues;
-              }
+  pending.add(stateParams);
 
-              routeParams = _route2.default.parts.assemble(stateName, routeValues);
-
-              if (!silent) {
-                _fragment2.default.set(routeParams.fragment);
-              }
-            }
-
-            _lodash2.default.extend(stateParams, { isTransient: isTransient, routeParams: routeParams });
-
-            pending.add(stateParams);
-
-            return _context.abrupt('return', stateParams);
-
-          case 14:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, undefined);
-  }));
-
-  return function (_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
+  return stateParams;
+};

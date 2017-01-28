@@ -18,23 +18,25 @@ var dataParams = _vars2.default.dataParams,
     resolveParams = _vars2.default.resolveParams;
 exports.default = {
   assemble: function assemble(family, stateParams) {
-    var clone = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-    var stateName = stateParams.stateName,
-        routeParams = stateParams.routeParams,
-        directParams = stateParams.directParams;
+    var direct = stateParams.direct,
+        route = stateParams.route,
+        stateName = stateParams.stateName;
 
-    var params = { dataParams: {}, resolveParams: {}, routeParams: routeParams };
+    var params = { data: {}, resolves: {}, route: route };
+    var data = params.data,
+        resolves = params.resolves;
+
 
     family.forEach(function (relation) {
-      _lodash2.default.extend(params.dataParams, dataParams[relation]);
-      _lodash2.default.extend(params.resolveParams, resolveParams[relation]);
+      _lodash2.default.extend(data, dataParams[relation]);
+      _lodash2.default.extend(resolves, resolveParams[relation]);
     });
 
     if (family.includes(stateName)) {
-      _lodash2.default.extend(params, { directParams: directParams });
-      _lodash2.default.extend(stateParams, { resolveParams: params.resolveParams, dataParams: params.dataParams });
+      _lodash2.default.extend(params, { direct: direct });
+      _lodash2.default.extend(stateParams, { data: data, resolves: resolves });
     }
 
-    return params;
+    return _lodash2.default.cloneDeep(params);
   }
 };

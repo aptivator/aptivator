@@ -3,6 +3,7 @@ import addresser           from '../../lib/addresser';
 import params              from '../../lib/params';
 import relations           from '../../lib/relations';
 import vars                from '../../lib/vars';
+import canceler            from '../canceler/canceler';
 import entitiesTreeBuilder from './lib/entities-tree-builder';
 import resolvesProcessor   from './lib/resolves-processor';
 
@@ -11,6 +12,8 @@ let {registry} = states;
 
 export default stateParams => 
   new Promise((resolve, reject) => {
+    canceler(stateParams);
+    
     if(stateParams.noResolves) {
       return resolve(stateParams);
     }

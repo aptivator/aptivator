@@ -24,6 +24,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 var _entitiesTreeBuilder = require('./lib/entities-tree-builder');
 
 var _entitiesTreeBuilder2 = _interopRequireDefault(_entitiesTreeBuilder);
@@ -41,6 +45,8 @@ var registry = states.registry;
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
+    (0, _canceler2.default)(stateParams);
+
     if (stateParams.noResolves) {
       return resolve(stateParams);
     }
