@@ -26,40 +26,36 @@ route = {
 
 aptivator.on({
   start: {
-    callbacks: function() {},
+    callbacks: [function tester1() {
+      return 22;
+    }, function another() {
+      return 'another';
+    }],
     sub: {
       'app-1': {
+        callbacks: function zero() {
+          return 0;
+        },
         sub: {
-          'error': [function() {
-            
-          }]
+          'error': {
+            callback: function context() {
+              return this.two;
+            },
+            context: {
+              two: 2
+            }
+          }
         }
-      }
-    }
-  },
-  
-  enter: [function tester() {
-    
-  }, function() {
-    
-  }]
-});
-
-aptivator.on({
-  start: {
-    sub: {
-      'app-1': function tester() {
-        
       }
     }
   }
 });
 
-aptivator.on('start', function tester1() {
-  
+aptivator.trigger([{handle: 'start:app-1:error', full: true}]).then(function(results) {
+  console.log(results);
 });
 
-console.log(aptivator.events());
+
 
 /*
 aptivator.trigger({

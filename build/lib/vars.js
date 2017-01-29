@@ -15,6 +15,10 @@ exports.default = {
 
   dataParams: {},
 
+  eventRegistry: {},
+
+  eventSplitter: /\s+/,
+
   rootStateName: 'root',
 
   router: new _backbone2.default.Router(),

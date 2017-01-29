@@ -5,6 +5,10 @@ export default {
   
   dataParams: {},
   
+  eventRegistry: {},
+  
+  eventSplitter: /\s+/,
+  
   rootStateName: 'root',
   
   router: new Backbone.Router(),
