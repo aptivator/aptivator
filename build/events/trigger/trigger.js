@@ -33,11 +33,14 @@ exports.default = function (events) {
     events = events.split(eventSplitter);
   }
 
+  if (!_lodash2.default.isArray(events)) {
+    events = [events];
+  }
+
   var promises = [];
   var results = {};
-  var triggerSequence = (0, _triggerSequencer2.default)(events, args);
 
-  triggerSequence.forEach(function (record) {
+  (0, _triggerSequencer2.default)(events, args).forEach(function (record) {
     var args = record.args,
         handle = record.handle,
         callbacks = record.callbacks;

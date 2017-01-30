@@ -30,7 +30,7 @@
 * regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
 * focal flag should also apply when it comes to the removal of immediates (take a look)
-* make sure that trigger sequence is unique
+* **DONE** make sure that trigger sequence is unique
 * **DONE** complete events module
 * **DONE** is it a good idea to define on object on the state to provide callbacks for various state hooks? (for now use hooks api)
 * **DONE** when activating from within Backbone router, save the origin url fragment (works fine as it is)

@@ -10,11 +10,14 @@ export default (events, ...args) => {
     events = events.split(eventSplitter);
   }
 
+  if(!_.isArray(events)) {
+    events = [events];
+  }
+
   let promises = [];
   let results = {};
-  let triggerSequence = triggerSequencer(events, args);
-  
-  triggerSequence.forEach(record => {
+
+  triggerSequencer(events, args).forEach(record => {
     let {args, handle, callbacks} = record;
     let handlePath = handle.split(':').concat('v');
     let store = {};
