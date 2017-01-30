@@ -1,9 +1,9 @@
 import _    from 'lodash';
-import vars from '../../../lib/vars';
+import vars from '../../../../lib/vars';
 
 let {eventRegistry} = vars;
 
-let sequenceMaker = (events, mainArgs, triggerSequence = []) => {
+export default function triggerSequencer(events, mainArgs, triggerSequence = []) {
   events.forEach(event => {
     if(_.isString(event)) {
       if(eventRegistry[event]) {
@@ -22,12 +22,8 @@ let sequenceMaker = (events, mainArgs, triggerSequence = []) => {
       handle = [handle];
     }
     
-    handle.forEach(handle => sequenceMaker([handle], args || mainArgs, triggerSequence));
+    handle.forEach(handle => triggerSequencer([handle], args || mainArgs, triggerSequence));
   });
   
   return triggerSequence;
-};
-
-export default (events, mainArgs) => 
-  sequenceMaker(events, mainArgs).sort((...args) => 
-    args[0].handle.split(':').length - args[1].handle.split(':').length);
+}

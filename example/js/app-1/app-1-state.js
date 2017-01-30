@@ -51,7 +51,7 @@ aptivator.on({
   }
 });
 
-aptivator.trigger([{handle: 'start:app-1:error', full: true}]).then(function(results) {
+aptivator.trigger([{handle: 'start:app-1:error', full: true}, 'start:app-1:error']).then(function(results) {
   console.log(results);
 });
 

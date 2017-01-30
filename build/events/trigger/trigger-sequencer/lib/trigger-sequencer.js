@@ -3,21 +3,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = triggerSequencer;
 
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _vars = require('../../../lib/vars');
+var _vars = require('../../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventRegistry = _vars2.default.eventRegistry;
-
-
-var triggerSequencer = function triggerSequencer(events, mainArgs) {
+function triggerSequencer(events, mainArgs) {
   var triggerSequence = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   events.forEach(function (event) {
@@ -49,16 +48,4 @@ var triggerSequencer = function triggerSequencer(events, mainArgs) {
   });
 
   return triggerSequence;
-};
-
-var depth = function depth(record) {
-  return record.handle.split(':').length;
-};
-
-exports.default = function (events, mainArgs) {
-  var triggerSequence = triggerSequencer(events, mainArgs);
-  triggerSequence = _lodash2.default.uniqWith(triggerSequence, _lodash2.default.isEqual);
-  return triggerSequence.sort(function () {
-    return depth(arguments.length <= 0 ? undefined : arguments[0]) - depth(arguments.length <= 1 ? undefined : arguments[1]);
-  });
-};
+}

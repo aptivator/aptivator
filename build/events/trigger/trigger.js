@@ -16,7 +16,7 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _triggerSequencer = require('./lib/trigger-sequencer');
+var _triggerSequencer = require('./trigger-sequencer/trigger-sequencer');
 
 var _triggerSequencer2 = _interopRequireDefault(_triggerSequencer);
 

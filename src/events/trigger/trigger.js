@@ -1,7 +1,7 @@
 import _                from 'lodash';
 import error            from '../../lib/error';
 import vars             from '../../lib/vars';
-import triggerSequencer from './lib/trigger-sequencer';
+import triggerSequencer from './trigger-sequencer/trigger-sequencer';
 
 let {eventSplitter} = vars;
 
