@@ -14,7 +14,7 @@
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * if state has no view or views, then delete everything except states and route
 * place function parameters and variable names in alphabetical order
-* see if more of the lodash functions can be used
+* see if more of the lodash functions can be used - read lodash documentation
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
 * what about adding routeEnums to make sure that some route values are constrained
 * what about also adding routeRxs to set a regex pattern for a parameter
@@ -30,6 +30,7 @@
 * regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
 * focal flag should also apply when it comes to the removal of immediates (take a look)
+* complete .off() to handle callbacks and contexts
 * **DONE** make sure that trigger sequence is unique
 * **DONE** complete events module
 * **DONE** is it a good idea to define on object on the state to provide callbacks for various state hooks? (for now use hooks api)

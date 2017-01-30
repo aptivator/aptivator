@@ -48,8 +48,12 @@ var _errorer = require('./errorer/errorer');
 
 var _errorer2 = _interopRequireDefault(_errorer);
 
+var _hook = require('./hook/hook');
+
+var _hook2 = _interopRequireDefault(_hook);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _instance2.default.activate = function (stateParams) {
-  return (0, _historian2.default)(stateParams).then(_initializer2.default).then(_preprocessor2.default).then(_resolver2.default).then(_deactivator2.default).then(_renderer2.default).then(_connector2.default).then(_displayer2.default).then(_finalizer2.default).catch(_lodash2.default.partial(_errorer2.default, _lodash2.default, stateParams));
+  return (0, _historian2.default)(stateParams).then(_initializer2.default).then((0, _hook2.default)('start')).then(_preprocessor2.default).then(_resolver2.default).then((0, _hook2.default)('loading')).then(_deactivator2.default).then(_renderer2.default).then(_connector2.default).then(_displayer2.default).then((0, _hook2.default)('loaded')).then(_finalizer2.default).then((0, _hook2.default)('enter')).catch(_lodash2.default.partial(_errorer2.default, _lodash2.default, stateParams));
 };

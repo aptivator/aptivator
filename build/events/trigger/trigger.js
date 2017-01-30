@@ -4,6 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -18,49 +26,68 @@ var _callbacker2 = _interopRequireDefault(_callbacker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (events) {
-  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
+exports.default = function () {
+  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(events) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
 
-  var promises = [];
-  var results = {};
+    var promises, results;
+    return _regenerator2.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            promises = [];
+            results = {};
 
-  (0, _callbacker2.default)(events, args).forEach(function (eventRecord) {
-    var args = eventRecord.args,
-        handle = eventRecord.handle,
-        callbacks = eventRecord.callbacks;
 
-    var handlePath = handle.split(':').concat('v');
-    var store = {};
+            (0, _callbacker2.default)(events, args).forEach(function (eventRecord) {
+              var args = eventRecord.args,
+                  handle = eventRecord.handle,
+                  callbacks = eventRecord.callbacks;
 
-    callbacks.forEach(function (callbackRecord) {
-      var callback = callbackRecord.callback,
-          context = callbackRecord.context;
-      var name = callback.name;
+              var handlePath = handle.split(':').concat('v');
+              var store = {};
 
-      var result = callback.apply(context, args);
+              callbacks.forEach(function (callbackRecord) {
+                var callback = callbackRecord.callback,
+                    context = callbackRecord.context;
+                var name = callback.name;
 
-      result = Promise.resolve(result);
-      result = result.then(function (result) {
-        if (name) {
-          if (!_lodash2.default.has(results, handlePath)) {
-            _lodash2.default.set(results, handlePath, store);
-          }
+                var result = callback.apply(context, args);
 
-          if (_lodash2.default.has(store, name)) {
-            _error2.default.throw('function [' + name + '] was already called for [' + handle + '] event', 'event triggerer');
-          }
+                result = Promise.resolve(result);
+                result = result.then(function (result) {
+                  if (name) {
+                    if (!_lodash2.default.has(results, handlePath)) {
+                      _lodash2.default.set(results, handlePath, store);
+                    }
 
-          _lodash2.default.set(store, name, result);
+                    if (_lodash2.default.has(store, name)) {
+                      _error2.default.throw('function [' + name + '] was already called for [' + handle + '] event', 'event triggerer');
+                    }
+
+                    _lodash2.default.set(store, name, result);
+                  }
+                });
+
+                promises.push(result);
+              });
+            });
+
+            return _context.abrupt('return', Promise.all(promises).then(function () {
+              return results;
+            }));
+
+          case 4:
+          case 'end':
+            return _context.stop();
         }
-      });
+      }
+    }, _callee, undefined);
+  }));
 
-      promises.push(result);
-    });
-  });
-
-  return Promise.all(promises).then(function () {
-    return results;
-  });
-};
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}();

@@ -46,68 +46,88 @@ var pause = function () {
 }();
 
 exports.default = function () {
-  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(stateParams) {
-    var transient, keepLast, _ref3, lastStateName, _ref4, promise, transientParams, timeout, deactivate, stateName;
+  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(stateParams) {
+    var transient, keepLast, lastStateParams, lastStateName, _ref3, promise, transientParams, timeout, deactivate, triggerPromise, stateName, handle;
 
-    return _regenerator2.default.wrap(function _callee2$(_context2) {
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             (0, _canceler2.default)(stateParams);
 
-            if (!stateParams.abort) {
-              _context2.next = 3;
-              break;
-            }
-
-            throw 'abort';
-
-          case 3:
             transient = stateParams.transient, keepLast = stateParams.keepLast;
-            _ref3 = _instance2.default.history.prev() || {}, lastStateName = _ref3.stateName;
-            _ref4 = transient || {}, promise = _ref4.promise, transientParams = _ref4.params, timeout = _ref4.timeout;
+            lastStateParams = _instance2.default.history.prev() || {};
+            lastStateName = lastStateParams.stateName;
+            _ref3 = transient || {}, promise = _ref3.promise, transientParams = _ref3.params, timeout = _ref3.timeout;
 
-            deactivate = function deactivate(keepLast) {
-              if (!keepLast && lastStateName) {
-                _instance2.default.deactivate({ name: lastStateName });
-              }
-            };
+            deactivate = function () {
+              var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(keepLast) {
+                var handle;
+                return _regenerator2.default.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        if (!(!keepLast && lastStateName)) {
+                          _context2.next = 4;
+                          break;
+                        }
+
+                        handle = 'exit:' + lastStateName;
+
+                        _instance2.default.deactivate({ name: lastStateName });
+                        return _context2.abrupt('return', _instance2.default.trigger(handle, lastStateParams));
+
+                      case 4:
+                      case 'end':
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2, undefined);
+              }));
+
+              return function deactivate(_x3) {
+                return _ref4.apply(this, arguments);
+              };
+            }();
+
+            triggerPromise = deactivate(keepLast);
 
             if (!promise) {
-              _context2.next = 15;
+              _context3.next = 17;
               break;
             }
 
-            _context2.next = 10;
+            _context3.next = 10;
             return promise;
 
           case 10:
             stateName = transientParams.stateName;
+            handle = 'exit:' + stateName;
 
             keepLast = !transientParams.keepLast;
             _instance2.default.deactivate({ name: stateName });
-            _context2.next = 16;
+            _instance2.default.trigger(handle);
+            _context3.next = 18;
             break;
 
-          case 15:
+          case 17:
             if (timeout) {
               clearTimeout(timeout);
             }
 
-          case 16:
-            deactivate(keepLast);
-            _context2.next = 19;
-            return pause(20);
-
-          case 19:
-            return _context2.abrupt('return', stateParams);
+          case 18:
+            _context3.next = 20;
+            return triggerPromise;
 
           case 20:
+            return _context3.abrupt('return', stateParams);
+
+          case 21:
           case 'end':
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, undefined);
+    }, _callee3, undefined);
   }));
 
   return function (_x2) {

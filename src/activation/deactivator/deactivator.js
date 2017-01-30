@@ -7,29 +7,32 @@ let pause = async ms =>
 export default async stateParams => {
   canceler(stateParams);
   
-  if(stateParams.abort) {
-    throw 'abort';
-  }
-  
   let {transient, keepLast} = stateParams;
-  let {stateName: lastStateName} = aptivator.history.prev() || {};
+  let lastStateParams = aptivator.history.prev() || {};
+  let {stateName: lastStateName} = lastStateParams;
   let {promise, params: transientParams, timeout} = transient || {};
-  let deactivate = keepLast => {
+  let deactivate = async keepLast => {
     if(!keepLast && lastStateName) {
+      let handle = `exit:${lastStateName}`;
       aptivator.deactivate({name: lastStateName});
+      return aptivator.trigger(handle, lastStateParams);
     }
   };
+  
+  let triggerPromise = deactivate(keepLast);
   
   if(promise) {
     await promise;
     let {stateName} = transientParams;
+    let handle = `exit:${stateName}`;
     keepLast = !transientParams.keepLast;
     aptivator.deactivate({name: stateName});
+    aptivator.trigger(handle);
   } else if(timeout) {
     clearTimeout(timeout);
   }
   
-  deactivate(keepLast);
-  await pause(20);
+  await triggerPromise;
+  
   return stateParams;
 };

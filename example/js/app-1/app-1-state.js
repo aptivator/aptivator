@@ -26,33 +26,53 @@ route = {
 
 aptivator.on({
   start: {
-    callbacks: [function tester1() {
-      return 22;
-    }, function another() {
-      return 'another';
-    }],
     sub: {
-      'app-1': {
-        callbacks: function zero() {
-          return 0;
-        },
-        sub: {
-          'error': {
-            callback: function context() {
-              return this.two;
-            },
-            context: {
-              two: 2
-            }
-          }
-        }
+      'app-1': function(stateParams) {
+        console.log('starting', stateParams.stateName);
+      }
+    }
+  },
+  loading: {
+    sub: {
+      'app-1': function(stateParams) {
+        console.log('loading', stateParams.stateName);
+        return new Promise(function(resolve, reject) {
+          setTimeout(function() {
+            resolve();
+          }, 2000);
+        });
+      }
+    }
+  },
+  
+  loaded: {
+    sub: {
+      'app-1': function(stateParams) {
+        console.log('loaded', stateParams.stateName);
+      }
+    }
+  },
+  
+  enter: {
+    sub: {
+      'app-1': function(stateParams) {
+        console.log('entered', stateParams.stateName);
+      }
+    }
+  },
+  
+  exit: {
+    sub: {
+      'app-1': function(stateParams) {
+        console.log('exited', stateParams.stateName);
+        return new Promise(function(resolve, reject) {
+          setTimeout(function() {
+            resolve();
+          }, 1000);
+        });
       }
     }
   }
-});
-
-aptivator.trigger({handle: 'start:app-1:error', full: true}).then(function(results) {
-  console.log(results);
 });
 
 aptivator.state('app-1', {

@@ -2,7 +2,7 @@ import _                from 'lodash';
 import error            from '../../lib/error';
 import callbacker       from '../callbacker/callbacker';
 
-export default (events, ...args) => {
+export default async (events, ...args) => {
   let promises = [];
   let results = {};
 
