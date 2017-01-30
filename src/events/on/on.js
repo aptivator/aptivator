@@ -18,7 +18,7 @@ export default (events, callback, context) => {
     
     return events.forEach(event => {
       let callbacks = eventRegistry[event] || (eventRegistry[event] = []);
-      callbacks.splice(callbacks.length, 0, ...callback);
+      callbacks.push(...callback);
     });
   }
 

@@ -12,38 +12,24 @@ var _error = require('../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
-var _vars = require('../../lib/vars');
+var _callbacker = require('../callbacker/callbacker');
 
-var _vars2 = _interopRequireDefault(_vars);
-
-var _triggerSequencer = require('./trigger-sequencer/trigger-sequencer');
-
-var _triggerSequencer2 = _interopRequireDefault(_triggerSequencer);
+var _callbacker2 = _interopRequireDefault(_callbacker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var eventSplitter = _vars2.default.eventSplitter;
 
 exports.default = function (events) {
   for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     args[_key - 1] = arguments[_key];
   }
 
-  if (_lodash2.default.isString(events)) {
-    events = events.split(eventSplitter);
-  }
-
-  if (!_lodash2.default.isArray(events)) {
-    events = [events];
-  }
-
   var promises = [];
   var results = {};
 
-  (0, _triggerSequencer2.default)(events, args).forEach(function (record) {
-    var args = record.args,
-        handle = record.handle,
-        callbacks = record.callbacks;
+  (0, _callbacker2.default)(events, args).forEach(function (eventRecord) {
+    var args = eventRecord.args,
+        handle = eventRecord.handle,
+        callbacks = eventRecord.callbacks;
 
     var handlePath = handle.split(':').concat('v');
     var store = {};

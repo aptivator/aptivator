@@ -1,24 +1,13 @@
 import _                from 'lodash';
 import error            from '../../lib/error';
-import vars             from '../../lib/vars';
-import triggerSequencer from './trigger-sequencer/trigger-sequencer';
-
-let {eventSplitter} = vars;
+import callbacker       from '../callbacker/callbacker';
 
 export default (events, ...args) => {
-  if(_.isString(events)) {
-    events = events.split(eventSplitter);
-  }
-
-  if(!_.isArray(events)) {
-    events = [events];
-  }
-
   let promises = [];
   let results = {};
 
-  triggerSequencer(events, args).forEach(record => {
-    let {args, handle, callbacks} = record;
+  callbacker(events, args).forEach(eventRecord => {
+    let {args, handle, callbacks} = eventRecord;
     let handlePath = handle.split(':').concat('v');
     let store = {};
     

@@ -55,18 +55,6 @@ aptivator.trigger({handle: 'start:app-1:error', full: true}).then(function(resul
   console.log(results);
 });
 
-
-
-/*
-aptivator.trigger({
-  paths: [{
-    path: 'start:app-1',
-    focal: true
-  }, 'start:app-2'],
-  args: console
-});
-*/
-
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],

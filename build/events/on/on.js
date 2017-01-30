@@ -41,7 +41,7 @@ exports.default = function (events, callback, context) {
 
     return events.forEach(function (event) {
       var callbacks = eventRegistry[event] || (eventRegistry[event] = []);
-      callbacks.splice.apply(callbacks, [callbacks.length, 0].concat((0, _toConsumableArray3.default)(callback)));
+      callbacks.push.apply(callbacks, (0, _toConsumableArray3.default)(callback));
     });
   }
 

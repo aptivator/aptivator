@@ -1,15 +1,14 @@
 import _    from 'lodash';
-import vars from '../../../../lib/vars';
+import vars from '../../../lib/vars';
 
 let {eventRegistry} = vars;
 
-export default function triggerSequencer(events, mainArgs, triggerSequence = []) {
+export default function callbacker(events, mainArgs, callbacks = []) {
   events.forEach(event => {
     if(_.isString(event)) {
-      if(eventRegistry[event]) {
-        triggerSequence.push({handle: event, args: mainArgs, callbacks: eventRegistry[event]});
+      if(!_.isEmpty(eventRegistry[event])) {
+        callbacks.push({handle: event, args: mainArgs, callbacks: eventRegistry[event]});
       }
-      
       return;
     }
     
@@ -22,8 +21,8 @@ export default function triggerSequencer(events, mainArgs, triggerSequence = [])
       handle = [handle];
     }
     
-    handle.forEach(handle => triggerSequencer([handle], args || mainArgs, triggerSequence));
+    handle.forEach(handle => callbacker([handle], args || mainArgs, callbacks));
   });
   
-  return triggerSequence;
+  return callbacks;
 }
