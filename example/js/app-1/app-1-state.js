@@ -68,8 +68,12 @@ aptivator.on({
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
             resolve();
-          }, 1000);
+          });
         });
+      },
+      loading: function exited(stateParams) {
+        console.log('exited', stateParams.stateName);
+        return 'exited';
       }
     }
   }

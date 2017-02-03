@@ -14,6 +14,8 @@ let {activationRecords, activationSequences, registry} = vars.states;
 export default stateParams => {
   canceler(stateParams);
   
+  stateParams.flags.rendered = true;
+  
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
     let {stateName, viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
     let parentRecord = activationRecords[registry[viewStateName].viewAddressUnique];
@@ -32,6 +34,8 @@ export default stateParams => {
     let unhide = !destroy && !_.isEmpty(activationRecord);
     let family = relations.family(stateName).concat(viewAddressUnique);
     let viewParameters = params.assemble(family, stateParams);
+
+    console.log(stateName, cache, cacheable.explicit.cache, cacheable.implicit.cache);
 
     if(destroy) {
       aptivator.destroy({name: viewAddressUnique});
@@ -62,6 +66,7 @@ export default stateParams => {
     };
     
     instance.on('destroy', () => {
+      console.log(`destroying ${viewAddressUnique}`);
       aptivator.deactivate({name: viewAddressUnique, forward: true, detach: {children: true}});
       targetRegion.current.delete(viewAddressUnique);
       delete activationRecord.instance;

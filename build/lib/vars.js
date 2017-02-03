@@ -26,9 +26,8 @@ exports.default = {
   states: {
     activationRecords: {},
     activationSequences: {},
-    activeTransient: undefined,
     error: [],
-    pending: new Set(),
+    history: [],
     queue: [],
     registry: {},
     transient: []

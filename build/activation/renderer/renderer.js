@@ -54,6 +54,8 @@ var _vars$states = _vars2.default.states,
 exports.default = function (stateParams) {
   (0, _canceler2.default)(stateParams);
 
+  stateParams.flags.rendered = true;
+
   activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique,
@@ -77,6 +79,8 @@ exports.default = function (stateParams) {
     var unhide = !destroy && !_lodash2.default.isEmpty(activationRecord);
     var family = _relations2.default.family(stateName).concat(viewAddressUnique);
     var viewParameters = _params2.default.assemble(family, stateParams);
+
+    console.log(stateName, cache, _cacheable2.default.explicit.cache, _cacheable2.default.implicit.cache);
 
     if (destroy) {
       _instance2.default.destroy({ name: viewAddressUnique });
@@ -111,6 +115,7 @@ exports.default = function (stateParams) {
     };
 
     instance.on('destroy', function () {
+      console.log('destroying ' + viewAddressUnique);
       _instance2.default.deactivate({ name: viewAddressUnique, forward: true, detach: { children: true } });
       targetRegion.current.delete(viewAddressUnique);
       delete activationRecord.instance;

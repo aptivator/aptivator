@@ -1,20 +1,14 @@
 import aptivator   from '../lib/instance';
-import statesCache from './lib/states-cache';
+import vars        from '../lib/vars';
+
+let {history} = vars.states;
 
 aptivator.history = {
-  get(start, end) {
-    return statesCache.slice(start, end);
+  get(filterer) {
+    return history.filter(filterer).reverse();
   },
   
-  size() {
-    return statesCache.length;
-  },
-  
-  last() {
-    return this.get(-1)[0];
-  },
-  
-  prev() {
-    return this.get(-2, -1)[0];
+  getOne(filterer) {
+    return this.get(filterer)[0];
   }
 };

@@ -1,7 +1,8 @@
-import vars        from '../lib/vars';
-import statesCache from './lib/states-cache';
+import vars from '../lib/vars';
+
+let {history} = vars.states;
 
 export default state => {
-  statesCache.push(state);
-  statesCache.splice(0, statesCache.length - vars.configs.historySize);
+  history.push(state);
+  history.splice(0, history.length - vars.configs.historySize);
 };

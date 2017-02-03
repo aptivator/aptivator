@@ -24,10 +24,7 @@ exports.default = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            if (!stateParams.noHistory) {
-              (0, _historyAdder2.default)(stateParams);
-            }
-
+            (0, _historyAdder2.default)(stateParams);
             return _context.abrupt('return', stateParams);
 
           case 2:

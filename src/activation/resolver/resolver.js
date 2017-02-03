@@ -14,6 +14,8 @@ export default stateParams =>
   new Promise((resolve, reject) => {
     canceler(stateParams);
     
+    stateParams.flags.resolved = true;
+    
     if(stateParams.noResolves) {
       return resolve(stateParams);
     }

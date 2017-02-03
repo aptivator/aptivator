@@ -12,9 +12,12 @@ let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
 
 export default stateParams => {
+  console.log(stateParams);
   canceler(stateParams);
   
   let {stateName} = stateParams;
+  
+  stateParams.flags.preprocessed = true;
   
   !function preprocess(stateName, previousSequence) {
     let stateConfigs = registry[stateName];

@@ -8,6 +8,10 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
@@ -37,10 +41,12 @@ exports.default = function (eventName) {
             case 3:
               results = _context.sent;
 
-              _lodash2.default.extend(stateParams, { hooks: results });
+
+              _lodash2.default.extend(stateParams.hooks, results);
+              _lodash2.default.extend(stateParams.flags, (0, _defineProperty3.default)({}, eventName, true));
               return _context.abrupt('return', stateParams);
 
-            case 6:
+            case 7:
             case 'end':
               return _context.stop();
           }

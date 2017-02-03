@@ -24,6 +24,6 @@ aptivator.activate = stateParams =>
     .then(connector)
     .then(displayer)
     .then(hook('loaded'))
-    .then(finalizer)
     .then(hook('enter'))
+    .then(finalizer)
     .catch(_.partial(errorer, _, stateParams));

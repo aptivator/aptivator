@@ -57,10 +57,13 @@ var activationSequences = states.activationSequences,
     registry = states.registry;
 
 exports.default = function (stateParams) {
+  console.log(stateParams);
   (0, _canceler2.default)(stateParams);
 
   var stateName = stateParams.stateName;
 
+
+  stateParams.flags.preprocessed = true;
 
   !function preprocess(stateName, previousSequence) {
     var stateConfigs = registry[stateName];
