@@ -1,15 +1,21 @@
 import _           from 'lodash';
 import aptivator   from '../lib/instance';
 import error       from '../lib/error';
-import deactivator from './lib/deactivator'; 
+import deactivator from './deactivator/deactivator'; 
 
 aptivator.deactivate = async params => {
-  let {name, forward, focal, stateParams} = params;
-  
-  console.log(params);
-  
+  let {name, forward, focal, stateParams, silent} = params;
+
   if(forward && focal) {
     error.throw(`use either [focal] or [forward] flag`, 'deactivator');
+  }
+  
+  if(name.includes('@')) {
+    silent = true;
+  }
+  
+  if(silent) {
+    return deactivator(params);
   }
   
   if(!stateParams) {
@@ -23,21 +29,12 @@ aptivator.deactivate = async params => {
     });
   }
 
-  let {transientConfigs} = stateParams;
-
-  if(transientConfigs) {
-    let {params: stateParams} = transientConfigs;
-    
-    if(!stateParams.flags.rendered) {
-      stateParams.flags.canceled = true;
-    } else {
-      await aptivator.deactivate({name: stateParams.stateName, stateParams});
-    }
+  if(!stateParams) {
+    return;
   }
-
+  
   if(stateParams.flags.rendered) {
-    let method = focal || forward ? 'partial' : 'full';
-    deactivator[method](params);
+    deactivator(params);
   }
 
   _.extend(stateParams.flags, {active: false, pending: false});

@@ -16,9 +16,9 @@ var _preprocessor = require('./preprocessor/preprocessor');
 
 var _preprocessor2 = _interopRequireDefault(_preprocessor);
 
-var _historian = require('./historian/historian');
+var _registrar = require('./registrar/registrar');
 
-var _historian2 = _interopRequireDefault(_historian);
+var _registrar2 = _interopRequireDefault(_registrar);
 
 var _resolver = require('./resolver/resolver');
 
@@ -48,12 +48,12 @@ var _errorer = require('./errorer/errorer');
 
 var _errorer2 = _interopRequireDefault(_errorer);
 
-var _hook = require('./hook/hook');
+var _eventLinker = require('./event-linker/event-linker');
 
-var _hook2 = _interopRequireDefault(_hook);
+var _eventLinker2 = _interopRequireDefault(_eventLinker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _instance2.default.activate = function (stateParams) {
-  return (0, _historian2.default)(stateParams).then(_initializer2.default).then((0, _hook2.default)('start')).then(_preprocessor2.default).then(_resolver2.default).then((0, _hook2.default)('loading')).then(_deactivator2.default).then(_renderer2.default).then(_connector2.default).then(_displayer2.default).then((0, _hook2.default)('loaded')).then((0, _hook2.default)('enter')).then(_finalizer2.default).catch(_lodash2.default.partial(_errorer2.default, _lodash2.default, stateParams));
+  return (0, _registrar2.default)(stateParams).then(_initializer2.default).then((0, _eventLinker2.default)('start')).then(_preprocessor2.default).then(_resolver2.default).then((0, _eventLinker2.default)('loading')).then(_deactivator2.default).then(_renderer2.default).then(_connector2.default).then(_displayer2.default).then((0, _eventLinker2.default)('loaded')).then((0, _eventLinker2.default)('enter')).then(_finalizer2.default).catch(_lodash2.default.partial(_errorer2.default, _lodash2.default, stateParams));
 };

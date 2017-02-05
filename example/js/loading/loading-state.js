@@ -3,7 +3,6 @@ var LoadingView = require('./loading');
 
 aptivator.state('loading', {
   transient: {
-    keepLast: false,
     noResolves: true,
     delay: 100
   },

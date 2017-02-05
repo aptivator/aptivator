@@ -35,20 +35,20 @@ exports.default = {
         viewAddressUnique = viewConfigs.viewAddressUnique;
 
     var family = _relations2.default.family(stateName).concat(viewAddressUnique);
-    var parameters = _params2.default.assemble(family, stateParams);
+    var params = _params2.default.assemble(family, stateParams);
 
-    delete parameters.data;
+    delete params.data;
 
-    if (parameters.route) {
-      delete parameters.route.fragment;
-      delete parameters.route.stateName;
+    if (params.route) {
+      delete params.route.fragment;
+      delete params.route.stateName;
     }
 
-    if (_lodash2.default.isEqual(paramsMap[viewAddressUnique], parameters)) {
+    if (_lodash2.default.isEqual(paramsMap[viewAddressUnique], params)) {
       return this.implicit.cache = true;
     }
 
-    paramsMap[viewAddressUnique] = parameters;
+    paramsMap[viewAddressUnique] = params;
 
     return this.implicit.cache = false;
   },

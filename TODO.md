@@ -4,7 +4,11 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
-* keep record of active states
+* figure out how to give hooks variables to each ancestor view
+* finalize stateParams flags
+* add resolves duration support
+* rewrite activation to handle multiple simultaneous activations and multiple transient states (BIG  ONE)
+* similar to above, make sure that states can be activated serially - one after another with resolves, etc. (might have to use resolve())
 * change order of activation(), put loading hook right before deactivator()
 * what about allow for duplicate views if they originate within different states?
 * what about directives to tell to bypass state event hooks (e.g., noHooks: true)
@@ -12,7 +16,6 @@
 * parent state that does not have a view, just resolves and data
 * split displayer in lib into modules that would go under renderer and deactivation
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
-* if state has no view or views, then delete everything except states and route
 * place function parameters and variable names in alphabetical order
 * see if more of the lodash functions can be used - read lodash documentation
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
@@ -25,12 +28,17 @@
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
 * for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* add parallel flag on activate() to indicate other states to load parallel to the focal state
-* think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated
 * regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
 * modals/notifiers (A state that loads parallel to current state)
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * complete .off() to handle callbacks and contexts
+* **DONE** think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated (Handled through caching)
+* **DONE** add silent flag for deactivation
+* **DONE** make sure that deactivation with trigger events happens for full-fledged states
+* **DONE** rework route params again, make sure that each view receives only the route params it is supposed to
+* **DONE** if state has no view or views, then delete everything except states and route (no, it can be an abstract state without view(s))
+* **DONE** add parallel flag on activate() to indicate other states to load parallel to the focal state
+* **DONE** keep record of active states (via reworked history module)
 * **DONE** make sure that trigger sequence is unique
 * **DONE** complete events module
 * **DONE** is it a good idea to define on object on the state to provide callbacks for various state hooks? (for now use hooks api)

@@ -49,7 +49,7 @@ exports.default = function (stateParams) {
 
     stateParams.flags.resolved = true;
 
-    if (stateParams.noResolves) {
+    if (stateParams.flags.noResolves) {
       return resolve(stateParams);
     }
 

@@ -43,12 +43,14 @@
     </div>
   </div>
   <% } %>
+  <% if(direct) { %>
   <h4>Direct params</h4>
   <div class = "row">
     <div class = "col-md-12">
-      <% _.each(direct, function(value, name) { %>
+      <% direct && _.each(direct, function(value, name) { %>
         <p><%= name %>: <%= value %></p>
       <% }); %>
     </div>
   </div>
+  <% } %>
 </div>

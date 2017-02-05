@@ -2,31 +2,27 @@ import _         from 'lodash';
 import aptivator from '../../../lib/instance';
 import vars      from '../../../lib/vars';
 
-export default (stateName, stateParams) => {
+export default stateName => {
   let {transient} = vars.states.registry[stateName];
-  let transientConfigs = _.isObject(transient) ? transient : {};
-  let owners = [_.cloneDeep(stateParams)];
-  let currentOwners = new Set(owners);
-  let params = {stateName, owners, currentOwners, flags: {parallel: false, transient: true}};
-  let activation = {params};
-  let {delay} = transientConfigs;
-  
-  /*
-  if(_.isObject(transient)) {
-    _.extend(params.flags, _.pick(transient, ['noResolves']));
-  }
-  */
+  let {delay} = _.isObject(transient) ? transient : {};
+  let stateParams = {stateName, owners: new Set(), flags: {parallel: false, transient: {}}};
+  let transientConfigs = stateParams.flags.transient;
   
   if(!_.isNumber(delay)) {
     let {transientDelay} = vars.configs;
     delay = _.isNumber(transientDelay) ? transientDelay : vars.transientDelay;
   }
   
-  activation.timeout = setTimeout(() => {
-    activation.promise = aptivator.activate(params);
-    activation.promise = activation.promise.then(_.noop, e => Promise.reject(e));
-    activation.promise.catch(_.noop);
+  if(_.isObject(transient)) {
+    _.extend(stateParams.flags, _.pick(transient, ['noResolves']));
+  }
+  
+  transientConfigs.timeout = setTimeout(() => {
+    let promise = aptivator.activate(stateParams);
+    promise = promise.then(_.noop, e => Promise.reject(e));
+    _.extend(transientConfigs, {promise});
+    promise.catch(_.noop);
   }, delay);
-
-  return activation;
+  
+  return stateParams;
 };

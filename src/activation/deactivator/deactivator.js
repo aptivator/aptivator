@@ -6,7 +6,11 @@ let totalTransientConfigs = [];
 
 export default stateParams => 
   new Promise(async (resolve, reject) => {
-    canceler(stateParams);
+    try {
+      canceler(stateParams);
+    } catch(e) {
+      return reject(e);
+    }
     
     let {transient, parallel} = stateParams.flags;
     
@@ -26,7 +30,7 @@ export default stateParams =>
           aptivator.deactivate({name: stateName, stateParams: activeStateParams});
         }
         
-        resolve(stateParams);
+        setTimeout(() => resolve(stateParams));
       });
       
       let pendingTransients = aptivator.history.get(stateParams => {
@@ -61,10 +65,10 @@ export default stateParams =>
       let {active} = flags || {};
       
       if(!parallel && active) {
-        aptivator.deactivate({name: stateName, stateParams: activeStateParams});
+        aptivator.deactivate({name: stateName, stateParams: activeStateParams, silent: true});
       }
       
-      resolve(stateParams);
+      setTimeout(() => resolve(stateParams));
     });
     
     if(!pendingRegulars.length) {
@@ -83,6 +87,7 @@ export default stateParams =>
       let transientStateNames = _.keys(promisesMap);
       
       await Promise.all(promises);
+      
       transientStateNames.forEach(stateName => 
         aptivator.deactivate({name: stateName, stateParams: promisesMap[stateName].stateParams}));
       aptivator.trigger('regular-render');

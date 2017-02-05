@@ -20,7 +20,7 @@ var _error = require('../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
-var _deactivator = require('./lib/deactivator');
+var _deactivator = require('./deactivator/deactivator');
 
 var _deactivator2 = _interopRequireDefault(_deactivator);
 
@@ -28,20 +28,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _instance2.default.deactivate = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(params) {
-    var name, forward, focal, stateParams, _stateParams, transientConfigs, _stateParams2, method;
-
+    var name, forward, focal, stateParams, silent;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            name = params.name, forward = params.forward, focal = params.focal, stateParams = params.stateParams;
+            name = params.name, forward = params.forward, focal = params.focal, stateParams = params.stateParams, silent = params.silent;
 
-
-            console.log(params);
 
             if (forward && focal) {
               _error2.default.throw('use either [focal] or [forward] flag', 'deactivator');
             }
+
+            if (name.includes('@')) {
+              silent = true;
+            }
+
+            if (!silent) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt('return', (0, _deactivator2.default)(params));
+
+          case 5:
 
             if (!stateParams) {
               stateParams = _instance2.default.history.getOne(function (stateParams) {
@@ -58,34 +68,17 @@ _instance2.default.deactivate = function () {
               });
             }
 
-            _stateParams = stateParams, transientConfigs = _stateParams.transientConfigs;
-
-            if (!transientConfigs) {
-              _context.next = 13;
+            if (stateParams) {
+              _context.next = 8;
               break;
             }
 
-            _stateParams2 = transientConfigs.params;
+            return _context.abrupt('return');
 
-            if (_stateParams2.flags.rendered) {
-              _context.next = 11;
-              break;
-            }
-
-            _stateParams2.flags.canceled = true;
-            _context.next = 13;
-            break;
-
-          case 11:
-            _context.next = 13;
-            return _instance2.default.deactivate({ name: _stateParams2.stateName, stateParams: _stateParams2 });
-
-          case 13:
+          case 8:
 
             if (stateParams.flags.rendered) {
-              method = focal || forward ? 'partial' : 'full';
-
-              _deactivator2.default[method](params);
+              (0, _deactivator2.default)(params);
             }
 
             _lodash2.default.extend(stateParams.flags, { active: false, pending: false });
@@ -95,7 +88,7 @@ _instance2.default.deactivate = function () {
               return results;
             }));
 
-          case 16:
+          case 11:
           case 'end':
             return _context.stop();
         }

@@ -1,8 +1,14 @@
 export default {
-  message: (error, moduleName) => new Error(`aptivator: ${moduleName && moduleName + ': ' || ''}${error}`),
+  message(errorMessage, moduleName) {
+    return `aptivator: ${moduleName && moduleName + ': ' || ''}${errorMessage}`;
+  },
   
-  'throw'(error, moduleName) {
-    throw this.message(error, moduleName);
+  throw(error, moduleName) {
+    throw new Error(this.message(error, moduleName));
+  },
+  
+  warn(error, moduleName) {
+    console.warn(this.message(error, moduleName));
   },
   
   errorer: e => console.error(e)

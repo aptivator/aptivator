@@ -4,19 +4,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _instance = require('../../lib/instance');
-
-var _instance2 = _interopRequireDefault(_instance);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 exports.default = function (stateParams) {
-  var stateName = stateParams.stateName,
-      flags = stateParams.flags;
+  var _stateParams$flags = stateParams.flags,
+      undeclared = _stateParams$flags.undeclared,
+      duplicateSerial = _stateParams$flags.duplicateSerial,
+      canceled = _stateParams$flags.canceled;
 
 
-  if (flags.canceled) {
-    _instance2.default.deactivate({ name: stateName, stateParams: stateParams });
+  if (undeclared) {
+    throw 'undeclared';
+  }
+
+  if (duplicateSerial) {
+    throw 'duplicate-serial';
+  }
+
+  if (canceled) {
     throw 'canceled';
   }
 

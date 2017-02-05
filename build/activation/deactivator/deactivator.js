@@ -37,8 +37,18 @@ exports.default = function (stateParams) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              (0, _canceler2.default)(stateParams);
+              _context2.prev = 0;
 
+              (0, _canceler2.default)(stateParams);
+              _context2.next = 7;
+              break;
+
+            case 4:
+              _context2.prev = 4;
+              _context2.t0 = _context2['catch'](0);
+              return _context2.abrupt('return', reject(_context2.t0));
+
+            case 7:
               _stateParams$flags = stateParams.flags, transient = _stateParams$flags.transient, parallel = _stateParams$flags.parallel;
               activeStateParams = _instance2.default.history.getOne(function (stateParams) {
                 var _stateParams$flags2 = stateParams.flags,
@@ -52,7 +62,7 @@ exports.default = function (stateParams) {
               });
 
               if (!transient) {
-                _context2.next = 8;
+                _context2.next = 14;
                 break;
               }
 
@@ -68,7 +78,9 @@ exports.default = function (stateParams) {
                   _instance2.default.deactivate({ name: stateName, stateParams: activeStateParams });
                 }
 
-                resolve(stateParams);
+                setTimeout(function () {
+                  return resolve(stateParams);
+                });
               });
 
               pendingTransients = _instance2.default.history.get(function (stateParams) {
@@ -91,7 +103,7 @@ exports.default = function (stateParams) {
 
               return _context2.abrupt('return');
 
-            case 8:
+            case 14:
               transientConfigs = stateParams.transientConfigs;
               pendingRegulars = _instance2.default.history.get(function (stateParams) {
                 var _stateParams$flags4 = stateParams.flags,
@@ -119,14 +131,16 @@ exports.default = function (stateParams) {
                     active = _ref5.active;
 
                 if (!parallel && active) {
-                  _instance2.default.deactivate({ name: stateName, stateParams: activeStateParams });
+                  _instance2.default.deactivate({ name: stateName, stateParams: activeStateParams, silent: true });
                 }
 
-                resolve(stateParams);
+                setTimeout(function () {
+                  return resolve(stateParams);
+                });
               });
 
               if (pendingRegulars.length) {
-                _context2.next = 14;
+                _context2.next = 20;
                 break;
               }
 
@@ -157,6 +171,7 @@ exports.default = function (stateParams) {
                         return Promise.all(promises);
 
                       case 5:
+
                         transientStateNames.forEach(function (stateName) {
                           return _instance2.default.deactivate({ name: stateName, stateParams: promisesMap[stateName].stateParams });
                         });
@@ -170,14 +185,14 @@ exports.default = function (stateParams) {
                     }
                   }
                 }, _callee, undefined);
-              })(), 't0', 14);
+              })(), 't1', 20);
 
-            case 14:
+            case 20:
             case 'end':
               return _context2.stop();
           }
         }
-      }, _callee2, undefined);
+      }, _callee2, undefined, [[0, 4]]);
     }));
 
     return function (_x, _x2) {

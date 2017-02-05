@@ -16,10 +16,6 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _error = require('../../lib/error');
-
-var _error2 = _interopRequireDefault(_error);
-
 var _fragment = require('../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);
@@ -32,6 +28,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _serialStatesNormalizer = require('./serial-states-normalizer/serial-states-normalizer');
+
+var _serialStatesNormalizer2 = _interopRequireDefault(_serialStatesNormalizer);
+
 var _transientInitializer = require('./transient-initializer/transient-initializer');
 
 var _transientInitializer2 = _interopRequireDefault(_transientInitializer);
@@ -41,99 +41,113 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var registry = _vars2.default.states.registry;
 
 exports.default = function (stateParams) {
-  if (!stateParams.flags) {
-    stateParams.flags = {};
-  }
-
-  var flags = stateParams.flags,
-      route = stateParams.route,
-      routeValues = stateParams.routeValues,
-      stateName = stateParams.stateName;
-  var parallel = flags.parallel,
-      silent = flags.silent,
-      transient = flags.transient;
-
-  var stateConfigs = registry[stateName];
-
-  if (!stateConfigs) {
-    _error2.default.throw('invalid [' + stateName + '] state name', 'initializer');
-  }
-
-  stateParams.hooks = {};
-
-  _lodash2.default.extend(stateParams.flags, { active: false, pending: true });
-
-  if (_vars2.default.configs.showRuntime && !transient) {
-    stateParams.time = _lodash2.default.now();
-  }
-
-  if (!transient) {
-    (function () {
-      var transientStateName = _approximator2.default.fromStateName('transient', stateName);
-
-      if (transientStateName) {
-        var transientStateParams = _instance2.default.history.getOne(function (stateParams) {
-          var stateName = stateParams.stateName,
-              flags = stateParams.flags;
-          var active = flags.active,
-              pending = flags.pending;
+  return new Promise(function (resolve) {
+    var transient = stateParams.flags.transient;
 
 
-          if (stateName === transientStateName && (active || pending)) {
-            return true;
-          }
-        });
+    _lodash2.default.extend(stateParams.flags, { active: false, pending: true });
 
-        if (transientStateParams) {
-          var owners = transientStateParams.owners,
-              currentOwners = transientStateParams.currentOwners;
+    _instance2.default.on('goto-preprocessor', function () {
+      return resolve(stateParams);
+    });
 
-          var ownerStateParams = owners[owners.length - 1];
-          var transientConfigs = ownerStateParams.transientConfigs;
+    var startingStates = _instance2.default.history.get(function (stateParams) {
+      var active = stateParams.flags.active;
 
-
-          _lodash2.default.extend(stateParams, { transientConfigs: transientConfigs });
-          owners.push(stateParams);
-          currentOwners.add(stateParams);
-        } else {
-          stateParams.transientConfigs = (0, _transientInitializer2.default)(transientStateName, stateParams);
-        }
-      }
-    })();
-  }
-
-  if (!(parallel || transient)) {
-    var pending = _instance2.default.history.get(function (stateParams) {
-      var stateNameInner = stateParams.stateName,
-          flags = stateParams.flags;
-      var pending = flags.pending,
-          parallel = flags.parallel,
-          transient = flags.transient;
-
-
-      if (!parallel && pending && !transient && stateNameInner !== stateName) {
+      if (_lodash2.default.isUndefined(active)) {
         return true;
       }
     });
 
-    pending.forEach(function (stateParams) {
-      return stateParams.flags.canceled = true;
+    if (startingStates.length) {
+      return;
+    }
+
+    var startedStates = _instance2.default.history.get(function (stateParams) {
+      var _stateParams$flags = stateParams.flags,
+          active = _stateParams$flags.active,
+          pending = _stateParams$flags.pending,
+          preprocessed = _stateParams$flags.preprocessed,
+          canceled = _stateParams$flags.canceled;
+
+
+      if (active === false && pending && !preprocessed && !canceled) {
+        return true;
+      }
     });
-  }
 
-  if (stateConfigs.route && !route) {
-    if (!routeValues) {
-      routeValues = stateConfigs.routeValues;
+    var undeclaredStates = startedStates.filter(function (stateParams) {
+      var flags = stateParams.flags,
+          stateName = stateParams.stateName;
+
+
+      if (!registry[stateName]) {
+        _lodash2.default.extend(flags, { active: false, canceled: true, pending: false, undeclared: true });
+        return true;
+      }
+    });
+
+    if (!transient) {
+      startedStates = _lodash2.default.difference(startedStates, undeclaredStates);
+      startedStates = (0, _serialStatesNormalizer2.default)(startedStates);
+
+      var transientStates = _instance2.default.history.get(function (stateParams) {
+        var _stateParams$flags2 = stateParams.flags,
+            active = _stateParams$flags2.active,
+            pending = _stateParams$flags2.pending,
+            canceled = _stateParams$flags2.canceled,
+            transient = _stateParams$flags2.transient;
+
+        if (transient && (active || pending) && !canceled) {
+          return true;
+        }
+      }).reduce(function (o, stateParams) {
+        return o[stateParams.stateName] = stateParams, o;
+      }, {});
+
+      startedStates.forEach(function (stateParams) {
+        var flags = stateParams.flags,
+            route = stateParams.route,
+            routeValues = stateParams.routeValues,
+            stateName = stateParams.stateName;
+        var parallel = flags.parallel,
+            silent = flags.silent;
+
+        var stateConfigs = registry[stateName];
+        var transientStateName = _approximator2.default.fromStateName('transient', stateName);
+
+        if (transientStateName) {
+          var transientStateParams = transientStates[transientStateName];
+          if (!transientStateParams) {
+            transientStateParams = (0, _transientInitializer2.default)(transientStateName);
+            transientStates[transientStateName] = transientStateParams;
+          }
+
+          transientStateParams.owners.add(stateParams);
+          _lodash2.default.extend(stateParams, { transientStateParams: transientStateParams });
+        }
+
+        if (stateConfigs.route && !route) {
+          if (!routeValues) {
+            routeValues = stateConfigs.routeValues;
+          }
+
+          route = _route2.default.parts.assemble(stateName, routeValues);
+
+          if (!(silent || parallel)) {
+            _fragment2.default.set(route.fragment);
+          }
+
+          _lodash2.default.extend(stateParams, { route: route });
+        }
+      });
+
+      if (_vars2.default.configs.showRuntime) {
+        stateParams.time = _lodash2.default.now();
+      }
     }
 
-    route = _route2.default.parts.assemble(stateName, routeValues);
-
-    if (!silent) {
-      _fragment2.default.set(route.fragment);
-    }
-
-    _lodash2.default.extend(stateParams, { route: route });
-  }
-
-  return stateParams;
+    _instance2.default.trigger('goto-preprocessor');
+    _instance2.default.off('goto-preprocessor');
+  });
 };

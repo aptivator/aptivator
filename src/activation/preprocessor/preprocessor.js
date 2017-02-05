@@ -11,8 +11,7 @@ import viewNormalizer     from './lib/view-normalizer';
 let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
 
-export default stateParams => {
-  console.log(stateParams);
+export default async stateParams => {
   canceler(stateParams);
   
   let {stateName} = stateParams;

@@ -1,11 +1,15 @@
-
-import aptivator from '../../lib/instance';
-
 export default stateParams => {
-  let {stateName, flags} = stateParams;
+  let {undeclared, duplicateSerial, canceled} = stateParams.flags;
   
-  if(flags.canceled) {
-    aptivator.deactivate({name: stateName, stateParams});
+  if(undeclared) {
+    throw 'undeclared';
+  }
+  
+  if(duplicateSerial) {
+    throw 'duplicate-serial';
+  }
+  
+  if(canceled) {
     throw 'canceled';
   }
   

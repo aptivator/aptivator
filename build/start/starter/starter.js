@@ -4,6 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -26,13 +34,34 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function () {
-  var defaultState = _vars2.default.configs.defaultState;
+exports.default = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  var defaultState;
+  return _regenerator2.default.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          defaultState = _vars2.default.configs.defaultState;
 
 
-  _backbone2.default.history.start();
+          _backbone2.default.history.start();
 
-  if (!_fragment2.default.get() && defaultState) {
-    _instance2.default.activate({ stateName: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
-  }
-};
+          _context.next = 4;
+          return _instance2.default.activate({ name: 'app-2.info' });
+
+        case 4:
+          //aptivator.activate({name: 'app-2.form', flags: {parallel: true}});
+          _instance2.default.activate({ name: 'app-1', flags: { parallel: true } });
+
+          /*
+          if(!fragment.get() && defaultState) {
+            aptivator.activate({stateName: defaultState, direct: {running: true}}).catch(_.noop);
+          }
+          */
+
+        case 5:
+        case 'end':
+          return _context.stop();
+      }
+    }
+  }, _callee, undefined);
+}));

@@ -1,5 +1,5 @@
 import _         from 'lodash';
-import params    from '../../../lib/params';
+import params_   from '../../../lib/params';
 import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars';
 
@@ -15,20 +15,20 @@ export default {
   implicit: function(viewConfigs, stateParams) {
     let {stateName, viewAddressUnique} = viewConfigs;
     let family = relations.family(stateName).concat(viewAddressUnique);
-    let parameters = params.assemble(family, stateParams);
+    let params = params_.assemble(family, stateParams);
 
-    delete parameters.data; 
+    delete params.data; 
     
-    if(parameters.route) {
-      delete parameters.route.fragment;
-      delete parameters.route.stateName;
+    if(params.route) {
+      delete params.route.fragment;
+      delete params.route.stateName;
     }
     
-    if(_.isEqual(paramsMap[viewAddressUnique], parameters)) {
+    if(_.isEqual(paramsMap[viewAddressUnique], params)) {
       return this.implicit.cache = true;
     }
 
-    paramsMap[viewAddressUnique] = parameters;
+    paramsMap[viewAddressUnique] = params;
     
     return this.implicit.cache = false;
   },

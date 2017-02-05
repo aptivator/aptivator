@@ -18,21 +18,14 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (stateName, stateParams) {
+exports.default = function (stateName) {
   var transient = _vars2.default.states.registry[stateName].transient;
 
-  var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
-  var owners = [_lodash2.default.cloneDeep(stateParams)];
-  var currentOwners = new Set(owners);
-  var params = { stateName: stateName, owners: owners, currentOwners: currentOwners, flags: { parallel: false, transient: true } };
-  var activation = { params: params };
-  var delay = transientConfigs.delay;
+  var _ref = _lodash2.default.isObject(transient) ? transient : {},
+      delay = _ref.delay;
 
-  /*
-  if(_.isObject(transient)) {
-    _.extend(params.flags, _.pick(transient, ['noResolves']));
-  }
-  */
+  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: false, transient: {} } };
+  var transientConfigs = stateParams.flags.transient;
 
   if (!_lodash2.default.isNumber(delay)) {
     var transientDelay = _vars2.default.configs.transientDelay;
@@ -40,13 +33,18 @@ exports.default = function (stateName, stateParams) {
     delay = _lodash2.default.isNumber(transientDelay) ? transientDelay : _vars2.default.transientDelay;
   }
 
-  activation.timeout = setTimeout(function () {
-    activation.promise = _instance2.default.activate(params);
-    activation.promise = activation.promise.then(_lodash2.default.noop, function (e) {
+  if (_lodash2.default.isObject(transient)) {
+    _lodash2.default.extend(stateParams.flags, _lodash2.default.pick(transient, ['noResolves']));
+  }
+
+  transientConfigs.timeout = setTimeout(function () {
+    var promise = _instance2.default.activate(stateParams);
+    promise = promise.then(_lodash2.default.noop, function (e) {
       return Promise.reject(e);
     });
-    activation.promise.catch(_lodash2.default.noop);
+    _lodash2.default.extend(transientConfigs, { promise: promise });
+    promise.catch(_lodash2.default.noop);
   }, delay);
 
-  return activation;
+  return stateParams;
 };

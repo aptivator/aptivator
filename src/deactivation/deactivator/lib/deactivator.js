@@ -1,7 +1,7 @@
 import _             from 'lodash';
-import addresser     from '../../lib/addresser';
-import displayer     from '../../lib/displayer';
-import vars          from '../../lib/vars';
+import addresser     from '../../../lib/addresser';
+import displayer     from '../../../lib/displayer';
+import vars          from '../../../lib/vars';
 import detachFlagger from './detach-flagger';
 
 let {activationRecords, activationSequences} = vars.states;
