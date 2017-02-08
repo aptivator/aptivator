@@ -77,18 +77,25 @@ _instance2.default.deactivate = function () {
 
           case 8:
 
+            _lodash2.default.extend(stateParams.flags, { active: false, pending: false });
+
             if (stateParams.flags.rendered) {
-              (0, _deactivator2.default)(params);
+              _context.next = 11;
+              break;
             }
 
-            _lodash2.default.extend(stateParams.flags, { active: false, pending: false });
+            return _context.abrupt('return', stateParams.flags.canceled = true);
+
+          case 11:
+
+            (0, _deactivator2.default)(params);
 
             return _context.abrupt('return', _instance2.default.trigger('exit:' + name, stateParams).then(function (results) {
               _lodash2.default.extend(stateParams.hooks, results);
               return results;
             }));
 
-          case 11:
+          case 13:
           case 'end':
             return _context.stop();
         }

@@ -24,6 +24,6 @@ exports.default = {
     return this.parts(viewAddress)[0];
   },
   stateName: function stateName(viewAddress) {
-    return this.parts(viewAddress)[1];
+    return viewAddress.includes('@') ? this.parts(viewAddress)[1] : viewAddress;
   }
 };

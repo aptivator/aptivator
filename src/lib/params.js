@@ -13,6 +13,7 @@ export default {
     let targetEntityName = family[family.length - 1];
     let targetStateName = targetEntityName.includes('@') ? addresser.stateName(targetEntityName) : targetEntityName;
     let targetStateConfigs = vars.states.registry[targetStateName];
+    let {error} = targetStateConfigs;
     
     if(route && targetStateConfigs.route) {
       let {routeParts} = targetStateConfigs;
@@ -29,6 +30,10 @@ export default {
         _.extend(params, {route: route_.parts.assemble(targetStateName, routeValues)});
         params.route.fragment = route.fragment;
       }
+    }
+    
+    if(error) {
+      _.extend(params, {route});
     }
     
     family.forEach(relation => {

@@ -1,8 +1,56 @@
 require('./tester/tester-state');
+require('./message/message-state');
 
 var aptivator = require('aptivator');
 var App2FormView = require('./form');
 var PlusView = require('./plus');
+
+/*
+aptivator.on({
+  enter: {
+    sub: {
+      'app-2.form': function() {
+        setTimeout(function() {
+          aptivator.activate({
+            name: 'app-2.form.message', 
+            flags: {
+              parallel: true, 
+              weave: true, 
+              noResolves: true}
+          });
+        }, 2000);
+        
+        console.log('Entered app-2.form');
+      }
+    }
+  }
+});
+*/
+
+
+aptivator.on({
+  error: {
+    callbacks: function(e, stateParams) {
+      console.log('general error callback: ', e, stateParams);
+    },
+    sub: {
+      'app-2.form': {
+        callbacks: function(e, stateParams) {
+          console.log('general error callback for app-2.form: ', e, stateParams);
+        },
+        sub: {
+          canceled: function something(e, stateParams) {
+            console.log('specific callback for canceled error under app-2.form state: ', e, stateParams);
+            return 'something';
+          }
+        }
+      },
+      canceled: function(e, stateParams) {
+        console.log('callback for all canceled errors: ', e, stateParams);
+      }
+    }
+  }
+});
 
 aptivator.state('app-2.form', {
   route: 'form',

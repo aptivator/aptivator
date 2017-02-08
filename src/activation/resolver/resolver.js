@@ -25,16 +25,15 @@ export default stateParams =>
       resolveAddresses.concat(registry[relation].resolveAddresses), []);
     let tree = entitiesTreeBuilder(resolveAddresses);
   
-    !function processResolves(node = tree) {
+    !function process(node = tree) {
       return new Promise((resolve, reject) => {
         let promises = [];
         _.keys(node).forEach(entityName => {
-          let hasAt = entityName.includes('@');
-          let stateName = hasAt ? addresser.stateName(entityName): entityName;
-          let family = relations.family(stateName).concat(hasAt ? entityName : []);
+          let stateName = addresser.stateName(entityName);
+          let family = relations.family(stateName);
           let resolverParams = params.assemble(family, stateParams);
           let promise = resolvesProcessor(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);
-          promises.push(promise.then(() => processResolves(node[entityName])).catch(reject));
+          promises.push(promise.then(() => process(node[entityName])).catch(reject));
         });
         Promise.all(promises).then(resolve).catch(reject);
       });

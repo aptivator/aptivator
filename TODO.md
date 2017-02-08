@@ -4,6 +4,9 @@
 * Write a documentation note about source structure
 * Sprinkle comments throughout code
 * Tutorial
+* note that it is a good practice to know which states are serial and which are parallel at the onset and use them as such
+* for history module create shortcut methods such as activeState, pendingTransients, etc.
+* polish canceler a bit
 * figure out how to give hooks variables to each ancestor view
 * finalize stateParams flags
 * add resolves duration support
@@ -22,6 +25,7 @@
 * what about adding routeEnums to make sure that some route values are constrained
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
+* regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
 * put back all callbacks that ui-router supports
 * put back all trigers that ui-router supports
 * for triggers, put more specific state triggers (e.g., state-change-start and state-change-start-auth.forgot)
@@ -32,6 +36,7 @@
 * modals/notifiers (A state that loads parallel to current state)
 * focal flag should also apply when it comes to the removal of immediates (take a look)
 * complete .off() to handle callbacks and contexts
+* **DONE** remove invalid-route-handler and handle error routes through backbone router
 * **DONE** think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated (Handled through caching)
 * **DONE** add silent flag for deactivation
 * **DONE** make sure that deactivation with trigger events happens for full-fledged states

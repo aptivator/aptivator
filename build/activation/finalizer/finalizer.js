@@ -32,8 +32,6 @@ exports.default = function () {
 
             _lodash2.default.extend(stateParams.flags, { pending: false, active: true });
 
-            console.log('finished ' + stateParams.stateName);
-
             if (stateParams.time) {
               console.log('%cruntime: ' + (_lodash2.default.now() - stateParams.time) + 'ms', 'color: green;');
             }
@@ -42,7 +40,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 6:
+          case 5:
           case 'end':
             return _context.stop();
         }

@@ -44,21 +44,17 @@ exports.default = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(fun
 
 
           _backbone2.default.history.start();
-
-          _context.next = 4;
-          return _instance2.default.activate({ name: 'app-2.info' });
-
-        case 4:
-          //aptivator.activate({name: 'app-2.form', flags: {parallel: true}});
-          _instance2.default.activate({ name: 'app-1', flags: { parallel: true } });
-
           /*
-          if(!fragment.get() && defaultState) {
-            aptivator.activate({stateName: defaultState, direct: {running: true}}).catch(_.noop);
-          }
+          aptivator.activate({name: 'app-1'});
+          aptivator.activate({name: 'app-2.form', route: {params: {one: '1'}}, flags: {parallel: true, weave: true}});
+          aptivator.activate({name: 'app-2.info', flags: {parallel: true, weave: true}});
           */
 
-        case 5:
+          if (!_fragment2.default.get() && defaultState) {
+            _instance2.default.activate({ stateName: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
+          }
+
+        case 3:
         case 'end':
           return _context.stop();
       }

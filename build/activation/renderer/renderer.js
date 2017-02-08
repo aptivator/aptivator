@@ -61,6 +61,7 @@ var _vars$states = _vars2.default.states,
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
+    var weave;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -68,6 +69,9 @@ exports.default = function () {
             (0, _canceler2.default)(stateParams);
 
             stateParams.flags.rendered = true;
+
+            weave = stateParams.flags.weave;
+
 
             activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
               var stateName = viewConfigs.stateName,
@@ -80,11 +84,6 @@ exports.default = function () {
               var parentRecord = activationRecords[parentViewAddressUnique];
               var $parentEl = parentRecord.instance.$el;
               var $regionEl = !viewSelector ? $parentEl : $parentEl.find(viewSelector).eq(0);
-
-              if (!$regionEl.length) {
-                _error2.default.throw('region [' + viewSelector + '] does not exist for [' + viewStateName + '] state');
-              }
-
               var parentRegions = parentRecord.regions || (parentRecord.regions = {});
               var targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = { current: new Set() });
               var activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
@@ -94,17 +93,23 @@ exports.default = function () {
               var family = _relations2.default.family(stateName).concat(viewAddressUnique);
               var viewParameters = _params2.default.assemble(family, stateParams);
 
+              if (weave && activationRecord.active) {
+                return;
+              }
+
+              if (!$regionEl.length) {
+                _error2.default.throw('region [' + viewSelector + '] does not exist for [' + viewStateName + '] state');
+              }
+
               if (destroy) {
                 _instance2.default.destroy({ name: viewAddressUnique });
               }
 
               if (unhide) {
                 if (!_cacheable2.default.implicit.cache) {
-                  if (!_lodash2.default.isObject(cache) || !cache.receiver) {
-                    _error2.default.throw('receiver function for variable parameters has not been provided');
+                  if (_lodash2.default.isObject(cache) || cache.receiver) {
+                    activationRecord.instance[cache.receiver](viewParameters);
                   }
-
-                  activationRecord.instance[cache.receiver](viewParameters);
                 }
 
                 return _displayer2.default.display(viewAddressUnique, $regionEl);
@@ -137,7 +142,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 4:
+          case 5:
           case 'end':
             return _context.stop();
         }

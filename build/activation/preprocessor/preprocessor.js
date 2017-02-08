@@ -81,10 +81,6 @@ exports.default = function () {
             !function preprocess(stateName, previousSequence) {
               var stateConfigs = registry[stateName];
 
-              if (!stateConfigs) {
-                _error2.default.throw('state [' + stateName + '] has not been declared', 'preprocessor');
-              }
-
               var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
 
               if (!_lodash2.default.isEmpty(activationSequence)) {

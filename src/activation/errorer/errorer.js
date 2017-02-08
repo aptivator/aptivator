@@ -1,10 +1,18 @@
-import hooksFactory from '../hooks/hooks-factory';
-
-let errorHook = hooksFactory('error');
+import _         from 'lodash';
+import aptivator from '../../lib/instance';
 
 export default async (e, stateParams) => {
   if(!(e instanceof Error)) {
-    await errorHook(stateParams);
+    let errorStateHandle = `error:${stateParams.stateName}:${e}`;
+    let errorHandle = `error:${e}`;
+    
+    let results = await aptivator.trigger([
+      {handle: errorStateHandle, full: true},
+      errorHandle
+    ], e, stateParams);
+    
+    _.extend(stateParams.hooks, results);
+    _.extend(stateParams.flags, {[e]: true});
   }
   
   console.error(e);

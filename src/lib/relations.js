@@ -1,5 +1,6 @@
-import _    from 'lodash';
-import vars from './vars';
+import _         from 'lodash';
+import addresser from './addresser';
+import vars      from './vars';
 
 export default {
   isRoot: stateName => stateName === vars.rootStateName,
@@ -8,10 +9,12 @@ export default {
     return stateName.split('.');
   },
   
-  family(stateName) {
-    if(!stateName) { 
+  family(entityName) {
+    if(!entityName) { 
       return []; 
     }
+    
+    let stateName = addresser.stateName(entityName);
     
     let family = this.parts(stateName);
     
@@ -19,6 +22,10 @@ export default {
     
     if(!this.isRoot(stateName)) {
       family.unshift(vars.rootStateName);
+    }
+    
+    if(entityName.includes('@')) {
+      family.push(entityName);
     }
     
     return family;

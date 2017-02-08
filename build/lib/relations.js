@@ -8,6 +8,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _addresser = require('./addresser');
+
+var _addresser2 = _interopRequireDefault(_addresser);
+
 var _vars = require('./vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -22,10 +26,12 @@ exports.default = {
   parts: function parts(stateName) {
     return stateName.split('.');
   },
-  family: function family(stateName) {
-    if (!stateName) {
+  family: function family(entityName) {
+    if (!entityName) {
       return [];
     }
+
+    var stateName = _addresser2.default.stateName(entityName);
 
     var family = this.parts(stateName);
 
@@ -35,6 +41,10 @@ exports.default = {
 
     if (!this.isRoot(stateName)) {
       family.unshift(_vars2.default.rootStateName);
+    }
+
+    if (entityName.includes('@')) {
+      family.push(entityName);
     }
 
     return family;

@@ -12,6 +12,6 @@ export default {
   },
   
   stateName(viewAddress) {
-    return this.parts(viewAddress)[1];
+    return viewAddress.includes('@') ? this.parts(viewAddress)[1] : viewAddress;
   }
 };

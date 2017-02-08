@@ -8,10 +8,9 @@ export default {
   set: (route, options = {}) => vars.router.navigate(route, options),
   
   toState(fragment = this.get()) {
-    return _.keys(vars.states.registry).filter(stateName => {
-      let stateConfigs = vars.states.registry[stateName];
-      let routeRx = stateConfigs.routeRx;
-      return !stateConfigs.abstract && routeRx && routeRx.test(fragment);
+    return _.filter(vars.states.registry, (stateConfigs, stateName) => {
+      let {abstract, routeRx} = stateConfigs;
+      return !abstract && routeRx && routeRx.test(fragment);
     })[0];
   }
 };

@@ -16,17 +16,14 @@ export default async stateParams => {
   
   stateParams.flags.rendered = true;
   
+  let {weave} = stateParams.flags;
+  
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
     let {stateName, viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
     let parentViewAddressUnique = registry[viewStateName].viewAddressUnique;
     let parentRecord = activationRecords[parentViewAddressUnique];
     let $parentEl = parentRecord.instance.$el;
     let $regionEl = !viewSelector ? $parentEl : $parentEl.find(viewSelector).eq(0);
-    
-    if(!$regionEl.length) {
-      error.throw(`region [${viewSelector}] does not exist for [${viewStateName}] state`);
-    }
-    
     let parentRegions = parentRecord.regions || (parentRecord.regions = {});
     let targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = {current: new Set()});
     let activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
@@ -35,18 +32,24 @@ export default async stateParams => {
     let unhide = !destroy && !_.isEmpty(activationRecord);
     let family = relations.family(stateName).concat(viewAddressUnique);
     let viewParameters = params.assemble(family, stateParams);
-
+    
+    if(weave && activationRecord.active) {
+      return;
+    }
+    
+    if(!$regionEl.length) {
+      error.throw(`region [${viewSelector}] does not exist for [${viewStateName}] state`);
+    }
+    
     if(destroy) {
       aptivator.destroy({name: viewAddressUnique});
     }
     
     if(unhide) {
       if(!cacheable.implicit.cache) {
-        if(!_.isObject(cache) || !cache.receiver) {
-          error.throw(`receiver function for variable parameters has not been provided`);
+        if(_.isObject(cache) || cache.receiver) {
+          activationRecord.instance[cache.receiver](viewParameters); 
         }
-        
-        activationRecord.instance[cache.receiver](viewParameters); 
       }
       
       return displayer.display(viewAddressUnique, $regionEl);

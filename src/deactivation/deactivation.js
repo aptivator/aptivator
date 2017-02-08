@@ -33,11 +33,13 @@ aptivator.deactivate = async params => {
     return;
   }
   
-  if(stateParams.flags.rendered) {
-    deactivator(params);
-  }
-
   _.extend(stateParams.flags, {active: false, pending: false});
+  
+  if(!stateParams.flags.rendered) {
+    return stateParams.flags.canceled = true;
+  }
+  
+  deactivator(params);
 
   return aptivator.trigger(`exit:${name}`, stateParams).then(results => {
     _.extend(stateParams.hooks, results);

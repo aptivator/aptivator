@@ -31,10 +31,11 @@ exports.default = {
   toState: function toState() {
     var fragment = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get();
 
-    return _lodash2.default.keys(_vars2.default.states.registry).filter(function (stateName) {
-      var stateConfigs = _vars2.default.states.registry[stateName];
-      var routeRx = stateConfigs.routeRx;
-      return !stateConfigs.abstract && routeRx && routeRx.test(fragment);
+    return _lodash2.default.filter(_vars2.default.states.registry, function (stateConfigs, stateName) {
+      var abstract = stateConfigs.abstract,
+          routeRx = stateConfigs.routeRx;
+
+      return !abstract && routeRx && routeRx.test(fragment);
     })[0];
   }
 };

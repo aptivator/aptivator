@@ -37,6 +37,8 @@ exports.default = {
     var targetEntityName = family[family.length - 1];
     var targetStateName = targetEntityName.includes('@') ? _addresser2.default.stateName(targetEntityName) : targetEntityName;
     var targetStateConfigs = _vars2.default.states.registry[targetStateName];
+    var error = targetStateConfigs.error;
+
 
     if (route && targetStateConfigs.route) {
       var routeParts = targetStateConfigs.routeParts;
@@ -54,6 +56,10 @@ exports.default = {
         _lodash2.default.extend(params, { route: _route2.default.parts.assemble(targetStateName, routeValues) });
         params.route.fragment = route.fragment;
       }
+    }
+
+    if (error) {
+      _lodash2.default.extend(params, { route: route });
     }
 
     family.forEach(function (relation) {

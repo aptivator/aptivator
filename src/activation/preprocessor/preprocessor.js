@@ -20,11 +20,7 @@ export default async stateParams => {
   
   !function preprocess(stateName, previousSequence) {
     let stateConfigs = registry[stateName];
-    
-    if(!stateConfigs) {
-      error.throw(`state [${stateName}] has not been declared`, 'preprocessor');
-    }
-    
+
     let activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     
     if(!_.isEmpty(activationSequence)) {

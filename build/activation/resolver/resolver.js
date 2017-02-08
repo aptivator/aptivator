@@ -60,19 +60,18 @@ exports.default = function (stateParams) {
     }, []);
     var tree = (0, _entitiesTreeBuilder2.default)(resolveAddresses);
 
-    !function processResolves() {
+    !function process() {
       var node = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : tree;
 
       return new Promise(function (resolve, reject) {
         var promises = [];
         _lodash2.default.keys(node).forEach(function (entityName) {
-          var hasAt = entityName.includes('@');
-          var stateName = hasAt ? _addresser2.default.stateName(entityName) : entityName;
-          var family = _relations2.default.family(stateName).concat(hasAt ? entityName : []);
+          var stateName = _addresser2.default.stateName(entityName);
+          var family = _relations2.default.family(stateName);
           var resolverParams = _params2.default.assemble(family, stateParams);
           var promise = (0, _resolvesProcessor2.default)(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);
           promises.push(promise.then(function () {
-            return processResolves(node[entityName]);
+            return process(node[entityName]);
           }).catch(reject));
         });
         Promise.all(promises).then(resolve).catch(reject);

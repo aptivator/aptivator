@@ -4,11 +4,8 @@ import missingParentsAssembler from './lib/missing-parents-assembler';
 
 let {queue} = vars.states;
 
-export default () => 
-  new Promise(resolve => {
-    if(!queue.length) {
-      return resolve();
-    }
-
+export default async () => {
+  if(queue.length) {
     error.throw(`undeclared parent states: [${missingParentsAssembler(queue)}]`, 'starter');
-  });
+  }
+};

@@ -1,3 +1,4 @@
+<div class = "message"></div>
 <form>
   <div>
     <input name = "first-name" id = "first-name" type = "text" 
