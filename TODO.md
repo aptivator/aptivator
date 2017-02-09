@@ -13,6 +13,7 @@
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
+* animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
 * **DONE** what about directives to tell to bypass state event hooks (e.g., noHooks: true) (wait for a proper use-case)
 * **DONE** noHooks spec can also be more granular (e.g., noHooks for state-change or state-exit) (wait for a proper use-case)
 * **DONE** under stateConfigs combine view-related properties in one object (if it is not broke, don't fix it)

@@ -16,7 +16,18 @@ var _displayer = require('../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
 
+var _vars = require('../../lib/vars');
+
+var _vars2 = _interopRequireDefault(_vars);
+
+var _animationEventNames = require('./animation-event-names/animation-event-names');
+
+var _animationEventNames2 = _interopRequireDefault(_animationEventNames);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var activationRecords = _vars2.default.states.activationRecords;
+
 
 var eventHandle = 'aptivator-goto-finalizer';
 
@@ -24,6 +35,8 @@ var triggerer = function triggerer() {
   _instance2.default.trigger(eventHandle);
   _instance2.default.off(eventHandle);
 };
+
+var animationHandle = _animationEventNames2.default.join(' ');
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve) {
@@ -43,6 +56,14 @@ exports.default = function (stateParams) {
     query = { flags: { pending: true, displayed: true, canceled: false } };
     var renderedStates = _instance2.default.history.find(query);
 
+    var $rootEl = activationRecords[_vars2.default.rootStateName].instance.$el;
+
+    $rootEl.addClass('aptivator-fade-in');
+
+    $rootEl.one(animationHandle, function () {
+      return $rootEl.removeClass('aptivator-fade-in');
+    });
+
     renderedStates.forEach(function (stateParams) {
       var rootViews = stateParams.rootViews;
 
@@ -52,6 +73,6 @@ exports.default = function (stateParams) {
       delete stateParams.rootViews;
     });
 
-    triggerer();
+    setTimeout(triggerer);
   });
 };

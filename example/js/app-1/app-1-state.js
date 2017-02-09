@@ -89,7 +89,14 @@ aptivator.state('app-1', {
     }
   },
   animate: {
-    'root': 'aptivator-fade-in'
+    'root': 'aptivator-fade-in',
+    enter: {
+      
+    },
+    
+    exit: {
+      
+    }
   },
   views: {
     'main': {
