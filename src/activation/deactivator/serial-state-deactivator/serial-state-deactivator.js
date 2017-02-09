@@ -1,14 +1,11 @@
 import aptivator from '../../../lib/instance';
 
 export default () => {
-  let activeStateParams = aptivator.history.getOne(stateParams => {
-    let {active, parallel, transient} = stateParams.flags;
-    if(active && !parallel && !transient) {
-      return true;
-    }
-  });
-  
-  if(activeStateParams) {
-    aptivator.deactivate({name: activeStateParams.stateName, stateParams: activeStateParams});
+  let query = {flags: {active: true, parallel: false, transient: false}};
+  let activeSerial = aptivator.history.findOne(query);
+
+  if(activeSerial) {
+    let {stateName} = activeSerial;
+    aptivator.deactivate({name: stateName, stateParams: activeSerial});
   }
 };

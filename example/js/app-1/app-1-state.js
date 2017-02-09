@@ -25,7 +25,7 @@ route = {
 
 
 aptivator.on({
-  start: {
+  started: {
     sub: {
       'app-1': function(stateParams) {
         console.log('starting', stateParams.stateName);
@@ -53,7 +53,7 @@ aptivator.on({
     }
   },
   
-  enter: {
+  entered: {
     sub: {
       'app-1': function(stateParams) {
         console.log('entered', stateParams.stateName);
@@ -61,7 +61,7 @@ aptivator.on({
     }
   },
   
-  exit: {
+  exited: {
     sub: {
       'app-1': function(stateParams) {
         console.log('exited', stateParams.stateName);

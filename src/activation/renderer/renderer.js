@@ -5,37 +5,36 @@ import error     from '../../lib/error';
 import params    from '../../lib/params';
 import relations from '../../lib/relations';
 import vars      from '../../lib/vars';
-import canceler  from '../canceler/canceler';
 import cacheable from './lib/cacheable';
 import viewApi   from './lib/view-api';
 
 let {activationRecords, activationSequences, registry} = vars.states;
 
-export default async stateParams => {
-  canceler(stateParams);
-  
+export default stateParams => {
   stateParams.flags.rendered = true;
   
-  let {weave} = stateParams.flags;
+  let rootViews = stateParams.rootViews = [];
+  let {augment} = stateParams.flags;
   
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
     let {stateName, viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
+    let activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
+    
+    if(augment && activationRecord.active) {
+      return;
+    }
+    
     let parentViewAddressUnique = registry[viewStateName].viewAddressUnique;
     let parentRecord = activationRecords[parentViewAddressUnique];
     let $parentEl = parentRecord.instance.$el;
     let $regionEl = !viewSelector ? $parentEl : $parentEl.find(viewSelector).eq(0);
     let parentRegions = parentRecord.regions || (parentRecord.regions = {});
     let targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = {current: new Set()});
-    let activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
     let cache = cacheable.total(viewConfigs, stateParams);
     let destroy = !cache && activationRecord.instance;
-    let unhide = !destroy && !_.isEmpty(activationRecord);
+    let unhide = !destroy && activationRecord.instance;
     let family = relations.family(stateName).concat(viewAddressUnique);
     let viewParameters = params.assemble(family, stateParams);
-    
-    if(weave && activationRecord.active) {
-      return;
-    }
     
     if(!$regionEl.length) {
       error.throw(`region [${viewSelector}] does not exist for [${viewStateName}] state`);
@@ -52,7 +51,11 @@ export default async stateParams => {
         }
       }
       
-      return displayer.display(viewAddressUnique, $regionEl);
+      if(relations.isRoot(viewStateName)) {
+        rootViews.push([viewAddressUnique, $regionEl]);
+      }
+    
+      return displayer(viewAddressUnique, $regionEl);
     }
 
     let instance = new viewConfigs.view(viewParameters);
@@ -70,10 +73,17 @@ export default async stateParams => {
     instance.on('destroy', () => {
       aptivator.deactivate({name: viewAddressUnique, forward: true, detach: {children: true}});
       targetRegion.current.delete(viewAddressUnique);
+      activationRecord.active = false;
       delete activationRecord.instance;
     });
 
-    displayer.display(viewAddressUnique, $regionEl);   
+    instance.render();
+
+    if(relations.isRoot(viewStateName)) {
+      return rootViews.push([viewAddressUnique, $regionEl]);
+    }
+
+    displayer(viewAddressUnique, $regionEl);   
   });
 
   return stateParams;

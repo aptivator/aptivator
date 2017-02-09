@@ -14,3 +14,4 @@ aptivator.destroy = params => {
   
   activationRecord.instance.destroy();
 };
+

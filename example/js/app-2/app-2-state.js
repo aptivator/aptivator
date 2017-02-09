@@ -16,6 +16,7 @@ aptivator.state('app-2', {
       return 'murmansk';
     }
   },
+  cache: true,
   views: {
     '.main': {
       view: App2View,

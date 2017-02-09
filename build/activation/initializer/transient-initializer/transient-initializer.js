@@ -24,8 +24,8 @@ exports.default = function (stateName) {
   var _ref = _lodash2.default.isObject(transient) ? transient : {},
       delay = _ref.delay;
 
-  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: false, transient: {} } };
-  var transientConfigs = stateParams.flags.transient;
+  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: false, transient: true } };
+  var transientConfigs = stateParams.transientConfigs = {};
 
   if (!_lodash2.default.isNumber(delay)) {
     var transientDelay = _vars2.default.configs.transientDelay;

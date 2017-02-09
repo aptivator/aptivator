@@ -1,16 +1,12 @@
-import _        from 'lodash';
-import canceler from '../canceler/canceler';
+import _ from 'lodash';
 
-export default async stateParams => {
-  canceler(stateParams);
-  
+export default stateParams => {
   _.extend(stateParams.flags, {pending: false, active: true});
   
   if(stateParams.time) {
     console.log(`%cruntime: ${_.now() - stateParams.time}ms`, 'color: green;');
+    delete stateParams.time;
   }
-
-  delete stateParams.time;
-
+  
   return stateParams;
 };

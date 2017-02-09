@@ -1,5 +1,5 @@
+import _                      from 'lodash';
 import aptivator              from '../../lib/instance';
-import canceler               from '../canceler/canceler';
 import serialStateDeactivator from './serial-state-deactivator/serial-state-deactivator';
 
 let eventHandle = 'aptivator-goto-render-';
@@ -17,12 +17,6 @@ let triggerer = (suffix) => {
 
 export default stateParams => 
   new Promise(async (resolve, reject) => {
-    try {
-      canceler(stateParams);
-    } catch(e) {
-      return reject(e);
-    }
-    
     stateParams.flags.prerendered = true;
     
     let {transient} = stateParams.flags;
@@ -30,23 +24,15 @@ export default stateParams =>
     if(transient) {
       aptivator.on(eventHandles['transient'], () => resolve(stateParams));
       
-      let loadingTransients = aptivator.history.get(stateParams => {
-        let {pending, canceled, transient, loading} = stateParams.flags;
-        if(transient && pending && !loading && !canceled) {
-          return true;
-        }
-      });
+      let query = {flags: {pending: true, transient: true, loading: false, canceled: false}};
+      let loadingTransients = aptivator.history.find(query);
       
       if(loadingTransients.length) {
         return;
       }
       
-      let serialTransients = aptivator.history.getOne(stateParams => {
-        let {pending, canceled, transient, loading, parallel} = stateParams.flags;
-        if(transient && pending && loading && !canceled && !parallel) {
-          return true;
-        }
-      });
+      query = {flags: {transient: true, pending: true, loading: true, canceled: false, parallel: false}};
+      let serialTransients = aptivator.history.findOne(query);
       
       if(serialTransients) {
         serialStateDeactivator();
@@ -59,33 +45,24 @@ export default stateParams =>
     
     aptivator.on(eventHandles['regular'], () => resolve(stateParams));
     
-    let loadingRegulars = aptivator.history.get(stateParams => {
-      let {pending, canceled, transient, prerendered} = stateParams.flags;
-      if(pending && !transient && !prerendered && !canceled) {
-        return true;
-      }
-    });
+    let query = {flags: {pending: true, transient: false, prerendered: false, canceled: false}};
+    let loadingRegulars = aptivator.history.find(query);
     
     if(loadingRegulars.length) {
       return;
     }
     
-    let loadedRegulars = aptivator.history.get(stateParams => {
-      let {pending, canceled, transient, loading} = stateParams.flags;
-      if(pending && !transient && loading && !canceled) {
-        return true;
-      }
-    });
+    query = {flags: {pending: true, transient: false, canceled: false, loading: true}};
+    let loadedRegulars = aptivator.history.find(query);
     
     let transientStates = loadedRegulars.reduce((transientStates, stateParams) => {
       return transientStates.add(stateParams.transientStateParams);
     }, new Set());
       
     let transientPromises = [...transientStates].reduce((promises, stateParams) => {
-      let {parallel, transient} = stateParams.flags;
-      let {promise, timeout} = transient || {};
+      let {promise, timeout} = stateParams.transientConfigs || {};
       
-      if(!parallel && promise) {
+      if(!stateParams.flags.parallel && promise) {
         promises.hasSerial = true;
       }
       
@@ -104,7 +81,9 @@ export default stateParams =>
       aptivator.deactivate({name: stateParams.stateName, stateParams});
     });
     
-    if(!transientPromises.hasSerial) {
+    let serialRegular = _.find(loadedRegulars, {flags: {parallel: false}});
+    
+    if(!transientPromises.hasSerial && serialRegular) {
       serialStateDeactivator();
     }
     

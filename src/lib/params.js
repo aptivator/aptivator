@@ -10,7 +10,7 @@ export default {
     let {direct, route, stateName} = stateParams;
     let params = {data: {}, resolves: {}, route: {}};
     let {data, resolves} = params;
-    let targetEntityName = family[family.length - 1];
+    let targetEntityName = _.nth(family, -1);
     let targetStateName = targetEntityName.includes('@') ? addresser.stateName(targetEntityName) : targetEntityName;
     let targetStateConfigs = vars.states.registry[targetStateName];
     let {error} = targetStateConfigs;

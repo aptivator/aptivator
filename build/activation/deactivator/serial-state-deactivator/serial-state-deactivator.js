@@ -11,18 +11,12 @@ var _instance2 = _interopRequireDefault(_instance);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
-  var activeStateParams = _instance2.default.history.getOne(function (stateParams) {
-    var _stateParams$flags = stateParams.flags,
-        active = _stateParams$flags.active,
-        parallel = _stateParams$flags.parallel,
-        transient = _stateParams$flags.transient;
+  var query = { flags: { active: true, parallel: false, transient: false } };
+  var activeSerial = _instance2.default.history.findOne(query);
 
-    if (active && !parallel && !transient) {
-      return true;
-    }
-  });
+  if (activeSerial) {
+    var stateName = activeSerial.stateName;
 
-  if (activeStateParams) {
-    _instance2.default.deactivate({ name: activeStateParams.stateName, stateParams: activeStateParams });
+    _instance2.default.deactivate({ name: stateName, stateParams: activeSerial });
   }
 };

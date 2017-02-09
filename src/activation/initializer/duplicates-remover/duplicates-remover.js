@@ -3,7 +3,7 @@ import aptivator from '../../../lib/instance';
 import error     from '../../../lib/error';
 
 export default startedStates => {
-  let serialStates = startedStates.filter(stateParams => !stateParams.flags.parallel);
+  let serialStates = _.filter(startedStates, {flags: {parallel: false}});
   let serialStatesDuplicates = serialStates.reverse().slice(1);
   
   if(serialStatesDuplicates.length) {
@@ -19,18 +19,14 @@ export default startedStates => {
   startedStates = _.difference(startedStates, serialStatesDuplicates);
   
   if(serialStates.length) {
-    let pendingSerialStateParams = aptivator.history.getOne(stateParams => {
-      let {parallel, pending, canceled, transient, preprocessed} = stateParams.flags;
-      if(!parallel && pending && !canceled && !transient && preprocessed) {
-        return true;
-      }
-    });
+    let query = {flags: {parallel: false, pending: true, canceled: false, transient: false, preprocessed: true}};
+    let pendingSerialState = aptivator.history.findOne(query);
 
-    if(pendingSerialStateParams) {
-      let {flags, transientStateParams, stateName} = pendingSerialStateParams;
+    if(pendingSerialState) {
+      let {flags, transientStateParams, stateName} = pendingSerialState;
       let {flags: transientFlags, stateName: transientStateName, owners} = transientStateParams;
 
-      owners.delete(pendingSerialStateParams);
+      owners.delete(pendingSerialState);
       
       if(!owners.size) {
         let {active} = transientFlags;
@@ -42,7 +38,7 @@ export default startedStates => {
       }
       
       _.extend(flags, {canceled: true});
-      aptivator.deactivate({name: stateName, pendingSerialStateParams, silent: true});
+      aptivator.deactivate({name: stateName, stateParams: pendingSerialState, silent: true});
     }
   }
   

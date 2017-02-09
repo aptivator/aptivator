@@ -34,7 +34,7 @@ exports.default = {
     var data = params.data,
         resolves = params.resolves;
 
-    var targetEntityName = family[family.length - 1];
+    var targetEntityName = _lodash2.default.nth(family, -1);
     var targetStateName = targetEntityName.includes('@') ? _addresser2.default.stateName(targetEntityName) : targetEntityName;
     var targetStateConfigs = _vars2.default.states.registry[targetStateName];
     var error = targetStateConfigs.error;

@@ -5,8 +5,8 @@ import vars      from '../../../lib/vars';
 export default stateName => {
   let {transient} = vars.states.registry[stateName];
   let {delay} = _.isObject(transient) ? transient : {};
-  let stateParams = {stateName, owners: new Set(), flags: {parallel: false, transient: {}}};
-  let transientConfigs = stateParams.flags.transient;
+  let stateParams = {stateName, owners: new Set(), flags: {parallel: false, transient: true}};
+  let transientConfigs = stateParams.transientConfigs = {};
   
   if(!_.isNumber(delay)) {
     let {transientDelay} = vars.configs;

@@ -1,3 +1,4 @@
+var aptivator = require('aptivator');
 var Marionette = require('backbone.marionette');
 var formTpl = require('./form.tpl');
 
@@ -13,11 +14,20 @@ module.exports = Marionette.ItemView.extend({
   template: formTpl,
   
   events: {
-    'click button': 'processButtonClick'
+    'click button': 'weave'
   },
   
-  processButtonClick: function(evt) {
-    evt.preventDefault();
-    alert('Clicked...');
+  weaveToggle: true,
+  
+  weave: function(evt) {
+    if(this.weaveToggle) {
+      aptivator.activate({name: 'app-2.form.message', flags: {parallel: true, augment: true, noResolves: true}});
+      this.weaveToggle = false;
+    } else {
+      aptivator.deactivate({name: 'app-2.form.message', forward: true});
+      this.weaveToggle = true;
+    }
+    
+    return false;
   }  
 });

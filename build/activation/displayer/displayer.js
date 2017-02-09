@@ -4,39 +4,54 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = require('babel-runtime/regenerator');
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
-var _regenerator2 = _interopRequireDefault(_regenerator);
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+var _instance = require('../../lib/instance');
 
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+var _instance2 = _interopRequireDefault(_instance);
 
-var _canceler = require('../canceler/canceler');
+var _displayer = require('../../lib/displayer');
 
-var _canceler2 = _interopRequireDefault(_canceler);
+var _displayer2 = _interopRequireDefault(_displayer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function () {
-  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
-    return _regenerator2.default.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            (0, _canceler2.default)(stateParams);
+var eventHandle = 'aptivator-goto-finalizer';
 
-            return _context.abrupt('return', stateParams);
+var triggerer = function triggerer() {
+  _instance2.default.trigger(eventHandle);
+  _instance2.default.off(eventHandle);
+};
 
-          case 2:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, undefined);
-  }));
+exports.default = function (stateParams) {
+  return new Promise(function (resolve) {
+    stateParams.flags.displayed = true;
 
-  return function (_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
+    _instance2.default.on(eventHandle, function () {
+      return resolve(stateParams);
+    });
+
+    var query = { flags: { rendered: true, displayed: false, canceled: false } };
+    var renderingStates = _instance2.default.history.find(query);
+
+    if (renderingStates.length) {
+      return;
+    }
+
+    query = { flags: { pending: true, displayed: true, canceled: false } };
+    var renderedStates = _instance2.default.history.find(query);
+
+    renderedStates.forEach(function (stateParams) {
+      var rootViews = stateParams.rootViews;
+
+      rootViews.forEach(function (rootView) {
+        return _displayer2.default.apply(undefined, (0, _toConsumableArray3.default)(rootView));
+      });
+      delete stateParams.rootViews;
+    });
+
+    triggerer();
+  });
+};

@@ -54,7 +54,7 @@ _instance2.default.deactivate = function () {
           case 5:
 
             if (!stateParams) {
-              stateParams = _instance2.default.history.getOne(function (stateParams) {
+              stateParams = _instance2.default.history.findOne(function (stateParams) {
                 var stateName = stateParams.stateName,
                     flags = stateParams.flags;
                 var active = flags.active,
@@ -90,7 +90,7 @@ _instance2.default.deactivate = function () {
 
             (0, _deactivator2.default)(params);
 
-            return _context.abrupt('return', _instance2.default.trigger('exit:' + name, stateParams).then(function (results) {
+            return _context.abrupt('return', _instance2.default.trigger('exited:' + name, stateParams).then(function (results) {
               _lodash2.default.extend(stateParams.hooks, results);
               return results;
             }));

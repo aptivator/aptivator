@@ -59,7 +59,7 @@ aptivator.state = (stateName, stateConfigs) =>
       
       if(!stateConfigs.abstract) {
         vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
-          let route = route_.parts.assemble(stateName, routeValues.filter(value => value));
+          let route = route_.parts.assemble(stateName, _.compact(routeValues));
           aptivator.activate({stateName, route}).catch(_.noop);
         });
       }

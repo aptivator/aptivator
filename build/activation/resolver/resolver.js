@@ -45,8 +45,6 @@ var registry = states.registry;
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve, reject) {
-    (0, _canceler2.default)(stateParams);
-
     stateParams.flags.resolved = true;
 
     if (stateParams.flags.noResolves) {

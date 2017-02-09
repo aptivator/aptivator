@@ -3,7 +3,6 @@ import addresser          from '../../lib/addresser';
 import error              from '../../lib/error';
 import relations          from '../../lib/relations';
 import vars               from '../../lib/vars';
-import canceler           from '../canceler/canceler';
 import fullAddressMaker   from './lib/full-address-maker';
 import resolvesNormalizer from './lib/resolves-normalizer';
 import viewNormalizer     from './lib/view-normalizer';
@@ -11,9 +10,7 @@ import viewNormalizer     from './lib/view-normalizer';
 let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
 
-export default async stateParams => {
-  canceler(stateParams);
-  
+export default stateParams => {
   let {stateName} = stateParams;
   
   stateParams.flags.preprocessed = true;
@@ -50,7 +47,7 @@ export default async stateParams => {
       return;
     }
     
-    stateConfigs.viewsRegistry = {};
+    let viewsRegistry = stateConfigs.viewsRegistry = {};
     
     if(stateConfigs.view && !stateConfigs.views) {
       stateConfigs.views = {};
@@ -60,7 +57,7 @@ export default async stateParams => {
     
     let parentStateName = relations.parent(stateName);
     let viewCount = _.keys(stateConfigs.views).length;
-    let mainViews = [];
+    let mainCount = 0;
     
     _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
       if(viewConfigs.address) {
@@ -87,10 +84,8 @@ export default async stateParams => {
       }
       
       if(viewConfigs.main) {
-        mainViews.push(viewAddress);
-        
-        if(mainViews.length > 1) {
-          error.throw(`The following views [${mainViews.join(', ')}] are main for [${stateName}]`);
+        if(++mainCount > 1) {
+          error.throw(`multiple main views for [${stateName}]`, 'preprocessor');
         }
         
         _.extend(stateConfigs, {viewAddressUnique});
@@ -106,17 +101,15 @@ export default async stateParams => {
       }
       
       viewNormalizer(viewConfigs);
-      stateConfigs.viewsRegistry[viewAddressUnique] = viewConfigs;
+      viewsRegistry[viewAddressUnique] = viewConfigs;
       _.extend(viewConfigs, {viewAddressFull, stateName, viewAddressUnique, viewSelector, viewStateName});
       activationSequence.push(viewConfigs);
-
-      if(viewConfigs.main) {
-        return preprocess(viewStateName, activationSequence);
-      }
+      
+      preprocess(viewStateName, activationSequence);
     });
     
-    if(!mainViews.length && stateConfigs.views) {
-      error.throw(`main view should be specified for [${stateName}]`);
+    if(!mainCount) {
+      error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
     
     _.each(stateConfigs.states, parallelStateName => {

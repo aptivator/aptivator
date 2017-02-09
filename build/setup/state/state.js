@@ -117,9 +117,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
                     routeValues[_key] = arguments[_key];
                   }
 
-                  var route = _route2.default.parts.assemble(stateName, routeValues.filter(function (value) {
-                    return value;
-                  }));
+                  var route = _route2.default.parts.assemble(stateName, _lodash2.default.compact(routeValues));
                   _instance2.default.activate({ stateName: stateName, route: route }).catch(_lodash2.default.noop);
                 });
               }

@@ -16,13 +16,13 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
-
-var _canceler = require('../canceler/canceler');
-
-var _canceler2 = _interopRequireDefault(_canceler);
 
 var _serialStateDeactivator = require('./serial-state-deactivator/serial-state-deactivator');
 
@@ -46,30 +46,18 @@ var triggerer = function triggerer(suffix) {
 exports.default = function (stateParams) {
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
-      var transient, loadingTransients, serialTransients, loadingRegulars, loadedRegulars, transientStates, transientPromises;
+      var transient, _query, loadingTransients, serialTransients, query, loadingRegulars, loadedRegulars, transientStates, transientPromises, serialRegular;
+
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
-
-              (0, _canceler2.default)(stateParams);
-              _context.next = 7;
-              break;
-
-            case 4:
-              _context.prev = 4;
-              _context.t0 = _context['catch'](0);
-              return _context.abrupt('return', reject(_context.t0));
-
-            case 7:
-
               stateParams.flags.prerendered = true;
 
               transient = stateParams.flags.transient;
 
               if (!transient) {
-                _context.next = 18;
+                _context.next = 13;
                 break;
               }
 
@@ -77,38 +65,20 @@ exports.default = function (stateParams) {
                 return resolve(stateParams);
               });
 
-              loadingTransients = _instance2.default.history.get(function (stateParams) {
-                var _stateParams$flags = stateParams.flags,
-                    pending = _stateParams$flags.pending,
-                    canceled = _stateParams$flags.canceled,
-                    transient = _stateParams$flags.transient,
-                    loading = _stateParams$flags.loading;
-
-                if (transient && pending && !loading && !canceled) {
-                  return true;
-                }
-              });
+              _query = { flags: { pending: true, transient: true, loading: false, canceled: false } };
+              loadingTransients = _instance2.default.history.find(_query);
 
               if (!loadingTransients.length) {
-                _context.next = 14;
+                _context.next = 8;
                 break;
               }
 
               return _context.abrupt('return');
 
-            case 14:
-              serialTransients = _instance2.default.history.getOne(function (stateParams) {
-                var _stateParams$flags2 = stateParams.flags,
-                    pending = _stateParams$flags2.pending,
-                    canceled = _stateParams$flags2.canceled,
-                    transient = _stateParams$flags2.transient,
-                    loading = _stateParams$flags2.loading,
-                    parallel = _stateParams$flags2.parallel;
+            case 8:
 
-                if (transient && pending && loading && !canceled && !parallel) {
-                  return true;
-                }
-              });
+              _query = { flags: { transient: true, pending: true, loading: true, canceled: false, parallel: false } };
+              serialTransients = _instance2.default.history.findOne(_query);
 
 
               if (serialTransients) {
@@ -119,56 +89,35 @@ exports.default = function (stateParams) {
 
               return _context.abrupt('return');
 
-            case 18:
+            case 13:
 
               _instance2.default.on(eventHandles['regular'], function () {
                 return resolve(stateParams);
               });
 
-              loadingRegulars = _instance2.default.history.get(function (stateParams) {
-                var _stateParams$flags3 = stateParams.flags,
-                    pending = _stateParams$flags3.pending,
-                    canceled = _stateParams$flags3.canceled,
-                    transient = _stateParams$flags3.transient,
-                    prerendered = _stateParams$flags3.prerendered;
-
-                if (pending && !transient && !prerendered && !canceled) {
-                  return true;
-                }
-              });
+              query = { flags: { pending: true, transient: false, prerendered: false, canceled: false } };
+              loadingRegulars = _instance2.default.history.find(query);
 
               if (!loadingRegulars.length) {
-                _context.next = 22;
+                _context.next = 18;
                 break;
               }
 
               return _context.abrupt('return');
 
-            case 22:
-              loadedRegulars = _instance2.default.history.get(function (stateParams) {
-                var _stateParams$flags4 = stateParams.flags,
-                    pending = _stateParams$flags4.pending,
-                    canceled = _stateParams$flags4.canceled,
-                    transient = _stateParams$flags4.transient,
-                    loading = _stateParams$flags4.loading;
+            case 18:
 
-                if (pending && !transient && loading && !canceled) {
-                  return true;
-                }
-              });
+              query = { flags: { pending: true, transient: false, canceled: false, loading: true } };
+              loadedRegulars = _instance2.default.history.find(query);
               transientStates = loadedRegulars.reduce(function (transientStates, stateParams) {
                 return transientStates.add(stateParams.transientStateParams);
               }, new Set());
               transientPromises = [].concat((0, _toConsumableArray3.default)(transientStates)).reduce(function (promises, stateParams) {
-                var _stateParams$flags5 = stateParams.flags,
-                    parallel = _stateParams$flags5.parallel,
-                    transient = _stateParams$flags5.transient;
-
-                var _ref2 = transient || {},
+                var _ref2 = stateParams.transientConfigs || {},
                     promise = _ref2.promise,
                     timeout = _ref2.timeout;
 
-                if (!parallel && promise) {
+                if (!stateParams.flags.parallel && promise) {
                   promises.hasSerial = true;
                 }
 
@@ -180,27 +129,30 @@ exports.default = function (stateParams) {
 
                 return promises;
               }, []);
-              _context.next = 27;
+              _context.next = 24;
               return Promise.all(transientPromises);
 
-            case 27:
+            case 24:
 
               transientStates.forEach(function (stateParams) {
                 _instance2.default.deactivate({ name: stateParams.stateName, stateParams: stateParams });
               });
 
-              if (!transientPromises.hasSerial) {
+              serialRegular = _lodash2.default.find(loadedRegulars, { flags: { parallel: false } });
+
+
+              if (!transientPromises.hasSerial && serialRegular) {
                 (0, _serialStateDeactivator2.default)();
               }
 
               triggerer('regular');
 
-            case 30:
+            case 28:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, undefined, [[0, 4]]);
+      }, _callee, undefined);
     }));
 
     return function (_x, _x2) {

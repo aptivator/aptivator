@@ -47,19 +47,13 @@ exports.default = function (stateParams) {
     var transient = stateParams.flags.transient;
 
 
-    _lodash2.default.extend(stateParams.flags, { active: false, pending: true });
+    _lodash2.default.extend(stateParams.flags, { initialized: true });
 
     _instance2.default.on(eventHandle, function () {
       return resolve(stateParams);
     });
 
-    var startingStates = _instance2.default.history.get(function (stateParams) {
-      var active = stateParams.flags.active;
-
-      if (_lodash2.default.isUndefined(active)) {
-        return true;
-      }
-    });
+    var startingStates = _instance2.default.history.find({ flags: { initialized: false } });
 
     if (startingStates.length) {
       return;
@@ -70,21 +64,14 @@ exports.default = function (stateParams) {
       _instance2.default.off(eventHandle);
     };
 
-    var startedStates = _instance2.default.history.get(function (stateParams) {
+    var query = { flags: { pending: true, initialized: true, preprocessed: false, canceled: false } };
+    var startedStates = _instance2.default.history.find(query);
+    var undeclaredStates = startedStates.filter(function (stateParams) {
       var flags = stateParams.flags,
           stateName = stateParams.stateName;
-      var active = flags.active,
-          pending = flags.pending,
-          preprocessed = flags.preprocessed,
-          canceled = flags.canceled;
 
-
-      if (active === false && pending && !preprocessed && !canceled) {
-        if (!registry[stateName]) {
-          _lodash2.default.extend(flags, { canceled: true, pending: false, undeclared: true });
-          return;
-        }
-        return true;
+      if (!registry[stateName]) {
+        return _lodash2.default.extend(flags, { canceled: true, pending: false, undeclared: true });
       }
     });
 
@@ -92,9 +79,10 @@ exports.default = function (stateParams) {
       return triggerer();
     }
 
+    startedStates = _lodash2.default.difference(startedStates, undeclaredStates);
     startedStates = (0, _duplicatesRemover2.default)(startedStates);
 
-    var transientStates = _instance2.default.history.get(function (stateParams) {
+    var transientStates = _instance2.default.history.find(function (stateParams) {
       var _stateParams$flags = stateParams.flags,
           active = _stateParams$flags.active,
           pending = _stateParams$flags.pending,
@@ -104,8 +92,11 @@ exports.default = function (stateParams) {
       if (transient && (active || pending) && !canceled) {
         return true;
       }
-    }).reduce(function (o, stateParams) {
-      return o[stateParams.stateName] = stateParams, o;
+    });
+
+    transientStates = transientStates.reduce(function (o, stateParams) {
+      o[stateParams.stateName] = stateParams;
+      return o;
     }, {});
 
     startedStates.forEach(function (stateParams) {

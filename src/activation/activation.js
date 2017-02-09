@@ -1,5 +1,7 @@
 import _            from 'lodash';
 import aptivator    from '../lib/instance';
+import canceler     from './canceler/canceler';
+import eventer      from './eventer/eventer';
 import initializer  from './initializer/initializer';
 import preprocessor from './preprocessor/preprocessor';
 import registrar    from './registrar/registrar';
@@ -10,20 +12,27 @@ import connector    from './connector/connector';
 import displayer    from './displayer/displayer';
 import finalizer    from './finalizer/finalizer';
 import errorer      from './errorer/errorer'; 
-import eventLinker  from './event-linker/event-linker';
 
 aptivator.activate = stateParams => 
   registrar(stateParams)
+    .then(canceler)
     .then(initializer)
-    .then(eventLinker('start'))
+    .then(eventer('started'))
+    .then(canceler)
     .then(preprocessor)
+    .then(canceler)
     .then(resolver)
-    .then(eventLinker('loading'))
+    .then(canceler)
+    .then(eventer('loading'))
     .then(deactivator)
+    .then(canceler)
     .then(renderer)
+    .then(canceler)
     .then(connector)
+    .then(canceler)
     .then(displayer)
-    .then(eventLinker('loaded'))
-    .then(eventLinker('enter'))
+    .then(eventer('loaded'))
+    .then(canceler)
     .then(finalizer)
+    .then(eventer('entered'))
     .catch(_.partial(errorer, _, stateParams));

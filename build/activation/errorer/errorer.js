@@ -28,34 +28,35 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(e, stateParams) {
-    var errorStateHandle, errorHandle, results;
+    var eventName, errorStateHandle, errorHandle, results;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             if (e instanceof Error) {
-              _context.next = 8;
+              _context.next = 9;
               break;
             }
 
-            errorStateHandle = 'error:' + stateParams.stateName + ':' + e;
-            errorHandle = 'error:' + e;
-            _context.next = 5;
+            eventName = 'errored';
+            errorStateHandle = eventName + ':' + stateParams.stateName + ':' + e;
+            errorHandle = eventName + ':' + e;
+            _context.next = 6;
             return _instance2.default.trigger([{ handle: errorStateHandle, full: true }, errorHandle], e, stateParams);
 
-          case 5:
+          case 6:
             results = _context.sent;
 
 
             _lodash2.default.extend(stateParams.hooks, results);
             _lodash2.default.extend(stateParams.flags, (0, _defineProperty3.default)({}, e, true));
 
-          case 8:
+          case 9:
 
             console.error(e);
             throw e;
 
-          case 10:
+          case 11:
           case 'end':
             return _context.stop();
         }

@@ -14,16 +14,11 @@ export default stateParams =>
   new Promise(resolve => {
     let {transient} = stateParams.flags;
     
-    _.extend(stateParams.flags, {active: false, pending: true});    
+    _.extend(stateParams.flags, {initialized: true});    
     
     aptivator.on(eventHandle, () => resolve(stateParams));
     
-    let startingStates = aptivator.history.get(stateParams => {
-      let {active} = stateParams.flags;
-      if(_.isUndefined(active)) {
-        return true;
-      }
-    });
+    let startingStates = aptivator.history.find({flags: {initialized: false}});
     
     if(startingStates.length) {
       return;
@@ -34,16 +29,12 @@ export default stateParams =>
       aptivator.off(eventHandle);
     };
     
-    let startedStates = aptivator.history.get(stateParams => {
+    let query = {flags: {pending: true, initialized: true, preprocessed: false, canceled: false}};
+    let startedStates = aptivator.history.find(query);
+    let undeclaredStates = startedStates.filter(stateParams => {
       let {flags, stateName} = stateParams;
-      let {active, pending, preprocessed, canceled} = flags;
-      
-      if(active === false && pending && !preprocessed && !canceled) {
-        if(!registry[stateName]) {
-          _.extend(flags, {canceled: true, pending: false, undeclared: true});
-          return;
-        }
-        return true;
+      if(!registry[stateName]) {
+        return _.extend(flags, {canceled: true, pending: false, undeclared: true});
       }
     });
 
@@ -51,14 +42,20 @@ export default stateParams =>
       return triggerer();
     }
 
+    startedStates = _.difference(startedStates, undeclaredStates);
     startedStates = duplicatesRemover(startedStates);
 
-    let transientStates = aptivator.history.get(stateParams => {
+    let transientStates = aptivator.history.find(stateParams => {
       let {active, pending, canceled, transient} = stateParams.flags;
       if(transient && (active || pending) && !canceled) {
         return true;
       }
-    }).reduce((o, stateParams) => (o[stateParams.stateName] = stateParams, o), {});
+    });
+    
+    transientStates = transientStates.reduce((o, stateParams) => {
+      o[stateParams.stateName] = stateParams;
+      return o;
+    }, {});
       
     startedStates.forEach(stateParams => {
       let {flags, route, routeValues, stateName} = stateParams;

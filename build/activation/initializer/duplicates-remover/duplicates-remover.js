@@ -19,9 +19,7 @@ var _error2 = _interopRequireDefault(_error);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (startedStates) {
-  var serialStates = startedStates.filter(function (stateParams) {
-    return !stateParams.flags.parallel;
-  });
+  var serialStates = _lodash2.default.filter(startedStates, { flags: { parallel: false } });
   var serialStatesDuplicates = serialStates.reverse().slice(1);
 
   if (serialStatesDuplicates.length) {
@@ -37,29 +35,19 @@ exports.default = function (startedStates) {
   startedStates = _lodash2.default.difference(startedStates, serialStatesDuplicates);
 
   if (serialStates.length) {
-    var pendingSerialStateParams = _instance2.default.history.getOne(function (stateParams) {
-      var _stateParams$flags = stateParams.flags,
-          parallel = _stateParams$flags.parallel,
-          pending = _stateParams$flags.pending,
-          canceled = _stateParams$flags.canceled,
-          transient = _stateParams$flags.transient,
-          preprocessed = _stateParams$flags.preprocessed;
+    var query = { flags: { parallel: false, pending: true, canceled: false, transient: false, preprocessed: true } };
+    var pendingSerialState = _instance2.default.history.findOne(query);
 
-      if (!parallel && pending && !canceled && !transient && preprocessed) {
-        return true;
-      }
-    });
-
-    if (pendingSerialStateParams) {
-      var flags = pendingSerialStateParams.flags,
-          transientStateParams = pendingSerialStateParams.transientStateParams,
-          stateName = pendingSerialStateParams.stateName;
+    if (pendingSerialState) {
+      var flags = pendingSerialState.flags,
+          transientStateParams = pendingSerialState.transientStateParams,
+          stateName = pendingSerialState.stateName;
       var transientFlags = transientStateParams.flags,
           transientStateName = transientStateParams.stateName,
           owners = transientStateParams.owners;
 
 
-      owners.delete(pendingSerialStateParams);
+      owners.delete(pendingSerialState);
 
       if (!owners.size) {
         var active = transientFlags.active;
@@ -72,7 +60,7 @@ exports.default = function (startedStates) {
       }
 
       _lodash2.default.extend(flags, { canceled: true });
-      _instance2.default.deactivate({ name: stateName, pendingSerialStateParams: pendingSerialStateParams, silent: true });
+      _instance2.default.deactivate({ name: stateName, stateParams: pendingSerialState, silent: true });
     }
   }
 

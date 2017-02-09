@@ -19,7 +19,7 @@ aptivator.deactivate = async params => {
   }
   
   if(!stateParams) {
-    stateParams = aptivator.history.getOne(stateParams => {
+    stateParams = aptivator.history.findOne(stateParams => {
       let {stateName, flags} = stateParams;
       let {active, pending, canceled} = flags;
       
@@ -41,7 +41,7 @@ aptivator.deactivate = async params => {
   
   deactivator(params);
 
-  return aptivator.trigger(`exit:${name}`, stateParams).then(results => {
+  return aptivator.trigger(`exited:${name}`, stateParams).then(results => {
     _.extend(stateParams.hooks, results);
     return results;
   });

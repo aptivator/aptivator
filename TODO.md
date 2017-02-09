@@ -1,41 +1,37 @@
 # TODOs
 
-* Documentation
-* Write a documentation note about source structure
-* Sprinkle comments throughout code
-* Tutorial
-* note that it is a good practice to know which states are serial and which are parallel at the onset and use them as such
-* for history module create shortcut methods such as activeState, pendingTransients, etc.
-* polish canceler a bit
 * figure out how to give hooks variables to each ancestor view
-* finalize stateParams flags
 * add resolves duration support
-* rewrite activation to handle multiple simultaneous activations and multiple transient states (BIG  ONE)
-* similar to above, make sure that states can be activated serially - one after another with resolves, etc. (might have to use resolve())
-* change order of activation(), put loading hook right before deactivator()
-* what about allow for duplicate views if they originate within different states?
-* what about directives to tell to bypass state event hooks (e.g., noHooks: true)
-* noHooks spec can also be more granular (e.g., noHooks for state-change or state-exit)
+* what about allowing for duplicate views if they originate within different states?
 * parent state that does not have a view, just resolves and data
 * split displayer in lib into modules that would go under renderer and deactivation
-* think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * place function parameters and variable names in alphabetical order
-* see if more of the lodash functions can be used - read lodash documentation
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* for above, similar approach to deactivator (i.e., destroy full, focal, and forward)
 * what about adding routeEnums to make sure that some route values are constrained
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
-* put back all callbacks that ui-router supports
-* put back all trigers that ui-router supports
-* for triggers, put more specific state triggers (e.g., state-change-start and state-change-start-auth.forgot)
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
-* for error triggers and callbacks think about syntax errors and errors in resolves due to reject()
-* add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
-* modals/notifiers (A state that loads parallel to current state)
-* focal flag should also apply when it comes to the removal of immediates (take a look)
-* complete .off() to handle callbacks and contexts
+* **DONE** what about directives to tell to bypass state event hooks (e.g., noHooks: true) (wait for a proper use-case)
+* **DONE** noHooks spec can also be more granular (e.g., noHooks for state-change or state-exit) (wait for a proper use-case)
+* **DONE** under stateConfigs combine view-related properties in one object (if it is not broke, don't fix it)
+* **DONE** main view assertion should be done if a state has children, otherwise it is not necessary (not quite, main view is used to associate unique address to a state)
+* **DONE** see if more of the lodash functions can be used - read lodash documentation
+* **DONE** polish canceler a bit
+* **DONE** change flags and event hooks to adjectives (e.g., started instead of start)
+* **DONE** change order of activation(), put loading hook right before deactivator()
+* **DONE** regarding above, overlay (or rather 'weave') spec can be used to designate if part of the activationSequence is already active, then it is kept
+* **DONE** modals/notifiers (A state that loads parallel to current state)
+* **DONE** focal flag should also apply when it comes to the removal of immediates (take a look) (it's probably better to just use partial or forward: no need for focal)
+* **DONE** rewrite activation to handle multiple simultaneous activations and multiple transient states (BIG  ONE)
+* **DONE** similar to above, make sure that states can be activated serially - one after another with resolves, etc. (might have to use resolve())
+* **DONE** finalize stateParams flags
+* **DONE** focal state deactivation should also include deactivating views that are under the state, yet have unrelated addresses
+* **DONE** put back all callbacks that ui-router supports
+* **DONE** put back all trigers that ui-router supports
+* **DONE** for triggers, put more specific state triggers (e.g., state-change-start and state-change-start-auth.forgot)
+* **DONE** for error triggers and callbacks think about syntax errors and errors in resolves due to reject() (Syntax errors error out to console)
 * **DONE** remove invalid-route-handler and handle error routes through backbone router
 * **DONE** think about using refresh tag to control if some non-cacheable ancestor states get regenerated when a child state is activated (Handled through caching)
 * **DONE** add silent flag for deactivation
