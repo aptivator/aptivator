@@ -114,7 +114,7 @@ exports.default = function (stateParams) {
           viewSelector = _addresser$parts2[0],
           viewStateName = _addresser$parts2[1];
 
-      var viewAddressUnique = _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
+      var viewAddressUnique = _addresser2.default.uniqueAddress(stateName);
       var duplicateViewConfigs = (previousSequence || []).concat(activationSequence).filter(function (viewConfigs) {
         return viewConfigs.viewAddressFull === viewAddressFull;
       });

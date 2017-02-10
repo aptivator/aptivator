@@ -44,7 +44,9 @@ exports.default = {
   partial: function partial(params) {
     var _this2 = this;
 
-    var viewAddressUnique = _addresser2.default.uniqueAddress(params.name);
+    var name = params.name;
+
+    var viewAddressUnique = name.includes('@') ? name : registry[name].viewAddressUnique;
     var stateName = _addresser2.default.stateName(viewAddressUnique);
     var stateConfigs = registry[stateName];
     var viewAddresses = new Set([viewAddressUnique]);

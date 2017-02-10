@@ -17,7 +17,7 @@ exports.default = {
 
   eventRegistry: {},
 
-  eventSplitter: /\s+/,
+  spaceSplitter: /\s+/,
 
   rootStateName: 'root',
 

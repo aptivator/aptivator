@@ -2,13 +2,13 @@ import _            from 'lodash';
 import vars         from '../../lib/vars';
 import callbacker   from './lib/callbacker';
 
-let {eventSplitter} = vars;
+let {spaceSplitter} = vars;
 
 let levels = record => record.handle.split(':').length;
 
 export default (events, mainArgs) => {
   if(_.isString(events)) {
-    events = events.split(eventSplitter);
+    events = events.split(spaceSplitter);
   }
   
   if(!_.isArray(events)) {

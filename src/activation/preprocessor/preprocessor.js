@@ -66,7 +66,7 @@ export default stateParams => {
       
       let viewAddressFull = fullAddressMaker(viewAddress, stateName);
       let [viewSelector, viewStateName] = addresser.parts(viewAddressFull);
-      let viewAddressUnique = `${_.uniqueId('aptivator-id-')}@${stateName}`;
+      let viewAddressUnique = addresser.uniqueAddress(stateName);
       let duplicateViewConfigs = (previousSequence || []).concat(activationSequence)
         .filter(viewConfigs => viewConfigs.viewAddressFull === viewAddressFull);
       let otherView = (duplicateViewConfigs[0] || {}).view;

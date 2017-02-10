@@ -17,7 +17,7 @@ export default stateParams => {
   let {augment} = stateParams.flags;
   
   activationSequences[stateParams.stateName].forEach(viewConfigs => {
-    let {stateName, viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
+    let {viewAddressUnique, viewSelector, viewStateName, detachHidden} = viewConfigs;
     let activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
     
     if(augment && activationRecord.active) {
@@ -33,7 +33,7 @@ export default stateParams => {
     let cache = cacheable.total(viewConfigs, stateParams);
     let destroy = !cache && activationRecord.instance;
     let unhide = !destroy && activationRecord.instance;
-    let family = relations.family(stateName).concat(viewAddressUnique);
+    let family = relations.family(viewAddressUnique);
     let viewParameters = params.assemble(family, stateParams);
     
     if(!$regionEl.length) {

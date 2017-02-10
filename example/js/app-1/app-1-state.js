@@ -90,7 +90,7 @@ aptivator.state('app-1', {
   },
   animate: {
     enter: {
-      'root': 'aptivator-fade-in'
+      'root': 'aptivator-fade-in   '
     },
     
     exit: {

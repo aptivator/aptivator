@@ -23,12 +23,12 @@ var _vars2 = _interopRequireDefault(_vars);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventRegistry = _vars2.default.eventRegistry,
-    eventSplitter = _vars2.default.eventSplitter;
+    spaceSplitter = _vars2.default.spaceSplitter;
 
 exports.default = function (events, callback, context, once) {
   if (_lodash2.default.isString(events) || _lodash2.default.isArray(events)) {
     if (_lodash2.default.isString(events)) {
-      events = events.split(eventSplitter);
+      events = events.split(spaceSplitter);
     }
 
     if (!_lodash2.default.isArray(callback)) {
@@ -45,12 +45,13 @@ exports.default = function (events, callback, context, once) {
       if (once) {
         (function () {
           var oncer = _lodash2.default.once(function () {
+            _instance2.default.off(events, oncer, context);
+
             for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
               args[_key] = arguments[_key];
             }
 
-            _instance2.default.off(events, oncer, context);
-            return callback.apply(undefined, args);
+            return callback.apply(this, args);
           });
 
           callbackRecord.callback = oncer;

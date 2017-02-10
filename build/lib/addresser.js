@@ -4,17 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _vars = require('./vars');
+var _lodash = require('lodash');
 
-var _vars2 = _interopRequireDefault(_vars);
+var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var registry = _vars2.default.states.registry;
 exports.default = {
-  uniqueAddress: function uniqueAddress(entityName) {
-    var hasAt = entityName.includes('@');
-    return hasAt ? entityName : registry[entityName].viewAddressUnique;
+  uniqueAddress: function uniqueAddress(stateName) {
+    return _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
   },
 
 

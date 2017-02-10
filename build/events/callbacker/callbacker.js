@@ -18,7 +18,7 @@ var _callbacker2 = _interopRequireDefault(_callbacker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventSplitter = _vars2.default.eventSplitter;
+var spaceSplitter = _vars2.default.spaceSplitter;
 
 
 var levels = function levels(record) {
@@ -27,7 +27,7 @@ var levels = function levels(record) {
 
 exports.default = function (events, mainArgs) {
   if (_lodash2.default.isString(events)) {
-    events = events.split(eventSplitter);
+    events = events.split(spaceSplitter);
   }
 
   if (!_lodash2.default.isArray(events)) {

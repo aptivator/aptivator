@@ -1,11 +1,8 @@
-import vars    from './vars';
-
-let {registry} = vars.states;
+import _ from 'lodash';
 
 export default {
-  uniqueAddress(entityName) {
-    let hasAt = entityName.includes('@');
-    return hasAt ? entityName : registry[entityName].viewAddressUnique;
+  uniqueAddress(stateName) {
+    return `${_.uniqueId('aptivator-id-')}@${stateName}`;
   },
   
   parts: address => address.split('@'),

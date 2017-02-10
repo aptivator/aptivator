@@ -20,6 +20,10 @@ var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
 
+var _addresser = require('../../lib/addresser');
+
+var _addresser2 = _interopRequireDefault(_addresser);
+
 var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
@@ -67,7 +71,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
               root = true;
 
               stateConfigs = _lodash2.default.pick(stateConfigs, rootStateProperties);
-              _lodash2.default.extend(stateConfigs, { viewAddressUnique: stateName });
+              _lodash2.default.extend(stateConfigs, { viewAddressUnique: _addresser2.default.uniqueAddress(stateName) });
 
               if (!stateConfigs.resolveConfigs) {
                 stateConfigs.resolveConfigs = {

@@ -1,5 +1,6 @@
 import _                   from 'lodash';
 import Backbone            from 'backbone';
+import addresser           from '../../lib/addresser';
 import aptivator           from '../../lib/instance';
 import error               from '../../lib/error';
 import relations           from '../../lib/relations';
@@ -19,7 +20,7 @@ aptivator.state = (stateName, stateConfigs) =>
     if(relations.isRoot(stateName)) {
       var root = true;
       stateConfigs = _.pick(stateConfigs, rootStateProperties);
-      _.extend(stateConfigs, {viewAddressUnique: stateName});
+      _.extend(stateConfigs, {viewAddressUnique: addresser.uniqueAddress(stateName)});
       
       if(!stateConfigs.resolveConfigs) {
         stateConfigs.resolveConfigs = {

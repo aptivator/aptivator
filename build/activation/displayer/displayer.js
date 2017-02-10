@@ -4,9 +4,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _animator = require('../../animation/animator');
+
+var _animator2 = _interopRequireDefault(_animator);
 
 var _instance = require('../../lib/instance');
 
@@ -16,52 +28,67 @@ var _displayer = require('../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
 
-var _vars = require('../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var activationRecords = _vars2.default.states.activationRecords;
-
 var eventHandle = 'aptivator-goto-finalizer';
-var animationHandle = 'animationend transitionend';
 
 exports.default = function (stateParams) {
-  return new Promise(function (resolve) {
-    stateParams.flags.displayed = true;
+  return new Promise(function () {
+    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
+      var query, renderingStates, renderedStates, animator;
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              stateParams.flags.displayed = true;
 
-    _instance2.default.once(eventHandle, function () {
-      return resolve(stateParams);
-    });
+              _instance2.default.once(eventHandle, function () {
+                return resolve(stateParams);
+              });
 
-    var query = { flags: { rendered: true, displayed: false, canceled: false } };
-    var renderingStates = _instance2.default.history.find(query);
+              query = { flags: { rendered: true, displayed: false, canceled: false } };
+              renderingStates = _instance2.default.history.find(query);
 
-    if (renderingStates.length) {
-      return;
-    }
+              if (!renderingStates.length) {
+                _context.next = 6;
+                break;
+              }
 
-    query = { flags: { pending: true, displayed: true, canceled: false } };
-    var renderedStates = _instance2.default.history.find(query);
+              return _context.abrupt('return');
 
-    var $rootEl = activationRecords[_vars2.default.rootStateName].instance.$el;
+            case 6:
 
-    $rootEl.addClass('aptivator-fade-in');
+              query = { flags: { pending: true, displayed: true, canceled: false } };
+              renderedStates = _instance2.default.history.find(query);
 
-    $rootEl.one(animationHandle, function () {
-      return $rootEl.removeClass('aptivator-fade-in');
-    });
 
-    renderedStates.forEach(function (stateParams) {
-      var rootViews = stateParams.rootViews;
+              renderedStates.forEach(function (stateParams) {
+                var rootViews = stateParams.rootViews;
 
-      rootViews.forEach(function (rootView) {
-        return _displayer2.default.apply(undefined, (0, _toConsumableArray3.default)(rootView));
-      });
-      delete stateParams.rootViews;
-    });
+                rootViews.forEach(function (rootView) {
+                  return _displayer2.default.apply(undefined, (0, _toConsumableArray3.default)(rootView));
+                });
+                delete stateParams.rootViews;
+              });
 
-    _instance2.default.trigger(eventHandle);
-  });
+              animator = new _animator2.default(renderedStates, 'enter');
+              _context.next = 12;
+              return animator.animate();
+
+            case 12:
+
+              _instance2.default.trigger(eventHandle);
+
+            case 13:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }());
 };

@@ -2,12 +2,12 @@ import _         from 'lodash';
 import aptivator from '../../lib/instance';
 import vars      from '../../lib/vars';
 
-let {eventRegistry, eventSplitter} = vars;
+let {eventRegistry, spaceSplitter} = vars;
 
 export default (events, callback, context, once) => {
   if(_.isString(events) || _.isArray(events)) {
     if(_.isString(events)) {
-      events = events.split(eventSplitter);
+      events = events.trim().split(spaceSplitter);
     }
     
     if(!_.isArray(callback)) {

@@ -16,10 +16,12 @@ var registry = states.registry,
     activationRecords = states.activationRecords;
 
 exports.default = function () {
-  var view = registry[rootStateName].view;
+  var _registry$rootStateNa = registry[rootStateName],
+      view = _registry$rootStateNa.view,
+      viewAddressUnique = _registry$rootStateNa.viewAddressUnique;
 
   var instance = new view();
 
   instance.render();
-  activationRecords[rootStateName] = { instance: instance };
+  activationRecords[viewAddressUnique] = { instance: instance, active: true };
 };

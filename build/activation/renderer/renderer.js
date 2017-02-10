@@ -55,8 +55,7 @@ exports.default = function (stateParams) {
 
 
   activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
-    var stateName = viewConfigs.stateName,
-        viewAddressUnique = viewConfigs.viewAddressUnique,
+    var viewAddressUnique = viewConfigs.viewAddressUnique,
         viewSelector = viewConfigs.viewSelector,
         viewStateName = viewConfigs.viewStateName,
         detachHidden = viewConfigs.detachHidden;
@@ -76,7 +75,7 @@ exports.default = function (stateParams) {
     var cache = _cacheable2.default.total(viewConfigs, stateParams);
     var destroy = !cache && activationRecord.instance;
     var unhide = !destroy && activationRecord.instance;
-    var family = _relations2.default.family(stateName).concat(viewAddressUnique);
+    var family = _relations2.default.family(viewAddressUnique);
     var viewParameters = _params2.default.assemble(family, stateParams);
 
     if (!$regionEl.length) {

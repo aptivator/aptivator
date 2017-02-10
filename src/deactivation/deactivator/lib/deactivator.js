@@ -17,7 +17,8 @@ export default {
   },
   
   partial(params) {
-    let viewAddressUnique = addresser.uniqueAddress(params.name);
+    let {name} = params;
+    let viewAddressUnique = name.includes('@') ? name : registry[name].viewAddressUnique;
     let stateName = addresser.stateName(viewAddressUnique);
     let stateConfigs = registry[stateName];
     let viewAddresses = new Set([viewAddressUnique]);
