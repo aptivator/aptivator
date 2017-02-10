@@ -2,18 +2,10 @@ import _                      from 'lodash';
 import aptivator              from '../../lib/instance';
 import serialStateDeactivator from './serial-state-deactivator/serial-state-deactivator';
 
-let eventHandle = 'aptivator-goto-render-';
-
 let eventHandles = ['transient', 'regular'].reduce((o, suffix) => {
-  o[suffix] = `${eventHandle}${suffix}`;
+  o[suffix] = `aptivator-goto-render-${suffix}`;
   return o;
-}, {}); 
-
-let triggerer = (suffix) => {
-  let handle = eventHandles[suffix];
-  aptivator.trigger(handle);
-  aptivator.off(handle);
-};
+}, {});
 
 export default stateParams => 
   new Promise(async (resolve, reject) => {
@@ -22,7 +14,9 @@ export default stateParams =>
     let {transient} = stateParams.flags;
     
     if(transient) {
-      aptivator.on(eventHandles['transient'], () => resolve(stateParams));
+      let eventHandle = eventHandles.transient;
+      
+      aptivator.once(eventHandle, () => resolve(stateParams));
       
       let query = {flags: {pending: true, transient: true, loading: false, canceled: false}};
       let loadingTransients = aptivator.history.find(query);
@@ -38,12 +32,12 @@ export default stateParams =>
         serialStateDeactivator();
       }
       
-      triggerer('transient');
-      
-      return;
+      return aptivator.trigger(eventHandle);
     }
     
-    aptivator.on(eventHandles['regular'], () => resolve(stateParams));
+    let eventHandle = eventHandles.regular;
+    
+    aptivator.once(eventHandle, () => resolve(stateParams));
     
     let query = {flags: {pending: true, transient: false, prerendered: false, canceled: false}};
     let loadingRegulars = aptivator.history.find(query);
@@ -87,5 +81,5 @@ export default stateParams =>
       serialStateDeactivator();
     }
     
-    triggerer('regular');
+    aptivator.trigger(eventHandle);
   });

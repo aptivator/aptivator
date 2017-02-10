@@ -25,7 +25,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var eventRegistry = _vars2.default.eventRegistry,
     eventSplitter = _vars2.default.eventSplitter;
 
-exports.default = function (events, callback, context) {
+exports.default = function (events, callback, context, once) {
   if (_lodash2.default.isString(events) || _lodash2.default.isArray(events)) {
     if (_lodash2.default.isString(events)) {
       events = events.split(eventSplitter);
@@ -35,8 +35,29 @@ exports.default = function (events, callback, context) {
       callback = [{ callback: callback, context: context }];
     }
 
-    callback = callback.map(function (callback) {
-      return _lodash2.default.isFunction(callback) ? { callback: callback } : callback;
+    callback = callback.map(function (callbackRecord) {
+      callbackRecord = _lodash2.default.isFunction(callbackRecord) ? { callback: callbackRecord } : callbackRecord;
+      var _callbackRecord = callbackRecord,
+          callback = _callbackRecord.callback,
+          context = _callbackRecord.context;
+
+
+      if (once) {
+        (function () {
+          var oncer = _lodash2.default.once(function () {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
+
+            _instance2.default.off(events, oncer, context);
+            return callback.apply(undefined, args);
+          });
+
+          callbackRecord.callback = oncer;
+        })();
+      }
+
+      return callbackRecord;
     });
 
     return events.forEach(function (event) {
@@ -63,11 +84,11 @@ exports.default = function (events, callback, context) {
 
     if (callbacks) {
       var handleName = handleParts.join(':');
-      _instance2.default.on(handleName, callbacks);
+      _instance2.default.on(handleName, callbacks, null, once);
     }
 
     if (configs.sub) {
-      _instance2.default.on(configs.sub, handleParts);
+      _instance2.default.on(configs.sub, handleParts, null, once);
     }
   });
 };

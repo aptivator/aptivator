@@ -22,7 +22,13 @@ function callbacker(events, mainArgs) {
   events.forEach(function (event) {
     if (_lodash2.default.isString(event)) {
       if (!_lodash2.default.isEmpty(eventRegistry[event])) {
-        callbacks.push({ handle: event, args: mainArgs, callbacks: eventRegistry[event] });
+        var eventRecord = { handle: event, callbacks: eventRegistry[event] };
+
+        if (mainArgs) {
+          _lodash2.default.extend(eventRecord, { args: mainArgs });
+        }
+
+        callbacks.push(eventRecord);
       }
       return;
     }

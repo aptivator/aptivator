@@ -4,7 +4,7 @@ import vars      from '../../lib/vars';
 
 let {eventRegistry, eventSplitter} = vars;
 
-export default (events, callback, context) => {
+export default (events, callback, context, once) => {
   if(_.isString(events) || _.isArray(events)) {
     if(_.isString(events)) {
       events = events.split(eventSplitter);
@@ -13,8 +13,22 @@ export default (events, callback, context) => {
     if(!_.isArray(callback)) {
       callback = [{callback, context}];
     }
-    
-    callback = callback.map(callback => _.isFunction(callback) ? {callback} : callback);
+
+    callback = callback.map(callbackRecord => {
+      callbackRecord = _.isFunction(callbackRecord) ? {callback: callbackRecord} : callbackRecord;
+      let {callback, context} = callbackRecord;
+      
+      if(once) {
+        let oncer = _.once((...args) => {
+          aptivator.off(events, oncer, context);
+          return callback.apply(this, args);
+        });
+        
+        callbackRecord.callback = oncer;
+      }
+      
+      return callbackRecord;
+    });
     
     return events.forEach(event => {
       let callbacks = eventRegistry[event] || (eventRegistry[event] = []);
@@ -39,11 +53,11 @@ export default (events, callback, context) => {
     
     if(callbacks) {
       let handleName = handleParts.join(':');
-      aptivator.on(handleName, callbacks);
+      aptivator.on(handleName, callbacks, null, once);
     }
     
     if(configs.sub) {
-      aptivator.on(configs.sub, handleParts);
+      aptivator.on(configs.sub, handleParts, null, once);
     }
   });
 };

@@ -16,18 +16,13 @@ export default stateParams =>
     
     _.extend(stateParams.flags, {initialized: true});    
     
-    aptivator.on(eventHandle, () => resolve(stateParams));
+    aptivator.once(eventHandle, () => resolve(stateParams));
     
     let startingStates = aptivator.history.find({flags: {initialized: false}});
     
     if(startingStates.length) {
       return;
     }
-    
-    let triggerer = () => {
-      aptivator.trigger(eventHandle);
-      aptivator.off(eventHandle);
-    };
     
     let query = {flags: {pending: true, initialized: true, preprocessed: false, canceled: false}};
     let startedStates = aptivator.history.find(query);
@@ -39,7 +34,7 @@ export default stateParams =>
     });
 
     if(transient) {
-      return triggerer();
+      return aptivator.trigger(eventHandle);
     }
 
     startedStates = _.difference(startedStates, undeclaredStates);
@@ -93,5 +88,5 @@ export default stateParams =>
       stateParams.time = _.now();
     }
     
-    triggerer();
+    aptivator.trigger(eventHandle);
   });

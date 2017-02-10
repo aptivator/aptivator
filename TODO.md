@@ -1,5 +1,8 @@
 # TODOs
 
+* think about splitting rendered into two manageable parts
+* analyze canceled flag setting within deactivation module
+* add on property to state definition
 * figure out how to give hooks variables to each ancestor view
 * add resolves duration support
 * what about allowing for duplicate views if they originate within different states?
@@ -14,6 +17,10 @@
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
 * animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
+* animations that should affect state activation timing
+* **DONE** complete .off() to handle callbacks and contexts (needed full functionality for once() method)
+* **DONE** add .once() method to execute callbacks only once
+* **DONE** polish out deactivator to do broader deactivation when deactivating a state fully
 * **DONE** what about directives to tell to bypass state event hooks (e.g., noHooks: true) (wait for a proper use-case)
 * **DONE** noHooks spec can also be more granular (e.g., noHooks for state-change or state-exit) (wait for a proper use-case)
 * **DONE** under stateConfigs combine view-related properties in one object (if it is not broke, don't fix it)

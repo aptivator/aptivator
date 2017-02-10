@@ -1,8 +1,11 @@
-import vars from './vars';
+import vars    from './vars';
+
+let {registry} = vars.states;
 
 export default {
-  uniqueStateAddress(stateName) {
-    return vars.states.registry[stateName].viewAddressUnique;
+  uniqueAddress(entityName) {
+    let hasAt = entityName.includes('@');
+    return hasAt ? entityName : registry[entityName].viewAddressUnique;
   },
   
   parts: address => address.split('@'),

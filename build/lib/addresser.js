@@ -10,9 +10,11 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var registry = _vars2.default.states.registry;
 exports.default = {
-  uniqueStateAddress: function uniqueStateAddress(stateName) {
-    return _vars2.default.states.registry[stateName].viewAddressUnique;
+  uniqueAddress: function uniqueAddress(entityName) {
+    var hasAt = entityName.includes('@');
+    return hasAt ? entityName : registry[entityName].viewAddressUnique;
   },
 
 

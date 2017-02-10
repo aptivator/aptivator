@@ -32,32 +32,27 @@ var _vars$states = _vars2.default.states,
     registry = _vars$states.registry;
 exports.default = {
   full: function full(params) {
-    var name = params.name;
+    var _this = this;
 
-    var stateName = _addresser2.default.stateName(name);
+    var stateName = _addresser2.default.stateName(params.name);
     var activationSequence = activationSequences[stateName];
 
     _lodash2.default.each(activationSequence, function (viewConfigs) {
-      (0, _hider2.default)(viewConfigs.viewAddressUnique);
+      _this.partial({ name: viewConfigs.viewAddressUnique });
     });
   },
   partial: function partial(params) {
-    var _this = this;
+    var _this2 = this;
 
-    var name = params.name,
-        detach = params.detach;
-
-    var hasAt = name.includes('@');
-    var stateName = _addresser2.default.stateName(name);
-    var viewAddressUnique = hasAt ? name : _addresser2.default.uniqueStateAddress(name);
-
-    var _ref = detach || {},
-        detachFocal = _ref.focal,
-        detachChildren = _ref.children,
-        detachFull = _ref.full;
-
+    var viewAddressUnique = _addresser2.default.uniqueAddress(params.name);
+    var stateName = _addresser2.default.stateName(viewAddressUnique);
     var stateConfigs = registry[stateName];
     var viewAddresses = new Set([viewAddressUnique]);
+    var activationRecord = activationRecords[viewAddressUnique];
+
+    if (!activationRecord.active) {
+      return;
+    }
 
     if (stateConfigs.viewAddressUnique === viewAddressUnique) {
       _lodash2.default.each(stateConfigs.viewsRegistry, function (viewConfigs, viewAddressUnique) {
@@ -67,14 +62,20 @@ exports.default = {
       });
     }
 
+    var _ref = params.detach || {},
+        detachFocal = _ref.focal,
+        detachChildren = _ref.children,
+        detachFull = _ref.full;
+
     viewAddresses.forEach(function (viewAddressUnique) {
       (0, _hider2.default)(viewAddressUnique, (0, _detachFlagger2.default)(detachFocal, detachFull));
     });
 
-    _lodash2.default.each(activationRecords[viewAddressUnique].regions, function (regionObj) {
+    var detach = { focal: detachChildren, full: detachFull };
+
+    _lodash2.default.each(activationRecord.regions, function (regionObj) {
       regionObj.current.forEach(function (viewAddressUnique) {
-        var detach = { focal: detachChildren, full: detachFull };
-        _this.partial({ name: viewAddressUnique, detach: detach });
+        _this2.partial({ name: viewAddressUnique, detach: detach });
       });
     });
   }

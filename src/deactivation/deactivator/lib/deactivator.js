@@ -8,23 +8,24 @@ let {activationRecords, activationSequences, registry} = vars.states;
 
 export default {
   full(params) {
-    let {name} = params;
-    let stateName = addresser.stateName(name);
+    let stateName = addresser.stateName(params.name);
     let activationSequence = activationSequences[stateName];
     
     _.each(activationSequence, viewConfigs => {
-      hider(viewConfigs.viewAddressUnique);
+      this.partial({name: viewConfigs.viewAddressUnique});
     });
   },
   
   partial(params) {
-    let {name, detach} = params;
-    let hasAt = name.includes('@');
-    let stateName = addresser.stateName(name);
-    let viewAddressUnique = hasAt ? name : addresser.uniqueStateAddress(name);
-    let {focal: detachFocal, children: detachChildren, full: detachFull} = detach || {};
+    let viewAddressUnique = addresser.uniqueAddress(params.name);
+    let stateName = addresser.stateName(viewAddressUnique);
     let stateConfigs = registry[stateName];
     let viewAddresses = new Set([viewAddressUnique]);
+    let activationRecord = activationRecords[viewAddressUnique];
+    
+    if(!activationRecord.active) {
+      return;
+    }
     
     if(stateConfigs.viewAddressUnique === viewAddressUnique) {
       _.each(stateConfigs.viewsRegistry, (viewConfigs, viewAddressUnique) => {
@@ -34,13 +35,16 @@ export default {
       });
     }
 
+    let {focal: detachFocal, children: detachChildren, full: detachFull} = params.detach || {};
+
     viewAddresses.forEach(viewAddressUnique => {
       hider(viewAddressUnique, detachFlagger(detachFocal, detachFull));
     });
     
-    _.each(activationRecords[viewAddressUnique].regions, regionObj => {
+    let detach = {focal: detachChildren, full: detachFull};
+    
+    _.each(activationRecord.regions, regionObj => {
       regionObj.current.forEach(viewAddressUnique => {
-        let detach = {focal: detachChildren, full: detachFull};
         this.partial({name: viewAddressUnique, detach});
       });
     });    

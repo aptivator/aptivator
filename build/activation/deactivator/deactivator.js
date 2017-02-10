@@ -30,23 +30,15 @@ var _serialStateDeactivator2 = _interopRequireDefault(_serialStateDeactivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventHandle = 'aptivator-goto-render-';
-
 var eventHandles = ['transient', 'regular'].reduce(function (o, suffix) {
-  o[suffix] = '' + eventHandle + suffix;
+  o[suffix] = 'aptivator-goto-render-' + suffix;
   return o;
 }, {});
-
-var triggerer = function triggerer(suffix) {
-  var handle = eventHandles[suffix];
-  _instance2.default.trigger(handle);
-  _instance2.default.off(handle);
-};
 
 exports.default = function (stateParams) {
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
-      var transient, _query, loadingTransients, serialTransients, query, loadingRegulars, loadedRegulars, transientStates, transientPromises, serialRegular;
+      var transient, _eventHandle, _query, loadingTransients, serialTransients, eventHandle, query, loadingRegulars, loadedRegulars, transientStates, transientPromises, serialRegular;
 
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
@@ -61,7 +53,10 @@ exports.default = function (stateParams) {
                 break;
               }
 
-              _instance2.default.on(eventHandles['transient'], function () {
+              _eventHandle = eventHandles.transient;
+
+
+              _instance2.default.once(_eventHandle, function () {
                 return resolve(stateParams);
               });
 
@@ -69,13 +64,13 @@ exports.default = function (stateParams) {
               loadingTransients = _instance2.default.history.find(_query);
 
               if (!loadingTransients.length) {
-                _context.next = 8;
+                _context.next = 9;
                 break;
               }
 
               return _context.abrupt('return');
 
-            case 8:
+            case 9:
 
               _query = { flags: { transient: true, pending: true, loading: true, canceled: false, parallel: false } };
               serialTransients = _instance2.default.history.findOne(_query);
@@ -85,13 +80,13 @@ exports.default = function (stateParams) {
                 (0, _serialStateDeactivator2.default)();
               }
 
-              triggerer('transient');
-
-              return _context.abrupt('return');
+              return _context.abrupt('return', _instance2.default.trigger(_eventHandle));
 
             case 13:
+              eventHandle = eventHandles.regular;
 
-              _instance2.default.on(eventHandles['regular'], function () {
+
+              _instance2.default.once(eventHandle, function () {
                 return resolve(stateParams);
               });
 
@@ -99,13 +94,13 @@ exports.default = function (stateParams) {
               loadingRegulars = _instance2.default.history.find(query);
 
               if (!loadingRegulars.length) {
-                _context.next = 18;
+                _context.next = 19;
                 break;
               }
 
               return _context.abrupt('return');
 
-            case 18:
+            case 19:
 
               query = { flags: { pending: true, transient: false, canceled: false, loading: true } };
               loadedRegulars = _instance2.default.history.find(query);
@@ -129,10 +124,10 @@ exports.default = function (stateParams) {
 
                 return promises;
               }, []);
-              _context.next = 24;
+              _context.next = 25;
               return Promise.all(transientPromises);
 
-            case 24:
+            case 25:
 
               transientStates.forEach(function (stateParams) {
                 _instance2.default.deactivate({ name: stateParams.stateName, stateParams: stateParams });
@@ -145,9 +140,9 @@ exports.default = function (stateParams) {
                 (0, _serialStateDeactivator2.default)();
               }
 
-              triggerer('regular');
+              _instance2.default.trigger(eventHandle);
 
-            case 28:
+            case 29:
             case 'end':
               return _context.stop();
           }

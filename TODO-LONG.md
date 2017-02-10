@@ -13,6 +13,8 @@
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * figure out direct parameters for combined states
-* for history module create shortcut methods such as activeState, pendingTransients, etc.
-* complete .off() to handle callbacks and contexts
+* for history, think about creating shortcut methods such as activeState, pendingTransients, etc.
 * put back dependencies support
+* think about sub-states
+* do I need a utilities library with methods such as hasAt()
+* place canceler inside each activation step - this places its execution on the same tick as the module

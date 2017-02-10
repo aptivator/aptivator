@@ -49,7 +49,7 @@ exports.default = function (stateParams) {
 
     _lodash2.default.extend(stateParams.flags, { initialized: true });
 
-    _instance2.default.on(eventHandle, function () {
+    _instance2.default.once(eventHandle, function () {
       return resolve(stateParams);
     });
 
@@ -58,11 +58,6 @@ exports.default = function (stateParams) {
     if (startingStates.length) {
       return;
     }
-
-    var triggerer = function triggerer() {
-      _instance2.default.trigger(eventHandle);
-      _instance2.default.off(eventHandle);
-    };
 
     var query = { flags: { pending: true, initialized: true, preprocessed: false, canceled: false } };
     var startedStates = _instance2.default.history.find(query);
@@ -76,7 +71,7 @@ exports.default = function (stateParams) {
     });
 
     if (transient) {
-      return triggerer();
+      return _instance2.default.trigger(eventHandle);
     }
 
     startedStates = _lodash2.default.difference(startedStates, undeclaredStates);
@@ -140,6 +135,6 @@ exports.default = function (stateParams) {
       stateParams.time = _lodash2.default.now();
     }
 
-    triggerer();
+    _instance2.default.trigger(eventHandle);
   });
 };

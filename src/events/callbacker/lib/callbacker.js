@@ -7,7 +7,13 @@ export default function callbacker(events, mainArgs, callbacks = []) {
   events.forEach(event => {
     if(_.isString(event)) {
       if(!_.isEmpty(eventRegistry[event])) {
-        callbacks.push({handle: event, args: mainArgs, callbacks: eventRegistry[event]});
+        let eventRecord = {handle: event, callbacks: eventRegistry[event]};
+        
+        if(mainArgs) {
+          _.extend(eventRecord, {args: mainArgs});
+        }
+        
+        callbacks.push(eventRecord);
       }
       return;
     }
