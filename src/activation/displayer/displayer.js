@@ -1,24 +1,16 @@
 import aptivator           from '../../lib/instance';
 import displayer           from '../../lib/displayer';
 import vars                from '../../lib/vars';
-import animationEventNames from './animation-event-names/animation-event-names';
 
 let {activationRecords} = vars.states;
-
 let eventHandle = 'aptivator-goto-finalizer';
-
-let triggerer = () => {
-  aptivator.trigger(eventHandle);
-  aptivator.off(eventHandle);
-};
-
-let animationHandle = animationEventNames.join(' ');
+let animationHandle = 'animationend transitionend';
 
 export default stateParams => 
   new Promise(resolve => {
     stateParams.flags.displayed = true;
     
-    aptivator.on(eventHandle, () => resolve(stateParams));
+    aptivator.once(eventHandle, () => resolve(stateParams));
     
     let query = {flags: {rendered: true, displayed: false, canceled: false}};
     let renderingStates = aptivator.history.find(query);
@@ -42,5 +34,5 @@ export default stateParams =>
       delete stateParams.rootViews;
     });
     
-    setTimeout(triggerer);
+    aptivator.trigger(eventHandle);
   });

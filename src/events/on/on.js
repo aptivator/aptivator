@@ -19,7 +19,7 @@ export default (events, callback, context, once) => {
       let {callback, context} = callbackRecord;
       
       if(once) {
-        let oncer = _.once((...args) => {
+        let oncer = _.once(function(...args) {
           aptivator.off(events, oncer, context);
           return callback.apply(this, args);
         });

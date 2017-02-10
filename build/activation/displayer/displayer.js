@@ -20,29 +20,18 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _animationEventNames = require('./animation-event-names/animation-event-names');
-
-var _animationEventNames2 = _interopRequireDefault(_animationEventNames);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var activationRecords = _vars2.default.states.activationRecords;
 
-
 var eventHandle = 'aptivator-goto-finalizer';
-
-var triggerer = function triggerer() {
-  _instance2.default.trigger(eventHandle);
-  _instance2.default.off(eventHandle);
-};
-
-var animationHandle = _animationEventNames2.default.join(' ');
+var animationHandle = 'animationend transitionend';
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve) {
     stateParams.flags.displayed = true;
 
-    _instance2.default.on(eventHandle, function () {
+    _instance2.default.once(eventHandle, function () {
       return resolve(stateParams);
     });
 
@@ -73,6 +62,6 @@ exports.default = function (stateParams) {
       delete stateParams.rootViews;
     });
 
-    setTimeout(triggerer);
+    _instance2.default.trigger(eventHandle);
   });
 };

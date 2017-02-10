@@ -14,7 +14,9 @@
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * figure out direct parameters for combined states
 * for history, think about creating shortcut methods such as activeState, pendingTransients, etc.
+* regarding above, would it be better to use mongodb-like queries
 * put back dependencies support
 * think about sub-states
 * do I need a utilities library with methods such as hasAt()
 * place canceler inside each activation step - this places its execution on the same tick as the module
+* think about when an error should be thrown or when a warning should be displayed
