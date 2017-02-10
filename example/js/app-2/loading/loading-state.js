@@ -6,6 +6,7 @@ aptivator.state('app-2.loading', {
     keepLast: false,
     delay: 100
   },
+  states: ['loading'],
   view: LoadingView,
   parentSelector: '.main',
   data: {

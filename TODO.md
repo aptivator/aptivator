@@ -18,6 +18,9 @@
 * keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
 * animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
 * animations that should affect state activation timing
+* for animation, allow selectors paired with the state name for finer animation assignment
+* **DONE** move uniq address generator into some centralized module
+* **DONE** trim class and event names before splitting them 
 * **DONE** complete .off() to handle callbacks and contexts (needed full functionality for once() method)
 * **DONE** add .once() method to execute callbacks only once
 * **DONE** polish out deactivator to do broader deactivation when deactivating a state fully

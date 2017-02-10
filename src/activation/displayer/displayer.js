@@ -20,10 +20,8 @@ export default stateParams =>
     query = {flags: {pending: true, displayed: true, canceled: false}};
     let renderedStates = aptivator.history.find(query);
     
-    
     renderedStates.forEach(stateParams => {
-      let {rootViews} = stateParams;
-      rootViews.forEach(rootView => displayer(...rootView));
+      stateParams.rootViews.forEach(rootView => displayer(...rootView));
       delete stateParams.rootViews;
     });
     

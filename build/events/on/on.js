@@ -28,7 +28,7 @@ var eventRegistry = _vars2.default.eventRegistry,
 exports.default = function (events, callback, context, once) {
   if (_lodash2.default.isString(events) || _lodash2.default.isArray(events)) {
     if (_lodash2.default.isString(events)) {
-      events = events.split(spaceSplitter);
+      events = events.trim().split(spaceSplitter);
     }
 
     if (!_lodash2.default.isArray(callback)) {

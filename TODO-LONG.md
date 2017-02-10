@@ -21,5 +21,3 @@
 * place canceler inside each activation step - this places its execution on the same tick as the module
 * think about when an error should be thrown or when a warning should be displayed
 * be on the lookout to use constructors (if appropriate)
-* **DONE** move uniq address generator into some centralized module
-* trim class and event names before splitting them 
