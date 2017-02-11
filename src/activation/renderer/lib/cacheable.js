@@ -6,13 +6,13 @@ import vars      from '../../../lib/vars';
 let paramsMap = {};
 
 export default {
-  explicit: function(viewConfigs) {
+  explicit(viewConfigs) {
     let stateConfigs = vars.states.registry[viewConfigs.stateName];
     return this.explicit.cache = !_.isUndefined(viewConfigs.cache) ? viewConfigs.cache :
       !_.isUndefined(stateConfigs.cache) ? stateConfigs.cache : undefined;
   },
   
-  implicit: function(viewConfigs, stateParams) {
+  implicit(viewConfigs, stateParams) {
     let {stateName, viewAddressUnique} = viewConfigs;
     let family = relations.family(stateName).concat(viewAddressUnique);
     let params = params_.assemble(family, stateParams);
@@ -33,7 +33,7 @@ export default {
     return this.implicit.cache = false;
   },
   
-  total: function(viewConfigs, stateParams) {
+  total(viewConfigs, stateParams) {
     this.implicit(viewConfigs, stateParams);
     
     if(!_.isUndefined(this.explicit(viewConfigs))) {

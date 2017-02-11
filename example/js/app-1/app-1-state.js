@@ -104,7 +104,7 @@ aptivator.state('app-1', {
   },
   animate: {
     enter: {
-      '.cover@root': 'aptivator-fade-in'
+      'root': 'aptivator-fade-in'
     },
     
     exit: {

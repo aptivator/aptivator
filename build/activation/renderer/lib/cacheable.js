@@ -29,7 +29,6 @@ exports.default = {
     var stateConfigs = _vars2.default.states.registry[viewConfigs.stateName];
     return this.explicit.cache = !_lodash2.default.isUndefined(viewConfigs.cache) ? viewConfigs.cache : !_lodash2.default.isUndefined(stateConfigs.cache) ? stateConfigs.cache : undefined;
   },
-
   implicit: function implicit(viewConfigs, stateParams) {
     var stateName = viewConfigs.stateName,
         viewAddressUnique = viewConfigs.viewAddressUnique;
@@ -52,7 +51,6 @@ exports.default = {
 
     return this.implicit.cache = false;
   },
-
   total: function total(viewConfigs, stateParams) {
     this.implicit(viewConfigs, stateParams);
 

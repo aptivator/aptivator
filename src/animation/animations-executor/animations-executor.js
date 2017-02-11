@@ -1,12 +1,6 @@
-import $ from 'jquery';
-import _ from 'lodash';
-
-let animationProperties = ['animation', 'transition'];
-
-let animationMap = animationProperties.reduce((animationMap, animationProperty) => {
-  animationMap[animationProperty] = {eventName: `${animationProperty}end`};
-  return animationMap;
-}, {});
+import $                from 'jquery';
+import _                from 'lodash';
+import stylesAggregator from './styles-aggregator/styles-aggregator';
 
 export default animations => {
   let allPromises = [];
@@ -15,25 +9,21 @@ export default animations => {
     let {$el, classes} = animationConfigs;
     let elementsPromises = [];
 
-    _.each(animationMap, (settings, animationProperty) => {
-      settings.initial = _.reduce($el, (initial, el) => {
-        let $el = $(el);
-        let initialCss = $el.css(animationProperty);
-        initial.set($el, initialCss);
-        return initial;
-      }, new Map());
-    });
-
-    $el.addClass(...classes);
-    
-    _.each(animationMap, (settings, animationProperty) => {
-      let {eventName, initial} = settings;
-      for(let [$el, initialCss] of initial.entries()) {
-        if(initialCss !== $el.css(animationProperty)) {
-          let promise = new Promise(resolve => $el.one(eventName, resolve));
+    _.each($el, el => {
+      let $el = $(el);
+      let css = ['animation', 'transition'].reduce((css, property) => {
+        css[property] = stylesAggregator(el, property);
+        return css;
+      }, {});
+      
+      $el.addClass(...classes);
+      
+      _.each(css, (css, property) => {
+        if(css !== stylesAggregator(el, property)) {
+          let promise = new Promise(resolve => $el.one(`${property}end`, resolve));
           elementsPromises.push(promise);
         }
-      }
+      });
     });
     
     allPromises.push(Promise.all(elementsPromises).then(() => $el.removeClass(...classes)));
