@@ -10,12 +10,12 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (el, mainStyle) {
+exports.default = function (el, mainProperty) {
   var computedStyles = window.getComputedStyle(el, null);
-  return _lodash2.default.reduce(computedStyles, function (accumulator, value) {
-    if (value.startsWith(mainStyle)) {
-      accumulator.push(computedStyles[value]);
+  return _lodash2.default.reduce(computedStyles, function (aggregator, property) {
+    if (property.startsWith(mainProperty)) {
+      aggregator.push(computedStyles[property]);
     }
-    return accumulator;
+    return aggregator;
   }, []).join(' ');
 };
