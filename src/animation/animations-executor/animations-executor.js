@@ -16,24 +16,27 @@ export default animations => {
     let elementsPromises = [];
 
     _.each(animationMap, (settings, animationProperty) => {
-      settings.initial = _.map($el, el => $(el).css(animationProperty));
+      settings.initial = _.reduce($el, (initial, el) => {
+        let $el = $(el);
+        let initialCss = $el.css(animationProperty);
+        initial.set($el, initialCss);
+        return initial;
+      }, new Map());
     });
 
     $el.addClass(...classes);
     
     _.each(animationMap, (settings, animationProperty) => {
-      let {animated, initial, eventName} = settings;
-      animated = _.map($el, el => $(el).css(animationProperty));
-      
-      if(!_.isEqual(animated, initial)) {
-        _.each($el, el => {
-          let promise = new Promise(resolve => $(el).one(eventName, resolve));
+      let {eventName, initial} = settings;
+      for(let [$el, initialCss] of initial.entries()) {
+        if(initialCss !== $el.css(animationProperty)) {
+          let promise = new Promise(resolve => $el.one(eventName, resolve));
           elementsPromises.push(promise);
-        });
+        }
       }
     });
-
-    allPromises.push(Promise.all(elementsPromises).then(() => $el.removeClass(...classes)));       
+    
+    allPromises.push(Promise.all(elementsPromises).then(() => $el.removeClass(...classes)));
   });
 
   return Promise.all(allPromises);  

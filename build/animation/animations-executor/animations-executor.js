@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
 var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
@@ -35,29 +39,53 @@ exports.default = function (animations) {
     var elementsPromises = [];
 
     _lodash2.default.each(animationMap, function (settings, animationProperty) {
-      settings.initial = _lodash2.default.map($el, function (el) {
-        return (0, _jquery2.default)(el).css(animationProperty);
-      });
+      settings.initial = _lodash2.default.reduce($el, function (initial, el) {
+        var $el = (0, _jquery2.default)(el);
+        var initialCss = $el.css(animationProperty);
+        initial.set($el, initialCss);
+        return initial;
+      }, new Map());
     });
 
     $el.addClass.apply($el, (0, _toConsumableArray3.default)(classes));
 
     _lodash2.default.each(animationMap, function (settings, animationProperty) {
-      var animated = settings.animated,
-          initial = settings.initial,
-          eventName = settings.eventName;
+      var eventName = settings.eventName,
+          initial = settings.initial;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-      animated = _lodash2.default.map($el, function (el) {
-        return (0, _jquery2.default)(el).css(animationProperty);
-      });
+      try {
+        var _loop = function _loop() {
+          var _step$value = (0, _slicedToArray3.default)(_step.value, 2),
+              $el = _step$value[0],
+              initialCss = _step$value[1];
 
-      if (!_lodash2.default.isEqual(animated, initial)) {
-        _lodash2.default.each($el, function (el) {
-          var promise = new Promise(function (resolve) {
-            return (0, _jquery2.default)(el).one(eventName, resolve);
-          });
-          elementsPromises.push(promise);
-        });
+          if (initialCss !== $el.css(animationProperty)) {
+            var promise = new Promise(function (resolve) {
+              return $el.one(eventName, resolve);
+            });
+            elementsPromises.push(promise);
+          }
+        };
+
+        for (var _iterator = initial.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          _loop();
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
     });
 
