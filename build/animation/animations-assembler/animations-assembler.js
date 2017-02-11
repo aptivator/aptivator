@@ -41,36 +41,36 @@ exports.default = function (statesParams, animationType) {
     _lodash2.default.each(animationsMap, function (classNames, entityName) {
       var _classes;
 
-      var stateName = _addresser2.default.stateName(entityName);
-      var stateConfigs = registry[stateName];
-
-      var _ref2 = stateConfigs || {},
-          viewAddressUnique = _ref2.viewAddressUnique;
-
-      var activationRecord = activationRecords[viewAddressUnique] || {};
-
-      var _ref3 = activationRecord.instance || {},
-          $el = _ref3.$el;
-
-      var selector = entityName.includes('@') && _addresser2.default.region(entityName);
-
-      if (!stateConfigs) {
-        return _error2.default.warn('state [' + stateName + '] does not exist', 'animator');
-      }
-
-      if (!activationRecord.active) {
-        return _error2.default.warn('state [' + stateName + '] is not activated', 'animator');
-      }
-
-      if (selector && !($el = $el.find(selector)).size()) {
-        return _error2.default.warn('no elements were found using [' + selector + '] selector', 'animator');
-      }
-
       var stateAnimations = animations[entityName] || (animations[entityName] = {});
       var classes = stateAnimations.classes;
 
 
       if (!classes) {
+        var stateName = _addresser2.default.stateName(entityName);
+        var stateConfigs = registry[stateName];
+
+        var _ref2 = stateConfigs || {},
+            viewAddressUnique = _ref2.viewAddressUnique;
+
+        var activationRecord = activationRecords[viewAddressUnique] || {};
+
+        var _ref3 = activationRecord.instance || {},
+            $el = _ref3.$el;
+
+        var selector = entityName.includes('@') && _addresser2.default.region(entityName);
+
+        if (!stateConfigs) {
+          return _error2.default.warn('state [' + stateName + '] does not exist', 'animator');
+        }
+
+        if (!activationRecord.active) {
+          return _error2.default.warn('state [' + stateName + '] is not activated', 'animator');
+        }
+
+        if (selector && !($el = $el.find(selector)).size()) {
+          return _error2.default.warn('no elements were found using [' + selector + '] selector', 'animator');
+        }
+
         classes = new Set();
         _lodash2.default.extend(stateAnimations, { $el: $el, classes: classes });
       }
