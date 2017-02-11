@@ -83,6 +83,20 @@ aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
   states: ['header'],
+  substates: {
+    'three': {
+      
+    }
+  },
+  on: {
+    exit: function() {
+      
+    },
+    
+    enter: function() {
+      
+    }
+  },
   resolves: {
     run: function() {
       return 'run';
@@ -90,7 +104,7 @@ aptivator.state('app-1', {
   },
   animate: {
     enter: {
-      'root': 'aptivator-fade-in   '
+      //'.cover@root': 'aptivator-fade-in'
     },
     
     exit: {

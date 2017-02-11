@@ -3,10 +3,10 @@
 * Documentation
 * Write a documentation note about source structure
 * note that it is a good practice to know which states are serial and which are parallel at the onset and use them as such
+* note that when specifying animations, the animation must be declared for specific element and not pseudo-elements
 * Sprinkle comments throughout code
 * Tutorial
 * allow to use a template property on the state instead of a view to tell framework to create a view
-* deactivate() function, defined on a state, that controls how a state is deactivated
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution
@@ -21,3 +21,4 @@
 * place canceler inside each activation step - this places its execution on the same tick as the module
 * think about when an error should be thrown or when a warning should be displayed
 * be on the lookout to use constructors (if appropriate)
+* change hook names back to originals (e.g., start instead of started)

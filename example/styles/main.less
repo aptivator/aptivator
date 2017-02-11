@@ -129,22 +129,17 @@ form > * {
   }
 }
 
-.aptivator-fade-in {
+#application {
   position: relative;
-  &:before {
-    content: "";
-    display: block;
-    clear: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    background-color: #fff;
-    
-    animation: aptivator-fade-out linear 500ms forwards;
-  }
 }
 
-
+.aptivator-fade-in {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  z-index: 100;
+  animation: aptivator-fade-out linear 1500ms;
+}

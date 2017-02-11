@@ -1,3 +1,4 @@
+<div class = "cover"></div>
 <div>
   <div class = "extra"></div>
   <div class = "error"></div>

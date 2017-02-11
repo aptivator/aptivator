@@ -19,6 +19,9 @@
 * animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
 * animations that should affect state activation timing
 * for animation, allow selectors paired with the state name for finer animation assignment
+* **DONE** for animation, make sure that both animations and transitions are handled
+* **DONE** for animation, make sure that state activation continues only after the last css animation/transition is finished
+* **DONE** deactivate() function, defined on a state, that controls how a state is deactivated (don't see the need)
 * **DONE** move uniq address generator into some centralized module
 * **DONE** trim class and event names before splitting them 
 * **DONE** complete .off() to handle callbacks and contexts (needed full functionality for once() method)

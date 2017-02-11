@@ -1,4 +1,4 @@
-import Animator  from '../../animation/animator';
+import animator  from '../../animation/animator';
 import aptivator from '../../lib/instance';
 import displayer from '../../lib/displayer';
 
@@ -25,8 +25,7 @@ export default stateParams =>
       delete stateParams.rootViews;
     });
     
-    let animator = new Animator(renderedStates, 'enter');
-    await animator.animate();
+    await animator(renderedStates, 'enter');
     
     aptivator.trigger(eventHandle);
   });

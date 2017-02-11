@@ -35,7 +35,7 @@ var eventHandle = 'aptivator-goto-finalizer';
 exports.default = function (stateParams) {
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
-      var query, renderingStates, renderedStates, animator;
+      var query, renderingStates, renderedStates;
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -63,23 +63,20 @@ exports.default = function (stateParams) {
 
 
               renderedStates.forEach(function (stateParams) {
-                var rootViews = stateParams.rootViews;
-
-                rootViews.forEach(function (rootView) {
+                stateParams.rootViews.forEach(function (rootView) {
                   return _displayer2.default.apply(undefined, (0, _toConsumableArray3.default)(rootView));
                 });
                 delete stateParams.rootViews;
               });
 
-              animator = new _animator2.default(renderedStates, 'enter');
-              _context.next = 12;
-              return animator.animate();
+              _context.next = 11;
+              return (0, _animator2.default)(renderedStates, 'enter');
 
-            case 12:
+            case 11:
 
               _instance2.default.trigger(eventHandle);
 
-            case 13:
+            case 12:
             case 'end':
               return _context.stop();
           }
