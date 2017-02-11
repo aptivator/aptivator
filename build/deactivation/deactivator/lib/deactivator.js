@@ -50,7 +50,7 @@ exports.default = {
     var stateName = _addresser2.default.stateName(viewAddressUnique);
     var stateConfigs = registry[stateName];
     var viewAddresses = new Set([viewAddressUnique]);
-    var activationRecord = activationRecords[viewAddressUnique];
+    var activationRecord = activationRecords[viewAddressUnique] || {};
 
     if (!activationRecord.active) {
       return;

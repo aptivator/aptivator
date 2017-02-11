@@ -22,7 +22,7 @@ export default {
     let stateName = addresser.stateName(viewAddressUnique);
     let stateConfigs = registry[stateName];
     let viewAddresses = new Set([viewAddressUnique]);
-    let activationRecord = activationRecords[viewAddressUnique];
+    let activationRecord = activationRecords[viewAddressUnique] || {};
     
     if(!activationRecord.active) {
       return;
