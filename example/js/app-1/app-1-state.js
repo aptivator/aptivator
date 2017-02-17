@@ -82,32 +82,25 @@ aptivator.on({
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
-  //states: ['header'],
+  states: ['header'],
   resolves: {
     run: function() {
       return 'run';
     }
   },
-  
-  animate: {
-    enter: {
-      'app-1': {
-        self: 'aptivator-fade-in'
-      }
-    }
-  },
-  
+
   views: {
     'main': {
       address: '.main',
-      view: HeaderView,
-      animate: {
-        enter: false
-      }
+      view: HeaderView
     },
+    
     '.main': {
       view: App1View,
       main: true,
+      animate: {
+        enter: 'aptivator-fade-in'
+      },
       cache: {
         receiver: 'receiver'  
       },

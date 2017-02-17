@@ -1,5 +1,7 @@
 # TODOs
 
+* for view animate declarations, allow animate: false to prevent any type of animation on the view
+* in declaring animations, if add and remove are defined, go with add
 * in animation, use base instead of self to set state's common classes
 * note that when using multiple classes for animation, these classes should not override the previous class's animation or transition property
 * simplify view property names in preprocessor
