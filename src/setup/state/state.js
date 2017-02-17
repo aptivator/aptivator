@@ -9,7 +9,7 @@ import vars                from '../../lib/vars';
 import otherStateRegistrar from './lib/other-state-registrar';
 
 let {registry, queue} = vars.states;
-let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden'];
+let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
 
 aptivator.state = (stateName, stateConfigs) => 
   !async function() {

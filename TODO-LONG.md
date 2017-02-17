@@ -22,3 +22,7 @@
 * think about when an error should be thrown or when a warning should be displayed
 * be on the lookout to use constructors (if appropriate)
 * change hook names back to originals (e.g., start instead of started)
+* should there be a cascade for animation specifications
+* if there are possible partial view deactivations, should and how should the animations be specified for the use case
+* should root state be instantiated and handled just like any other state and has the same settings (e.g., multiple views)
+* revisit an issue again of the root state

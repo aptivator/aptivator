@@ -3,7 +3,7 @@ import aptivator from '../../lib/instance';
 
 export default async (e, stateParams) => {
   if(!(e instanceof Error)) {
-    let eventName = 'errored';
+    let eventName = 'error';
     let errorStateHandle = `${eventName}:${stateParams.stateName}:${e}`;
     let errorHandle = `${eventName}:${e}`;
     

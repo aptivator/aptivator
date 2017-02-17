@@ -6,7 +6,7 @@ var App2FormView = require('./form');
 var PlusView = require('./plus');
 
 aptivator.on({
-  errored: {
+  error: {
     callbacks: function(e, stateParams) {
       console.log('general error callback: ', e, stateParams);
     },

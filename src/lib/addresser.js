@@ -1,6 +1,18 @@
-import _ from 'lodash';
+import _    from 'lodash';
+import vars from './vars';
+
+let {registry} = vars.states;
 
 export default {
+  isStateAddress(viewAddress) {
+    if(!viewAddress.includes('@')) {
+      return true;
+    }
+    
+    let stateName = this.stateName(viewAddress);
+    return registry[stateName].viewAddressUnique === viewAddress;
+  },
+  
   uniqueAddress(stateName) {
     return `${_.uniqueId('aptivator-id-')}@${stateName}`;
   },

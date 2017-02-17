@@ -117,9 +117,8 @@ exports.default = function (stateParams) {
     };
 
     instance.on('destroy', function () {
-      _instance2.default.deactivate({ name: viewAddressUnique, forward: true, detach: { children: true } });
+      _instance2.default.deactivate({ name: viewAddressUnique, partial: true, detach: { children: true } });
       targetRegion.current.delete(viewAddressUnique);
-      activationRecord.active = false;
       delete activationRecord.instance;
     });
 

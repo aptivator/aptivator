@@ -1,22 +1,20 @@
 import _           from 'lodash';
+import addresser   from '../lib/addresser';
 import aptivator   from '../lib/instance';
-import error       from '../lib/error';
 import deactivator from './deactivator/deactivator'; 
 
 aptivator.deactivate = async params => {
-  let {name, forward, focal, stateParams, silent} = params;
+  let {name, stateParams, silent} = params;
 
-  if(forward && focal) {
-    error.throw(`use either [focal] or [forward] flag`, 'deactivator');
-  }
-  
-  if(name.includes('@')) {
+  if(!addresser.isStateAddress(name)) {
     silent = true;
   }
   
   if(silent) {
     return deactivator(params);
   }
+  
+  console.log(`deactivating ${name}`);
   
   if(!stateParams) {
     stateParams = aptivator.history.findOne(stateParams => {
@@ -39,10 +37,7 @@ aptivator.deactivate = async params => {
     return stateParams.flags.canceled = true;
   }
   
+  let results = await aptivator.trigger({handle: `exit:${name}`, full: true}, stateParams);
+  
   deactivator(params);
-
-  return aptivator.trigger(`exited:${name}`, stateParams).then(results => {
-    _.extend(stateParams.hooks, results);
-    return results;
-  });
 };

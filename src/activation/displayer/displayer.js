@@ -1,3 +1,4 @@
+import _         from 'lodash';
 import animator  from '../../animation/animator';
 import aptivator from '../../lib/instance';
 import displayer from '../../lib/displayer';
@@ -19,13 +20,14 @@ export default stateParams =>
     
     query = {flags: {pending: true, displayed: true, canceled: false}};
     let renderedStates = aptivator.history.find(query);
-    
-    renderedStates.forEach(stateParams => {
-      stateParams.rootViews.forEach(rootView => displayer(...rootView));
+    let stateNames = _.map(renderedStates, stateParams => {
+      let {stateName, rootViews} = stateParams;
+      _.each(rootViews, rootView => displayer(...rootView));
       delete stateParams.rootViews;
+      return stateName;
     });
     
-    await animator(renderedStates, 'enter');
+    await animator(stateNames, 'enter');
     
     aptivator.trigger(eventHandle);
   });

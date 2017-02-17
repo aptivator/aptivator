@@ -1,6 +1,6 @@
-import _                from 'lodash';
-import error            from '../../lib/error';
-import callbacker       from '../callbacker/callbacker';
+import _          from 'lodash';
+import error      from '../../lib/error';
+import callbacker from '../callbacker/callbacker';
 
 export default async (events, ...args) => {
   let promises = [];

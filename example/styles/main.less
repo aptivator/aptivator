@@ -129,10 +129,20 @@ form > * {
   }
 }
 
+@keyframes redify {
+  0% {
+    border: 2px solid #fff;
+  }
+  
+  100% {
+    border: 2px solid red;
+  }
+}
+
 #application {
   position: relative;
 }
 
 .aptivator-fade-in {
-  animation: aptivator-fade-in linear 500ms;
+  animation: aptivator-fade-in linear 1500ms, redify linear 1500ms;
 }

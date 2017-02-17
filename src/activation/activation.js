@@ -17,7 +17,7 @@ aptivator.activate = stateParams =>
   registrar(stateParams)
     .then(canceler)
     .then(initializer)
-    .then(eventer('started'))
+    .then(eventer('start'))
     .then(canceler)
     .then(preprocessor)
     .then(canceler)
@@ -33,6 +33,6 @@ aptivator.activate = stateParams =>
     .then(displayer)
     .then(eventer('loaded'))
     .then(canceler)
-    .then(eventer('entered'))
+    .then(eventer('enter'))
     .then(finalizer)
     .catch(_.partial(errorer, _, stateParams));

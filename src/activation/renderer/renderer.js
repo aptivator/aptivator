@@ -71,9 +71,8 @@ export default stateParams => {
     };
     
     instance.on('destroy', () => {
-      aptivator.deactivate({name: viewAddressUnique, forward: true, detach: {children: true}});
+      aptivator.deactivate({name: viewAddressUnique, partial: true, detach: {children: true}});
       targetRegion.current.delete(viewAddressUnique);
-      activationRecord.active = false;
       delete activationRecord.instance;
     });
 

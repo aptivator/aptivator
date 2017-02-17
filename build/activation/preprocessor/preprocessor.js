@@ -32,6 +32,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _animationsNormalizer = require('./lib/animations-normalizer');
+
+var _animationsNormalizer2 = _interopRequireDefault(_animationsNormalizer);
+
 var _fullAddressMaker = require('./lib/full-address-maker');
 
 var _fullAddressMaker2 = _interopRequireDefault(_fullAddressMaker);
@@ -102,11 +106,10 @@ exports.default = function (stateParams) {
     var viewCount = _lodash2.default.keys(stateConfigs.views).length;
     var mainCount = 0;
 
-    _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewAddress) {
-      if (viewConfigs.address) {
-        viewAddress = viewConfigs.address;
-      }
+    _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewHash) {
+      var address = viewConfigs.address;
 
+      var viewAddress = address || viewHash;
       var viewAddressFull = (0, _fullAddressMaker2.default)(viewAddress, stateName);
 
       var _addresser$parts = _addresser2.default.parts(viewAddressFull),
@@ -149,9 +152,10 @@ exports.default = function (stateParams) {
         dataParams[viewAddressUnique] = viewConfigs.data;
       }
 
+      _lodash2.default.extend(viewConfigs, { viewAddressFull: viewAddressFull, stateName: stateName, viewHash: viewHash, viewAddressUnique: viewAddressUnique, viewSelector: viewSelector, viewStateName: viewStateName });
+
       (0, _viewNormalizer2.default)(viewConfigs);
       viewsRegistry[viewAddressUnique] = viewConfigs;
-      _lodash2.default.extend(viewConfigs, { viewAddressFull: viewAddressFull, stateName: stateName, viewAddressUnique: viewAddressUnique, viewSelector: viewSelector, viewStateName: viewStateName });
       activationSequence.push(viewConfigs);
 
       preprocess(viewStateName, activationSequence);
@@ -161,8 +165,8 @@ exports.default = function (stateParams) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
     }
 
-    _lodash2.default.each(stateConfigs.states, function (parallelStateName) {
-      preprocess(parallelStateName, activationSequence);
+    _lodash2.default.each(stateConfigs.states, function (stateName) {
+      return preprocess(stateName, activationSequence);
     });
 
     if (previousSequence) {

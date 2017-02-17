@@ -16,6 +16,10 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _animator = require('../../animation/animator');
 
 var _animator2 = _interopRequireDefault(_animator);
@@ -35,7 +39,7 @@ var eventHandle = 'aptivator-goto-finalizer';
 exports.default = function (stateParams) {
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
-      var query, renderingStates, renderedStates;
+      var query, renderingStates, renderedStates, stateNames;
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -60,17 +64,18 @@ exports.default = function (stateParams) {
 
               query = { flags: { pending: true, displayed: true, canceled: false } };
               renderedStates = _instance2.default.history.find(query);
+              stateNames = _lodash2.default.map(renderedStates, function (stateParams) {
+                var stateName = stateParams.stateName,
+                    rootViews = stateParams.rootViews;
 
-
-              renderedStates.forEach(function (stateParams) {
-                stateParams.rootViews.forEach(function (rootView) {
+                _lodash2.default.each(rootViews, function (rootView) {
                   return _displayer2.default.apply(undefined, (0, _toConsumableArray3.default)(rootView));
                 });
                 delete stateParams.rootViews;
+                return stateName;
               });
-
               _context.next = 11;
-              return (0, _animator2.default)(renderedStates, 'enter');
+              return (0, _animator2.default)(stateNames, 'enter');
 
             case 11:
 

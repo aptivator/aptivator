@@ -33,5 +33,17 @@ export default {
   
   parent(stateName) {
     return this.family(stateName).slice(-2, -1)[0];
+  },
+  
+  hierarchySorter(desc) {
+    return (...args) => {
+      let [length1, length2] = args.map(stateName => this.parts(stateName).length);
+      
+      if(desc) {
+        [length2, length1] = [length1, length2];
+      }
+      
+      return length1 - length2;
+    };
   }
 };

@@ -1,11 +1,12 @@
-import _                  from 'lodash';
-import addresser          from '../../lib/addresser';
-import error              from '../../lib/error';
-import relations          from '../../lib/relations';
-import vars               from '../../lib/vars';
-import fullAddressMaker   from './lib/full-address-maker';
-import resolvesNormalizer from './lib/resolves-normalizer';
-import viewNormalizer     from './lib/view-normalizer';
+import _                    from 'lodash';
+import addresser            from '../../lib/addresser';
+import error                from '../../lib/error';
+import relations            from '../../lib/relations';
+import vars                 from '../../lib/vars';
+import animationsNormalizer from './lib/animations-normalizer';
+import fullAddressMaker     from './lib/full-address-maker';
+import resolvesNormalizer   from './lib/resolves-normalizer';
+import viewNormalizer       from './lib/view-normalizer';
 
 let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
@@ -59,11 +60,9 @@ export default stateParams => {
     let viewCount = _.keys(stateConfigs.views).length;
     let mainCount = 0;
     
-    _.each(stateConfigs.views, (viewConfigs, viewAddress) => {
-      if(viewConfigs.address) {
-        viewAddress = viewConfigs.address;
-      }
-      
+    _.each(stateConfigs.views, (viewConfigs, viewHash) => {
+      let {address} = viewConfigs;
+      let viewAddress = address || viewHash;
       let viewAddressFull = fullAddressMaker(viewAddress, stateName);
       let [viewSelector, viewStateName] = addresser.parts(viewAddressFull);
       let viewAddressUnique = addresser.uniqueAddress(stateName);
@@ -100,9 +99,10 @@ export default stateParams => {
         dataParams[viewAddressUnique] = viewConfigs.data;
       }
       
+      _.extend(viewConfigs, {viewAddressFull, stateName, viewHash, viewAddressUnique, viewSelector, viewStateName});
+      
       viewNormalizer(viewConfigs);
       viewsRegistry[viewAddressUnique] = viewConfigs;
-      _.extend(viewConfigs, {viewAddressFull, stateName, viewAddressUnique, viewSelector, viewStateName});
       activationSequence.push(viewConfigs);
       
       preprocess(viewStateName, activationSequence);
@@ -112,9 +112,7 @@ export default stateParams => {
       error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
     
-    _.each(stateConfigs.states, parallelStateName => {
-      preprocess(parallelStateName, activationSequence);
-    });
+    _.each(stateConfigs.states, stateName => preprocess(stateName, activationSequence));
     
     if(previousSequence) {
       preprocess(stateName, previousSequence);

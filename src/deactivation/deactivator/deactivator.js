@@ -1,7 +1,6 @@
 import deactivator from './lib/deactivator';
 
 export default params => {
-  let {focal, forward} = params;
-  let method = focal || forward ? 'partial' : 'full';
+  let method = params.partial ? 'partial' : 'full';
   deactivator[method](params);
 };

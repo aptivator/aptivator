@@ -25,7 +25,7 @@ route = {
 
 
 aptivator.on({
-  started: {
+  start: {
     sub: {
       'app-1': function(stateParams) {
         console.log('starting', stateParams.stateName);
@@ -53,7 +53,7 @@ aptivator.on({
     }
   },
   
-  entered: {
+  enter: {
     sub: {
       'app-1': function(stateParams) {
         console.log('entered', stateParams.stateName);
@@ -61,7 +61,7 @@ aptivator.on({
     }
   },
   
-  exited: {
+  exit: {
     sub: {
       'app-1': function(stateParams) {
         console.log('exited', stateParams.stateName);
@@ -82,39 +82,28 @@ aptivator.on({
 aptivator.state('app-1', {
   route: 'app-1(/:one)(/:two)',
   routeValues: ['one', 22],
-  states: ['header'],
-  substates: {
-    'three': {
-      
-    }
-  },
-  on: {
-    exit: function() {
-      
-    },
-    
-    enter: function() {
-      
-    }
-  },
+  //states: ['header'],
   resolves: {
     run: function() {
       return 'run';
     }
   },
+  
   animate: {
     enter: {
-      'root': 'aptivator-fade-in'
-    },
-    
-    exit: {
-      
+      'app-1': {
+        self: 'aptivator-fade-in'
+      }
     }
   },
+  
   views: {
     'main': {
       address: '.main',
-      view: HeaderView
+      view: HeaderView,
+      animate: {
+        enter: false
+      }
     },
     '.main': {
       view: App1View,

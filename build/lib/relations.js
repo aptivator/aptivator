@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -51,5 +55,29 @@ exports.default = {
   },
   parent: function parent(stateName) {
     return this.family(stateName).slice(-2, -1)[0];
+  },
+  hierarchySorter: function hierarchySorter(desc) {
+    var _this = this;
+
+    return function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var _args$map = args.map(function (stateName) {
+        return _this.parts(stateName).length;
+      }),
+          _args$map2 = (0, _slicedToArray3.default)(_args$map, 2),
+          length1 = _args$map2[0],
+          length2 = _args$map2[1];
+
+      if (desc) {
+        var _ref = [length1, length2];
+        length2 = _ref[0];
+        length1 = _ref[1];
+      }
+
+      return length1 - length2;
+    };
   }
 };

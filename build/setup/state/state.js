@@ -54,7 +54,7 @@ var _vars$states = _vars2.default.states,
     registry = _vars$states.registry,
     queue = _vars$states.queue;
 
-var rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden'];
+var rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
 
 _instance2.default.state = function (stateName, stateConfigs) {
   return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {

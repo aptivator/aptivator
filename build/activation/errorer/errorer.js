@@ -38,7 +38,7 @@ exports.default = function () {
               break;
             }
 
-            eventName = 'errored';
+            eventName = 'error';
             errorStateHandle = eventName + ':' + stateParams.stateName + ':' + e;
             errorHandle = eventName + ':' + e;
             _context.next = 6;

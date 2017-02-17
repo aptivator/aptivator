@@ -1,5 +1,9 @@
 # TODOs
 
+* in animation, use base instead of self to set state's common classes
+* note that when using multiple classes for animation, these classes should not override the previous class's animation or transition property
+* simplify view property names in preprocessor
+* take a look at preprocessor code for root state and optimize
 * think about splitting rendered into two manageable parts
 * analyze canceled flag setting within deactivation module
 * add on property to state definition
@@ -15,10 +19,15 @@
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
-* keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
-* animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
-* animations that should affect state activation timing
-* for animation, allow selectors paired with the state name for finer animation assignment
+* in light of animation support, figure out how to handle deactivation of states
+* for deactivation, when unique address is submitted, see if it is associated with a state, and if yes, deactivate the state
+* to complete animation, make sure that multiple view states and composites states are handled correctly
+* rethink complete through the process of deactivation (e.g., state activated fully, then only a part of it is deactivated, etc)
+* what about adding keyword this or self to views or animation definitions (it could work well)
+* **DONE** keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
+* **DONE** animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
+* **DONE** animations that should affect state activation timing
+* **DONE** for animation, allow selectors paired with the state name for finer animation assignment
 * **DONE** for animation, make sure that both animations and transitions are handled
 * **DONE** for animation, make sure that state activation continues only after the last css animation/transition is finished
 * **DONE** deactivate() function, defined on a state, that controls how a state is deactivated (don't see the need)
