@@ -4,6 +4,9 @@ var HeaderView = require('./header');
 aptivator.state('header', {
   view: HeaderView,
   parentSelector: '.header',
+  animate: {
+    enter: 'border-blue'
+  },
   resolves: {
     another: function() {
       return 'another';

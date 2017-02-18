@@ -4,13 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
 var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
 exports.default = animationsAssembler;
 
@@ -55,6 +55,10 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
 
   var stateNameToUse = stateName;
 
+  if (!_lodash2.default.isObject(animationSettings)) {
+    animationSettings = (0, _defineProperty3.default)({}, stateNameToUse, animationSettings);
+  }
+
   if (fromStateName) {
     var family = _relations2.default.family(fromStateName);
     if (!family.includes(stateName) && !active) {
@@ -72,8 +76,8 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
     }
   }
 
-  var _animationSettings = animationSettings,
-      self_ = _animationSettings[stateNameToUse];
+  var _animationSettings2 = animationSettings,
+      self_ = _animationSettings2[stateNameToUse];
 
 
   if (!_lodash2.default.isObject(self_)) {

@@ -14,6 +14,10 @@ export default function animationsAssembler(stateName, animationType, animations
   let {$el} = instance;
   let stateNameToUse = stateName;
   
+  if(!_.isObject(animationSettings)) {
+    animationSettings = {[stateNameToUse]: animationSettings};
+  }
+  
   if(fromStateName) {
     let family = relations.family(fromStateName);
     if(!family.includes(stateName) && !active) {
