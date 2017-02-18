@@ -22,13 +22,17 @@ var _error = require('../../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _relations = require('../../../lib/relations');
+
+var _relations2 = _interopRequireDefault(_relations);
+
 var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _selectorAssembler = require('./selector-assembler/selector-assembler');
+var _elementAssembler = require('./element-assembler/element-assembler');
 
-var _selectorAssembler2 = _interopRequireDefault(_selectorAssembler);
+var _elementAssembler2 = _interopRequireDefault(_elementAssembler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36,26 +40,41 @@ var spaceSplitter = _vars2.default.spaceSplitter,
     states = _vars2.default.states;
 var activationRecords = states.activationRecords,
     registry = states.registry;
-function animationsAssembler(stateName, animationType, animations, origin) {
+function animationsAssembler(stateName, animationType, animations, fromStateName) {
   var _registry$stateName = registry[stateName],
       viewsRegistry = _registry$stateName.viewsRegistry,
       _registry$stateName$a = _registry$stateName.animate,
-      animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a;
+      animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
+      viewAddressUnique = _registry$stateName.viewAddressUnique;
   var _animate$animationTyp = animate[animationType],
-      typeSettings = _animate$animationTyp === undefined ? {} : _animate$animationTyp;
+      animationSettings = _animate$animationTyp === undefined ? {} : _animate$animationTyp;
+  var _activationRecords$vi = activationRecords[viewAddressUnique],
+      active = _activationRecords$vi.active,
+      instance = _activationRecords$vi.instance;
+  var $el = instance.$el;
 
+  var stateNameToUse = stateName;
 
-  if (typeSettings.self) {
-    delete typeSettings[stateName];
+  if (fromStateName) {
+    var family = _relations2.default.family(fromStateName);
+    if (!family.includes(stateName) && !active) {
+      return _error2.default.warn('state [' + stateName + '] is not activated', 'animator');
+    }
+
+    var _ref = registry[fromStateName].animate || {};
+
+    var _ref$animationType = _ref[animationType];
+    animationSettings = _ref$animationType === undefined ? {} : _ref$animationType;
+  } else {
+    if (animationSettings.self) {
+      delete animationSettings[stateName];
+      stateNameToUse = 'self';
+    }
   }
 
-  if (typeSettings[stateName]) {
-    typeSettings.self = typeSettings[stateName];
-    delete typeSettings[stateName];
-  }
+  var _animationSettings = animationSettings,
+      self_ = _animationSettings[stateNameToUse];
 
-  var _ref = typeSettings || {},
-      self_ = _ref.self;
 
   if (!_lodash2.default.isObject(self_)) {
     self_ = { base: self_ };
@@ -83,12 +102,12 @@ function animationsAssembler(stateName, animationType, animations, origin) {
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
 
-  _lodash2.default.each(viewsRegistry, function (viewConfigs, viewAddressUnique) {
-    var _ref2 = activationRecords[viewAddressUnique] || {},
-        active = _ref2.active,
-        instance = _ref2.instance;
+  _lodash2.default.each(self_.elements, function (selectorConfigs, selector) {
+    (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
+  });
 
-    var $el = instance.$el;
+  _lodash2.default.each(viewsRegistry, function (viewConfigs, viewAddressUnique) {
+    var $el = activationRecords[viewAddressUnique].instance.$el;
     var viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,
         viewStateName = viewConfigs.viewStateName;
@@ -104,12 +123,8 @@ function animationsAssembler(stateName, animationType, animations, origin) {
         classes = _viewSettings.classes;
 
 
-    if (!active) {
-      return _error2.default.warn('state [' + stateName + '] is not activated', 'animator');
-    }
-
     if (viewStateName !== stateName) {
-      if (baseClasses === false) {
+      if (_lodash2.default.isNull(baseClasses)) {
         _lodash2.default.remove(classes, function () {
           return true;
         });
@@ -126,16 +141,16 @@ function animationsAssembler(stateName, animationType, animations, origin) {
       }
     }
 
-    if (animate === false) {
+    if (!_lodash2.default.isObject(animate)) {
       animate = (0, _defineProperty3.default)({}, animationType, animate);
     }
 
-    var _ref3 = animate || {};
+    var _ref2 = animate || {};
 
-    animate = _ref3[animationType];
+    animate = _ref2[animationType];
 
 
-    if (!origin || _lodash2.default.isUndefined(animate)) {
+    if (fromStateName || _lodash2.default.isUndefined(animate)) {
       animate = self_[viewHash];
     }
 
@@ -154,14 +169,14 @@ function animationsAssembler(stateName, animationType, animations, origin) {
     }
 
     if (add && remove) {
-      _error2.default.throw('for [' + viewHash + '] view animations, in [' + stateName + '], specify either \'add\' or \'remove\' flag', 'animator');
+      remove = false;
     }
 
-    if (_lodash2.default.isUndefined(viewClasses) && baseClasses === false) {
-      viewClasses = false;
+    if (_lodash2.default.isUndefined(viewClasses) && _lodash2.default.isNull(baseClasses)) {
+      viewClasses = null;
     }
 
-    if (viewClasses === false) {
+    if (_lodash2.default.isNull(viewClasses)) {
       return delete animations[stateName][viewHash];
     }
 
@@ -180,13 +195,9 @@ function animationsAssembler(stateName, animationType, animations, origin) {
     }
   });
 
-  _lodash2.default.each(_lodash2.default.omit(typeSettings, 'self'), function (animationSettings, entityName) {
-    if (entityName.includes('@')) {
-      return (0, _selectorAssembler2.default)(entityName, animationSettings, animations);
-    }
-
-    animationsAssembler(entityName, animationType, animations, false);
-  });
-
-  return animations;
+  if (!fromStateName) {
+    _lodash2.default.each(_lodash2.default.omit(animationSettings, 'self'), function (animationSettings, toStateName) {
+      animationsAssembler(toStateName, animationType, animations, stateName);
+    });
+  }
 }

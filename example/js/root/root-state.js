@@ -5,6 +5,16 @@ aptivator.state('root', {
   route: '',
   routeEnum: {},
   view: MainView,
+  animate: {
+    enter: {
+      self: {
+        base: 'aptivator-fade-in',
+        elements: {
+          '.tester': 'border-blue'
+        }
+      }
+    }
+  },
   resolves: {
     dmitriy: function() {
       return 'dmitriy';

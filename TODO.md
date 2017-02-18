@@ -1,5 +1,6 @@
 # TODOs
 
+* when declaring individual views, they should not be named elements or base
 * for view animate declarations, allow animate: false to prevent any type of animation on the view
 * in declaring animations, if add and remove are defined, go with add
 * in animation, use base instead of self to set state's common classes

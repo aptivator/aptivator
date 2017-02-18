@@ -37,7 +37,7 @@ aptivator.state('app-2.form', {
       return 'main';
     }
   },
-  
+
   views: {
     '.main': {
       view: App2FormView,

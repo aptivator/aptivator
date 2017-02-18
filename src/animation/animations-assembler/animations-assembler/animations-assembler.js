@@ -1,30 +1,39 @@
-import _                 from 'lodash';
-import error             from '../../../lib/error';
-import vars              from '../../../lib/vars';
-import selectorAssembler from './selector-assembler/selector-assembler';
+import _                from 'lodash';
+import error            from '../../../lib/error';
+import relations        from '../../../lib/relations';
+import vars             from '../../../lib/vars';
+import elementAssembler from './element-assembler/element-assembler';
 
 let {spaceSplitter, states} = vars;
 let {activationRecords, registry} = states;
 
-export default function animationsAssembler(stateName, animationType, animations, origin) {
-  let {viewsRegistry, animate = {}} = registry[stateName];
-  let {[animationType]: typeSettings = {}} = animate;
+export default function animationsAssembler(stateName, animationType, animations, fromStateName) {
+  let {viewsRegistry, animate = {}, viewAddressUnique} = registry[stateName];
+  let {[animationType]: animationSettings = {}} = animate;
+  let {active, instance} = activationRecords[viewAddressUnique];
+  let {$el} = instance;
+  let stateNameToUse = stateName;
   
-  if(typeSettings.self) {
-    delete typeSettings[stateName];
+  if(fromStateName) {
+    let family = relations.family(fromStateName);
+    if(!family.includes(stateName) && !active) {
+      return error.warn(`state [${stateName}] is not activated`, 'animator');
+    }
+    
+    ({[animationType]: animationSettings = {}} = registry[fromStateName].animate || {}); 
+  } else {
+    if(animationSettings.self) {
+      delete animationSettings[stateName];
+      stateNameToUse = 'self';
+    }
   }
   
-  if(typeSettings[stateName]) {
-    typeSettings.self = typeSettings[stateName];
-    delete typeSettings[stateName];
-  }
-  
-  let {self: self_} = typeSettings || {};
+  let {[stateNameToUse]: self_} = animationSettings;
   
   if(!_.isObject(self_)) {
     self_ = {base: self_};
   }
-  
+
   let {base} = self_;
 
   if(!_.isObject(base)) {
@@ -41,9 +50,12 @@ export default function animationsAssembler(stateName, animationType, animations
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
   
+  _.each(self_.elements, (selectorConfigs, selector) => {
+    elementAssembler(selector, selectorConfigs, stateName, $el, animations);
+  });
+  
   _.each(viewsRegistry, (viewConfigs, viewAddressUnique) => {
-    let {active, instance} = activationRecords[viewAddressUnique] || {};
-    let {$el} = instance;
+    let {$el} = activationRecords[viewAddressUnique].instance;
     let {viewHash, animate, viewStateName} = viewConfigs;
     let viewSettingsPath = [stateName, viewHash];
     let viewSettings = _.get(animations, viewSettingsPath);
@@ -54,12 +66,8 @@ export default function animationsAssembler(stateName, animationType, animations
     
     let {classes} = viewSettings;
     
-    if(!active) {
-      return error.warn(`state [${stateName}] is not activated`, 'animator');
-    }
-    
     if(viewStateName !== stateName) {
-      if(baseClasses === false) {
+      if(_.isNull(baseClasses)) {
         _.remove(classes, () => true);
       } else if(baseClasses) {
         if(baseAdd) {
@@ -72,13 +80,13 @@ export default function animationsAssembler(stateName, animationType, animations
       }
     }
     
-    if(animate === false) {
+    if(!_.isObject(animate)) {
       animate = {[animationType]: animate};
     }
     
     ({[animationType]: animate} = animate || {});
     
-    if(!origin || _.isUndefined(animate)) {
+    if(fromStateName || _.isUndefined(animate)) {
       animate = self_[viewHash];
     }
   
@@ -96,11 +104,11 @@ export default function animationsAssembler(stateName, animationType, animations
       remove = false;
     }
     
-    if(_.isUndefined(viewClasses) && baseClasses === false) {
-      viewClasses = false;
+    if(_.isUndefined(viewClasses) && _.isNull(baseClasses)) {
+      viewClasses = null;
     }
     
-    if(viewClasses === false) {
+    if(_.isNull(viewClasses)) {
       return delete animations[stateName][viewHash];
     }
     
@@ -117,13 +125,9 @@ export default function animationsAssembler(stateName, animationType, animations
     }
   });
   
-  _.each(_.omit(typeSettings, 'self'), (animationSettings, entityName) => {
-    if(entityName.includes('@')) {
-      return selectorAssembler(entityName, animationSettings, animations);
-    }
-    
-    animationsAssembler(entityName, animationType, animations, false);
-  });
-  
-  return animations;
+  if(!fromStateName) {
+    _.each(_.omit(animationSettings, 'self'), (animationSettings, toStateName) => {
+      animationsAssembler(toStateName, animationType, animations, stateName);
+    });
+  }
 }

@@ -5,6 +5,7 @@ import stateNamesCollector from './state-names-collector/state-names-collector';
 export default (stateNames, animationType) => {
   stateNames = stateNamesCollector(stateNames);
   return _.reduce(stateNames, (animations, stateName) => {
-    return animationsAssembler(stateName, animationType, animations, true);
+    animationsAssembler(stateName, animationType, animations);
+    return animations;
   }, {});
 };

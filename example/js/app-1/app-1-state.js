@@ -88,7 +88,6 @@ aptivator.state('app-1', {
       return 'run';
     }
   },
-
   views: {
     'main': {
       address: '.main',
@@ -98,9 +97,6 @@ aptivator.state('app-1', {
     '.main': {
       view: App1View,
       main: true,
-      animate: {
-        enter: 'aptivator-fade-in'
-      },
       cache: {
         receiver: 'receiver'  
       },
