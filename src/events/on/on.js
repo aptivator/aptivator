@@ -56,8 +56,11 @@ export default (events, callback, context, once) => {
       aptivator.on(handleName, callbacks, null, once);
     }
     
-    if(configs.sub) {
-      aptivator.on(configs.sub, handleParts, null, once);
+    if(_.isPlainObject(configs)) {
+      let childrenConfigs = _.omit(configs, 'callbacks');
+      if(!_.isEmpty(childrenConfigs)) {
+        aptivator.on(childrenConfigs, handleParts, null, once);
+      }
     }
   });
 };

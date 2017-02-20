@@ -4,14 +4,17 @@ import aptivator            from '../../lib/instance';
 import fragment             from '../../lib/fragment';
 import route_               from '../../lib/route';
 import vars                 from '../../lib/vars';
+import canceler             from '../canceler/canceler';
 import duplicatesRemover    from './duplicates-remover/duplicates-remover';
 import transientInitializer from './transient-initializer/transient-initializer';
 
 let {registry} = vars.states;
 let eventHandle = 'aptivator-goto-preprocessor';
 
-export default stateParams => 
-  new Promise(resolve => {
+export default stateParams => {
+  canceler(stateParams);
+  
+  return new Promise(resolve => {
     let {transient} = stateParams.flags;
     
     _.extend(stateParams.flags, {initialized: true});    
@@ -90,3 +93,4 @@ export default stateParams =>
     
     aptivator.trigger(eventHandle);
   });
+};

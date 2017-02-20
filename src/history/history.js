@@ -11,13 +11,5 @@ aptivator.history = {
   
   findOne(predicate) {
     return this.find(predicate)[0];
-  },
-  
-  get(filterer) {
-    return history.filter(filterer).reverse();
-  },
-  
-  getOne(filterer) {
-    return this.get(filterer)[0];
   }
 };

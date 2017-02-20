@@ -44,6 +44,8 @@ var resolveDefinitions = _vars2.default.resolveDefinitions,
 var registry = states.registry;
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   return new Promise(function (resolve, reject) {
     stateParams.flags.resolved = true;
 

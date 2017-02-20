@@ -32,6 +32,8 @@ exports.default = function (viewAddress, containerStateName) {
     stateName = _vars2.default.rootStateName;
   } else if (!stateName) {
     stateName = _relations2.default.parent(containerStateName);
+  } else if (stateName === 'self') {
+    stateName = containerStateName;
   }
 
   return selector + '@' + stateName;

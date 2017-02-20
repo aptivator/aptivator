@@ -32,6 +32,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 var _cacheable = require('./lib/cacheable');
 
 var _cacheable2 = _interopRequireDefault(_cacheable);
@@ -48,6 +52,8 @@ var _vars$states = _vars2.default.states,
     registry = _vars$states.registry;
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   stateParams.flags.rendered = true;
 
   var rootViews = stateParams.rootViews = [];
@@ -73,8 +79,10 @@ exports.default = function (stateParams) {
     var parentRegions = parentRecord.regions || (parentRecord.regions = {});
     var targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = { current: new Set() });
     var cache = _cacheable2.default.total(viewConfigs, stateParams);
-    var destroy = !cache && activationRecord.instance;
-    var unhide = !destroy && activationRecord.instance;
+    var instance = activationRecord.instance;
+
+    var destroy = !cache && instance;
+    var unhide = !destroy && instance;
     var family = _relations2.default.family(viewAddressUnique);
     var viewParameters = _params2.default.assemble(family, stateParams);
 
@@ -83,13 +91,13 @@ exports.default = function (stateParams) {
     }
 
     if (destroy) {
-      _instance2.default.destroy({ name: viewAddressUnique });
+      instance.destroy();
     }
 
     if (unhide) {
       if (!_cacheable2.default.implicit.cache) {
         if (_lodash2.default.isObject(cache) || cache.receiver) {
-          activationRecord.instance[cache.receiver](viewParameters);
+          instance[cache.receiver](viewParameters);
         }
       }
 
@@ -100,7 +108,7 @@ exports.default = function (stateParams) {
       return (0, _displayer2.default)(viewAddressUnique, $regionEl);
     }
 
-    var instance = new viewConfigs.view(viewParameters);
+    instance = new viewConfigs.view(viewParameters);
     var serializeData = instance.serializeData;
 
     targetRegion.current.add(viewAddressUnique);

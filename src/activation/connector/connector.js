@@ -1,7 +1,6 @@
 import canceler from '../canceler/canceler';
 
-export default async stateParams => {
+export default stateParams => {
   canceler(stateParams);
-
   return stateParams;  
 };

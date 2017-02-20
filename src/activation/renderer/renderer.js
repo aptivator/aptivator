@@ -5,12 +5,15 @@ import error     from '../../lib/error';
 import params    from '../../lib/params';
 import relations from '../../lib/relations';
 import vars      from '../../lib/vars';
+import canceler  from '../canceler/canceler';
 import cacheable from './lib/cacheable';
 import viewApi   from './lib/view-api';
 
 let {activationRecords, activationSequences, registry} = vars.states;
 
 export default stateParams => {
+  canceler(stateParams);
+  
   stateParams.flags.rendered = true;
   
   let rootViews = stateParams.rootViews = [];
@@ -31,8 +34,9 @@ export default stateParams => {
     let parentRegions = parentRecord.regions || (parentRecord.regions = {});
     let targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = {current: new Set()});
     let cache = cacheable.total(viewConfigs, stateParams);
-    let destroy = !cache && activationRecord.instance;
-    let unhide = !destroy && activationRecord.instance;
+    let {instance} = activationRecord;
+    let destroy = !cache && instance;
+    let unhide = !destroy && instance;
     let family = relations.family(viewAddressUnique);
     let viewParameters = params.assemble(family, stateParams);
     
@@ -41,13 +45,13 @@ export default stateParams => {
     }
     
     if(destroy) {
-      aptivator.destroy({name: viewAddressUnique});
+      instance.destroy();
     }
     
     if(unhide) {
       if(!cacheable.implicit.cache) {
         if(_.isObject(cache) || cache.receiver) {
-          activationRecord.instance[cache.receiver](viewParameters); 
+          instance[cache.receiver](viewParameters); 
         }
       }
       
@@ -58,7 +62,7 @@ export default stateParams => {
       return displayer(viewAddressUnique, $regionEl);
     }
 
-    let instance = new viewConfigs.view(viewParameters);
+    instance = new viewConfigs.view(viewParameters);
     let serializeData = instance.serializeData;
     
     targetRegion.current.add(viewAddressUnique);

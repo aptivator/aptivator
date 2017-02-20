@@ -8,6 +8,10 @@ var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
@@ -57,7 +61,7 @@ var _vars$states = _vars2.default.states,
 var rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
 
 _instance2.default.state = function (stateName, stateConfigs) {
-  return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     var root, parentStateName, parentConfigs, routeParts, routeValues, route, routeRx;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -103,7 +107,11 @@ _instance2.default.state = function (stateName, stateConfigs) {
               delete stateConfigs.route;
             }
 
-            registry[stateName] = stateConfigs;
+            if (stateConfigs.on) {
+              _instance2.default.on(_lodash2.default.mapValues(stateConfigs.on, function (eventConfigs) {
+                return (0, _defineProperty3.default)({}, stateName, eventConfigs);
+              }));
+            }
 
             if (stateConfigs.route) {
               {
@@ -127,9 +135,15 @@ _instance2.default.state = function (stateName, stateConfigs) {
               }
             }
 
+            registry[stateName] = stateConfigs;
+
+            _lodash2.default.each(stateConfigs.substates, function (stateConfigs, subStateName) {
+              _instance2.default.state(stateName + '.' + subStateName, stateConfigs);
+            });
+
             return _context.abrupt('return', _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, (0, _toConsumableArray3.default)(_vars2.default.states.queue.pop())) : _instance2.default);
 
-          case 11:
+          case 13:
           case 'end':
             return _context.stop();
         }

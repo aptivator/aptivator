@@ -88,8 +88,11 @@ exports.default = function (events, callback, context, once) {
       _instance2.default.on(handleName, callbacks, null, once);
     }
 
-    if (configs.sub) {
-      _instance2.default.on(configs.sub, handleParts, null, once);
+    if (_lodash2.default.isPlainObject(configs)) {
+      var childrenConfigs = _lodash2.default.omit(configs, 'callbacks');
+      if (!_lodash2.default.isEmpty(childrenConfigs)) {
+        _instance2.default.on(childrenConfigs, handleParts, null, once);
+      }
     }
   });
 };

@@ -6,15 +6,9 @@ import deactivator from './deactivator/deactivator';
 aptivator.deactivate = async params => {
   let {name, stateParams, silent} = params;
 
-  if(!addresser.isStateAddress(name)) {
-    silent = true;
-  }
-  
-  if(silent) {
+  if(!addresser.isStateAddress(name) || silent) {
     return deactivator(params);
   }
-  
-  console.log(`deactivating ${name}`);
   
   if(!stateParams) {
     stateParams = aptivator.history.findOne(stateParams => {
@@ -28,16 +22,16 @@ aptivator.deactivate = async params => {
   }
 
   if(!stateParams) {
-    return;
+    //return;
   }
   
   _.extend(stateParams.flags, {active: false, pending: false});
   
   if(!stateParams.flags.rendered) {
-    return stateParams.flags.canceled = true;
+    //return stateParams.flags.canceled = true;
   }
   
-  let results = await aptivator.trigger({handle: `exit:${name}`, full: true}, stateParams);
+  //let results = await aptivator.trigger({handle: `exit:${name}`, full: true}, stateParams);
   
   deactivator(params);
 };

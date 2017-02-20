@@ -98,10 +98,6 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       baseRemove = _base.remove;
 
 
-  if (baseAdd && baseRemove) {
-    baseRemove = false;
-  }
-
   if (_lodash2.default.isString(baseClasses)) {
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
@@ -165,15 +161,16 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
     var _animate2 = animate,
         viewClasses = _animate2.classes,
         add = _animate2.add,
-        remove = _animate2.remove;
+        remove = _animate2.remove,
+        elements = _animate2.elements;
 
+
+    _lodash2.default.each(elements, function (selectorConfigs, selector) {
+      (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
+    });
 
     if (_lodash2.default.isString(viewClasses)) {
       viewClasses = viewClasses.trim().split(spaceSplitter);
-    }
-
-    if (add && remove) {
-      remove = false;
     }
 
     if (_lodash2.default.isUndefined(viewClasses) && _lodash2.default.isNull(baseClasses)) {

@@ -10,21 +10,20 @@ aptivator.on({
     callbacks: function(e, stateParams) {
       console.log('general error callback: ', e, stateParams);
     },
-    sub: {
-      'app-2.form': {
-        callbacks: function(e, stateParams) {
-          console.log('general error callback for app-2.form: ', e, stateParams);
-        },
-        sub: {
-          canceled: function something(e, stateParams) {
-            console.log('specific callback for canceled error under app-2.form state: ', e, stateParams);
-            return 'something';
-          }
-        }
+    
+    'app-2.form': {
+      callbacks: function(e, stateParams) {
+        console.log('general error callback for app-2.form: ', e, stateParams);
       },
-      canceled: function(e, stateParams) {
-        console.log('callback for all canceled errors: ', e, stateParams);
+      
+      canceled: function something(e, stateParams) {
+        console.log('specific callback for canceled error under app-2.form state: ', e, stateParams);
+        return 'something';
       }
+    },
+    
+    canceled: function(e, stateParams) {
+      console.log('callback for all canceled errors: ', e, stateParams);
     }
   }
 });
@@ -44,7 +43,7 @@ aptivator.state('app-2.form', {
       main: true
     },
     
-    '.plus@app-2.form': {
+    '.plus@self': {
       view: PlusView,
       resolves: {
         something: function(p) {

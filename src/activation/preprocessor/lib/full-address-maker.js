@@ -9,6 +9,8 @@ export default (viewAddress, containerStateName) => {
     stateName = vars.rootStateName;
   } else if(!stateName) {
     stateName = relations.parent(containerStateName);
+  } else if(stateName === 'self') {
+    stateName = containerStateName;
   }
   
   return `${selector}@${stateName}`;

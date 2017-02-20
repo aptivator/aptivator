@@ -46,10 +46,6 @@ export default function animationsAssembler(stateName, animationType, animations
   
   let {classes: baseClasses, add: baseAdd, remove: baseRemove} = base;
   
-  if(baseAdd && baseRemove) {
-    baseRemove = false;
-  }
-  
   if(_.isString(baseClasses)) {
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
@@ -98,14 +94,14 @@ export default function animationsAssembler(stateName, animationType, animations
       animate = {classes: animate};
     }
     
-    let {classes: viewClasses, add, remove} = animate;
+    let {classes: viewClasses, add, remove, elements} = animate;
+    
+    _.each(elements, (selectorConfigs, selector) => {
+      elementAssembler(selector, selectorConfigs, stateName, $el, animations);
+    });
     
     if(_.isString(viewClasses)) {
       viewClasses = viewClasses.trim().split(spaceSplitter);
-    }
-    
-    if(add && remove) {
-      remove = false;
     }
     
     if(_.isUndefined(viewClasses) && _.isNull(baseClasses)) {

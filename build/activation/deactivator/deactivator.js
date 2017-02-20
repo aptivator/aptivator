@@ -24,21 +24,26 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 var _serialStateDeactivator = require('./serial-state-deactivator/serial-state-deactivator');
 
 var _serialStateDeactivator2 = _interopRequireDefault(_serialStateDeactivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventHandles = ['transient', 'regular'].reduce(function (o, suffix) {
-  o[suffix] = 'aptivator-goto-render-' + suffix;
-  return o;
-}, {});
+var eventHandles = _lodash2.default.mapValues({ transient: '', regular: '' }, function (value, key) {
+  return 'aptivator-goto-render-' + key;
+});
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
-      var transient, _eventHandle, _query, loadingTransients, serialTransients, eventHandle, query, loadingRegulars, loadedRegulars, transientStates, transientPromises, serialRegular;
+      var transient, _eventHandle, _query, loadingTransients, serialTransients, eventHandle, query, loadingRegulars, loadedRegulars, transientStates, transientPromises, deactivationPromises, serialRegular, promise;
 
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
@@ -128,21 +133,28 @@ exports.default = function (stateParams) {
               return Promise.all(transientPromises);
 
             case 25:
+              deactivationPromises = [];
+
 
               transientStates.forEach(function (stateParams) {
-                _instance2.default.deactivate({ name: stateParams.stateName, stateParams: stateParams });
+                var promise = _instance2.default.deactivate({ name: stateParams.stateName, stateParams: stateParams });
+                deactivationPromises.push(promise);
               });
 
               serialRegular = _lodash2.default.find(loadedRegulars, { flags: { parallel: false } });
 
 
               if (!transientPromises.hasSerial && serialRegular) {
-                (0, _serialStateDeactivator2.default)();
+                promise = (0, _serialStateDeactivator2.default)();
+
+                deactivationPromises.push(promise);
               }
+
+              //the promise that deactivate() return is related to exit animation
 
               _instance2.default.trigger(eventHandle);
 
-            case 29:
+            case 30:
             case 'end':
               return _context.stop();
           }

@@ -2,11 +2,14 @@ import _         from 'lodash';
 import animator  from '../../animation/animator';
 import aptivator from '../../lib/instance';
 import displayer from '../../lib/displayer';
+import canceler  from '../canceler/canceler';
 
 let eventHandle = 'aptivator-goto-finalizer';
 
-export default stateParams => 
-  new Promise(async resolve => {
+export default stateParams => {
+  canceler(stateParams);
+  
+  return new Promise(async resolve => {
     stateParams.flags.displayed = true;
     
     aptivator.once(eventHandle, () => resolve(stateParams));
@@ -31,3 +34,4 @@ export default stateParams =>
     
     aptivator.trigger(eventHandle);
   });
+};

@@ -25,16 +25,52 @@ route = {
 
 
 aptivator.on({
-  start: {
-    sub: {
-      'app-1': function(stateParams) {
-        console.log('starting', stateParams.stateName);
+  exit: {
+    'app-1': function(stateParams) {
+      console.log('exited', stateParams.stateName);
+      return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          resolve();
+        });
+      });
+    },
+    
+    loading: function exited(stateParams) {
+      console.log('exited', stateParams.stateName);
+      return 'exited';
+    }
+  }
+});
+
+aptivator.state('app-1', {
+  substates: {
+    'another': {
+      route: 'another',
+      views: {
+        '.main@root': {
+          view: HeaderView,
+          main: true
+        }
       }
     }
   },
-  loading: {
-    sub: {
-      'app-1': function(stateParams) {
+  route: 'app-1/:one/:two',
+  routeValues: ['one', 22],
+  states: ['header'],
+  
+  resolves: {
+    run: function() {
+      return 'run';
+    }
+  },
+  
+  on: {
+    start: function(stateParams) {
+      console.log('starting', stateParams.stateName);  
+    },
+    
+    loading: {
+      callbacks: function(stateParams) {
         console.log('loading', stateParams.stateName);
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
@@ -42,52 +78,18 @@ aptivator.on({
           });
         });
       }
-    }
-  },
-  
-  loaded: {
-    sub: {
-      'app-1': function(stateParams) {
+    },
+    
+    loaded: [function(stateParams) {
         console.log('loaded', stateParams.stateName);
       }
+    ],
+    
+    enter: function(stateParams) {
+      console.log('entered', stateParams.stateName);
     }
   },
   
-  enter: {
-    sub: {
-      'app-1': function(stateParams) {
-        console.log('entered', stateParams.stateName);
-      }
-    }
-  },
-  
-  exit: {
-    sub: {
-      'app-1': function(stateParams) {
-        console.log('exited', stateParams.stateName);
-        return new Promise(function(resolve, reject) {
-          setTimeout(function() {
-            resolve();
-          });
-        });
-      },
-      loading: function exited(stateParams) {
-        console.log('exited', stateParams.stateName);
-        return 'exited';
-      }
-    }
-  }
-});
-
-aptivator.state('app-1', {
-  route: 'app-1(/:one)(/:two)',
-  routeValues: ['one', 22],
-  states: ['header'],
-  resolves: {
-    run: function() {
-      return 'run';
-    }
-  },
   views: {
     'main': {
       address: '.main',

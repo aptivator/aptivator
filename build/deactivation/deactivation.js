@@ -28,28 +28,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _instance2.default.deactivate = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(params) {
-    var name, stateParams, silent, results;
+    var name, stateParams, silent;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             name = params.name, stateParams = params.stateParams, silent = params.silent;
 
-
-            if (!_addresser2.default.isStateAddress(name)) {
-              silent = true;
-            }
-
-            if (!silent) {
-              _context.next = 4;
+            if (!(!_addresser2.default.isStateAddress(name) || silent)) {
+              _context.next = 3;
               break;
             }
 
             return _context.abrupt('return', (0, _deactivator2.default)(params));
 
-          case 4:
-
-            console.log('deactivating ' + name);
+          case 3:
 
             if (!stateParams) {
               stateParams = _instance2.default.history.findOne(function (stateParams) {
@@ -66,35 +59,21 @@ _instance2.default.deactivate = function () {
               });
             }
 
-            if (stateParams) {
-              _context.next = 8;
-              break;
+            if (!stateParams) {
+              //return;
             }
-
-            return _context.abrupt('return');
-
-          case 8:
 
             _lodash2.default.extend(stateParams.flags, { active: false, pending: false });
 
-            if (stateParams.flags.rendered) {
-              _context.next = 11;
-              break;
-            }
+            if (!stateParams.flags.rendered) {}
+            //return stateParams.flags.canceled = true;
 
-            return _context.abrupt('return', stateParams.flags.canceled = true);
 
-          case 11:
-            _context.next = 13;
-            return _instance2.default.trigger({ handle: 'exit:' + name, full: true }, stateParams);
-
-          case 13:
-            results = _context.sent;
-
+            //let results = await aptivator.trigger({handle: `exit:${name}`, full: true}, stateParams);
 
             (0, _deactivator2.default)(params);
 
-          case 15:
+          case 8:
           case 'end':
             return _context.stop();
         }

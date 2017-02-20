@@ -12,7 +12,7 @@ let {registry, queue} = vars.states;
 let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
 
 aptivator.state = (stateName, stateConfigs) => 
-  !async function() {
+  (async function() {
     if(registry[stateName]) {
       error.throw(`state [${stateName}] has already been declared`, 'state declaration');
     }
@@ -47,7 +47,11 @@ aptivator.state = (stateName, stateConfigs) =>
       delete stateConfigs.route;
     }
     
-    registry[stateName] = stateConfigs;
+    if(stateConfigs.on) {
+      aptivator.on(_.mapValues(stateConfigs.on, eventConfigs => {
+        return {[stateName]: eventConfigs};
+      }));
+    }
     
     if(stateConfigs.route) {
       {
@@ -66,5 +70,11 @@ aptivator.state = (stateName, stateConfigs) =>
       }
     }
   
+    registry[stateName] = stateConfigs;
+  
+    _.each(stateConfigs.substates, (stateConfigs, subStateName) => {
+      aptivator.state(`${stateName}.${subStateName}`, stateConfigs);
+    });
+  
     return vars.states.queue.length ? aptivator.state(...vars.states.queue.pop()) : aptivator;
-  }().catch(error.errorer);
+  })().catch(error.errorer);

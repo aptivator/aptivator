@@ -19,6 +19,13 @@ aptivator.state('app-2', {
   cache: true,
   views: {
     '.main': {
+      animate: {
+        enter: {
+          elements: {
+            'h3': 'border-blue'
+          }
+        }
+      },
       view: App2View,
       resolves: {
         random1: {

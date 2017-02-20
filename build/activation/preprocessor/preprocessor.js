@@ -32,9 +32,9 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _animationsNormalizer = require('./lib/animations-normalizer');
+var _canceler = require('../canceler/canceler');
 
-var _animationsNormalizer2 = _interopRequireDefault(_animationsNormalizer);
+var _canceler2 = _interopRequireDefault(_canceler);
 
 var _fullAddressMaker = require('./lib/full-address-maker');
 
@@ -57,6 +57,8 @@ var activationSequences = states.activationSequences,
     registry = states.registry;
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   var stateName = stateParams.stateName;
 
 

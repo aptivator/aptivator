@@ -5,8 +5,7 @@ Application activator is an architectural framework for [Backbone]- and
 embraces the inherent hierarchy in all software and provides an explicit 
 mechanism to define and manage and thereby simplify code bureacracy.  The 
 foundational premise driving Aptivator's development is decomposability of a 
-program into sub-programs or sub-sub-programs, and so on, until no more 
-destructuring is practical.  Viewing an application as consisting of standalone 
+program into sub-components.  Viewing an application as consisting of standalone 
 yet inter-related components is the essence of systemic thinking and a key 
 practice in achieving a working modular code with manageable complexity and 
 high reusability.

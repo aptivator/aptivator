@@ -13,16 +13,9 @@
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * figure out direct parameters for combined states
-* for history, think about creating shortcut methods such as activeState, pendingTransients, etc.
 * regarding above, would it be better to use mongodb-like queries
 * put back dependencies support
-* think about sub-states
-* do I need a utilities library with methods such as hasAt()
-* place canceler inside each activation step - this places its execution on the same tick as the module
-* think about when an error should be thrown or when a warning should be displayed
 * be on the lookout to use constructors (if appropriate)
-* change hook names back to originals (e.g., start instead of started)
-* should there be a cascade for animation specifications (yes)
 * if there are possible partial view deactivations, should and how should the animations be specified for the use case
-* should root state be instantiated and handled just like any other state and has the same settings (e.g., multiple views)
-* revisit an issue again of the root state
+* when assembling parameters, consider caching some of these to optimize performance
+* do not forget to put callback support for animator

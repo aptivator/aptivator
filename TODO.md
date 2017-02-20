@@ -1,32 +1,51 @@
 # TODOs
 
+* after rendering, the hooks should not affect activation timing
+* exit hooks should not affect deactivation timing
+* for deactivation, handle simultaneous deactivation invocations
+* figure out directory and file conventions (should I use libs or full directory names, or should there be an apps directory)
 * when declaring individual views, they should not be named elements or base
-* for view animate declarations, allow animate: false to prevent any type of animation on the view
-* in declaring animations, if add and remove are defined, go with add
-* in animation, use base instead of self to set state's common classes
 * note that when using multiple classes for animation, these classes should not override the previous class's animation or transition property
 * simplify view property names in preprocessor
 * take a look at preprocessor code for root state and optimize
 * think about splitting rendered into two manageable parts
 * analyze canceled flag setting within deactivation module
-* add on property to state definition
 * figure out how to give hooks variables to each ancestor view
 * add resolves duration support
 * what about allowing for duplicate views if they originate within different states?
 * parent state that does not have a view, just resolves and data
-* split displayer in lib into modules that would go under renderer and deactivation
-* place function parameters and variable names in alphabetical order
-* finalize state destruction api (can be useful when login out and wanting to clear states from memory)
-* for above, similar approach to deactivator (i.e., destroy full, focal, and forward)
+* finalize state destruction api (can be useful when login out and wanting to clear states from memory
 * what about adding routeEnums to make sure that some route values are constrained
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
 * in light of animation support, figure out how to handle deactivation of states
-* for deactivation, when unique address is submitted, see if it is associated with a state, and if yes, deactivate the state
-* to complete animation, make sure that multiple view states and composites states are handled correctly
 * rethink complete through the process of deactivation (e.g., state activated fully, then only a part of it is deactivated, etc)
-* what about adding keyword this or self to views or animation definitions (it could work well)
+* **DONE** for animation, remove code that sets remove to false if add and remove are both true (this is implicitly handled by existing conditionals)
+* **DONE** think about when an error should be thrown or when a warning should be displayed
+* **DONE** think about sub-states (added; however, state definitions can be big and should be split up)
+* **DONE** do I need a utilities library with methods such as hasAt() (so far no need)
+* **DONE** for history, think about creating shortcut methods such as activeState, pendingTransients, etc. (for now write out full queries)
+* **DONE** add on property to state definition for events registrations (for a specific state)
+* **DONE** for events, flatten object event declaration by eliminating sub property
+* **DONE** place function parameters and variable names in alphabetical order (parameters are placed in the order of importance and relatedness)
+* **DONE** what about adding keyword this or self to views or animation definitions (it could work well)
+* **DONE** for deactivation, when unique address is submitted, see if it is associated with a state, and if yes, deactivate the state
+* **DONE** split displayer in lib into modules that would go under renderer and deactivation
+* **DONE** add elements animation support for individual views
+* **DONE** should root state be instantiated and handled just like any other state and has the same settings (e.g., multiple views)
+* **DONE** revisit an issue again of the root state (root state, as a ui part, is a constant template)
+* **DONE** place canceler inside each activation step - this places its execution on the same tick as the module
+* **DONE** when reintegrating canceler assure that no unhandled errors are displayed (done by placing canceler outsider of promise body)
+* **DONE** when a view is deleted make sure that parameters used to determine its caching status are erased also (no need because instance is set to null)
+* **DONE** in rendered, remove aptivator.destroy(), invoke destroy() directly on a view instance
+* **DONE** change hook names back to originals (e.g., start instead of started)
+* **DONE** should there be a cascade for animation specifications (yes)
+* **DONE** for above, similar approach to deactivator (i.e., destroy full, focal, and forward) (focal does not seem to be necessary)
+* **DONE** for view animate declarations, allow animate: false to prevent any type of animation on the view (using null instead of false)
+* **DONE** in declaring animations, if add and remove are defined, go with add
+* **DONE** in animation, use base instead of self to set state's common classes
+* **DONE** to complete animation, make sure that multiple view states and composites states are handled correctly
 * **DONE** keep thinking about the animation object declared on the state (yes, animate object as a collection of stateNames and animationClasses)
 * **DONE** animation definitvely needs to be done in displayer in case multiple states are jointly launched and share animation specs
 * **DONE** animations that should affect state activation timing

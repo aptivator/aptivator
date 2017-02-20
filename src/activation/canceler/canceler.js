@@ -1,4 +1,4 @@
-export default async stateParams => {
+export default stateParams => {
   let {undeclared, duplicateSerial, canceled} = stateParams.flags;
   
   if(undeclared) {
@@ -12,6 +12,4 @@ export default async stateParams => {
   if(canceled) {
     throw 'canceled';
   }
-  
-  return stateParams;
 };

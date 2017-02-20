@@ -3,7 +3,7 @@ import addresser            from '../../lib/addresser';
 import error                from '../../lib/error';
 import relations            from '../../lib/relations';
 import vars                 from '../../lib/vars';
-import animationsNormalizer from './lib/animations-normalizer';
+import canceler             from '../canceler/canceler';
 import fullAddressMaker     from './lib/full-address-maker';
 import resolvesNormalizer   from './lib/resolves-normalizer';
 import viewNormalizer       from './lib/view-normalizer';
@@ -12,6 +12,8 @@ let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
 
 export default stateParams => {
+  canceler(stateParams);
+  
   let {stateName} = stateParams;
   
   stateParams.flags.preprocessed = true;

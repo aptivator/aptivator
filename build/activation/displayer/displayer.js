@@ -32,11 +32,17 @@ var _displayer = require('../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
 
+var _canceler = require('../canceler/canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventHandle = 'aptivator-goto-finalizer';
 
 exports.default = function (stateParams) {
+  (0, _canceler2.default)(stateParams);
+
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
       var query, renderingStates, renderedStates, stateNames;

@@ -23,11 +23,5 @@ _instance2.default.history = {
   },
   findOne: function findOne(predicate) {
     return this.find(predicate)[0];
-  },
-  get: function get(filterer) {
-    return history.filter(filterer).reverse();
-  },
-  getOne: function getOne(filterer) {
-    return this.get(filterer)[0];
   }
 };

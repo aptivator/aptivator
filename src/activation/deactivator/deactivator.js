@@ -1,14 +1,16 @@
 import _                      from 'lodash';
 import aptivator              from '../../lib/instance';
+import canceler               from '../canceler/canceler';
 import serialStateDeactivator from './serial-state-deactivator/serial-state-deactivator';
 
-let eventHandles = ['transient', 'regular'].reduce((o, suffix) => {
-  o[suffix] = `aptivator-goto-render-${suffix}`;
-  return o;
-}, {});
+let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {
+  return `aptivator-goto-render-${key}`;
+});
 
-export default stateParams => 
-  new Promise(async (resolve, reject) => {
+export default stateParams => {
+  canceler(stateParams);
+  
+  return new Promise(async (resolve, reject) => {
     stateParams.flags.prerendered = true;
     
     let {transient} = stateParams.flags;
@@ -71,15 +73,22 @@ export default stateParams =>
     
     await Promise.all(transientPromises);
     
+    let deactivationPromises = [];
+    
     transientStates.forEach(stateParams => {
-      aptivator.deactivate({name: stateParams.stateName, stateParams});
+      let promise = aptivator.deactivate({name: stateParams.stateName, stateParams});
+      deactivationPromises.push(promise);
     });
     
     let serialRegular = _.find(loadedRegulars, {flags: {parallel: false}});
     
     if(!transientPromises.hasSerial && serialRegular) {
-      serialStateDeactivator();
+      let promise = serialStateDeactivator();
+      deactivationPromises.push(promise);
     }
+    
+    //the promise that deactivate() return is related to exit animation
     
     aptivator.trigger(eventHandle);
   });
+};

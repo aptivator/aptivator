@@ -6,11 +6,6 @@ aptivator.state('loading', {
     noResolves: true,
     delay: 100
   },
-  animate: {
-    enter: {
-      root: null
-    }
-  },
   view: LoadingView,
   parentSelector: '.extra',
   resolves: {
