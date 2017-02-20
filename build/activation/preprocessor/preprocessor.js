@@ -58,9 +58,7 @@ var activationSequences = states.activationSequences,
 
 exports.default = function (stateParams) {
   (0, _canceler2.default)(stateParams);
-
   var stateName = stateParams.stateName;
-
 
   stateParams.flags.preprocessed = true;
 

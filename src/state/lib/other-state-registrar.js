@@ -1,5 +1,5 @@
-import error     from '../../../lib/error';
-import relations from '../../../lib/relations';
+import error     from '../../lib/error';
+import relations from '../../lib/relations';
 
 export default (stateName, registeredStateNames) => {
   let parentStateName = relations.parent(stateName);

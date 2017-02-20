@@ -1,9 +1,5 @@
 'use strict';
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _instance = require('../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
@@ -48,12 +44,12 @@ var _finalizer = require('./finalizer/finalizer');
 
 var _finalizer2 = _interopRequireDefault(_finalizer);
 
-var _errorer = require('./errorer/errorer');
+var _errorer = require('../errorer/errorer');
 
 var _errorer2 = _interopRequireDefault(_errorer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _instance2.default.activate = function (stateParams) {
-  return (0, _registrar2.default)(stateParams).then(_initializer2.default).then((0, _eventer2.default)('start')).then(_preprocessor2.default).then(_resolver2.default).then((0, _eventer2.default)('loading')).then(_deactivator2.default).then(_renderer2.default).then(_connector2.default).then(_displayer2.default).then((0, _eventer2.default)('loaded')).then((0, _eventer2.default)('enter')).then(_finalizer2.default).catch(_lodash2.default.partial(_errorer2.default, _lodash2.default, stateParams));
+  return (0, _registrar2.default)(stateParams).then(_initializer2.default).then((0, _eventer2.default)('start')).then(_preprocessor2.default).then(_resolver2.default).then((0, _eventer2.default)('loading')).then(_deactivator2.default).then(_renderer2.default).then(_connector2.default).then(_displayer2.default).then((0, _eventer2.default)('loaded')).then((0, _eventer2.default)('enter')).then(_finalizer2.default).catch(_errorer2.default);
 };

@@ -1,7 +1,7 @@
 import _            from 'lodash';
-import approximator from '../../../lib/approximator';
-import aptivator    from '../../../lib/instance';
-import vars         from '../../../lib/vars';
+import approximator from '../../lib/approximator';
+import aptivator    from '../../lib/instance';
+import vars         from '../../lib/vars';
 
 export default () => {
   vars.router.route('*error', hash => {

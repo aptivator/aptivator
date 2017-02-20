@@ -1,4 +1,3 @@
-import _            from 'lodash';
 import aptivator    from '../lib/instance';
 import eventer      from './eventer/eventer';
 import initializer  from './initializer/initializer';
@@ -10,7 +9,7 @@ import renderer     from './renderer/renderer';
 import connector    from './connector/connector';
 import displayer    from './displayer/displayer';
 import finalizer    from './finalizer/finalizer';
-import errorer      from './errorer/errorer'; 
+import errorer      from '../errorer/errorer'; 
 
 aptivator.activate = stateParams => 
   registrar(stateParams)
@@ -26,4 +25,4 @@ aptivator.activate = stateParams =>
     .then(eventer('loaded'))
     .then(eventer('enter'))
     .then(finalizer)
-    .catch(_.partial(errorer, _, stateParams));
+    .catch(errorer);

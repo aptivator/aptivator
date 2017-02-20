@@ -27,20 +27,12 @@ export default stateParams => {
       return;
     }
     
-    let query = {flags: {pending: true, initialized: true, preprocessed: false, canceled: false}};
-    let startedStates = aptivator.history.find(query);
-    let undeclaredStates = startedStates.filter(stateParams => {
-      let {flags, stateName} = stateParams;
-      if(!registry[stateName]) {
-        return _.extend(flags, {canceled: true, pending: false, undeclared: true});
-      }
-    });
-
     if(transient) {
       return aptivator.trigger(eventHandle);
     }
 
-    startedStates = _.difference(startedStates, undeclaredStates);
+    let query = {flags: {pending: true, initialized: true, preprocessed: false, canceled: false}};
+    let startedStates = aptivator.history.find(query);
     startedStates = duplicatesRemover(startedStates);
 
     let transientStates = aptivator.history.find(stateParams => {

@@ -37,6 +37,14 @@ aptivator.state('app-2.form', {
     }
   },
 
+  animate: {
+    enter: {
+      self: {
+        '.plus@self': 'border-blue'
+      }
+    }
+  },
+
   views: {
     '.main': {
       view: App2FormView,

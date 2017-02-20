@@ -5,21 +5,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (stateParams) {
+  var stateName = stateParams.stateName;
   var _stateParams$flags = stateParams.flags,
-      undeclared = _stateParams$flags.undeclared,
       duplicateSerial = _stateParams$flags.duplicateSerial,
       canceled = _stateParams$flags.canceled;
 
 
-  if (undeclared) {
-    throw 'undeclared';
-  }
-
   if (duplicateSerial) {
-    throw 'duplicate-serial';
+    throw {
+      errorType: 'duplicate-serial',
+      errorMessage: 'state [' + stateName + '] is serial and cannot be activated with another serial state',
+      stateParams: stateParams
+    };
   }
 
   if (canceled) {
-    throw 'canceled';
+    throw {
+      errorType: 'canceled',
+      errorMessage: 'state [' + stateName + '] was canceled',
+      stateParams: stateParams
+    };
   }
 };

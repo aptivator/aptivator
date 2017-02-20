@@ -65,22 +65,12 @@ exports.default = function (stateParams) {
       return;
     }
 
-    var query = { flags: { pending: true, initialized: true, preprocessed: false, canceled: false } };
-    var startedStates = _instance2.default.history.find(query);
-    var undeclaredStates = startedStates.filter(function (stateParams) {
-      var flags = stateParams.flags,
-          stateName = stateParams.stateName;
-
-      if (!registry[stateName]) {
-        return _lodash2.default.extend(flags, { canceled: true, pending: false, undeclared: true });
-      }
-    });
-
     if (transient) {
       return _instance2.default.trigger(eventHandle);
     }
 
-    startedStates = _lodash2.default.difference(startedStates, undeclaredStates);
+    var query = { flags: { pending: true, initialized: true, preprocessed: false, canceled: false } };
+    var startedStates = _instance2.default.history.find(query);
     startedStates = (0, _duplicatesRemover2.default)(startedStates);
 
     var transientStates = _instance2.default.history.find(function (stateParams) {

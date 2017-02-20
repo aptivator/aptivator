@@ -6,7 +6,9 @@ require('./events/events');
 
 require('./storage/storage');
 
-require('./setup/setup');
+require('./config/config');
+
+require('./state/state');
 
 require('./start/start');
 

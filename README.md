@@ -12,6 +12,7 @@ high reusability.
 
 For example, 
 
+explicit representation and management of application hierarchy
 
 Keeping related entities together
 

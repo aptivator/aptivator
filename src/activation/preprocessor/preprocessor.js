@@ -13,9 +13,7 @@ let {activationSequences, registry} = states;
 
 export default stateParams => {
   canceler(stateParams);
-  
   let {stateName} = stateParams;
-  
   stateParams.flags.preprocessed = true;
   
   !function preprocess(stateName, previousSequence) {

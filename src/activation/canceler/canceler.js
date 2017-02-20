@@ -1,15 +1,20 @@
 export default stateParams => {
-  let {undeclared, duplicateSerial, canceled} = stateParams.flags;
-  
-  if(undeclared) {
-    throw 'undeclared';
-  }
+  let {stateName} = stateParams;
+  let {duplicateSerial, canceled} = stateParams.flags;
   
   if(duplicateSerial) {
-    throw 'duplicate-serial';
+    throw {
+      errorType: 'duplicate-serial',
+      errorMessage: `state [${stateName}] is serial and cannot be activated with another serial state`,
+      stateParams
+    };
   }
   
   if(canceled) {
-    throw 'canceled';
+    throw {
+      errorType: 'canceled',
+      errorMessage: `state [${stateName}] was canceled`,
+      stateParams
+    };
   }
 };

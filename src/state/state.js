@@ -1,11 +1,11 @@
 import _                   from 'lodash';
 import Backbone            from 'backbone';
-import addresser           from '../../lib/addresser';
-import aptivator           from '../../lib/instance';
-import error               from '../../lib/error';
-import relations           from '../../lib/relations';
-import route_              from '../../lib/route';
-import vars                from '../../lib/vars';
+import addresser           from '../lib/addresser';
+import aptivator           from '../lib/instance';
+import error               from '../lib/error';
+import relations           from '../lib/relations';
+import route_              from '../lib/route';
+import vars                from '../lib/vars';
 import otherStateRegistrar from './lib/other-state-registrar';
 
 let {registry, queue} = vars.states;
