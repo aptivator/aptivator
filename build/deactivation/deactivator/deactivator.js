@@ -126,8 +126,6 @@ exports.default = function (stateParams) {
       _lodash2.default.extend(record, { min: min, max: max });
     });
 
-    console.log(deactivationRecords);
-
     var stateNamePairs = _lodash2.default.reduce(deactivationRecords, function (pairs, record) {
       var min = record.min,
           stateNames = record.stateNames;
@@ -137,8 +135,6 @@ exports.default = function (stateParams) {
       });
       return pairs;
     }, []);
-
-    console.log(stateNamePairs);
 
     var animationPromise = (0, _animator2.default)(stateNamePairs, 'exit').then(function () {
       _lodash2.default.each(deactivationRecords, function (record) {

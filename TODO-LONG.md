@@ -16,6 +16,5 @@
 * figure out direct parameters for combined states
 * regarding above, would it be better to use mongodb-like queries
 * put back dependencies support
-* if there are possible partial view deactivations, should and how should the animations be specified for the use case
 * when assembling parameters, consider caching some of these to optimize performance
 * do not forget to put callback support for animator

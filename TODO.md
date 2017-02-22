@@ -12,8 +12,10 @@
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
-* in light of animation support, figure out how to handle deactivation of states
-* rethink complete through the process of deactivation (e.g., state activated fully, then only a part of it is deactivated, etc)
+* optimize deactivation module
+* **DONE** if there are possible partial view deactivations, should and how should the animations be specified for the use case
+* **DONE** in light of animation support, figure out how to handle deactivation of states
+* **DONE** rethink complete through the process of deactivation (e.g., state activated fully, then only a part of it is deactivated, etc)
 * **DONE** figure out how to give hooks variables to each ancestor view (hook values are given to the state that is being activated)
 * **DONE** after rendering, the hooks should not affect activation timing
 * **DONE** exit and error hooks should not affect deactivation timing

@@ -80,15 +80,11 @@ export default stateParams =>
       _.extend(record, {min, max});
     });
     
-    console.log(deactivationRecords);
-    
     let stateNamePairs = _.reduce(deactivationRecords, (pairs, record) => {
       let {min, stateNames} = record;
       _.each(stateNames, stateName => pairs.push([min, stateName]));
       return pairs;
     }, []);
-    
-    console.log(stateNamePairs);
     
     let animationPromise = animator(stateNamePairs, 'exit').then(() => {
       _.each(deactivationRecords, record => {
