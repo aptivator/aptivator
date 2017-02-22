@@ -20,7 +20,7 @@ aptivator.state = (stateName, stateConfigs) =>
     if(relations.isRoot(stateName)) {
       var root = true;
       stateConfigs = _.pick(stateConfigs, rootStateProperties);
-      _.extend(stateConfigs, {viewAddressUnique: addresser.uniqueAddress(stateName)});
+      _.extend(stateConfigs, {uniqueAddress: addresser.uniqueAddress(stateName)});
       
       if(!stateConfigs.resolveConfigs) {
         stateConfigs.resolveConfigs = {

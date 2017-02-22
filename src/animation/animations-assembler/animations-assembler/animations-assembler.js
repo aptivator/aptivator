@@ -8,9 +8,9 @@ let {spaceSplitter, states} = vars;
 let {activationRecords, registry} = states;
 
 export default function animationsAssembler(stateName, animationType, animations, fromStateName) {
-  let {viewsRegistry, animate = {}, viewAddressUnique} = registry[stateName];
+  let {viewsRegistry, animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
-  let {active, instance} = activationRecords[viewAddressUnique];
+  let {active, instance} = activationRecords[uniqueAddress];
   let {$el} = instance;
   let stateNameToUse = stateName;
   
@@ -54,9 +54,9 @@ export default function animationsAssembler(stateName, animationType, animations
     elementAssembler(selector, selectorConfigs, stateName, $el, animations);
   });
   
-  _.each(viewsRegistry, (viewConfigs, viewAddressUnique) => {
-    let {$el} = activationRecords[viewAddressUnique].instance;
-    let {viewHash, animate, viewStateName} = viewConfigs;
+  _.each(viewsRegistry, (viewConfigs, uniqueAddress) => {
+    let {$el} = activationRecords[uniqueAddress].instance;
+    let {viewHash, animate, addressStateName} = viewConfigs;
     let viewSettingsPath = [stateName, viewHash];
     let viewSettings = _.get(animations, viewSettingsPath);
     
@@ -66,7 +66,7 @@ export default function animationsAssembler(stateName, animationType, animations
     
     let {classes} = viewSettings;
     
-    if(viewStateName !== stateName) {
+    if(addressStateName !== stateName) {
       if(_.isNull(baseClasses)) {
         _.remove(classes, () => true);
       } else if(baseClasses) {

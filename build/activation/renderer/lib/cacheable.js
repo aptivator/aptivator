@@ -31,9 +31,9 @@ exports.default = {
   },
   implicit: function implicit(viewConfigs, stateParams) {
     var stateName = viewConfigs.stateName,
-        viewAddressUnique = viewConfigs.viewAddressUnique;
+        uniqueAddress = viewConfigs.uniqueAddress;
 
-    var family = _relations2.default.family(stateName).concat(viewAddressUnique);
+    var family = _relations2.default.family(stateName).concat(uniqueAddress);
     var params = _params2.default.assemble(family, stateParams);
 
     delete params.data;
@@ -43,11 +43,11 @@ exports.default = {
       delete params.route.stateName;
     }
 
-    if (_lodash2.default.isEqual(paramsMap[viewAddressUnique], params)) {
+    if (_lodash2.default.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;
     }
 
-    paramsMap[viewAddressUnique] = params;
+    paramsMap[uniqueAddress] = params;
 
     return this.implicit.cache = false;
   },

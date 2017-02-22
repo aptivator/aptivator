@@ -23,8 +23,6 @@ export default async stateParams => {
     delete stateParams.name;
   }
   
-  stateParams.hooks = {};
-  
   historyAdder(stateParams);
   
   return stateParams;

@@ -32,6 +32,10 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
+var _deactivator = require('../../deactivation/deactivator/lib/deactivator');
+
+var _deactivator2 = _interopRequireDefault(_deactivator);
+
 var _canceler = require('../canceler/canceler');
 
 var _canceler2 = _interopRequireDefault(_canceler);
@@ -61,33 +65,33 @@ exports.default = function (stateParams) {
 
 
   activationSequences[stateParams.stateName].forEach(function (viewConfigs) {
-    var viewAddressUnique = viewConfigs.viewAddressUnique,
-        viewSelector = viewConfigs.viewSelector,
-        viewStateName = viewConfigs.viewStateName,
+    var uniqueAddress = viewConfigs.uniqueAddress,
+        addressSelector = viewConfigs.addressSelector,
+        addressStateName = viewConfigs.addressStateName,
         detachHidden = viewConfigs.detachHidden;
 
-    var activationRecord = activationRecords[viewAddressUnique] || (activationRecords[viewAddressUnique] = {});
+    var activationRecord = activationRecords[uniqueAddress] || (activationRecords[uniqueAddress] = {});
 
     if (augment && activationRecord.active) {
       return;
     }
 
-    var parentViewAddressUnique = registry[viewStateName].viewAddressUnique;
-    var parentRecord = activationRecords[parentViewAddressUnique];
+    var parentUniqueAddress = registry[addressStateName].uniqueAddress;
+    var parentRecord = activationRecords[parentUniqueAddress];
     var $parentEl = parentRecord.instance.$el;
-    var $regionEl = !viewSelector ? $parentEl : $parentEl.find(viewSelector).eq(0);
+    var $regionEl = !addressSelector ? $parentEl : $parentEl.find(addressSelector).eq(0);
     var parentRegions = parentRecord.regions || (parentRecord.regions = {});
-    var targetRegion = parentRegions[viewSelector] || (parentRegions[viewSelector] = { current: new Set() });
+    var targetRegion = parentRegions[addressSelector] || (parentRegions[addressSelector] = { current: new Set() });
     var cache = _cacheable2.default.total(viewConfigs, stateParams);
     var instance = activationRecord.instance;
 
     var destroy = !cache && instance;
     var unhide = !destroy && instance;
-    var family = _relations2.default.family(viewAddressUnique);
+    var family = _relations2.default.family(uniqueAddress);
     var viewParameters = _params2.default.assemble(family, stateParams);
 
     if (!$regionEl.length) {
-      _error2.default.throw('region [' + viewSelector + '] does not exist for [' + viewStateName + '] state');
+      _error2.default.throw('region [' + addressSelector + '] does not exist for [' + addressStateName + '] state');
     }
 
     if (destroy) {
@@ -101,17 +105,17 @@ exports.default = function (stateParams) {
         }
       }
 
-      if (_relations2.default.isRoot(viewStateName)) {
-        rootViews.push([viewAddressUnique, $regionEl]);
+      if (_relations2.default.isRoot(addressStateName)) {
+        rootViews.push([uniqueAddress, $regionEl]);
       }
 
-      return (0, _displayer2.default)(viewAddressUnique, $regionEl);
+      return (0, _displayer2.default)(uniqueAddress, $regionEl);
     }
 
     instance = new viewConfigs.view(viewParameters);
     var serializeData = instance.serializeData;
 
-    targetRegion.current.add(viewAddressUnique);
+    targetRegion.current.add(uniqueAddress);
 
     _lodash2.default.extend(activationRecord, { active: true, instance: instance, detached: true, detach: detachHidden });
 
@@ -125,18 +129,18 @@ exports.default = function (stateParams) {
     };
 
     instance.on('destroy', function () {
-      _instance2.default.deactivate({ name: viewAddressUnique, partial: true, detach: { children: true } });
-      targetRegion.current.delete(viewAddressUnique);
+      _deactivator2.default.partial({ name: uniqueAddress, detach: { children: true } });
+      targetRegion.current.delete(uniqueAddress);
       delete activationRecord.instance;
     });
 
     instance.render();
 
-    if (_relations2.default.isRoot(viewStateName)) {
-      return rootViews.push([viewAddressUnique, $regionEl]);
+    if (_relations2.default.isRoot(addressStateName)) {
+      return rootViews.push([uniqueAddress, $regionEl]);
     }
 
-    (0, _displayer2.default)(viewAddressUnique, $regionEl);
+    (0, _displayer2.default)(uniqueAddress, $regionEl);
   });
 
   return stateParams;

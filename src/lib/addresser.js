@@ -4,13 +4,13 @@ import vars from './vars';
 let {registry} = vars.states;
 
 export default {
-  isStateAddress(viewAddress) {
-    if(!viewAddress.includes('@')) {
+  isStateAddress(address) {
+    if(!address.includes('@')) {
       return true;
     }
     
-    let stateName = this.stateName(viewAddress);
-    return registry[stateName].viewAddressUnique === viewAddress;
+    let stateName = this.stateName(address);
+    return registry[stateName].uniqueAddress === address;
   },
   
   uniqueAddress(stateName) {
@@ -19,11 +19,11 @@ export default {
   
   parts: address => address.split('@'),
 
-  region(viewAddress) {
-    return this.parts(viewAddress)[0];
+  region(address) {
+    return this.parts(address)[0];
   },
   
-  stateName(viewAddress) {
-    return viewAddress.includes('@') ? this.parts(viewAddress)[1] : viewAddress;
+  stateName(address) {
+    return address.includes('@') ? this.parts(address)[1] : address;
   }
 };

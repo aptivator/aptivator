@@ -16,13 +16,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var registry = _vars2.default.states.registry;
 exports.default = {
-  isStateAddress: function isStateAddress(viewAddress) {
-    if (!viewAddress.includes('@')) {
+  isStateAddress: function isStateAddress(address) {
+    if (!address.includes('@')) {
       return true;
     }
 
-    var stateName = this.stateName(viewAddress);
-    return registry[stateName].viewAddressUnique === viewAddress;
+    var stateName = this.stateName(address);
+    return registry[stateName].uniqueAddress === address;
   },
   uniqueAddress: function uniqueAddress(stateName) {
     return _lodash2.default.uniqueId('aptivator-id-') + '@' + stateName;
@@ -33,10 +33,10 @@ exports.default = {
     return address.split('@');
   },
 
-  region: function region(viewAddress) {
-    return this.parts(viewAddress)[0];
+  region: function region(address) {
+    return this.parts(address)[0];
   },
-  stateName: function stateName(viewAddress) {
-    return viewAddress.includes('@') ? this.parts(viewAddress)[1] : viewAddress;
+  stateName: function stateName(address) {
+    return address.includes('@') ? this.parts(address)[1] : address;
   }
 };

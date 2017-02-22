@@ -13,8 +13,8 @@ export default {
   },
   
   implicit(viewConfigs, stateParams) {
-    let {stateName, viewAddressUnique} = viewConfigs;
-    let family = relations.family(stateName).concat(viewAddressUnique);
+    let {stateName, uniqueAddress} = viewConfigs;
+    let family = relations.family(stateName).concat(uniqueAddress);
     let params = params_.assemble(family, stateParams);
 
     delete params.data; 
@@ -24,11 +24,11 @@ export default {
       delete params.route.stateName;
     }
     
-    if(_.isEqual(paramsMap[viewAddressUnique], params)) {
+    if(_.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;
     }
 
-    paramsMap[viewAddressUnique] = params;
+    paramsMap[uniqueAddress] = params;
     
     return this.implicit.cache = false;
   },

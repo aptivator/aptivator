@@ -45,12 +45,12 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       viewsRegistry = _registry$stateName.viewsRegistry,
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
-      viewAddressUnique = _registry$stateName.viewAddressUnique;
+      uniqueAddress = _registry$stateName.uniqueAddress;
   var _animate$animationTyp = animate[animationType],
       animationSettings = _animate$animationTyp === undefined ? {} : _animate$animationTyp;
-  var _activationRecords$vi = activationRecords[viewAddressUnique],
-      active = _activationRecords$vi.active,
-      instance = _activationRecords$vi.instance;
+  var _activationRecords$un = activationRecords[uniqueAddress],
+      active = _activationRecords$un.active,
+      instance = _activationRecords$un.instance;
   var $el = instance.$el;
 
   var stateNameToUse = stateName;
@@ -106,11 +106,11 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
     (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
   });
 
-  _lodash2.default.each(viewsRegistry, function (viewConfigs, viewAddressUnique) {
-    var $el = activationRecords[viewAddressUnique].instance.$el;
+  _lodash2.default.each(viewsRegistry, function (viewConfigs, uniqueAddress) {
+    var $el = activationRecords[uniqueAddress].instance.$el;
     var viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,
-        viewStateName = viewConfigs.viewStateName;
+        addressStateName = viewConfigs.addressStateName;
 
     var viewSettingsPath = [stateName, viewHash];
     var viewSettings = _lodash2.default.get(animations, viewSettingsPath);
@@ -123,7 +123,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
         classes = _viewSettings.classes;
 
 
-    if (viewStateName !== stateName) {
+    if (addressStateName !== stateName) {
       if (_lodash2.default.isNull(baseClasses)) {
         _lodash2.default.remove(classes, function () {
           return true;

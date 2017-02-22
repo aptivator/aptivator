@@ -62,13 +62,11 @@ exports.default = function () {
               delete stateParams.name;
             }
 
-            stateParams.hooks = {};
-
             (0, _historyAdder2.default)(stateParams);
 
             return _context.abrupt('return', stateParams);
 
-          case 9:
+          case 8:
           case 'end':
             return _context.stop();
         }

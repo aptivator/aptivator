@@ -40,7 +40,7 @@ aptivator.state('app-2.form', {
   animate: {
     enter: {
       self: {
-        '.plus@self': 'border-blue'
+        //'.plus@self': 'border-blue'
       }
     }
   },

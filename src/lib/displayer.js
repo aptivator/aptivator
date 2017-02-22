@@ -3,8 +3,8 @@ import vars          from './vars';
 
 let {activationRecords} = vars.states;
 
-export default (viewAddressUnique, $regionEl) => {
-  let activationRecord = activationRecords[viewAddressUnique];
+export default (uniqueAddress, $regionEl) => {
+  let activationRecord = activationRecords[uniqueAddress];
   let {detached, instance} = activationRecord;
   let {$el} = instance;
   

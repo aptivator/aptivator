@@ -10,10 +10,12 @@ aptivator.state('root', {
       self: {
         base: 'aptivator-fade-in',
         elements: {
-          '.tester': 'border-blue'
+          //'.tester': 'border-blue'
         }
       }
-    }
+    },
+    
+    exit: 'aptivator-fade-out'
   },
   resolves: {
     dmitriy: function() {

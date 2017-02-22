@@ -7,8 +7,8 @@ let {dataParams, resolveParams} = vars;
 
 export default {
   assemble(family, stateParams) {
-    let {direct, route, stateName} = stateParams;
-    let params = {data: {}, resolves: {}, route: {}};
+    let {direct, route, stateName, hooks} = stateParams;
+    let params = {data: {}, resolves: {}, route: {}, direct: {}, hooks: {}};
     let {data, resolves} = params;
     let targetEntityName = _.nth(family, -1);
     let targetStateName = targetEntityName.includes('@') ? addresser.stateName(targetEntityName) : targetEntityName;
@@ -47,11 +47,11 @@ export default {
         _.extend(stateParams, {direct});
       }
       
+      if(hooks) {
+        _.extend(params, {hooks});
+      }
+      
       _.extend(stateParams, {data, resolves});
-    }
-    
-    if(!params.direct) {
-      params.direct = {};
     }
     
     return _.cloneDeep(params);

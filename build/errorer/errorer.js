@@ -8,17 +8,13 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _lodash = require('lodash');
+var _hookResulter = require('../lib/hook-resulter');
 
-var _lodash2 = _interopRequireDefault(_lodash);
+var _hookResulter2 = _interopRequireDefault(_hookResulter);
 
 var _instance = require('../lib/instance');
 
@@ -50,7 +46,7 @@ exports.default = function () {
 
                 var eventName = 'error';
                 var errorHandles = [eventName + ':' + errorType];
-                errorToPrint = _error2.default.message(errorType + ': ' + errorMessage, 'errorer');
+                errorToPrint = _error2.default.message(errorType + ' ' + (errorMessage ? ':' + errorMessage : ''), 'errorer');
 
                 if (stateName) {
                   var handle = eventName + ':' + stateName + ':' + errorType;
@@ -59,8 +55,7 @@ exports.default = function () {
 
                 _instance2.default.trigger(errorHandles, errorType, stateParams).then(function (results) {
                   if (stateName) {
-                    _lodash2.default.extend(stateParams.hooks, results);
-                    _lodash2.default.extend(stateParams.flags, (0, _defineProperty3.default)({}, errorType, true));
+                    (0, _hookResulter2.default)(stateParams, errorType, results);
                   }
                 });
               })();

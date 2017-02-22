@@ -1,18 +1,11 @@
 # TODOs
 
-* after rendering, the hooks should not affect activation timing
-* exit hooks should not affect deactivation timing
 * for deactivation, handle simultaneous deactivation invocations
 * figure out directory and file conventions (should I use libs or full directory names, or should there be an apps directory)
-* when declaring individual views, they should not be named elements or base
-* note that when using multiple classes for animation, these classes should not override the previous class's animation or transition property
-* simplify view property names in preprocessor
 * take a look at preprocessor code for root state and optimize
-* think about splitting rendered into two manageable parts
+* think about splitting renderer into two manageable parts
 * analyze canceled flag setting within deactivation module
-* figure out how to give hooks variables to each ancestor view
 * add resolves duration support
-* what about allowing for duplicate views if they originate within different states?
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory
 * what about adding routeEnums to make sure that some route values are constrained
@@ -21,6 +14,14 @@
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
 * in light of animation support, figure out how to handle deactivation of states
 * rethink complete through the process of deactivation (e.g., state activated fully, then only a part of it is deactivated, etc)
+* **DONE** figure out how to give hooks variables to each ancestor view (hook values are given to the state that is being activated)
+* **DONE** after rendering, the hooks should not affect activation timing
+* **DONE** exit and error hooks should not affect deactivation timing
+* **DONE** restructure and streamline errorer module
+* **DONE** be on the lookout to use constructors (if appropriate)
+* **DONE** what about allowing for duplicate views if they originate within different states? (duplicates are now allowed, developer will decide if appropriate)
+* **DONE** simplify view property names in preprocessor
+* **DONE** when declaring individual views, they should not be named elements or base
 * **DONE** for animation, remove code that sets remove to false if add and remove are both true (this is implicitly handled by existing conditionals)
 * **DONE** think about when an error should be thrown or when a warning should be displayed
 * **DONE** think about sub-states (added; however, state definitions can be big and should be split up)

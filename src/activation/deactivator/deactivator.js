@@ -31,7 +31,7 @@ export default stateParams => {
       let serialTransients = aptivator.history.findOne(query);
       
       if(serialTransients) {
-        serialStateDeactivator();
+        await serialStateDeactivator();
       }
       
       return aptivator.trigger(eventHandle);
@@ -65,6 +65,7 @@ export default stateParams => {
       if(promise) {
         promises.push(promise);
       } else {
+        transientStates.delete(stateParams);
         clearTimeout(timeout);
       }
       
@@ -76,7 +77,7 @@ export default stateParams => {
     let deactivationPromises = [];
     
     transientStates.forEach(stateParams => {
-      let promise = aptivator.deactivate({name: stateParams.stateName, stateParams});
+      let promise = aptivator.deactivate({name: stateParams.stateName});
       deactivationPromises.push(promise);
     });
     
@@ -86,9 +87,9 @@ export default stateParams => {
       let promise = serialStateDeactivator();
       deactivationPromises.push(promise);
     }
-    
-    //the promise that deactivate() return is related to exit animation
-    
+
+    await Promise.all(deactivationPromises);
+
     aptivator.trigger(eventHandle);
   });
 };

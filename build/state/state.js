@@ -75,7 +75,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
               root = true;
 
               stateConfigs = _lodash2.default.pick(stateConfigs, rootStateProperties);
-              _lodash2.default.extend(stateConfigs, { viewAddressUnique: _addresser2.default.uniqueAddress(stateName) });
+              _lodash2.default.extend(stateConfigs, { uniqueAddress: _addresser2.default.uniqueAddress(stateName) });
 
               if (!stateConfigs.resolveConfigs) {
                 stateConfigs.resolveConfigs = {

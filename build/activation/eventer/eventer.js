@@ -4,17 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var _lodash = require('lodash');
 
@@ -24,38 +16,37 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
+var _hookResulter = require('../../lib/hook-resulter');
+
+var _hookResulter2 = _interopRequireDefault(_hookResulter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (eventName) {
-  return function () {
-    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
-      var handle, results;
-      return _regenerator2.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              handle = eventName + ':' + stateParams.stateName;
-              _context.next = 3;
-              return _instance2.default.trigger({ handle: handle, full: true }, stateParams);
+var syncHookNames = ['start', 'loading'];
 
-            case 3:
-              results = _context.sent;
+exports.default = function (hookName) {
+  return function (stateParams) {
+    return new Promise(function (resolve, reject) {
+      var stateName = stateParams.stateName;
 
+      var handle = hookName + ':' + stateName;
+      var sync = syncHookNames.includes(hookName);
 
-              _lodash2.default.extend(stateParams.hooks, results);
-              _lodash2.default.extend(stateParams.flags, (0, _defineProperty3.default)({}, eventName, true));
-              return _context.abrupt('return', stateParams);
+      if (!sync) {
+        resolve(stateParams);
+      }
 
-            case 7:
-            case 'end':
-              return _context.stop();
-          }
+      _instance2.default.trigger({ handle: handle, full: true }, stateParams).then(function (results) {
+        _lodash2.default.extend(stateParams.flags, (0, _defineProperty3.default)({}, hookName, true));
+
+        (0, _hookResulter2.default)(stateParams, hookName, results);
+
+        if (sync) {
+          resolve(stateParams);
         }
-      }, _callee, undefined);
-    }));
-
-    return function (_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+      }, function (e) {
+        return reject({ errorType: e, stateParams: stateParams });
+      });
+    });
+  };
 };

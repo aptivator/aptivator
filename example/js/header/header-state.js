@@ -5,7 +5,7 @@ aptivator.state('header', {
   view: HeaderView,
   parentSelector: '.header',
   animate: {
-    enter: 'border-blue'
+    //enter: 'border-blue'
   },
   resolves: {
     another: function() {

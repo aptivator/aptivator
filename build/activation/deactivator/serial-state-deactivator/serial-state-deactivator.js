@@ -15,8 +15,8 @@ exports.default = function () {
   var activeSerial = _instance2.default.history.findOne(query);
 
   if (activeSerial) {
-    var stateName = activeSerial.stateName;
-
-    _instance2.default.deactivate({ name: stateName, stateParams: activeSerial });
+    return _instance2.default.deactivate({ name: activeSerial.stateName });
   }
+
+  return Promise.resolve();
 };

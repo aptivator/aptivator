@@ -4,8 +4,8 @@ import vars          from '../../../lib/vars';
 
 let {activationRecords} = vars.states;
 
-export default (viewAddressUnique, detach) => {
-  let activationRecord = activationRecords[viewAddressUnique];
+export default (uniqueAddress, detach) => {
+  let activationRecord = activationRecords[uniqueAddress];
   let {instance} = activationRecord || {};
   
   if(!(activationRecord && instance)) {

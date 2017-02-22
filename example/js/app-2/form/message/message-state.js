@@ -7,6 +7,10 @@ aptivator.state('app-2.form.message', {
     enter: {
       root: null,
       self: 'aptivator-fade-in'
+    },
+    exit: {
+      root: null,
+      self: 'aptivator-fade-out'
     }
   },
   views: {

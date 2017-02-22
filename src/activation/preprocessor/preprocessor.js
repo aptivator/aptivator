@@ -10,9 +10,11 @@ import viewNormalizer       from './lib/view-normalizer';
 
 let {dataParams, resolveDefinitions, states} = vars;
 let {activationSequences, registry} = states;
+let reservedHashes = ['base', 'elements'];
 
 export default stateParams => {
   canceler(stateParams);
+  
   let {stateName} = stateParams;
   stateParams.flags.preprocessed = true;
   
@@ -33,27 +35,29 @@ export default stateParams => {
       return;
     }
     
+    let {data, resolves} = stateConfigs;
     let resolveAddresses = stateConfigs.resolveAddresses = [];
     
-    if(stateConfigs.data) {
-      dataParams[stateName] = stateConfigs.data;
+    if(data) {
+      dataParams[stateName] = data;
     }
     
-    if(stateConfigs.resolves) {
+    if(resolves) {
       resolveDefinitions[stateName] = resolvesNormalizer(stateConfigs, stateName);
       resolveAddresses.push(stateName);
     }
     
     if(relations.isRoot(stateName)) {
-      return;
+      return stateConfigs.viewsRegistry = {[stateConfigs.uniqueAddress]: {}};
     }
     
     let viewsRegistry = stateConfigs.viewsRegistry = {};
     
     if(stateConfigs.view && !stateConfigs.views) {
-      stateConfigs.views = {};
-      stateConfigs.main = true;
-      stateConfigs.views[stateConfigs.parentSelector || ''] = _.pick(stateConfigs, ['view', 'cache']);
+      let viewHash = stateConfigs.parentSelector || '';
+      _.extend(stateConfigs, {
+        views: {[viewHash]: _.pick(stateConfigs, ['view', 'cache'])}
+      });
     }
     
     let parentStateName = relations.parent(stateName);
@@ -61,51 +65,47 @@ export default stateParams => {
     let mainCount = 0;
     
     _.each(stateConfigs.views, (viewConfigs, viewHash) => {
-      let {address} = viewConfigs;
-      let viewAddress = address || viewHash;
-      let viewAddressFull = fullAddressMaker(viewAddress, stateName);
-      let [viewSelector, viewStateName] = addresser.parts(viewAddressFull);
-      let viewAddressUnique = addresser.uniqueAddress(stateName);
-      let duplicateViewConfigs = (previousSequence || []).concat(activationSequence)
-        .filter(viewConfigs => viewConfigs.viewAddressFull === viewAddressFull);
-      let otherView = (duplicateViewConfigs[0] || {}).view;
+      let {address = viewHash, main, resolves, data} = viewConfigs;
+      let fullAddress = fullAddressMaker(address, stateName);
+      let [addressSelector, addressStateName] = addresser.parts(fullAddress);
+      let uniqueAddress = addresser.uniqueAddress(stateName);
       
-      if(otherView === viewConfigs.view) {
-        return;
+      if(reservedHashes.includes(viewHash)) {
+        error.throw(`view hashes - ${reservedHashes.join(', ')} - are reserved`, 'preprocessor');
       }
       
-      if(viewStateName !== parentStateName) {
+      if(addressStateName !== parentStateName) {
         delete viewConfigs.main;
       }
       
       if(viewCount === 1) {
-        viewConfigs.main = true;
+        main = true;
       }
       
-      if(viewConfigs.main) {
+      if(main) {
         if(++mainCount > 1) {
           error.throw(`multiple main views for [${stateName}]`, 'preprocessor');
         }
         
-        _.extend(stateConfigs, {viewAddressUnique});
+        _.extend(stateConfigs, {uniqueAddress});
       }
       
-      if(viewConfigs.resolves) {
-        resolveDefinitions[viewAddressUnique] = resolvesNormalizer(viewConfigs, viewAddressUnique);
-        resolveAddresses.push(viewAddressUnique);
+      if(resolves) {
+        resolveDefinitions[uniqueAddress] = resolvesNormalizer(viewConfigs, uniqueAddress);
+        resolveAddresses.push(uniqueAddress);
       }
       
-      if(viewConfigs.data) {
-        dataParams[viewAddressUnique] = viewConfigs.data;
+      if(data) {
+        dataParams[uniqueAddress] = data;
       }
       
-      _.extend(viewConfigs, {viewAddressFull, stateName, viewHash, viewAddressUnique, viewSelector, viewStateName});
+      _.extend(viewConfigs, {address, main, uniqueAddress, fullAddress, stateName, viewHash, addressSelector, addressStateName});
       
       viewNormalizer(viewConfigs);
-      viewsRegistry[viewAddressUnique] = viewConfigs;
+      viewsRegistry[uniqueAddress] = viewConfigs;
       activationSequence.push(viewConfigs);
       
-      preprocess(viewStateName, activationSequence);
+      preprocess(addressStateName, activationSequence);
     });
     
     if(!mainCount) {
@@ -118,9 +118,10 @@ export default stateParams => {
       preprocess(stateName, previousSequence);
     }
     
-    activationSequence.sort((viewConfigs1, viewConfigs2) => 
-      relations.parts(addresser.stateName(viewConfigs1.viewAddressUnique)).length -
-      relations.parts(addresser.stateName(viewConfigs2.viewAddressUnique)).length);
+    activationSequence.sort((...args) => {
+      let [length1, length2] = args.map(viewConfigs => relations.parts(viewConfigs.stateName).length);
+      return length1 - length2;
+    });
   }(stateName);
   
   return stateParams;

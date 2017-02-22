@@ -22,7 +22,7 @@ aptivator.state('app-2', {
       animate: {
         enter: {
           elements: {
-            'h3': 'border-blue'
+            //'h3': 'border-blue'
           }
         }
       },

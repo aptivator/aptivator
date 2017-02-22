@@ -1,6 +1,6 @@
-import _         from 'lodash';
-import aptivator from '../lib/instance';
-import error     from '../lib/error';
+import hookResulter from '../lib/hook-resulter';
+import aptivator    from '../lib/instance';
+import error        from '../lib/error';
 
 export default async e => {
   let errorToPrint = e;
@@ -10,7 +10,7 @@ export default async e => {
     let {stateName} = stateParams;
     let eventName = 'error';
     let errorHandles = [`${eventName}:${errorType}`];
-    errorToPrint = error.message(`${errorType}: ${errorMessage}`, 'errorer');
+    errorToPrint = error.message(`${errorType} ${errorMessage ? ':' + errorMessage : ''}`, 'errorer');
     
     if(stateName) {
       let handle = `${eventName}:${stateName}:${errorType}`;
@@ -19,11 +19,10 @@ export default async e => {
     
     aptivator.trigger(errorHandles, errorType, stateParams).then(results => {
       if(stateName) {
-        _.extend(stateParams.hooks, results);
-        _.extend(stateParams.flags, {[errorType]: true});
+        hookResulter(stateParams, errorType, results);
       }
     });
-  } 
+  }
   
   console.log(`%c${errorToPrint}`, 'color: red');
   

@@ -55,4 +55,19 @@
     </div>
   </div>
   <% } %>
+  <% if(hooks) { %>
+  <h4>Hook params</h4>
+  <div class = "row">
+    <div class = "col-md-12">
+      <% _.each(hooks, function(values, name) { %>
+        <strong><%= name %> hook</strong>
+        <ul>
+        <% _.each(values, function(value, name) { %>
+          <li><strong><em><%= name %></em></strong>: <%= value %></li>
+        <% }); %>
+        </ul>
+      <% }); %>
+    </div>
+  </div>
+  <% } %>
 </div>

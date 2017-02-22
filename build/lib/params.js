@@ -28,9 +28,10 @@ exports.default = {
   assemble: function assemble(family, stateParams) {
     var direct = stateParams.direct,
         route = stateParams.route,
-        stateName = stateParams.stateName;
+        stateName = stateParams.stateName,
+        hooks = stateParams.hooks;
 
-    var params = { data: {}, resolves: {}, route: {} };
+    var params = { data: {}, resolves: {}, route: {}, direct: {}, hooks: {} };
     var data = params.data,
         resolves = params.resolves;
 
@@ -73,11 +74,11 @@ exports.default = {
         _lodash2.default.extend(stateParams, { direct: direct });
       }
 
-      _lodash2.default.extend(stateParams, { data: data, resolves: resolves });
-    }
+      if (hooks) {
+        _lodash2.default.extend(params, { hooks: hooks });
+      }
 
-    if (!params.direct) {
-      params.direct = {};
+      _lodash2.default.extend(stateParams, { data: data, resolves: resolves });
     }
 
     return _lodash2.default.cloneDeep(params);

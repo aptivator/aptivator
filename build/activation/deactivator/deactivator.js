@@ -54,7 +54,7 @@ exports.default = function (stateParams) {
               transient = stateParams.flags.transient;
 
               if (!transient) {
-                _context.next = 13;
+                _context.next = 15;
                 break;
               }
 
@@ -80,14 +80,18 @@ exports.default = function (stateParams) {
               _query = { flags: { transient: true, pending: true, loading: true, canceled: false, parallel: false } };
               serialTransients = _instance2.default.history.findOne(_query);
 
-
-              if (serialTransients) {
-                (0, _serialStateDeactivator2.default)();
+              if (!serialTransients) {
+                _context.next = 14;
+                break;
               }
 
+              _context.next = 14;
+              return (0, _serialStateDeactivator2.default)();
+
+            case 14:
               return _context.abrupt('return', _instance2.default.trigger(_eventHandle));
 
-            case 13:
+            case 15:
               eventHandle = eventHandles.regular;
 
 
@@ -99,13 +103,13 @@ exports.default = function (stateParams) {
               loadingRegulars = _instance2.default.history.find(query);
 
               if (!loadingRegulars.length) {
-                _context.next = 19;
+                _context.next = 21;
                 break;
               }
 
               return _context.abrupt('return');
 
-            case 19:
+            case 21:
 
               query = { flags: { pending: true, transient: false, canceled: false, loading: true } };
               loadedRegulars = _instance2.default.history.find(query);
@@ -124,20 +128,21 @@ exports.default = function (stateParams) {
                 if (promise) {
                   promises.push(promise);
                 } else {
+                  transientStates.delete(stateParams);
                   clearTimeout(timeout);
                 }
 
                 return promises;
               }, []);
-              _context.next = 25;
+              _context.next = 27;
               return Promise.all(transientPromises);
 
-            case 25:
+            case 27:
               deactivationPromises = [];
 
 
               transientStates.forEach(function (stateParams) {
-                var promise = _instance2.default.deactivate({ name: stateParams.stateName, stateParams: stateParams });
+                var promise = _instance2.default.deactivate({ name: stateParams.stateName });
                 deactivationPromises.push(promise);
               });
 
@@ -150,11 +155,14 @@ exports.default = function (stateParams) {
                 deactivationPromises.push(promise);
               }
 
-              //the promise that deactivate() return is related to exit animation
+              _context.next = 33;
+              return Promise.all(deactivationPromises);
+
+            case 33:
 
               _instance2.default.trigger(eventHandle);
 
-            case 30:
+            case 34:
             case 'end':
               return _context.stop();
           }

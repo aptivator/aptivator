@@ -5,7 +5,8 @@ export default () => {
   let activeSerial = aptivator.history.findOne(query);
 
   if(activeSerial) {
-    let {stateName} = activeSerial;
-    aptivator.deactivate({name: stateName, stateParams: activeSerial});
+    return aptivator.deactivate({name: activeSerial.stateName});
   }
+  
+  return Promise.resolve();
 };

@@ -25,6 +25,9 @@ route = {
 
 
 aptivator.on({
+  start: function dmitriy(stateParams) {
+    return 'dmitriy';
+  },
   exit: {
     'app-1': function(stateParams) {
       console.log('exited', stateParams.stateName);
@@ -65,33 +68,47 @@ aptivator.state('app-1', {
   },
   
   on: {
-    start: function(stateParams) {
+    start: function one(stateParams) {
       console.log('starting', stateParams.stateName);  
+      return 'one';
     },
     
     loading: {
-      callbacks: function(stateParams) {
+      callbacks: [function two(stateParams) {
         console.log('loading', stateParams.stateName);
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
-            resolve();
+            resolve(2);
           });
         });
-      }
+      }]
     },
     
-    loaded: [function(stateParams) {
+    loaded: [function three(stateParams) {
         console.log('loaded', stateParams.stateName);
+        return 3;
       }
     ],
     
-    enter: function(stateParams) {
+    enter: function four(stateParams) {
       console.log('entered', stateParams.stateName);
+      return 4;
+    },
+    
+    error: {
+      fail: function(stateParams) {
+        console.log('failed...');
+      }
     }
   },
   
   views: {
     'main': {
+      address: '.main',
+      view: HeaderView
+    },
+    
+    'main-2': {
       address: '.main',
       view: HeaderView
     },
