@@ -8,11 +8,11 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _animationsAssembler = require('./animations-assembler/animations-assembler');
+var _animationsAssembler = require('./lib/animations-assembler');
 
 var _animationsAssembler2 = _interopRequireDefault(_animationsAssembler);
 
-var _stateNamesAggregator = require('./state-names-aggregator/state-names-aggregator');
+var _stateNamesAggregator = require('./lib/state-names-aggregator');
 
 var _stateNamesAggregator2 = _interopRequireDefault(_stateNamesAggregator);
 

@@ -1,7 +1,7 @@
 import _                      from 'lodash';
 import aptivator              from '../../lib/instance';
 import canceler               from '../canceler/canceler';
-import serialStateDeactivator from './serial-state-deactivator/serial-state-deactivator';
+import serialStateDeactivator from './lib/serial-state-deactivator';
 
 let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {
   return `aptivator-goto-render-${key}`;

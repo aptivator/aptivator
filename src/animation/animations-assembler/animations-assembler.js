@@ -1,6 +1,6 @@
 import _                    from 'lodash';
-import animationsAssembler  from './animations-assembler/animations-assembler';
-import stateNamesAggregator from './state-names-aggregator/state-names-aggregator';
+import animationsAssembler  from './lib/animations-assembler';
+import stateNamesAggregator from './lib/state-names-aggregator';
 
 export default (stateNames, animationType) => {
   stateNames = stateNamesAggregator(stateNames);

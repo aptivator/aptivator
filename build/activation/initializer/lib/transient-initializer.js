@@ -21,13 +21,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (stateName) {
   var transient = _vars2.default.states.registry[stateName].transient;
 
-  var transientConfigs = _lodash2.default.isObject(transient) ? transient : {};
-  var baseParams = { keepLast: false, overlay: false };
-  var setParams = _lodash2.default.pick(transientConfigs, _lodash2.default.keys(baseParams));
-  var immutableParams = { noHistory: true, stateName: stateName, ignorePending: true };
-  var activation = { params: _lodash2.default.extend(baseParams, setParams, immutableParams) };
-  var delay = transientConfigs.delay;
+  var _ref = _lodash2.default.isObject(transient) ? transient : {},
+      delay = _ref.delay;
 
+  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: false, transient: true } };
+  var transientConfigs = stateParams.transientConfigs = {};
 
   if (!_lodash2.default.isNumber(delay)) {
     var transientDelay = _vars2.default.configs.transientDelay;
@@ -35,13 +33,18 @@ exports.default = function (stateName) {
     delay = _lodash2.default.isNumber(transientDelay) ? transientDelay : _vars2.default.transientDelay;
   }
 
-  activation.timeout = setTimeout(function () {
-    activation.promise = _instance2.default.activate(activation.params);
-    activation.promise = activation.promise.then(_lodash2.default.noop, function (e) {
+  if (_lodash2.default.isObject(transient)) {
+    _lodash2.default.extend(stateParams.flags, _lodash2.default.pick(transient, ['noResolves']));
+  }
+
+  transientConfigs.timeout = setTimeout(function () {
+    var promise = _instance2.default.activate(stateParams);
+    promise = promise.then(_lodash2.default.noop, function (e) {
       return Promise.reject(e);
     });
-    activation.promise.catch(_lodash2.default.noop);
+    _lodash2.default.extend(transientConfigs, { promise: promise });
+    promise.catch(_lodash2.default.noop);
   }, delay);
 
-  return activation;
+  return stateParams;
 };

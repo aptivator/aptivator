@@ -28,7 +28,7 @@ var _canceler = require('../canceler/canceler');
 
 var _canceler2 = _interopRequireDefault(_canceler);
 
-var _serialStateDeactivator = require('./serial-state-deactivator/serial-state-deactivator');
+var _serialStateDeactivator = require('./lib/serial-state-deactivator');
 
 var _serialStateDeactivator2 = _interopRequireDefault(_serialStateDeactivator);
 

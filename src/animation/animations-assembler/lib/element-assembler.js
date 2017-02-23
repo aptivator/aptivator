@@ -1,5 +1,5 @@
 import _         from 'lodash';
-import vars      from '../../../../lib/vars';
+import vars      from '../../../lib/vars';
 
 let {spaceSplitter} = vars;
 

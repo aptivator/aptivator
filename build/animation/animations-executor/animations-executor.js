@@ -16,7 +16,7 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _stylesAggregator = require('./styles-aggregator/styles-aggregator');
+var _stylesAggregator = require('./lib/styles-aggregator');
 
 var _stylesAggregator2 = _interopRequireDefault(_stylesAggregator);
 

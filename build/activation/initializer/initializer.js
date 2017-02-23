@@ -40,11 +40,11 @@ var _canceler = require('../canceler/canceler');
 
 var _canceler2 = _interopRequireDefault(_canceler);
 
-var _duplicatesRemover = require('./duplicates-remover/duplicates-remover');
+var _duplicatesRemover = require('./lib/duplicates-remover');
 
 var _duplicatesRemover2 = _interopRequireDefault(_duplicatesRemover);
 
-var _transientInitializer = require('./transient-initializer/transient-initializer');
+var _transientInitializer = require('./lib/transient-initializer');
 
 var _transientInitializer2 = _interopRequireDefault(_transientInitializer);
 

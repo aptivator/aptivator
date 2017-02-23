@@ -2,7 +2,7 @@ import _                from 'lodash';
 import error            from '../../../lib/error';
 import relations        from '../../../lib/relations';
 import vars             from '../../../lib/vars';
-import elementAssembler from './element-assembler/element-assembler';
+import elementAssembler from './element-assembler';
 
 let {spaceSplitter, states} = vars;
 let {activationRecords, registry} = states;

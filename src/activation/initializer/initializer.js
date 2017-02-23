@@ -5,8 +5,8 @@ import fragment             from '../../lib/fragment';
 import route_               from '../../lib/route';
 import vars                 from '../../lib/vars';
 import canceler             from '../canceler/canceler';
-import duplicatesRemover    from './duplicates-remover/duplicates-remover';
-import transientInitializer from './transient-initializer/transient-initializer';
+import duplicatesRemover    from './lib/duplicates-remover';
+import transientInitializer from './lib/transient-initializer';
 
 let {registry} = vars.states;
 let eventHandle = 'aptivator-goto-preprocessor';

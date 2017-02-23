@@ -1,6 +1,6 @@
 import $                from 'jquery';
 import _                from 'lodash';
-import stylesAggregator from './styles-aggregator/styles-aggregator';
+import stylesAggregator from './lib/styles-aggregator';
 
 export default animations => {
   let allPromises = [];

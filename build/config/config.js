@@ -12,7 +12,7 @@ var _vars = require('../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _invalidRouteRegistrar = require('./invalid-route-registrar/invalid-route-registrar');
+var _invalidRouteRegistrar = require('./lib/invalid-route-registrar');
 
 var _invalidRouteRegistrar2 = _interopRequireDefault(_invalidRouteRegistrar);
 
