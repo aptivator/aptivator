@@ -58,7 +58,7 @@ exports.default = function () {
 
                 result = Promise.resolve(result);
                 result = result.then(function (result) {
-                  if (name) {
+                  if (name && name !== '_ignore') {
                     if (!_lodash2.default.has(results, handlePath)) {
                       _lodash2.default.set(results, handlePath, store);
                     }

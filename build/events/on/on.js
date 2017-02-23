@@ -37,25 +37,9 @@ exports.default = function (events, callback, context, once) {
 
     callback = callback.map(function (callbackRecord) {
       callbackRecord = _lodash2.default.isFunction(callbackRecord) ? { callback: callbackRecord } : callbackRecord;
-      var _callbackRecord = callbackRecord,
-          callback = _callbackRecord.callback,
-          context = _callbackRecord.context;
-
 
       if (once) {
-        (function () {
-          var oncer = _lodash2.default.once(function () {
-            _instance2.default.off(events, oncer, context);
-
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-              args[_key] = arguments[_key];
-            }
-
-            return callback.apply(this, args);
-          });
-
-          callbackRecord.callback = oncer;
-        })();
+        callbackRecord.callback.once = true;
       }
 
       return callbackRecord;
@@ -63,6 +47,36 @@ exports.default = function (events, callback, context, once) {
 
     return events.forEach(function (event) {
       var callbacks = eventRegistry[event] || (eventRegistry[event] = []);
+      var lastCallbackRecord = _lodash2.default.last(callbacks);
+
+      if (once) {
+        var _ref = lastCallbackRecord || {},
+            oncer = _ref.oncer;
+
+        if (oncer) {
+          lastCallbackRecord = callbacks.splice(callbacks.length - 1)[0];
+        } else {
+          var _callback = function _ignore() {
+            var onces = _lodash2.default.filter(callbacks, function (callbackRecord) {
+              return callbackRecord.callback.once;
+            });
+
+            _lodash2.default.each(onces, function (callbackRecord) {
+              var callback = callbackRecord.callback,
+                  context = callbackRecord.context;
+
+              _instance2.default.off(event, callback, context);
+            });
+          };
+
+          _callback.once = true;
+
+          lastCallbackRecord = { callback: _callback, oncer: true };
+        }
+
+        callback.push(lastCallbackRecord);
+      }
+
       callbacks.push.apply(callbacks, (0, _toConsumableArray3.default)(callback));
     });
   }

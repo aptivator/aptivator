@@ -69,13 +69,13 @@ aptivator.state('app-1', {
   
   on: {
     start: function one(stateParams) {
-      console.log('starting', stateParams.stateName);  
+      //console.log('starting', stateParams.stateName);  
       return 'one';
     },
     
     loading: {
       callbacks: [function two(stateParams) {
-        console.log('loading', stateParams.stateName);
+        //console.log('loading', stateParams.stateName);
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
             resolve(2);
@@ -85,13 +85,13 @@ aptivator.state('app-1', {
     },
     
     loaded: [function three(stateParams) {
-        console.log('loaded', stateParams.stateName);
+        //console.log('loaded', stateParams.stateName);
         return 3;
       }
     ],
     
     enter: function four(stateParams) {
-      console.log('entered', stateParams.stateName);
+      //console.log('entered', stateParams.stateName);
       return 4;
     },
     

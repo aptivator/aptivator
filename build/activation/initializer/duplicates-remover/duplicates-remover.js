@@ -34,6 +34,8 @@ exports.default = function (startedStates) {
 
   startedStates = _lodash2.default.difference(startedStates, serialStatesDuplicates);
 
+  var deactivationPromises = [];
+
   if (serialStates.length) {
     var query = { flags: { parallel: false, pending: true, canceled: false, transient: false, preprocessed: true } };
     var pendingSerialState = _instance2.default.history.findOne(query);
@@ -50,19 +52,36 @@ exports.default = function (startedStates) {
       owners.delete(pendingSerialState);
 
       if (!owners.size) {
-        var active = transientFlags.active;
+        var active = transientFlags.active,
+            rendered = transientFlags.rendered;
 
         if (!active) {
-          _lodash2.default.extend(transientFlags, { canceled: true });
+          var flagsUpdate = { canceled: true };
+
+          if (rendered) {
+            _lodash2.default.extend(flagsUpdate, { active: true });
+          }
+
+          _lodash2.default.extend(transientFlags, flagsUpdate);
         }
 
-        _instance2.default.deactivate({ name: transientStateName, stateParams: transientStateParams, silent: !active });
+        if (rendered) {
+          var promise = _instance2.default.deactivate({ name: transientStateName });
+          deactivationPromises.push(promise);
+        }
       }
 
       _lodash2.default.extend(flags, { canceled: true });
-      _instance2.default.deactivate({ name: stateName, stateParams: pendingSerialState, silent: true });
+
+      if (flags.rendered) {
+        _lodash2.default.extend(flags, { active: true });
+        var _promise = _instance2.default.deactivate({ name: stateName });
+        deactivationPromises.push(_promise);
+      }
     }
   }
 
-  return startedStates;
+  return Promise.all(deactivationPromises).then(function () {
+    return startedStates;
+  });
 };

@@ -18,7 +18,7 @@ export default async (events, ...args) => {
       
       result = Promise.resolve(result);
       result = result.then(result => {
-        if(name) {
+        if(name && name !== '_ignore') {
           if(!_.has(results, handlePath)) {
             _.set(results, handlePath, store);
           }

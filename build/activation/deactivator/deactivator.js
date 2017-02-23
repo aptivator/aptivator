@@ -65,7 +65,7 @@ exports.default = function (stateParams) {
                 return resolve(stateParams);
               });
 
-              _query = { flags: { pending: true, transient: true, loading: false, canceled: false } };
+              _query = { flags: { pending: true, transient: true, loading: false, canceled: false, prerendered: false } };
               loadingTransients = _instance2.default.history.find(_query);
 
               if (!loadingTransients.length) {

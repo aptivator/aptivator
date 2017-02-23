@@ -14,10 +14,14 @@ let eventHandle = 'aptivator-goto-preprocessor';
 export default stateParams => {
   canceler(stateParams);
   
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     let {transient} = stateParams.flags;
     
     _.extend(stateParams.flags, {initialized: true});    
+    
+    if(transient) {
+      return resolve(stateParams);
+    }
     
     aptivator.once(eventHandle, () => resolve(stateParams));
     
@@ -26,14 +30,11 @@ export default stateParams => {
     if(startingStates.length) {
       return;
     }
-    
-    if(transient) {
-      return aptivator.trigger(eventHandle);
-    }
 
     let query = {flags: {pending: true, initialized: true, preprocessed: false, canceled: false}};
     let startedStates = aptivator.history.find(query);
-    startedStates = duplicatesRemover(startedStates);
+    
+    startedStates = await duplicatesRemover(startedStates);
 
     let transientStates = aptivator.history.find(stateParams => {
       let {active, pending, canceled, transient} = stateParams.flags;
@@ -52,7 +53,7 @@ export default stateParams => {
       let {parallel, silent} = flags;
       let stateConfigs = registry[stateName];
       let transientStateName = approximator.fromStateName('transient', stateName);
-        
+      
       if(transientStateName) {
         let transientStateParams = transientStates[transientStateName];
         if(!transientStateParams) {

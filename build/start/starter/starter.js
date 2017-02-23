@@ -45,6 +45,17 @@ exports.default = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(fun
 
           _backbone2.default.history.start();
 
+          /*
+           aptivator.activate({name: 'app-1'});
+          aptivator.activate({name: 'app-2.form', flags: {parallel: true}});
+          aptivator.activate({name: 'app-2.info', flags: {parallel: true}});
+           setTimeout(() => {
+            aptivator.deactivate({name: 'app-2.form'});
+            aptivator.deactivate({name: 'app-2.info'});
+          }, 5000);
+          
+          */
+
           if (!_fragment2.default.get() && defaultState) {
             _instance2.default.activate({ stateName: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
           }

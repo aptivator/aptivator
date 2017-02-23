@@ -1,10 +1,9 @@
 # TODOs
 
-* for deactivation, handle simultaneous deactivation invocations
+* break on() into two parts: unwinding object module and callback registration module
 * figure out directory and file conventions (should I use libs or full directory names, or should there be an apps directory)
 * take a look at preprocessor code for root state and optimize
 * think about splitting renderer into two manageable parts
-* analyze canceled flag setting within deactivation module
 * add resolves duration support
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory
@@ -13,6 +12,9 @@
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
 * optimize deactivation module
+* **DONE** for deactivation, handle simultaneous deactivation invocations
+* **DONE** augment events module to allow multiple once registrations for the same handle before triggering and clearing them out
+* **DONE** analyze canceled flag setting within deactivation module
 * **DONE** if there are possible partial view deactivations, should and how should the animations be specified for the use case
 * **DONE** in light of animation support, figure out how to handle deactivation of states
 * **DONE** rethink complete through the process of deactivation (e.g., state activated fully, then only a part of it is deactivated, etc)

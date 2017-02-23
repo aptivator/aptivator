@@ -20,7 +20,7 @@ export default stateParams => {
       
       aptivator.once(eventHandle, () => resolve(stateParams));
       
-      let query = {flags: {pending: true, transient: true, loading: false, canceled: false}};
+      let query = {flags: {pending: true, transient: true, loading: false, canceled: false, prerendered: false}};
       let loadingTransients = aptivator.history.find(query);
       
       if(loadingTransients.length) {
@@ -71,7 +71,7 @@ export default stateParams => {
       
       return promises;
     }, []);
-    
+
     await Promise.all(transientPromises);
     
     let deactivationPromises = [];

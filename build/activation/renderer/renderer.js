@@ -8,10 +8,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../../lib/instance');
-
-var _instance2 = _interopRequireDefault(_instance);
-
 var _displayer = require('../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);

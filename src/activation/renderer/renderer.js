@@ -1,5 +1,4 @@
 import _           from 'lodash';
-import aptivator   from '../../lib/instance';
 import displayer   from '../../lib/displayer';
 import error       from '../../lib/error';
 import params      from '../../lib/params';

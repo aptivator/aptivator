@@ -16,22 +16,42 @@ export default (events, callback, context, once) => {
 
     callback = callback.map(callbackRecord => {
       callbackRecord = _.isFunction(callbackRecord) ? {callback: callbackRecord} : callbackRecord;
-      let {callback, context} = callbackRecord;
       
       if(once) {
-        let oncer = _.once(function(...args) {
-          aptivator.off(events, oncer, context);
-          return callback.apply(this, args);
-        });
-        
-        callbackRecord.callback = oncer;
+        callbackRecord.callback.once = true;
       }
-      
+
       return callbackRecord;
     });
     
     return events.forEach(event => {
       let callbacks = eventRegistry[event] || (eventRegistry[event] = []);
+      let lastCallbackRecord = _.last(callbacks);
+      
+      if(once) {
+        let {oncer} = lastCallbackRecord || {};
+        if(oncer) {
+          lastCallbackRecord = callbacks.splice(callbacks.length - 1)[0];
+        } else {
+          let callback = function _ignore() {
+            let onces = _.filter(callbacks, callbackRecord => {
+              return callbackRecord.callback.once;
+            });
+            
+            _.each(onces, callbackRecord => {
+              let {callback, context} = callbackRecord;
+              aptivator.off(event, callback, context);
+            });            
+          };
+          
+          callback.once = true;
+          
+          lastCallbackRecord = {callback, oncer: true};
+        }
+        
+        callback.push(lastCallbackRecord);
+      }
+      
       callbacks.push(...callback);
     });
   }
