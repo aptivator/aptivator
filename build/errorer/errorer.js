@@ -46,7 +46,7 @@ exports.default = function () {
 
                 var eventName = 'error';
                 var errorHandles = [eventName + ':' + errorType];
-                errorToPrint = _error2.default.message(errorType + ' ' + (errorMessage ? ':' + errorMessage : ''), 'errorer');
+                errorToPrint = _error2.default.message('' + errorType + (errorMessage ? ': ' + errorMessage : ''), 'errorer');
 
                 if (stateName) {
                   var handle = eventName + ':' + stateName + ':' + errorType;

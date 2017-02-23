@@ -10,7 +10,7 @@ export default async e => {
     let {stateName} = stateParams;
     let eventName = 'error';
     let errorHandles = [`${eventName}:${errorType}`];
-    errorToPrint = error.message(`${errorType} ${errorMessage ? ':' + errorMessage : ''}`, 'errorer');
+    errorToPrint = error.message(`${errorType}${errorMessage ? ': ' + errorMessage : ''}`, 'errorer');
     
     if(stateName) {
       let handle = `${eventName}:${stateName}:${errorType}`;
