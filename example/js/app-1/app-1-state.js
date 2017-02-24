@@ -39,7 +39,7 @@ aptivator.on({
     },
     
     loading: function exited(stateParams) {
-      console.log('exited', stateParams.stateName);
+      console.log('exited -dmitriy-', stateParams.stateName);
       return 'exited';
     }
   }
