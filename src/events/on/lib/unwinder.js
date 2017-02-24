@@ -4,7 +4,7 @@ import aptivator from '../../../lib/instance';
 export default (eventsConfigs, handlePartsBase, once) => {
   _.each(eventsConfigs, (configs, eventName) => {
     let {callbacks} = configs;
-    let handleParts = handlePartsBase.concat(eventName);
+    let handleParts = handlePartsBase.slice().concat(eventName);
     
     if(_.isArray(configs)) {
       callbacks = configs;

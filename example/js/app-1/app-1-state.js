@@ -23,7 +23,6 @@ route = {
 };
 */
 
-
 aptivator.on({
   start: function dmitriy(stateParams) {
     return 'dmitriy';

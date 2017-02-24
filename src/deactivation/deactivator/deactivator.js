@@ -105,7 +105,7 @@ export default stateParams =>
           _.extend(stateParams.flags, {active: false, deactivated: true});
           hookResulter(stateParams, 'exit', results);
         });
-      });      
+      });
     });
     
     resolve(animationPromise);
