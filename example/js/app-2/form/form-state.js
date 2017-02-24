@@ -65,7 +65,7 @@ aptivator.state('app-2.form', {
               }, 2000);
             });
           },
-          persist: false,
+          duration: 0,
           store: true
         }
       }

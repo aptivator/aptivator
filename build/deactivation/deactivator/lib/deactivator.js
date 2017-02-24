@@ -44,7 +44,9 @@ exports.default = {
   partial: function partial(params) {
     var _this2 = this;
 
-    var name = params.name;
+    var name = params.name,
+        _params$detach = params.detach,
+        detach = _params$detach === undefined ? {} : _params$detach;
 
     var uniqueAddress = name.includes('@') ? name : registry[name].uniqueAddress;
     var stateName = _addresser2.default.stateName(uniqueAddress);
@@ -52,7 +54,7 @@ exports.default = {
     var viewAddresses = new Set([uniqueAddress]);
     var activationRecord = activationRecords[uniqueAddress] || {};
 
-    if (!activationRecord.active) {
+    if (!activationRecord.active && !detach.focal) {
       return;
     }
 
@@ -64,20 +66,21 @@ exports.default = {
       });
     }
 
-    var _ref = params.detach || {},
-        detachFocal = _ref.focal,
-        detachChildren = _ref.children,
-        detachFull = _ref.full;
+    var _detach = detach,
+        detachFocal = _detach.focal,
+        detachChildren = _detach.children,
+        detachFull = _detach.full;
+
 
     viewAddresses.forEach(function (uniqueAddress) {
       (0, _hider2.default)(uniqueAddress, (0, _detachFlagger2.default)(detachFocal, detachFull));
     });
 
-    var detach = { focal: detachChildren, full: detachFull };
+    detach = { focal: detachChildren, full: detachFull };
 
     _lodash2.default.each(activationRecord.regions, function (regionObj) {
       regionObj.current.forEach(function (uniqueAddress) {
-        _this2.partial({ name: uniqueAddress, detach: detach });
+        _this2.partial({ name: uniqueAddress, detach: _lodash2.default.clone(detach) });
       });
     });
   }

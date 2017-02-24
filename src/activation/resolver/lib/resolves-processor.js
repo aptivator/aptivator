@@ -12,7 +12,7 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
     let results = resolveParams[storeKey] || (resolveParams[storeKey] = {});
     
     let storeResult = (resolve, resolveName, result) => {
-      resolve.processed = true;
+      resolve.timestamp = _.now();
       processedResolves.push(resolveName);
       if(resolve.store) {
         results[resolveName] = result;
@@ -25,7 +25,9 @@ export default (resolves, resolveParams, storeKey, resolverParams) =>
       let dependents = {};
       
       _.each(resolves, (resolve, resolveName) => {
-        if(resolve.persist && resolve.processed) {
+        let {duration, timestamp} = resolve;
+        
+        if(timestamp && _.now() - timestamp < duration) {
           return processedResolves.push(resolveName);
         }
         

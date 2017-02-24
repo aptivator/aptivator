@@ -25,7 +25,7 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
     var results = resolveParams[storeKey] || (resolveParams[storeKey] = {});
 
     var storeResult = function storeResult(resolve, resolveName, result) {
-      resolve.processed = true;
+      resolve.timestamp = _lodash2.default.now();
       processedResolves.push(resolveName);
       if (resolve.store) {
         results[resolveName] = result;
@@ -38,7 +38,11 @@ exports.default = function (resolves, resolveParams, storeKey, resolverParams) {
       var dependents = {};
 
       _lodash2.default.each(resolves, function (resolve, resolveName) {
-        if (resolve.persist && resolve.processed) {
+        var duration = resolve.duration,
+            timestamp = resolve.timestamp;
+
+
+        if (timestamp && _lodash2.default.now() - timestamp < duration) {
           return processedResolves.push(resolveName);
         }
 

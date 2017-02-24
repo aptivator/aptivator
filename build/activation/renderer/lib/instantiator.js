@@ -45,18 +45,23 @@ exports.default = function (viewConfigs, stateParams) {
       rendering = viewConfigs.rendering,
       uniqueAddress = viewConfigs.uniqueAddress,
       detachHidden = viewConfigs.detachHidden,
-      addressStateName = viewConfigs.addressStateName;
-  var instance = rendering.instance,
-      region = rendering.region,
+      addressStateName = viewConfigs.addressStateName,
+      fullAddress = viewConfigs.fullAddress,
+      stateName = viewConfigs.stateName,
+      viewHash = viewConfigs.viewHash;
+  var region = rendering.region,
       record = rendering.record;
+  var instance = record.instance;
 
 
   if (instance) {
+    console.log('destroying ' + fullAddress + ': ' + viewHash + ' @ ' + stateName);
     instance.destroy();
   }
 
   var family = _relations2.default.family(uniqueAddress);
   var viewParameters = _params2.default.assemble(family, stateParams);
+
   instance = new view(viewParameters);
 
   region.current.add(uniqueAddress);
@@ -74,9 +79,9 @@ exports.default = function (viewConfigs, stateParams) {
   };
 
   instance.on('destroy', function () {
-    _deactivator2.default.partial({ name: uniqueAddress, detach: { children: true } });
+    _deactivator2.default.partial({ name: uniqueAddress, detach: { focal: true, children: true } });
     region.current.delete(uniqueAddress);
-    delete paramsMap[uniqueAddress];
+    //delete paramsMap[uniqueAddress];
     delete record.instance;
   });
 

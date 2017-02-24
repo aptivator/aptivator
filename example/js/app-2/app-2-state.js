@@ -16,7 +16,6 @@ aptivator.state('app-2', {
       return 'murmansk';
     }
   },
-  cache: true,
   views: {
     '.main': {
       animate: {
@@ -30,9 +29,10 @@ aptivator.state('app-2', {
       resolves: {
         random1: {
           resolver: function() {
+            console.log('running random1 resolve');
             return Math.random();
           },
-          persist: false,
+          duration: 500,
           store: true
         }
       }

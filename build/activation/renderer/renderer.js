@@ -57,6 +57,8 @@ exports.default = function (stateParams) {
       return (0, _displayer2.default)(viewConfigs, stateParams, _cacheAssessor2.default);
     }
 
+    console.log(viewConfigs.fullAddress, _cacheAssessor2.default.explicit.cache, _cacheAssessor2.default.implicit.cache);
+
     (0, _instantiator2.default)(viewConfigs, stateParams);
   });
 

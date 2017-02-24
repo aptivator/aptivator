@@ -35,7 +35,7 @@ exports.default = {
     var stateCache = stateConfigs.cache;
     var instance = rendering.record.instance;
 
-    var cache = false;
+    var cache = void 0;
 
     if (instance) {
       cache = viewCache || stateCache;
@@ -44,7 +44,8 @@ exports.default = {
     return this.explicit.cache = cache;
   },
   implicit: function implicit(viewConfigs, stateParams) {
-    var uniqueAddress = viewConfigs.uniqueAddress;
+    var uniqueAddress = viewConfigs.uniqueAddress,
+        stateName = viewConfigs.stateName;
 
     var family = _relations2.default.family(uniqueAddress);
     var params = _params2.default.assemble(family, stateParams);
@@ -54,6 +55,10 @@ exports.default = {
     if (params.route) {
       delete params.route.fragment;
       delete params.route.stateName;
+    }
+
+    if (stateName === 'app-2.about') {
+      console.log(paramsMap[uniqueAddress], params, _lodash2.default.isEqual(paramsMap[uniqueAddress], params));
     }
 
     if (_lodash2.default.isEqual(paramsMap[uniqueAddress], params)) {

@@ -18,7 +18,7 @@ exports.default = function (eventsConfigs, handlePartsBase, once) {
   _lodash2.default.each(eventsConfigs, function (configs, eventName) {
     var callbacks = configs.callbacks;
 
-    var handleParts = handlePartsBase.slice().concat(eventName);
+    var handleParts = handlePartsBase.concat(eventName);
 
     if (_lodash2.default.isArray(configs)) {
       callbacks = configs;

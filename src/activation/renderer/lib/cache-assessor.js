@@ -12,7 +12,7 @@ export default {
     let stateConfigs = registry[stateName];
     let {cache: stateCache} = stateConfigs;
     let {instance} = rendering.record;
-    let cache = false;
+    let cache;
     
     if(instance) {
       cache = viewCache || stateCache;
@@ -22,7 +22,7 @@ export default {
   },
   
   implicit(viewConfigs, stateParams) {
-    let {uniqueAddress} = viewConfigs;
+    let {uniqueAddress, stateName} = viewConfigs;
     let family = relations.family(uniqueAddress);
     let params = params_.assemble(family, stateParams);
 
@@ -31,6 +31,10 @@ export default {
     if(params.route) {
       delete params.route.fragment;
       delete params.route.stateName;
+    }
+    
+    if(stateName === 'app-2.about') {
+      console.log(paramsMap[uniqueAddress], params, _.isEqual(paramsMap[uniqueAddress], params));
     }
     
     if(_.isEqual(paramsMap[uniqueAddress], params)) {

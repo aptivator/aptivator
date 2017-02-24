@@ -26,6 +26,8 @@ export default stateParams => {
       return displayer(viewConfigs, stateParams, cacheAssessor);
     }
     
+    console.log(viewConfigs.fullAddress, cacheAssessor.explicit.cache, cacheAssessor.implicit.cache);
+    
     instantiator(viewConfigs, stateParams);
   });
 

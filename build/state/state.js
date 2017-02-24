@@ -79,7 +79,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
 
               if (!stateConfigs.resolveConfigs) {
                 stateConfigs.resolveConfigs = {
-                  persist: true,
+                  duration: 0,
                   store: true
                 };
               }

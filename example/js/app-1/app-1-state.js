@@ -38,7 +38,7 @@ aptivator.on({
     },
     
     loading: function exited(stateParams) {
-      console.log('exited -dmitriy-', stateParams.stateName);
+      console.log('exited', stateParams.stateName);
       return 'exited';
     }
   }
@@ -127,7 +127,7 @@ aptivator.state('app-1', {
               }, 1500);
             });
           },
-          persist: false
+          duration: 0
         },
         
         success: function() {
@@ -142,7 +142,7 @@ aptivator.state('app-1', {
               });
             });
           },
-          persist: false,
+          duration: 0,
           store: false
         },
         

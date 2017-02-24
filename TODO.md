@@ -3,10 +3,11 @@
 * cap deactivate() invocations within aptivator with .catch(_.noop)
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
 * take a look at preprocessor code for root state and optimize
-* think about splitting renderer into two manageable parts
-* add resolves duration support
 * optimize deactivation module
 * refactor start module
+* **DONE** fix a situation when a parent is destroyed and its children are not detached (detach should work even for hidden views)
+* **DONE** add resolves duration support (allows for no persistance via duration: 0, or full persistance via duration: Infinity, and somewhere in between)
+* **DONE** think about splitting renderer into two manageable parts (completely rewritten)
 * **DONE** regarding above, would it be better to use mongodb-like queries (postpone for now, it is a good side project though)
 * **DONE** figure out directory and file conventions (should I use libs or full directory names, or should there be an apps directory)
 * **DONE** break on() into two parts: unwinding object module and callback registration module

@@ -3,7 +3,7 @@ import addresser from '../../../lib/addresser';
 import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars'; 
 
-const [persistFlag, storeFlag, bothFlags] = [1, 2, 1 | 2];
+const [durationFlag, storeFlag, bothFlags] = [1, 2, 1 | 2];
 
 export default (configs, entityName) => {
   let {resolves} = configs;
@@ -18,8 +18,8 @@ export default (configs, entityName) => {
       resolveConfigs = {resolver: resolveConfigs};
     }
   
-    if(!_.isUndefined(resolveConfigs.persist)) {
-      status |= persistFlag;
+    if(!_.isUndefined(resolveConfigs.duration)) {
+      status |= durationFlag;
     }
     
     if(!_.isUndefined(resolveConfigs.store)) {
@@ -38,9 +38,9 @@ export default (configs, entityName) => {
       }
       
       if(stateConfigs.resolveConfigs) {
-        if(!(status & persistFlag) && !_.isUndefined(stateConfigs.resolveConfigs.persist)) {
-          resolveConfigs.persist = stateConfigs.resolveConfigs.persist;
-          status |= persistFlag;
+        if(!(status & durationFlag) && !_.isUndefined(stateConfigs.resolveConfigs.duration)) {
+          resolveConfigs.duration = stateConfigs.resolveConfigs.duration;
+          status |= durationFlag;
         }
         
         if(!(status & storeFlag) && !_.isUndefined(stateConfigs.resolveConfigs.store)) {

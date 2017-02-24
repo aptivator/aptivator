@@ -17,14 +17,14 @@ export default {
   },
   
   partial(params) {
-    let {name} = params;
+    let {name, detach = {}} = params;
     let uniqueAddress = name.includes('@') ? name : registry[name].uniqueAddress;
     let stateName = addresser.stateName(uniqueAddress);
     let stateConfigs = registry[stateName];
     let viewAddresses = new Set([uniqueAddress]);
     let activationRecord = activationRecords[uniqueAddress] || {};
     
-    if(!activationRecord.active) {
+    if(!activationRecord.active && !detach.focal) {
       return;
     }
     
@@ -36,17 +36,17 @@ export default {
       });
     }
 
-    let {focal: detachFocal, children: detachChildren, full: detachFull} = params.detach || {};
+    let {focal: detachFocal, children: detachChildren, full: detachFull} = detach;
 
     viewAddresses.forEach(uniqueAddress => {
       hider(uniqueAddress, detachFlagger(detachFocal, detachFull));
     });
     
-    let detach = {focal: detachChildren, full: detachFull};
+    detach = {focal: detachChildren, full: detachFull};
     
     _.each(activationRecord.regions, regionObj => {
       regionObj.current.forEach(uniqueAddress => {
-        this.partial({name: uniqueAddress, detach});
+        this.partial({name: uniqueAddress, detach: _.clone(detach)});
       });
     });    
   }

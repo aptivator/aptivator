@@ -10,15 +10,18 @@ import viewApi           from './view-api';
 let {paramsMap} = vars;
 
 export default (viewConfigs, stateParams) => {
-  let {view, rendering, uniqueAddress, detachHidden, addressStateName} = viewConfigs;
-  let {instance, region, record} = rendering;
+  let {view, rendering, uniqueAddress, detachHidden, addressStateName, fullAddress, stateName, viewHash} = viewConfigs;
+  let {region, record} = rendering;
+  let {instance} = record;
   
   if(instance) {
+    console.log(`destroying ${fullAddress}: ${viewHash} @ ${stateName}`);
     instance.destroy();
   }
   
   let family = relations.family(uniqueAddress);
   let viewParameters = params.assemble(family, stateParams);
+  
   instance = new view(viewParameters);
   
   region.current.add(uniqueAddress);
@@ -32,9 +35,9 @@ export default (viewConfigs, stateParams) => {
   };
   
   instance.on('destroy', () => {
-    deactivator.partial({name: uniqueAddress, detach: {children: true}});
+    deactivator.partial({name: uniqueAddress, detach: {focal: true, children: true}});
     region.current.delete(uniqueAddress);
-    delete paramsMap[uniqueAddress];
+    //delete paramsMap[uniqueAddress];
     delete record.instance;
   });
 

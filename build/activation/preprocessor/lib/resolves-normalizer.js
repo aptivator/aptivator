@@ -22,7 +22,7 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var persistFlag = 1,
+var durationFlag = 1,
     storeFlag = 2,
     bothFlags = 1 | 2;
 
@@ -40,8 +40,8 @@ exports.default = function (configs, entityName) {
       resolveConfigs = { resolver: resolveConfigs };
     }
 
-    if (!_lodash2.default.isUndefined(resolveConfigs.persist)) {
-      status |= persistFlag;
+    if (!_lodash2.default.isUndefined(resolveConfigs.duration)) {
+      status |= durationFlag;
     }
 
     if (!_lodash2.default.isUndefined(resolveConfigs.store)) {
@@ -63,9 +63,9 @@ exports.default = function (configs, entityName) {
       }
 
       if (stateConfigs.resolveConfigs) {
-        if (!(status & persistFlag) && !_lodash2.default.isUndefined(stateConfigs.resolveConfigs.persist)) {
-          resolveConfigs.persist = stateConfigs.resolveConfigs.persist;
-          status |= persistFlag;
+        if (!(status & durationFlag) && !_lodash2.default.isUndefined(stateConfigs.resolveConfigs.duration)) {
+          resolveConfigs.duration = stateConfigs.resolveConfigs.duration;
+          status |= durationFlag;
         }
 
         if (!(status & storeFlag) && !_lodash2.default.isUndefined(stateConfigs.resolveConfigs.store)) {
