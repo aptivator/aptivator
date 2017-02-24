@@ -17,11 +17,17 @@ exports.default = {
 
   eventRegistry: {},
 
-  spaceSplitter: /\s+/,
+  paramsMap: {},
 
   rootStateName: 'root',
 
   router: new _backbone2.default.Router(),
+
+  resolveDefinitions: {},
+
+  resolveParams: {},
+
+  spaceSplitter: /\s+/,
 
   states: {
     activationRecords: {},
@@ -32,10 +38,6 @@ exports.default = {
     registry: {},
     transient: []
   },
-
-  resolveDefinitions: {},
-
-  resolveParams: {},
 
   transientDelay: 300,
 

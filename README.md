@@ -12,6 +12,8 @@ high reusability.
 
 For example, 
 
+applications are hierarchies consisting of smaller applications.
+
 explicit representation and management of application hierarchy
 
 Keeping related entities together

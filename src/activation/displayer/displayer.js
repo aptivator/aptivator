@@ -25,7 +25,7 @@ export default stateParams => {
     let renderedStates = aptivator.history.find(query);
     let stateNames = _.map(renderedStates, stateParams => {
       let {stateName, rootViews} = stateParams;
-      _.each(rootViews, rootView => displayer(...rootView));
+      _.each(rootViews, rootView => displayer(rootView));
       delete stateParams.rootViews;
       return stateName;
     });

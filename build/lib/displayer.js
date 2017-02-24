@@ -8,27 +8,28 @@ var _hideClass = require('./hide-class');
 
 var _hideClass2 = _interopRequireDefault(_hideClass);
 
-var _vars = require('./vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var activationRecords = _vars2.default.states.activationRecords;
-
-exports.default = function (uniqueAddress, $regionEl) {
-  var activationRecord = activationRecords[uniqueAddress];
-  var detached = activationRecord.detached,
-      instance = activationRecord.instance;
+exports.default = function (viewConfigs) {
+  var _viewConfigs$renderin = viewConfigs.rendering,
+      record = _viewConfigs$renderin.record,
+      parentRecord = _viewConfigs$renderin.parentRecord,
+      addressSelector = _viewConfigs$renderin.addressSelector;
+  var detached = record.detached,
+      instance = record.instance;
   var $el = instance.$el;
 
 
-  activationRecord.active = true;
+  record.active = true;
 
   if (!detached) {
     return $el.removeClass(_hideClass2.default);
   }
 
-  activationRecord.detached = false;
+  var $parentEl = parentRecord.instance.$el;
+
+  var $regionEl = !addressSelector ? $parentEl : $parentEl.find(addressSelector).eq(0);
+
+  record.detached = false;
   $regionEl.append($el);
 };

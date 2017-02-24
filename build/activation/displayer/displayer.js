@@ -8,10 +8,6 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
@@ -75,7 +71,7 @@ exports.default = function (stateParams) {
                     rootViews = stateParams.rootViews;
 
                 _lodash2.default.each(rootViews, function (rootView) {
-                  return _displayer2.default.apply(undefined, (0, _toConsumableArray3.default)(rootView));
+                  return (0, _displayer2.default)(rootView);
                 });
                 delete stateParams.rootViews;
                 return stateName;

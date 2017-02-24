@@ -14,7 +14,6 @@
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
 * think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
 * figure out direct parameters for combined states
-* regarding above, would it be better to use mongodb-like queries
 * put back dependencies support
 * when assembling parameters, consider caching some of these to optimize performance
 * do not forget to put callback support for animator

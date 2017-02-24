@@ -28,14 +28,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(e) {
-    var errorToPrint;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            errorToPrint = e;
-
-
             if (!(e instanceof Error)) {
               (function () {
                 var errorType = e.errorType,
@@ -46,7 +42,7 @@ exports.default = function () {
 
                 var eventName = 'error';
                 var errorHandles = [eventName + ':' + errorType];
-                errorToPrint = _error2.default.message('' + errorType + (errorMessage ? ': ' + errorMessage : ''), 'errorer');
+                var errorToPrint = _error2.default.message('' + errorType + (errorMessage ? ': ' + errorMessage : ''), 'errorer');
 
                 if (stateName) {
                   var handle = eventName + ':' + stateName + ':' + errorType;
@@ -58,14 +54,16 @@ exports.default = function () {
                     (0, _hookResulter2.default)(stateParams, errorType, results);
                   }
                 });
-              })();
-            }
 
-            console.log('%c' + errorToPrint, 'color: red');
+                console.log('%c' + errorToPrint, 'color: red');
+              })();
+            } else {
+              console.error(e);
+            }
 
             throw e;
 
-          case 4:
+          case 2:
           case 'end':
             return _context.stop();
         }

@@ -3,18 +3,27 @@ import params_   from '../../../lib/params';
 import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars';
 
-let paramsMap = {};
+let {paramsMap, states} = vars;
+let {registry} = states;
 
 export default {
   explicit(viewConfigs) {
-    let stateConfigs = vars.states.registry[viewConfigs.stateName];
-    return this.explicit.cache = !_.isUndefined(viewConfigs.cache) ? viewConfigs.cache :
-      !_.isUndefined(stateConfigs.cache) ? stateConfigs.cache : undefined;
+    let {stateName, rendering, cache: viewCache} = viewConfigs;
+    let stateConfigs = registry[stateName];
+    let {cache: stateCache} = stateConfigs;
+    let {instance} = rendering.record;
+    let cache = false;
+    
+    if(instance) {
+      cache = viewCache || stateCache;
+    }
+
+    return this.explicit.cache = cache;
   },
   
   implicit(viewConfigs, stateParams) {
-    let {stateName, uniqueAddress} = viewConfigs;
-    let family = relations.family(stateName).concat(uniqueAddress);
+    let {uniqueAddress} = viewConfigs;
+    let family = relations.family(uniqueAddress);
     let params = params_.assemble(family, stateParams);
 
     delete params.data; 

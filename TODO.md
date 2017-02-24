@@ -2,11 +2,13 @@
 
 * cap deactivate() invocations within aptivator with .catch(_.noop)
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
-* figure out directory and file conventions (should I use libs or full directory names, or should there be an apps directory)
 * take a look at preprocessor code for root state and optimize
 * think about splitting renderer into two manageable parts
 * add resolves duration support
 * optimize deactivation module
+* refactor start module
+* **DONE** regarding above, would it be better to use mongodb-like queries (postpone for now, it is a good side project though)
+* **DONE** figure out directory and file conventions (should I use libs or full directory names, or should there be an apps directory)
 * **DONE** break on() into two parts: unwinding object module and callback registration module
 * **DONE** for deactivation, handle simultaneous deactivation invocations
 * **DONE** augment events module to allow multiple once registrations for the same handle before triggering and clearing them out

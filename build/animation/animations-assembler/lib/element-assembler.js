@@ -47,10 +47,6 @@ exports.default = function (selector, selectorConfigs, stateName, $parentEl, ani
     selectorClasses = selectorClasses.trim().split(spaceSplitter);
   }
 
-  if (add && remove) {
-    remove = false;
-  }
-
   var _selectorSettings = selectorSettings,
       classes = _selectorSettings.classes;
 

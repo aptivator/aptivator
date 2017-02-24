@@ -7,11 +7,17 @@ export default {
   
   eventRegistry: {},
   
-  spaceSplitter: /\s+/,
+  paramsMap: {},
   
   rootStateName: 'root',
   
   router: new Backbone.Router(),
+  
+  resolveDefinitions: {},
+  
+  resolveParams: {},
+  
+  spaceSplitter: /\s+/,
   
   states: {
     activationRecords: {},
@@ -22,10 +28,6 @@ export default {
     registry: {},
     transient: []
   },
-  
-  resolveDefinitions: {},
-  
-  resolveParams: {},
   
   transientDelay: 300,
   

@@ -26,10 +26,6 @@ export default (selector, selectorConfigs, stateName, $parentEl, animations) => 
     selectorClasses = selectorClasses.trim().split(spaceSplitter);
   }
   
-  if(add && remove) {
-    remove = false;
-  }
-  
   let {classes} = selectorSettings;
   
   if(add) {

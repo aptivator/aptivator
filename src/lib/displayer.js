@@ -1,19 +1,19 @@
 import hideClassName from './hide-class';
-import vars          from './vars';
 
-let {activationRecords} = vars.states;
-
-export default (uniqueAddress, $regionEl) => {
-  let activationRecord = activationRecords[uniqueAddress];
-  let {detached, instance} = activationRecord;
+export default viewConfigs => {
+  let {record, parentRecord, addressSelector} = viewConfigs.rendering;
+  let {detached, instance} = record;
   let {$el} = instance;
   
-  activationRecord.active = true;
+  record.active = true;
   
   if(!detached) {
     return $el.removeClass(hideClassName);
   }
   
-  activationRecord.detached = false;
+  let {$el: $parentEl} = parentRecord.instance;
+  let $regionEl = !addressSelector ? $parentEl : $parentEl.find(addressSelector).eq(0);
+  
+  record.detached = false;
   $regionEl.append($el);
 };
