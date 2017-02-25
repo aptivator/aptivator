@@ -6,5 +6,4 @@ import invalidRouteRegistrar from './lib/invalid-route-registrar';
 aptivator.config = configs => {
   _.extend(vars.configs, configs);
   invalidRouteRegistrar();
-  return aptivator;
 };

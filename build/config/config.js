@@ -21,5 +21,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _instance2.default.config = function (configs) {
   _lodash2.default.extend(_vars2.default.configs, configs);
   (0, _invalidRouteRegistrar2.default)();
-  return _instance2.default;
 };

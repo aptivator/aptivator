@@ -1,85 +1,71 @@
 import _                        from 'lodash';
-import Backbone                 from 'backbone';
-import addresser                from '../lib/addresser';
 import aptivator                from '../lib/instance';
-import error                    from '../lib/error';
+import error_                   from '../lib/error';
 import relations                from '../lib/relations';
-import route_                   from '../lib/route';
 import vars                     from '../lib/vars';
 import otherStateRegistrar      from './lib/other-state-registrar';
 import parallelStatesNormalizer from './lib/parallel-states-normalizer';
+import rootStateConfigurator    from './lib/root-state-configurator';
+import routeConfigurator        from './lib/route-configurator';
 
-let {registry, queue} = vars.states;
-let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
+let {states} = vars;
+let {registry, queue} = states;
 
 aptivator.state = (stateName, stateConfigs) => 
-  (async function() {
+  !async function() {
     if(registry[stateName]) {
-      error.throw(`state [${stateName}] has already been declared`, 'state declaration');
+      error_.throw(`state [${stateName}] has already been declared`, 'state declaration');
     }
     
     if(relations.isRoot(stateName)) {
-      var root = true;
-      stateConfigs = _.pick(stateConfigs, rootStateProperties);
-      _.extend(stateConfigs, {uniqueAddress: addresser.uniqueAddress(stateName)});
-      
-      if(!stateConfigs.resolveConfigs) {
-        stateConfigs.resolveConfigs = {
-          duration: 0,
-          store: true
-        };
-      }
-      
-      if(_.isUndefined(stateConfigs.detachHidden)) {
-        stateConfigs.detachHidden = false;
-      }
+      stateConfigs = rootStateConfigurator(stateName, stateConfigs);
     }
     
-    let parentStateName = root ? null : relations.parent(stateName);
+    _.extend(stateConfigs, {stateName});
+    
+    let {transient, error, on, once, states: parallelStates, substates, route, root} = stateConfigs;
+    let parentStateName = root || relations.parent(stateName);
     let parentConfigs = root ? {} : registry[parentStateName];    
+    let eventMethods = {};
     
     if(!parentConfigs) {
-      queue.push([stateName, stateConfigs]);
-      return aptivator;
+      return queue.push([stateName, stateConfigs]);
     }
     
-    if(stateConfigs.transient || stateConfigs.error) {
-      otherStateRegistrar(stateName, vars.states[stateConfigs.transient ? 'transient' : 'error']);
+    if(transient || error) {
+      otherStateRegistrar(stateName, states[transient ? 'transient' : 'error']);
       delete stateConfigs.route;
     }
     
-    if(stateConfigs.on) {
-      aptivator.on(_.mapValues(stateConfigs.on, eventConfigs => {
+    if(on) {
+      _.extend(eventMethods, {on});
+    }
+    
+    if(once) {
+      _.extend(eventMethods, {once});
+    }
+    
+    _.each(eventMethods, (eventsConfigs, eventMethod) => {
+      aptivator[eventMethod](_.mapValues(eventsConfigs, eventConfigs => {
         return {[stateName]: eventConfigs};
       }));
+    });
+    
+    if(parallelStates) {
+      parallelStatesNormalizer(parallelStates);
     }
     
-    if(stateConfigs.states) {
-      parallelStatesNormalizer(stateConfigs.states);
-    }
-    
-    if(stateConfigs.route) {
-      {
-        let routeParts = route_.parts.parse(parentConfigs, stateConfigs);
-        let routeValues = (parentConfigs.routeValues || []).concat(stateConfigs.routeValues || []);
-        let route = `${parentConfigs.route && parentConfigs.route + '/' || ''}${stateConfigs.route}`;
-        let routeRx = Backbone.Router.prototype._routeToRegExp(route);
-        _.extend(stateConfigs, {route, routeParts, routeRx, routeValues});
-      }
-      
-      if(!stateConfigs.abstract) {
-        vars.router.route(stateConfigs.route, stateName, (...routeValues) => {
-          let route = route_.parts.assemble(stateName, _.compact(routeValues));
-          aptivator.activate({stateName, route}).catch(_.noop);
-        });
-      }
+    if(route) {
+      routeConfigurator(stateConfigs, parentConfigs);
     }
   
     registry[stateName] = stateConfigs;
   
-    _.each(stateConfigs.substates, (stateConfigs, subStateName) => {
+    _.each(substates, (stateConfigs, subStateName) => {
       aptivator.state(`${stateName}.${subStateName}`, stateConfigs);
     });
   
-    return vars.states.queue.length ? aptivator.state(...vars.states.queue.pop()) : aptivator;
-  })().catch(error.errorer);
+    if(queue.length) {
+      aptivator.state(...queue.pop());
+    }
+  }().catch(error_.errorer);

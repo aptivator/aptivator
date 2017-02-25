@@ -13,7 +13,6 @@ aptivator.state('app-2.form.message', {
       self: 'aptivator-fade-out'
     }
   },
-  states: ['app-2.form'],
   views: {
     '.message': {
       view: MessageView,
