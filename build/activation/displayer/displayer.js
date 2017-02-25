@@ -47,12 +47,11 @@ exports.default = function (stateParams) {
           switch (_context.prev = _context.next) {
             case 0:
               stateParams.flags.displayed = true;
-
               _instance2.default.once(eventHandle, function () {
                 return resolve(stateParams);
               });
 
-              query = { flags: { rendered: true, displayed: false, canceled: false } };
+              query = { flags: { pending: true, rendered: true, displayed: false, canceled: false } };
               renderingStates = _instance2.default.history.find(query);
 
               if (!renderingStates.length) {

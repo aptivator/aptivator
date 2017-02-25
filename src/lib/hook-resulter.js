@@ -7,11 +7,16 @@ export default (stateParams, hookName, results) => {
   
   let hookValues = _.get(results, [hookName, 'v'], {});
   let hookStateValues = _.get(results, [hookName, stateParams.stateName, 'v'], {});
-  results[hookName] = _.merge(hookValues, hookStateValues);
+  
+  if(stateParams.stateName === 'app-2.form.tester') {
+    console.log(_.cloneDeep(hookValues), _.cloneDeep(hookStateValues));
+  }
+  
+  results[hookName] = _.extend(hookValues, hookStateValues);
   
   if(!stateParams.hooks) {
     stateParams.hooks = {};
   }
   
-  _.merge(stateParams.hooks, results);
+  _.extend(stateParams.hooks, results);
 };

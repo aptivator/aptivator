@@ -2,8 +2,7 @@ import _         from 'lodash';
 import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars';
 
-let {rootStateName, states} = vars;
-let {registry} = states;
+let {rootStateName} = vars;
 
 export default function stateNamesAggregator(stateNames) {
   stateNames = _.reduce(stateNames, (stateNames, stateNameArr) => {
@@ -12,16 +11,10 @@ export default function stateNamesAggregator(stateNames) {
     }
   
     let [min, stateName] = stateNameArr;
-    let stateConfigs = registry[stateName];
-    let {states} = stateConfigs;
     let family = relations.family(stateName);
     let minIndex = family.indexOf(min);
     
     family = family.slice(minIndex);
-    
-    if(states) {
-      stateNames.push(...stateNamesAggregator(states));
-    }
     
     stateNames.push(...family);
     return stateNames;

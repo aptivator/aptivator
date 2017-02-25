@@ -12,10 +12,6 @@ var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -69,17 +65,17 @@ exports.default = function (stateParams) {
 
   stateParams.flags.preprocessed = true;
 
-  !function preprocess(stateName, previousSequence) {
+  !function preprocess(stateName, previous) {
     var stateConfigs = registry[stateName];
 
     var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
 
-    if (!_lodash2.default.isEmpty(activationSequence)) {
-      if (previousSequence) {
-        var uniqueValues = _lodash2.default.uniq(previousSequence.concat(activationSequence));
-        previousSequence.splice.apply(previousSequence, [0, previousSequence.length].concat((0, _toConsumableArray3.default)(uniqueValues)));
-      }
-      return;
+    if (previous && !_lodash2.default.isEmpty(activationSequence)) {
+      return _lodash2.default.each(activationSequence, function (viewConfigs) {
+        if (!previous.includes(viewConfigs)) {
+          previous.push(viewConfigs);
+        }
+      });
     }
 
     if (stateConfigs.resolveAddresses) {
@@ -175,12 +171,8 @@ exports.default = function (stateParams) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
     }
 
-    _lodash2.default.each(stateConfigs.states, function (stateName) {
-      return preprocess(stateName, activationSequence);
-    });
-
-    if (previousSequence) {
-      preprocess(stateName, previousSequence);
+    if (previous) {
+      preprocess(stateName, previous);
     }
 
     activationSequence.sort(function () {

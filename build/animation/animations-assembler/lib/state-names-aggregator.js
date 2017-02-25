@@ -28,9 +28,7 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var rootStateName = _vars2.default.rootStateName,
-    states = _vars2.default.states;
-var registry = states.registry;
+var rootStateName = _vars2.default.rootStateName;
 function stateNamesAggregator(stateNames) {
   stateNames = _lodash2.default.reduce(stateNames, function (stateNames, stateNameArr) {
     if (!_lodash2.default.isArray(stateNameArr)) {
@@ -42,17 +40,10 @@ function stateNamesAggregator(stateNames) {
         min = _stateNameArr2[0],
         stateName = _stateNameArr2[1];
 
-    var stateConfigs = registry[stateName];
-    var states = stateConfigs.states;
-
     var family = _relations2.default.family(stateName);
     var minIndex = family.indexOf(min);
 
     family = family.slice(minIndex);
-
-    if (states) {
-      stateNames.push.apply(stateNames, (0, _toConsumableArray3.default)(stateNamesAggregator(states)));
-    }
 
     stateNames.push.apply(stateNames, (0, _toConsumableArray3.default)(family));
     return stateNames;

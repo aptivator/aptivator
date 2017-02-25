@@ -40,6 +40,10 @@ var _defaultFlags = require('./lib/default-flags');
 
 var _defaultFlags2 = _interopRequireDefault(_defaultFlags);
 
+var _parallelStatesStarter = require('./lib/parallel-states-starter');
+
+var _parallelStatesStarter2 = _interopRequireDefault(_parallelStatesStarter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var registry = _vars2.default.states.registry;
@@ -90,27 +94,7 @@ exports.default = function () {
               _lodash2.default.extend(stateParams, { route: route });
             }
 
-            _lodash2.default.each(stateConfigs.states, function (parallelStateParams) {
-              parallelStateParams = _lodash2.default.cloneDeep(parallelStateParams);
-              var _parallelStateParams = parallelStateParams,
-                  parallelDirect = _parallelStateParams.direct,
-                  parallelRoute = _parallelStateParams.route;
-
-
-              if (direct && parallelDirect) {
-                parallelStateParams.direct = direct;
-              }
-
-              if (route && parallelRoute) {
-                parallelStateParams.route = route;
-              }
-
-              if (flags.transient) {
-                parallelStateParams.flags.transient = true;
-              }
-
-              _instance2.default.activate(parallelStateParams);
-            });
+            (0, _parallelStatesStarter2.default)(name, stateParams);
 
             (0, _historyAdder2.default)(stateParams);
 

@@ -9,7 +9,7 @@ var App2View = require('./app-2');
 
 aptivator.state('app-2', {
   route: 'app-2/:one',
-  routeValues: [1],
+  routeValues: ['1'],
   abstract: true,
   resolves: {
     murmansk: function() {
@@ -29,7 +29,6 @@ aptivator.state('app-2', {
       resolves: {
         random1: {
           resolver: function() {
-            console.log('running random1 resolve');
             return Math.random();
           },
           duration: 500,

@@ -11,10 +11,9 @@ export default stateParams => {
   
   return new Promise(async resolve => {
     stateParams.flags.displayed = true;
-    
     aptivator.once(eventHandle, () => resolve(stateParams));
     
-    let query = {flags: {rendered: true, displayed: false, canceled: false}};
+    let query = {flags: {pending: true, rendered: true, displayed: false, canceled: false}};
     let renderingStates = aptivator.history.find(query);
     
     if(renderingStates.length) {
@@ -23,6 +22,7 @@ export default stateParams => {
     
     query = {flags: {pending: true, displayed: true, canceled: false}};
     let renderedStates = aptivator.history.find(query);
+    
     let stateNames = _.map(renderedStates, stateParams => {
       let {stateName, rootViews} = stateParams;
       _.each(rootViews, rootView => displayer(rootView));

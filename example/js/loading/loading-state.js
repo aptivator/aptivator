@@ -6,19 +6,10 @@ aptivator.state('loading', {
     noResolves: true,
     delay: 100
   },
+  cache: false,
   view: LoadingView,
   parentSelector: '.extra',
-  resolves: {
-    delayer: {
-      resolver: function() {
-        return new Promise(function(resolve, reject) {
-          setTimeout(function() {
-            resolve('resolved');
-          }, 1000);
-        });
-      }
-    }
-  },
+
   data: {
     loadingMessage: 'Loading...'
   }

@@ -58,7 +58,11 @@ aptivator.state('app-1', {
   },
   route: 'app-1/:one/:two',
   routeValues: ['one', 22],
-  states: ['header'],
+  states: [{
+    name: 'header',
+    direct: true,
+    route: true
+  }],
   
   resolves: {
     run: function() {

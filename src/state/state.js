@@ -1,12 +1,13 @@
-import _                   from 'lodash';
-import Backbone            from 'backbone';
-import addresser           from '../lib/addresser';
-import aptivator           from '../lib/instance';
-import error               from '../lib/error';
-import relations           from '../lib/relations';
-import route_              from '../lib/route';
-import vars                from '../lib/vars';
-import otherStateRegistrar from './lib/other-state-registrar';
+import _                        from 'lodash';
+import Backbone                 from 'backbone';
+import addresser                from '../lib/addresser';
+import aptivator                from '../lib/instance';
+import error                    from '../lib/error';
+import relations                from '../lib/relations';
+import route_                   from '../lib/route';
+import vars                     from '../lib/vars';
+import otherStateRegistrar      from './lib/other-state-registrar';
+import parallelStatesNormalizer from './lib/parallel-states-normalizer';
 
 let {registry, queue} = vars.states;
 let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
@@ -51,6 +52,10 @@ aptivator.state = (stateName, stateConfigs) =>
       aptivator.on(_.mapValues(stateConfigs.on, eventConfigs => {
         return {[stateName]: eventConfigs};
       }));
+    }
+    
+    if(stateConfigs.states) {
+      parallelStatesNormalizer(stateConfigs.states);
     }
     
     if(stateConfigs.route) {

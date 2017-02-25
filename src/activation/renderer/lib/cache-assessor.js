@@ -8,10 +8,10 @@ let {registry} = states;
 
 export default {
   explicit(viewConfigs) {
-    let {stateName, rendering, cache: viewCache} = viewConfigs;
+    let {stateName, record, cache: viewCache} = viewConfigs;
+    let {instance} = record;
     let stateConfigs = registry[stateName];
     let {cache: stateCache} = stateConfigs;
-    let {instance} = rendering.record;
     let cache;
     
     if(instance) {
@@ -22,7 +22,7 @@ export default {
   },
   
   implicit(viewConfigs, stateParams) {
-    let {uniqueAddress, stateName} = viewConfigs;
+    let {uniqueAddress, fullAddress} = viewConfigs;
     let family = relations.family(uniqueAddress);
     let params = params_.assemble(family, stateParams);
 
@@ -33,9 +33,7 @@ export default {
       delete params.route.stateName;
     }
     
-    if(stateName === 'app-2.about') {
-      console.log(paramsMap[uniqueAddress], params, _.isEqual(paramsMap[uniqueAddress], params));
-    }
+    console.log(uniqueAddress, fullAddress, paramsMap[uniqueAddress], params, _.isEqual(paramsMap[uniqueAddress], params));
     
     if(_.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;

@@ -6,8 +6,9 @@ let {registry} = vars.states;
 
 export default async params => {
   let {name, partial} = params;
-  
-  if(!registry[name]) {
+  let stateConfigs = registry[name];
+
+  if(!stateConfigs) {
     throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
   }
   
@@ -19,6 +20,11 @@ export default async params => {
   }
   
   _.extend(stateParams.flags, {deactivating: true, partial});
+
+  _.each(stateConfigs.states, parallelStateParams => {
+    let {name} = parallelStateParams;
+    aptivator.deactivate({name});
+  });
 
   return stateParams;
 };

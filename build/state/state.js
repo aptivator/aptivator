@@ -52,6 +52,10 @@ var _otherStateRegistrar = require('./lib/other-state-registrar');
 
 var _otherStateRegistrar2 = _interopRequireDefault(_otherStateRegistrar);
 
+var _parallelStatesNormalizer = require('./lib/parallel-states-normalizer');
+
+var _parallelStatesNormalizer2 = _interopRequireDefault(_parallelStatesNormalizer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _vars$states = _vars2.default.states,
@@ -113,6 +117,10 @@ _instance2.default.state = function (stateName, stateConfigs) {
               }));
             }
 
+            if (stateConfigs.states) {
+              (0, _parallelStatesNormalizer2.default)(stateConfigs.states);
+            }
+
             if (stateConfigs.route) {
               {
                 routeParts = _route2.default.parts.parse(parentConfigs, stateConfigs);
@@ -143,7 +151,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
 
             return _context.abrupt('return', _vars2.default.states.queue.length ? _instance2.default.state.apply(_instance2.default, (0, _toConsumableArray3.default)(_vars2.default.states.queue.pop())) : _instance2.default);
 
-          case 13:
+          case 14:
           case 'end':
             return _context.stop();
         }

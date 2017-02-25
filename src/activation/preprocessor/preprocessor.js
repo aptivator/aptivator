@@ -18,17 +18,17 @@ export default stateParams => {
   let {stateName} = stateParams;
   stateParams.flags.preprocessed = true;
   
-  !function preprocess(stateName, previousSequence) {
+  !function preprocess(stateName, previous) {
     let stateConfigs = registry[stateName];
 
     let activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     
-    if(!_.isEmpty(activationSequence)) {
-      if(previousSequence) {
-        let uniqueValues = _.uniq(previousSequence.concat(activationSequence));
-        previousSequence.splice(0, previousSequence.length, ...uniqueValues);
-      }
-      return;
+    if(previous && !_.isEmpty(activationSequence)) {
+      return _.each(activationSequence, viewConfigs => {
+        if(!previous.includes(viewConfigs)) {
+          previous.push(viewConfigs);
+        }
+      });
     }
     
     if(stateConfigs.resolveAddresses) {
@@ -111,11 +111,9 @@ export default stateParams => {
     if(!mainCount) {
       error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
-    
-    _.each(stateConfigs.states, stateName => preprocess(stateName, activationSequence));
-    
-    if(previousSequence) {
-      preprocess(stateName, previousSequence);
+
+    if(previous) {
+      preprocess(stateName, previous);
     }
     
     activationSequence.sort((...args) => {

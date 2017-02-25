@@ -1,10 +1,16 @@
 # TODOs
 
+* get rid of chaining for api methods
 * cap deactivate() invocations within aptivator with .catch(_.noop)
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
 * take a look at preprocessor code for root state and optimize
 * optimize deactivation module
 * refactor start module
+* reimplement composite states as two states or more states activated simultaneously with necessary configurations
+* regarding parallel states, take a look at parallel transients
+* **DONE** for parallel states, it seems that views from one state need to be copied over and given a new unique id (definition of parallel states was changed)
+* **DONE** think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
+* **DONE** figure out direct parameters for combined states (combined states are states launched in parallel, and direct parameters from one can be assigned in activate() call)
 * **DONE** fix a situation when a parent is destroyed and its children are not detached (detach should work even for hidden views)
 * **DONE** add resolves duration support (allows for no persistance via duration: 0, or full persistance via duration: Infinity, and somewhere in between)
 * **DONE** think about splitting renderer into two manageable parts (completely rewritten)

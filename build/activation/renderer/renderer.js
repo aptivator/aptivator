@@ -32,10 +32,6 @@ var _renderingPreparer = require('./lib/rendering-preparer');
 
 var _renderingPreparer2 = _interopRequireDefault(_renderingPreparer);
 
-var _spliceAssessor = require('./lib/splice-assessor');
-
-var _spliceAssessor2 = _interopRequireDefault(_spliceAssessor);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var activationSequences = _vars2.default.states.activationSequences;
@@ -43,21 +39,21 @@ var activationSequences = _vars2.default.states.activationSequences;
 exports.default = function (stateParams) {
   (0, _canceler2.default)(stateParams);
   stateParams.flags.rendered = true;
+  var augment = stateParams.flags.augment;
+
 
   _lodash2.default.each(activationSequences[stateParams.stateName], function (viewConfigs) {
-    if (!viewConfigs.rendering) {
+    if (!viewConfigs.record) {
       (0, _renderingPreparer2.default)(viewConfigs);
     }
 
-    if ((0, _spliceAssessor2.default)(viewConfigs, stateParams)) {
+    if (augment && viewConfigs.record.active) {
       return;
     }
 
     if (_cacheAssessor2.default.total(viewConfigs, stateParams)) {
       return (0, _displayer2.default)(viewConfigs, stateParams, _cacheAssessor2.default);
     }
-
-    console.log(viewConfigs.fullAddress, _cacheAssessor2.default.explicit.cache, _cacheAssessor2.default.implicit.cache);
 
     (0, _instantiator2.default)(viewConfigs, stateParams);
   });

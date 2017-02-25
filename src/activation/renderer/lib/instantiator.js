@@ -5,17 +5,15 @@ import relations         from '../../../lib/relations';
 import vars              from '../../../lib/vars';
 import deactivator       from '../../../deactivation/deactivator/lib/deactivator';
 import rootViewRegistrar from './root-view-registrar';
-import viewApi           from './view-api';
+import viewApi from './view-api';
 
 let {paramsMap} = vars;
 
 export default (viewConfigs, stateParams) => {
-  let {view, rendering, uniqueAddress, detachHidden, addressStateName, fullAddress, stateName, viewHash} = viewConfigs;
-  let {region, record} = rendering;
+  let {view, record, region, uniqueAddress, detachHidden, addressStateName, fullAddress, stateName, viewHash} = viewConfigs;
   let {instance} = record;
   
   if(instance) {
-    console.log(`destroying ${fullAddress}: ${viewHash} @ ${stateName}`);
     instance.destroy();
   }
   

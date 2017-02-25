@@ -1,7 +1,7 @@
 import hideClassName from './hide-class';
 
 export default viewConfigs => {
-  let {record, parentRecord, addressSelector} = viewConfigs.rendering;
+  let {record, parentRecord, addressSelector} = viewConfigs;
   let {detached, instance} = record;
   let {$el} = instance;
   

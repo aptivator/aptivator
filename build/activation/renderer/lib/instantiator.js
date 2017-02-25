@@ -42,20 +42,18 @@ var paramsMap = _vars2.default.paramsMap;
 
 exports.default = function (viewConfigs, stateParams) {
   var view = viewConfigs.view,
-      rendering = viewConfigs.rendering,
+      record = viewConfigs.record,
+      region = viewConfigs.region,
       uniqueAddress = viewConfigs.uniqueAddress,
       detachHidden = viewConfigs.detachHidden,
       addressStateName = viewConfigs.addressStateName,
       fullAddress = viewConfigs.fullAddress,
       stateName = viewConfigs.stateName,
       viewHash = viewConfigs.viewHash;
-  var region = rendering.region,
-      record = rendering.record;
   var instance = record.instance;
 
 
   if (instance) {
-    console.log('destroying ' + fullAddress + ': ' + viewHash + ' @ ' + stateName);
     instance.destroy();
   }
 

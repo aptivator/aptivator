@@ -3,10 +3,9 @@ var LoadingView = require('./loading');
 
 aptivator.state('app-2.loading', {
   transient: {
-    keepLast: false,
     delay: 100
   },
-  states: ['loading'],
+  //states: ['loading'],
   view: LoadingView,
   parentSelector: '.main',
   data: {

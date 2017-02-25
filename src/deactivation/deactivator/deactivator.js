@@ -15,7 +15,7 @@ export default stateParams =>
     
     let query = {flags: {active: true, deactivating: true}};
     let deactivatingStates = aptivator.history.find(query);
-    
+
     if(deactivatingStates.length) {
       aptivator.once(eventHandle, resolve);
       return;

@@ -21,6 +21,10 @@ export default hookName =>
         hookResulter(stateParams, hookName, results);
         
         if(sync) {
+          if(hookName === 'start') {
+            console.log(stateName, results);
+          }
+          
           resolve(stateParams);
         }
       }, e => reject({errorType: e, stateParams}));

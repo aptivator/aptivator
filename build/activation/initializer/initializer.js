@@ -24,14 +24,6 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _fragment = require('../../lib/fragment');
-
-var _fragment2 = _interopRequireDefault(_fragment);
-
-var _route = require('../../lib/route');
-
-var _route2 = _interopRequireDefault(_route);
-
 var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -49,8 +41,6 @@ var _transientInitializer = require('./lib/transient-initializer');
 var _transientInitializer2 = _interopRequireDefault(_transientInitializer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var registry = _vars2.default.states.registry;
 
 var eventHandle = 'aptivator-goto-preprocessor';
 
@@ -117,16 +107,8 @@ exports.default = function (stateParams) {
                 return o;
               }, {});
 
-              startedStates.forEach(function (stateParams) {
-                var flags = stateParams.flags,
-                    route = stateParams.route,
-                    routeValues = stateParams.routeValues,
-                    stateName = stateParams.stateName;
-                var parallel = flags.parallel,
-                    silent = flags.silent;
-
-                var stateConfigs = registry[stateName];
-                var transientStateName = _approximator2.default.fromStateName('transient', stateName);
+              _lodash2.default.each(startedStates, function (stateParams) {
+                var transientStateName = _approximator2.default.fromStateName('transient', stateParams.stateName);
 
                 if (transientStateName) {
                   var transientStateParams = transientStates[transientStateName];
@@ -137,20 +119,6 @@ exports.default = function (stateParams) {
 
                   transientStateParams.owners.add(stateParams);
                   _lodash2.default.extend(stateParams, { transientStateParams: transientStateParams });
-                }
-
-                if (stateConfigs.route && !route) {
-                  if (!routeValues) {
-                    routeValues = stateConfigs.routeValues;
-                  }
-
-                  route = _route2.default.parts.assemble(stateName, routeValues);
-
-                  if (!(silent || parallel)) {
-                    _fragment2.default.set(route.fragment);
-                  }
-
-                  _lodash2.default.extend(stateParams, { route: route });
                 }
               });
 

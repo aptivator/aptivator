@@ -28,12 +28,12 @@ var registry = states.registry;
 exports.default = {
   explicit: function explicit(viewConfigs) {
     var stateName = viewConfigs.stateName,
-        rendering = viewConfigs.rendering,
+        record = viewConfigs.record,
         viewCache = viewConfigs.cache;
+    var instance = record.instance;
 
     var stateConfigs = registry[stateName];
     var stateCache = stateConfigs.cache;
-    var instance = rendering.record.instance;
 
     var cache = void 0;
 
@@ -45,7 +45,7 @@ exports.default = {
   },
   implicit: function implicit(viewConfigs, stateParams) {
     var uniqueAddress = viewConfigs.uniqueAddress,
-        stateName = viewConfigs.stateName;
+        fullAddress = viewConfigs.fullAddress;
 
     var family = _relations2.default.family(uniqueAddress);
     var params = _params2.default.assemble(family, stateParams);
@@ -57,9 +57,7 @@ exports.default = {
       delete params.route.stateName;
     }
 
-    if (stateName === 'app-2.about') {
-      console.log(paramsMap[uniqueAddress], params, _lodash2.default.isEqual(paramsMap[uniqueAddress], params));
-    }
+    console.log(uniqueAddress, fullAddress, paramsMap[uniqueAddress], params, _lodash2.default.isEqual(paramsMap[uniqueAddress], params));
 
     if (_lodash2.default.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;

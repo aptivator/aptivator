@@ -12,8 +12,6 @@
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* think through state composition.  If a state needs route params and it is composed with another state under a new url, then what?
-* figure out direct parameters for combined states
 * put back dependencies support
 * when assembling parameters, consider caching some of these to optimize performance
 * do not forget to put callback support for animator
@@ -23,3 +21,4 @@
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
+* parallel states cannot be ancestors of the focal state

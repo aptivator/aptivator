@@ -11,10 +11,9 @@ var _hideClass2 = _interopRequireDefault(_hideClass);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (viewConfigs) {
-  var _viewConfigs$renderin = viewConfigs.rendering,
-      record = _viewConfigs$renderin.record,
-      parentRecord = _viewConfigs$renderin.parentRecord,
-      addressSelector = _viewConfigs$renderin.addressSelector;
+  var record = viewConfigs.record,
+      parentRecord = viewConfigs.parentRecord,
+      addressSelector = viewConfigs.addressSelector;
   var detached = record.detached,
       instance = record.instance;
   var $el = instance.$el;

@@ -1,14 +1,11 @@
 import _                    from 'lodash';
 import approximator         from '../../lib/approximator';
 import aptivator            from '../../lib/instance';
-import fragment             from '../../lib/fragment';
-import route_               from '../../lib/route';
 import vars                 from '../../lib/vars';
 import canceler             from '../canceler/canceler';
 import duplicatesRemover    from './lib/duplicates-remover';
 import transientInitializer from './lib/transient-initializer';
 
-let {registry} = vars.states;
 let eventHandle = 'aptivator-goto-preprocessor';
 
 export default stateParams => {
@@ -48,11 +45,8 @@ export default stateParams => {
       return o;
     }, {});
       
-    startedStates.forEach(stateParams => {
-      let {flags, route, routeValues, stateName} = stateParams;
-      let {parallel, silent} = flags;
-      let stateConfigs = registry[stateName];
-      let transientStateName = approximator.fromStateName('transient', stateName);
+    _.each(startedStates, stateParams => {
+      let transientStateName = approximator.fromStateName('transient', stateParams.stateName);
       
       if(transientStateName) {
         let transientStateParams = transientStates[transientStateName];
@@ -63,20 +57,6 @@ export default stateParams => {
         
         transientStateParams.owners.add(stateParams);
         _.extend(stateParams, {transientStateParams});
-      }
-      
-      if(stateConfigs.route && !route) {
-        if(!routeValues) {
-          routeValues = stateConfigs.routeValues;
-        }
-        
-        route = route_.parts.assemble(stateName, routeValues);
-        
-        if(!(silent || parallel)) {
-          fragment.set(route.fragment);
-        }
-        
-        _.extend(stateParams, {route});
       }
     });
 

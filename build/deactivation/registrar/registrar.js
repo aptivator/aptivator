@@ -30,38 +30,45 @@ var registry = _vars2.default.states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(params) {
-    var name, partial, query, stateParams;
+    var name, partial, stateConfigs, query, stateParams;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             name = params.name, partial = params.partial;
+            stateConfigs = registry[name];
 
-            if (registry[name]) {
-              _context.next = 3;
+            if (stateConfigs) {
+              _context.next = 4;
               break;
             }
 
             throw { errorType: 'undeclared', errorMessage: 'state [' + name + '] does not exist' };
 
-          case 3:
+          case 4:
             query = { stateName: name, flags: { active: true } };
             stateParams = _instance2.default.history.findOne(query);
 
             if (stateParams) {
-              _context.next = 7;
+              _context.next = 8;
               break;
             }
 
             throw { errorType: 'inactive', errorMessage: 'state [' + name + '] is not activated' };
 
-          case 7:
+          case 8:
 
             _lodash2.default.extend(stateParams.flags, { deactivating: true, partial: partial });
 
+            _lodash2.default.each(stateConfigs.states, function (parallelStateParams) {
+              var name = parallelStateParams.name;
+
+              _instance2.default.deactivate({ name: name });
+            });
+
             return _context.abrupt('return', stateParams);
 
-          case 9:
+          case 11:
           case 'end':
             return _context.stop();
         }

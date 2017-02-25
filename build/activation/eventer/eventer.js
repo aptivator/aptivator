@@ -42,6 +42,10 @@ exports.default = function (hookName) {
         (0, _hookResulter2.default)(stateParams, hookName, results);
 
         if (sync) {
+          if (hookName === 'start') {
+            console.log(stateName, results);
+          }
+
           resolve(stateParams);
         }
       }, function (e) {
