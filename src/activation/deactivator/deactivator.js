@@ -77,7 +77,7 @@ export default stateParams => {
     let deactivationPromises = [];
     
     transientStates.forEach(stateParams => {
-      let promise = aptivator.deactivate({name: stateParams.stateName});
+      let promise = aptivator.deactivate({name: stateParams.stateName}).catch(_.noop);
       deactivationPromises.push(promise);
     });
     

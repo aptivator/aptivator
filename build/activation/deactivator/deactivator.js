@@ -142,7 +142,7 @@ exports.default = function (stateParams) {
 
 
               transientStates.forEach(function (stateParams) {
-                var promise = _instance2.default.deactivate({ name: stateParams.stateName });
+                var promise = _instance2.default.deactivate({ name: stateParams.stateName }).catch(_lodash2.default.noop);
                 deactivationPromises.push(promise);
               });
 

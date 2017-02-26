@@ -36,25 +36,19 @@ exports.default = function (events, callback, context, once) {
 
   callback = _lodash2.default.map(callback, function (callbackRecord) {
     callbackRecord = _lodash2.default.isFunction(callbackRecord) ? { callback: callbackRecord } : callbackRecord;
-    _lodash2.default.extend(callbackRecord.callback, { once: once });
-    return callbackRecord;
+    return _lodash2.default.extend(callbackRecord, { once: once });
   });
 
   _lodash2.default.each(events, function (event) {
     var callbacks = eventRegistry[event] || (eventRegistry[event] = []);
-    var lastCallbackRecord = _lodash2.default.last(callbacks);
 
     if (once) {
-      var _ref = lastCallbackRecord || {},
-          oncer = _ref.oncer;
-
-      if (oncer) {
-        lastCallbackRecord = callbacks.splice(callbacks.length - 1)[0];
+      var onceRemover = _lodash2.default.findIndex(callbacks, { onceRemover: true });
+      if (onceRemover !== -1) {
+        onceRemover = callbacks.splice(onceRemover, 1)[0];
       } else {
         var _callback = function _ignore() {
-          var onces = _lodash2.default.filter(callbacks, function (callbackRecord) {
-            return callbackRecord.callback.once;
-          });
+          var onces = _lodash2.default.filter(callbacks, { once: true });
 
           _lodash2.default.each(onces, function (callbackRecord) {
             var callback = callbackRecord.callback,
@@ -64,12 +58,10 @@ exports.default = function (events, callback, context, once) {
           });
         };
 
-        _callback.once = true;
-
-        lastCallbackRecord = { callback: _callback, oncer: true };
+        onceRemover = { callback: _callback, once: true, onceRemover: true };
       }
 
-      callback.push(lastCallbackRecord);
+      callback.push(onceRemover);
     }
 
     callbacks.push.apply(callbacks, (0, _toConsumableArray3.default)(callback));

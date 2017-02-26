@@ -1,3 +1,4 @@
+import _         from 'lodash';
 import aptivator from '../../../lib/instance';
 
 export default () => {
@@ -5,7 +6,7 @@ export default () => {
   let activeSerial = aptivator.history.findOne(query);
 
   if(activeSerial) {
-    return aptivator.deactivate({name: activeSerial.stateName});
+    return aptivator.deactivate({name: activeSerial.stateName}).catch(_.noop);
   }
   
   return Promise.resolve();

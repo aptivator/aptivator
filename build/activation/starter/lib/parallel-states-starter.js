@@ -44,10 +44,14 @@ exports.default = function (stateName, stateParams) {
 
       if (direct && parallelDirect) {
         parallelStateParams.direct = direct;
+      } else {
+        delete parallelStateParams.direct;
       }
 
       if (route && parallelRoute) {
         parallelStateParams.route = route;
+      } else {
+        delete parallelStateParams.route;
       }
 
       _lodash2.default.extend(parallelStateParams.flgas, { transient: transient });

@@ -35,7 +35,7 @@ export default stateParams => {
       return;
     }
     
-    let {data, resolves} = stateConfigs;
+    let {data, resolves, view, views} = stateConfigs;
     let resolveAddresses = stateConfigs.resolveAddresses = [];
     
     if(data) {
@@ -53,7 +53,7 @@ export default stateParams => {
     
     let viewsRegistry = stateConfigs.viewsRegistry = {};
     
-    if(stateConfigs.view && !stateConfigs.views) {
+    if(view && !views) {
       let viewHash = stateConfigs.parentSelector || '';
       _.extend(stateConfigs, {
         views: {[viewHash]: _.pick(stateConfigs, ['view', 'cache'])}

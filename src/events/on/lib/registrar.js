@@ -15,23 +15,19 @@ export default (events, callback, context, once) => {
 
   callback = _.map(callback, callbackRecord => {
     callbackRecord = _.isFunction(callbackRecord) ? {callback: callbackRecord} : callbackRecord;
-    _.extend(callbackRecord.callback, {once});
-    return callbackRecord;
+    return _.extend(callbackRecord, {once});
   });
   
   _.each(events, event => {
     let callbacks = eventRegistry[event] || (eventRegistry[event] = []);
-    let lastCallbackRecord = _.last(callbacks);
     
     if(once) {
-      let {oncer} = lastCallbackRecord || {};
-      if(oncer) {
-        lastCallbackRecord = callbacks.splice(callbacks.length - 1)[0];
+      let onceRemover = _.findIndex(callbacks, {onceRemover: true});
+      if(onceRemover !== -1) {
+        onceRemover = callbacks.splice(onceRemover, 1)[0];
       } else {
         let callback = function _ignore() {
-          let onces = _.filter(callbacks, callbackRecord => {
-            return callbackRecord.callback.once;
-          });
+          let onces = _.filter(callbacks, {once: true});
           
           _.each(onces, callbackRecord => {
             let {callback, context} = callbackRecord;
@@ -39,12 +35,10 @@ export default (events, callback, context, once) => {
           });            
         };
         
-        callback.once = true;
-        
-        lastCallbackRecord = {callback, oncer: true};
+        onceRemover = {callback, once: true, onceRemover: true};
       }
       
-      callback.push(lastCallbackRecord);
+      callback.push(onceRemover);
     }
     
     callbacks.push(...callback);

@@ -1,9 +1,9 @@
 import aptivator   from '../lib/instance';
 import errorer     from '../errorer/errorer';
-import registrar   from './registrar/registrar';
+import starter     from './starter/starter';
 import deactivator from './deactivator/deactivator';
 
 aptivator.deactivate = params => 
-  registrar(params)
+  starter(params)
     .then(deactivator)
     .catch(errorer);

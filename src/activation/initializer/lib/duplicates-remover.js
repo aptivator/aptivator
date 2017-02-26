@@ -43,7 +43,7 @@ export default startedStates => {
         }
         
         if(rendered) {
-          let promise = aptivator.deactivate({name: transientStateName});
+          let promise = aptivator.deactivate({name: transientStateName}).catch(_.noop);
           deactivationPromises.push(promise);
         }
       }
@@ -52,7 +52,7 @@ export default startedStates => {
       
       if(flags.rendered) {
         _.extend(flags, {active: true});
-        let promise = aptivator.deactivate({name: stateName});
+        let promise = aptivator.deactivate({name: stateName}).catch(_.noop);
         deactivationPromises.push(promise);
       }
     }

@@ -19,10 +19,14 @@ export default (stateName, stateParams) => {
       
       if(direct && parallelDirect) {
         parallelStateParams.direct = direct;
-      } 
+      } else {
+        delete parallelStateParams.direct;
+      }
       
       if(route && parallelRoute) {
         parallelStateParams.route = route;
+      } else {
+        delete parallelStateParams.route;
       }
 
       _.extend(parallelStateParams.flgas, {transient: transient});

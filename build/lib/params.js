@@ -36,7 +36,7 @@ exports.default = {
         resolves = params.resolves;
 
     var targetEntityName = _lodash2.default.nth(family, -1);
-    var targetStateName = targetEntityName.includes('@') ? _addresser2.default.stateName(targetEntityName) : targetEntityName;
+    var targetStateName = _addresser2.default.stateName(targetEntityName);
     var targetStateConfigs = _vars2.default.states.registry[targetStateName];
     var error = targetStateConfigs.error;
 
@@ -68,14 +68,20 @@ exports.default = {
       _lodash2.default.extend(resolves, resolveParams[relation]);
     });
 
+    _lodash2.default.each(hooks, function (hookValues, hookName) {
+      var values = [['v'], [targetStateName, 'v']].reduce(function (values, path) {
+        return _lodash2.default.extend(values, _lodash2.default.get(hookValues, path, {}));
+      }, {});
+
+      if (!_lodash2.default.isEmpty(values)) {
+        params.hooks[hookName] = values;
+      }
+    });
+
     if (family.includes(stateName)) {
       if (direct) {
         _lodash2.default.extend(params, { direct: direct });
         _lodash2.default.extend(stateParams, { direct: direct });
-      }
-
-      if (hooks) {
-        _lodash2.default.extend(params, { hooks: hooks });
       }
 
       _lodash2.default.extend(stateParams, { data: data, resolves: resolves });

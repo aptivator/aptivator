@@ -83,7 +83,9 @@ exports.default = function (stateParams) {
     }
 
     var data = stateConfigs.data,
-        resolves = stateConfigs.resolves;
+        resolves = stateConfigs.resolves,
+        view = stateConfigs.view,
+        views = stateConfigs.views;
 
     var resolveAddresses = stateConfigs.resolveAddresses = [];
 
@@ -102,7 +104,7 @@ exports.default = function (stateParams) {
 
     var viewsRegistry = stateConfigs.viewsRegistry = {};
 
-    if (stateConfigs.view && !stateConfigs.views) {
+    if (view && !views) {
       var viewHash = stateConfigs.parentSelector || '';
       _lodash2.default.extend(stateConfigs, {
         views: (0, _defineProperty3.default)({}, viewHash, _lodash2.default.pick(stateConfigs, ['view', 'cache']))

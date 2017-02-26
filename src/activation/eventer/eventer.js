@@ -1,4 +1,3 @@
-import _            from 'lodash';
 import aptivator    from '../../lib/instance';
 import hookResulter from '../../lib/hook-resulter';
 
@@ -16,12 +15,10 @@ export default hookName =>
       }
       
       aptivator.trigger({handle, full: true}, stateParams).then(results => {
-        _.extend(stateParams.flags, {[hookName]: true});
-        
-        hookResulter(stateParams, hookName, results);
+        hookResulter(hookName, stateParams, results);
         
         if(sync) {
-          resolve(stateParams);
+          return resolve(stateParams);
         }
       }, e => reject({errorType: e, stateParams}));
     });

@@ -1,13 +1,15 @@
 # TODOs
 
 * what about giving params to hooks callbacks
-* cap deactivate() invocations within aptivator with .catch(_.noop)
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
 * take a look at preprocessor code for root state and optimize
 * optimize deactivation module
 * refactor start module
 * reimplement composite states as two states or more states activated simultaneously with necessary configurations
 * regarding parallel states, take a look at parallel transients
+* children states should be able to cancel ancestor parallel states
+* **DONE** cap deactivate() invocations within aptivator with .catch(_.noop)
+* **DONE** rewrite once() to make sure that location of onceRemover can be anywhere in the callbacks array
 * **DONE** add once support on state declaration
 * **DONE** refactor state module
 * **DONE** get rid of chaining for api methods

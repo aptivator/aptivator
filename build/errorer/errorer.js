@@ -12,10 +12,6 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _hookResulter = require('../lib/hook-resulter');
-
-var _hookResulter2 = _interopRequireDefault(_hookResulter);
-
 var _instance = require('../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
@@ -23,6 +19,10 @@ var _instance2 = _interopRequireDefault(_instance);
 var _error = require('../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
+
+var _hookResulter = require('../lib/hook-resulter');
+
+var _hookResulter2 = _interopRequireDefault(_hookResulter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,7 +51,7 @@ exports.default = function () {
 
                 _instance2.default.trigger(errorHandles, errorType, stateParams).then(function (results) {
                   if (stateName) {
-                    (0, _hookResulter2.default)(stateParams, errorType, results);
+                    (0, _hookResulter2.default)(errorType, stateParams, results);
                   }
                 });
 

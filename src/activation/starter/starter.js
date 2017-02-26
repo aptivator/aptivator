@@ -10,7 +10,7 @@ import parallelStatesStarter from './lib/parallel-states-starter';
 let {registry} = vars.states;
 
 export default async stateParams => {
-  let {stateName, name = stateName, flags = {}, route, direct, routeValues} = stateParams;
+  let {stateName, name = stateName, flags = {}, route, routeValues} = stateParams;
   let {silent, parallel} = flags;
   let stateConfigs = registry[name];
   

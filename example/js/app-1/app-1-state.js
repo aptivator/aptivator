@@ -70,9 +70,16 @@ aptivator.state('app-1', {
     }
   },
   
+  once: {
+    start: function once(stateParams) {
+      console.log(stateParams);
+      console.log('starting once', stateParams.stateName);
+    }
+  },
+  
   on: {
     start: function one(stateParams) {
-      //console.log('starting', stateParams.stateName);  
+      console.log('starting', stateParams.stateName);  
       return 'one';
     },
     

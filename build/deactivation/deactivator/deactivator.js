@@ -157,7 +157,7 @@ exports.default = function (stateParams) {
 
         _instance2.default.trigger({ handle: 'exit:' + stateName, full: true }, stateParams).then(function (results) {
           _lodash2.default.extend(stateParams.flags, { active: false, deactivated: true });
-          (0, _hookResulter2.default)(stateParams, 'exit', results);
+          (0, _hookResulter2.default)('exit', stateParams, results);
         });
       });
     });

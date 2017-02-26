@@ -1,18 +1,17 @@
 import _ from 'lodash';
 
-export default (stateParams, hookName, results) => {
+export default (hookName, stateParams, results) => {
+  _.extend(stateParams.flags, {[hookName]: true});
+  
   if(_.isEmpty(results)) {
     return;
   }
   
-  let hookValues = _.get(results, [hookName, 'v'], {});
-  let hookStateValues = _.get(results, [hookName, stateParams.stateName, 'v'], {});
+  let {hooks} = stateParams;
   
-  results[hookName] = _.extend(hookValues, hookStateValues);
-  
-  if(!stateParams.hooks) {
-    stateParams.hooks = {};
+  if(!hooks) {
+    _.set(stateParams, 'hooks', hooks = {});
   }
   
-  _.extend(stateParams.hooks, results);
+  _.extend(hooks, results);
 };

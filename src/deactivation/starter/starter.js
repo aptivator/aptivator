@@ -23,7 +23,7 @@ export default async params => {
 
   _.each(stateConfigs.states, parallelStateParams => {
     let {name} = parallelStateParams;
-    aptivator.deactivate({name});
+    aptivator.deactivate({name}).catch(_.noop);
   });
 
   return stateParams;

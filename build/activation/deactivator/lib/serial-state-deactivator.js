@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _instance = require('../../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
@@ -15,7 +19,7 @@ exports.default = function () {
   var activeSerial = _instance2.default.history.findOne(query);
 
   if (activeSerial) {
-    return _instance2.default.deactivate({ name: activeSerial.stateName });
+    return _instance2.default.deactivate({ name: activeSerial.stateName }).catch(_lodash2.default.noop);
   }
 
   return Promise.resolve();

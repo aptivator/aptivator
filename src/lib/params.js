@@ -1,7 +1,7 @@
-import _         from 'lodash';
-import addresser from './addresser';
-import route_    from './route';
-import vars      from './vars';
+import _            from 'lodash';
+import addresser    from './addresser';
+import route_       from './route';
+import vars         from './vars';
 
 let {dataParams, resolveParams} = vars;
 
@@ -11,7 +11,7 @@ export default {
     let params = {data: {}, resolves: {}, route: {}, direct: {}, hooks: {}};
     let {data, resolves} = params;
     let targetEntityName = _.nth(family, -1);
-    let targetStateName = targetEntityName.includes('@') ? addresser.stateName(targetEntityName) : targetEntityName;
+    let targetStateName = addresser.stateName(targetEntityName);
     let targetStateConfigs = vars.states.registry[targetStateName];
     let {error} = targetStateConfigs;
     
@@ -41,14 +41,20 @@ export default {
       _.extend(resolves, resolveParams[relation]);
     });
 
+    _.each(hooks, (hookValues, hookName) => {
+      let values = [['v'], [targetStateName, 'v']].reduce((values, path) => {
+        return _.extend(values, _.get(hookValues, path, {}));
+      }, {});
+      
+      if(!_.isEmpty(values)) {
+        params.hooks[hookName] = values;
+      }
+    });
+
     if(family.includes(stateName)) {
       if(direct) {
         _.extend(params, {direct});
         _.extend(stateParams, {direct});
-      }
-      
-      if(hooks) {
-        _.extend(params, {hooks});
       }
       
       _.extend(stateParams, {data, resolves});

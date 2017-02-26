@@ -66,7 +66,7 @@ exports.default = function (startedStates) {
         }
 
         if (rendered) {
-          var promise = _instance2.default.deactivate({ name: transientStateName });
+          var promise = _instance2.default.deactivate({ name: transientStateName }).catch(_lodash2.default.noop);
           deactivationPromises.push(promise);
         }
       }
@@ -75,7 +75,7 @@ exports.default = function (startedStates) {
 
       if (flags.rendered) {
         _lodash2.default.extend(flags, { active: true });
-        var _promise = _instance2.default.deactivate({ name: stateName });
+        var _promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
         deactivationPromises.push(_promise);
       }
     }

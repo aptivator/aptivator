@@ -22,7 +22,7 @@ export default {
   },
   
   implicit(viewConfigs, stateParams) {
-    let {uniqueAddress, fullAddress} = viewConfigs;
+    let {uniqueAddress} = viewConfigs;
     let family = relations.family(uniqueAddress);
     let params = params_.assemble(family, stateParams);
 
@@ -32,9 +32,7 @@ export default {
       delete params.route.fragment;
       delete params.route.stateName;
     }
-    
-    console.log(uniqueAddress, fullAddress, paramsMap[uniqueAddress], params, _.isEqual(paramsMap[uniqueAddress], params));
-    
+
     if(_.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;
     }

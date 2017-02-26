@@ -1,6 +1,6 @@
-import hookResulter from '../lib/hook-resulter';
 import aptivator    from '../lib/instance';
 import error        from '../lib/error';
+import hookResulter from '../lib/hook-resulter';
 
 export default async e => {
   if(!(e instanceof Error)) {
@@ -17,7 +17,7 @@ export default async e => {
     
     aptivator.trigger(errorHandles, errorType, stateParams).then(results => {
       if(stateName) {
-        hookResulter(stateParams, errorType, results);
+        hookResulter(errorType, stateParams, results);
       }
     });
     
