@@ -1,15 +1,17 @@
 import _            from 'lodash';
 import addresser    from './addresser';
+import relations    from './relations';
 import route_       from './route';
 import vars         from './vars';
 
 let {dataParams, resolveParams} = vars;
 
 export default {
-  assemble(family, stateParams) {
+  assemble(entityName, stateParams) {
     let {direct, route, stateName, hooks} = stateParams;
     let params = {data: {}, resolves: {}, route: {}, direct: {}, hooks: {}};
     let {data, resolves} = params;
+    let family = relations.family(entityName);
     let targetEntityName = _.nth(family, -1);
     let targetStateName = addresser.stateName(targetEntityName);
     let targetStateConfigs = vars.states.registry[targetStateName];

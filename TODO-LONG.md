@@ -7,6 +7,7 @@
 * note that when using multiple classes for animation, these classes should not override the previous class's animation or transition property
 * Sprinkle comments throughout code
 * Tutorial
+
 * allow to use a template property on the state instead of a view to tell framework to create a view
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
 * start exploring how to write tests
@@ -21,4 +22,3 @@
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
-* parallel states cannot be ancestors of the focal state

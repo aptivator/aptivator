@@ -20,10 +20,6 @@ var _relations = require('../../../lib/relations');
 
 var _relations2 = _interopRequireDefault(_relations);
 
-var _vars = require('../../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 var _deactivator = require('../../../deactivation/deactivator/lib/deactivator');
 
 var _deactivator2 = _interopRequireDefault(_deactivator);
@@ -38,18 +34,13 @@ var _viewApi2 = _interopRequireDefault(_viewApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var paramsMap = _vars2.default.paramsMap;
-
 exports.default = function (viewConfigs, stateParams) {
   var view = viewConfigs.view,
       record = viewConfigs.record,
       region = viewConfigs.region,
       uniqueAddress = viewConfigs.uniqueAddress,
       detachHidden = viewConfigs.detachHidden,
-      addressStateName = viewConfigs.addressStateName,
-      fullAddress = viewConfigs.fullAddress,
-      stateName = viewConfigs.stateName,
-      viewHash = viewConfigs.viewHash;
+      addressStateName = viewConfigs.addressStateName;
   var instance = record.instance;
 
 
@@ -57,8 +48,7 @@ exports.default = function (viewConfigs, stateParams) {
     instance.destroy();
   }
 
-  var family = _relations2.default.family(uniqueAddress);
-  var viewParameters = _params2.default.assemble(family, stateParams);
+  var viewParameters = _params2.default.assemble(uniqueAddress, stateParams);
 
   instance = new view(viewParameters);
 
@@ -79,7 +69,6 @@ exports.default = function (viewConfigs, stateParams) {
   instance.on('destroy', function () {
     _deactivator2.default.partial({ name: uniqueAddress, detach: { focal: true, children: true } });
     region.current.delete(uniqueAddress);
-    //delete paramsMap[uniqueAddress];
     delete record.instance;
   });
 

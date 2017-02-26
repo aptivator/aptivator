@@ -8,6 +8,8 @@
 * reimplement composite states as two states or more states activated simultaneously with necessary configurations
 * regarding parallel states, take a look at parallel transients
 * children states should be able to cancel ancestor parallel states
+* **DONE** let params assembler receive either an address or stateName and not family
+* **DONE** parallel states cannot be ancestors of the focal state
 * **DONE** cap deactivate() invocations within aptivator with .catch(_.noop)
 * **DONE** rewrite once() to make sure that location of onceRemover can be anywhere in the callbacks array
 * **DONE** add once support on state declaration

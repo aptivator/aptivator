@@ -1,6 +1,5 @@
 import _         from 'lodash';
 import params_   from '../../../lib/params';
-import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars';
 
 let {paramsMap, states} = vars;
@@ -23,8 +22,7 @@ export default {
   
   implicit(viewConfigs, stateParams) {
     let {uniqueAddress} = viewConfigs;
-    let family = relations.family(uniqueAddress);
-    let params = params_.assemble(family, stateParams);
+    let params = params_.assemble(uniqueAddress, stateParams);
 
     delete params.data; 
     

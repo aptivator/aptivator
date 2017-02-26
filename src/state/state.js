@@ -52,7 +52,7 @@ aptivator.state = (stateName, stateConfigs) =>
     });
     
     if(parallelStates) {
-      parallelStatesNormalizer(parallelStates);
+      parallelStatesNormalizer(parallelStates, stateName);
     }
     
     if(route) {

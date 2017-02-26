@@ -12,10 +12,6 @@ var _params = require('../../../lib/params');
 
 var _params2 = _interopRequireDefault(_params);
 
-var _relations = require('../../../lib/relations');
-
-var _relations2 = _interopRequireDefault(_relations);
-
 var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -46,8 +42,7 @@ exports.default = {
   implicit: function implicit(viewConfigs, stateParams) {
     var uniqueAddress = viewConfigs.uniqueAddress;
 
-    var family = _relations2.default.family(uniqueAddress);
-    var params = _params2.default.assemble(family, stateParams);
+    var params = _params2.default.assemble(uniqueAddress, stateParams);
 
     delete params.data;
 

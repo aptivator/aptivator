@@ -29,9 +29,7 @@ export default stateParams => {
       return new Promise((resolve, reject) => {
         let promises = [];
         _.keys(node).forEach(entityName => {
-          let stateName = addresser.stateName(entityName);
-          let family = relations.family(stateName);
-          let resolverParams = params.assemble(family, stateParams);
+          let resolverParams = params.assemble(entityName, stateParams);
           let promise = resolvesProcessor(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);
           promises.push(promise.then(() => process(node[entityName])).catch(reject));
         });

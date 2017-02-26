@@ -66,9 +66,7 @@ exports.default = function (stateParams) {
       return new Promise(function (resolve, reject) {
         var promises = [];
         _lodash2.default.keys(node).forEach(function (entityName) {
-          var stateName = _addresser2.default.stateName(entityName);
-          var family = _relations2.default.family(stateName);
-          var resolverParams = _params2.default.assemble(family, stateParams);
+          var resolverParams = _params2.default.assemble(entityName, stateParams);
           var promise = (0, _resolvesProcessor2.default)(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);
           promises.push(promise.then(function () {
             return process(node[entityName]);

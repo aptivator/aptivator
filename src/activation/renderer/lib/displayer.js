@@ -12,8 +12,7 @@ export default (viewConfigs, stateParams, cacheAssessor) => {
     
     if(receiver) {
       let {instance} = viewConfigs.record;
-      let family = relations.family(uniqueAddress);
-      let viewParameters = params.assemble(family, stateParams);
+      let viewParameters = params.assemble(uniqueAddress, stateParams);
       instance[receiver](viewParameters);
     }
   }

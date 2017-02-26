@@ -36,8 +36,7 @@ exports.default = function (viewConfigs, stateParams, cacheAssessor) {
     if (receiver) {
       var instance = viewConfigs.record.instance;
 
-      var family = _relations2.default.family(uniqueAddress);
-      var viewParameters = _params2.default.assemble(family, stateParams);
+      var viewParameters = _params2.default.assemble(uniqueAddress, stateParams);
       instance[receiver](viewParameters);
     }
   }

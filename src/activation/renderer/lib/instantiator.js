@@ -2,23 +2,19 @@ import _                 from 'lodash';
 import displayer         from '../../../lib/displayer';
 import params            from '../../../lib/params';
 import relations         from '../../../lib/relations';
-import vars              from '../../../lib/vars';
 import deactivator       from '../../../deactivation/deactivator/lib/deactivator';
 import rootViewRegistrar from './root-view-registrar';
 import viewApi from './view-api';
 
-let {paramsMap} = vars;
-
 export default (viewConfigs, stateParams) => {
-  let {view, record, region, uniqueAddress, detachHidden, addressStateName, fullAddress, stateName, viewHash} = viewConfigs;
+  let {view, record, region, uniqueAddress, detachHidden, addressStateName} = viewConfigs;
   let {instance} = record;
   
   if(instance) {
     instance.destroy();
   }
   
-  let family = relations.family(uniqueAddress);
-  let viewParameters = params.assemble(family, stateParams);
+  let viewParameters = params.assemble(uniqueAddress, stateParams);
   
   instance = new view(viewParameters);
   
@@ -35,7 +31,6 @@ export default (viewConfigs, stateParams) => {
   instance.on('destroy', () => {
     deactivator.partial({name: uniqueAddress, detach: {focal: true, children: true}});
     region.current.delete(uniqueAddress);
-    //delete paramsMap[uniqueAddress];
     delete record.instance;
   });
 

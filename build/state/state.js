@@ -111,7 +111,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
             });
 
             if (parallelStates) {
-              (0, _parallelStatesNormalizer2.default)(parallelStates);
+              (0, _parallelStatesNormalizer2.default)(parallelStates, stateName);
             }
 
             if (route) {

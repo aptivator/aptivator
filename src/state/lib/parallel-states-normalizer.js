@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default states => 
+export default (states, stateName) => 
   _.each(states, (stateConfigs, index) => {
     if(_.isString(stateConfigs)) {
       stateConfigs = {
@@ -8,6 +8,10 @@ export default states =>
         route: true,
         direct: true
       };
+    }
+    
+    if(stateName.includes(stateConfigs.name)) {
+      return states.splice(index, 1);
     }
     
     if(!stateConfigs.flags) {

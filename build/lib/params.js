@@ -12,6 +12,10 @@ var _addresser = require('./addresser');
 
 var _addresser2 = _interopRequireDefault(_addresser);
 
+var _relations = require('./relations');
+
+var _relations2 = _interopRequireDefault(_relations);
+
 var _route = require('./route');
 
 var _route2 = _interopRequireDefault(_route);
@@ -25,7 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var dataParams = _vars2.default.dataParams,
     resolveParams = _vars2.default.resolveParams;
 exports.default = {
-  assemble: function assemble(family, stateParams) {
+  assemble: function assemble(entityName, stateParams) {
     var direct = stateParams.direct,
         route = stateParams.route,
         stateName = stateParams.stateName,
@@ -35,6 +39,7 @@ exports.default = {
     var data = params.data,
         resolves = params.resolves;
 
+    var family = _relations2.default.family(entityName);
     var targetEntityName = _lodash2.default.nth(family, -1);
     var targetStateName = _addresser2.default.stateName(targetEntityName);
     var targetStateConfigs = _vars2.default.states.registry[targetStateName];
