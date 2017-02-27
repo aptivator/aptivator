@@ -9,7 +9,7 @@ export default hookName =>
       let {stateName} = stateParams;
       let handle = `${hookName}:${stateName}`;
       let sync = syncHookNames.includes(hookName);
-      
+
       if(!sync) {
         resolve(stateParams);
       }

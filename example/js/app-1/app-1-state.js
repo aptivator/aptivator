@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var aptivator = require('aptivator');
 var App1View = require('./app-1');
 var HeaderView = require('../header/header');
@@ -79,13 +80,11 @@ aptivator.state('app-1', {
   
   on: {
     start: function one(stateParams) {
-      console.log('starting', stateParams.stateName);  
       return 'one';
     },
     
     loading: {
-      callbacks: [function two(stateParams) {
-        //console.log('loading', stateParams.stateName);
+      callbacks: [function two(stateParams, params) {
         return new Promise(function(resolve, reject) {
           setTimeout(function() {
             resolve(2);

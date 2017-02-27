@@ -61,8 +61,7 @@ var registry = states.registry,
 
 _instance2.default.state = function (stateName, stateConfigs) {
   return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-    var _stateConfigs, transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods;
-
+    var transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -71,13 +70,13 @@ _instance2.default.state = function (stateName, stateConfigs) {
               _error2.default.throw('state [' + stateName + '] has already been declared', 'state declaration');
             }
 
-            if (_relations2.default.isRoot(stateName)) {
-              stateConfigs = (0, _rootStateConfigurator2.default)(stateName, stateConfigs);
-            }
-
             _lodash2.default.extend(stateConfigs, { stateName: stateName });
 
-            _stateConfigs = stateConfigs, transient = _stateConfigs.transient, error = _stateConfigs.error, on = _stateConfigs.on, once = _stateConfigs.once, parallelStates = _stateConfigs.states, substates = _stateConfigs.substates, route = _stateConfigs.route, root = _stateConfigs.root;
+            if (_relations2.default.isRoot(stateName)) {
+              (0, _rootStateConfigurator2.default)(stateConfigs);
+            }
+
+            transient = stateConfigs.transient, error = stateConfigs.error, on = stateConfigs.on, once = stateConfigs.once, parallelStates = stateConfigs.states, substates = stateConfigs.substates, route = stateConfigs.route, root = stateConfigs.root;
             parentStateName = root || _relations2.default.parent(stateName);
             parentConfigs = root ? {} : registry[parentStateName];
             eventMethods = {};

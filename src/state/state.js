@@ -17,12 +17,12 @@ aptivator.state = (stateName, stateConfigs) =>
       error_.throw(`state [${stateName}] has already been declared`, 'state declaration');
     }
     
-    if(relations.isRoot(stateName)) {
-      stateConfigs = rootStateConfigurator(stateName, stateConfigs);
-    }
-    
     _.extend(stateConfigs, {stateName});
     
+    if(relations.isRoot(stateName)) {
+      rootStateConfigurator(stateConfigs);
+    }
+  
     let {transient, error, on, once, states: parallelStates, substates, route, root} = stateConfigs;
     let parentStateName = root || relations.parent(stateName);
     let parentConfigs = root ? {} : registry[parentStateName];    

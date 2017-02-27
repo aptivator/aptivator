@@ -1,21 +1,33 @@
 import _         from 'lodash';
 import addresser from '../../lib/addresser';
+import error     from '../../lib/error';
+import vars      from '../../lib/vars';
 
-let rootStateProperties = ['view', 'resolves', 'data', 'route', 'resolveConfigs', 'detachHidden', 'animate'];
+let {activationRecords} = vars.states;
 
-export default (stateName, stateConfigs) => {
-  stateConfigs = _.pick(stateConfigs, rootStateProperties);
+export default stateConfigs => {
+  let {view, stateName, resolveConfigs, detachHidden} = stateConfigs;
+  let uniqueAddress = addresser.uniqueAddress(stateName);
   
-  if(!stateConfigs.resolveConfigs) {
-    stateConfigs.resolveConfigs = {
+  if(!view) {
+    error.throw('root state should have a designated view', 'state setter');
+  }
+
+  let instance = new view();
+  instance.render();
+  activationRecords[uniqueAddress] = {instance, active: true};
+  
+  if(!resolveConfigs) {
+    resolveConfigs = {
       duration: 0,
       store: true
     };
   }
   
-  if(_.isUndefined(stateConfigs.detachHidden)) {
-    stateConfigs.detachHidden = false;
+  if(_.isUndefined(detachHidden)) {
+    detachHidden = false;
   }
   
-  return _.extend(stateConfigs, {root: true, uniqueAddress: addresser.uniqueAddress(stateName)});
+  let configs = {root: true, uniqueAddress, view, viewsRegistry: {[uniqueAddress]: {}}, detachHidden, resolveConfigs};
+  _.extend(stateConfigs, configs);
 };

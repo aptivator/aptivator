@@ -1,4 +1,5 @@
 import _                    from 'lodash';
+import Marionette           from 'backbone.marionette';
 import addresser            from '../../lib/addresser';
 import error                from '../../lib/error';
 import relations            from '../../lib/relations';
@@ -35,7 +36,7 @@ export default stateParams => {
       return;
     }
     
-    let {data, resolves, view, views} = stateConfigs;
+    let {data, resolves, view, views, template} = stateConfigs;
     let resolveAddresses = stateConfigs.resolveAddresses = [];
     
     if(data) {
@@ -53,10 +54,10 @@ export default stateParams => {
     
     let viewsRegistry = stateConfigs.viewsRegistry = {};
     
-    if(view && !views) {
+    if((view || template) && !views) {
       let viewHash = stateConfigs.parentSelector || '';
       _.extend(stateConfigs, {
-        views: {[viewHash]: _.pick(stateConfigs, ['view', 'cache'])}
+        views: {[viewHash]: _.pick(stateConfigs, ['view', 'template', 'cache'])}
       });
     }
     
@@ -65,13 +66,17 @@ export default stateParams => {
     let mainCount = 0;
     
     _.each(stateConfigs.views, (viewConfigs, viewHash) => {
-      let {address = viewHash, main, resolves, data} = viewConfigs;
+      let {address = viewHash, main, resolves, data, view, template} = viewConfigs;
       let fullAddress = fullAddressMaker(address, stateName);
       let [addressSelector, addressStateName] = addresser.parts(fullAddress);
       let uniqueAddress = addresser.uniqueAddress(stateName);
       
       if(reservedHashes.includes(viewHash)) {
         error.throw(`view hashes - ${reservedHashes.join(', ')} - are reserved`, 'preprocessor');
+      }
+      
+      if(template && !view) {
+        view = Marionette.ItemView.extend({template});
       }
       
       if(addressStateName !== parentStateName) {
@@ -99,7 +104,7 @@ export default stateParams => {
         dataParams[uniqueAddress] = data;
       }
       
-      _.extend(viewConfigs, {address, main, uniqueAddress, fullAddress, stateName, viewHash, addressSelector, addressStateName});
+      _.extend(viewConfigs, {address, main, view, uniqueAddress, fullAddress, stateName, viewHash, addressSelector, addressStateName});
       
       viewNormalizer(viewConfigs);
       viewsRegistry[uniqueAddress] = viewConfigs;
@@ -108,7 +113,7 @@ export default stateParams => {
       preprocess(addressStateName, activationSequence);
     });
     
-    if(!mainCount) {
+    if(!mainCount && viewCount) {
       error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
 

@@ -16,6 +16,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _backbone = require('backbone.marionette');
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
 var _addresser = require('../../lib/addresser');
 
 var _addresser2 = _interopRequireDefault(_addresser);
@@ -85,7 +89,8 @@ exports.default = function (stateParams) {
     var data = stateConfigs.data,
         resolves = stateConfigs.resolves,
         view = stateConfigs.view,
-        views = stateConfigs.views;
+        views = stateConfigs.views,
+        template = stateConfigs.template;
 
     var resolveAddresses = stateConfigs.resolveAddresses = [];
 
@@ -104,10 +109,10 @@ exports.default = function (stateParams) {
 
     var viewsRegistry = stateConfigs.viewsRegistry = {};
 
-    if (view && !views) {
+    if ((view || template) && !views) {
       var viewHash = stateConfigs.parentSelector || '';
       _lodash2.default.extend(stateConfigs, {
-        views: (0, _defineProperty3.default)({}, viewHash, _lodash2.default.pick(stateConfigs, ['view', 'cache']))
+        views: (0, _defineProperty3.default)({}, viewHash, _lodash2.default.pick(stateConfigs, ['view', 'template', 'cache']))
       });
     }
 
@@ -120,7 +125,9 @@ exports.default = function (stateParams) {
           address = _viewConfigs$address === undefined ? viewHash : _viewConfigs$address,
           main = viewConfigs.main,
           resolves = viewConfigs.resolves,
-          data = viewConfigs.data;
+          data = viewConfigs.data,
+          view = viewConfigs.view,
+          template = viewConfigs.template;
 
       var fullAddress = (0, _fullAddressMaker2.default)(address, stateName);
 
@@ -133,6 +140,10 @@ exports.default = function (stateParams) {
 
       if (reservedHashes.includes(viewHash)) {
         _error2.default.throw('view hashes - ' + reservedHashes.join(', ') + ' - are reserved', 'preprocessor');
+      }
+
+      if (template && !view) {
+        view = _backbone2.default.ItemView.extend({ template: template });
       }
 
       if (addressStateName !== parentStateName) {
@@ -160,7 +171,7 @@ exports.default = function (stateParams) {
         dataParams[uniqueAddress] = data;
       }
 
-      _lodash2.default.extend(viewConfigs, { address: address, main: main, uniqueAddress: uniqueAddress, fullAddress: fullAddress, stateName: stateName, viewHash: viewHash, addressSelector: addressSelector, addressStateName: addressStateName });
+      _lodash2.default.extend(viewConfigs, { address: address, main: main, view: view, uniqueAddress: uniqueAddress, fullAddress: fullAddress, stateName: stateName, viewHash: viewHash, addressSelector: addressSelector, addressStateName: addressStateName });
 
       (0, _viewNormalizer2.default)(viewConfigs);
       viewsRegistry[uniqueAddress] = viewConfigs;
@@ -169,7 +180,7 @@ exports.default = function (stateParams) {
       preprocess(addressStateName, activationSequence);
     });
 
-    if (!mainCount) {
+    if (!mainCount && viewCount) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
     }
 
