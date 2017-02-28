@@ -43,10 +43,12 @@ exports.default = function (startedStates) {
     if (pendingSerialState) {
       var flags = pendingSerialState.flags,
           transientStateParams = pendingSerialState.transientStateParams,
-          stateName = pendingSerialState.stateName;
+          stateName = pendingSerialState.stateName,
+          parallels = pendingSerialState.parallels;
       var transientFlags = transientStateParams.flags,
           transientStateName = transientStateParams.stateName,
-          owners = transientStateParams.owners;
+          owners = transientStateParams.owners,
+          transientParallels = transientStateParams.transientParallels;
 
 
       owners.delete(pendingSerialState);
@@ -56,27 +58,40 @@ exports.default = function (startedStates) {
             rendered = transientFlags.rendered;
 
         if (!active) {
-          var flagsUpdate = { canceled: true };
-
-          if (rendered) {
-            _lodash2.default.extend(flagsUpdate, { active: true });
-          }
-
-          _lodash2.default.extend(transientFlags, flagsUpdate);
+          _lodash2.default.extend(transientFlags, { canceled: true });
         }
 
         if (rendered) {
+          _lodash2.default.extend(transientFlags, { active: true });
           var promise = _instance2.default.deactivate({ name: transientStateName }).catch(_lodash2.default.noop);
           deactivationPromises.push(promise);
         }
       }
 
+      _lodash2.default.each(false, function (stateParams) {
+        var flags = stateParams.flags,
+            stateName = stateParams.stateName;
+        var active = flags.active,
+            rendered = flags.rendered;
+
+
+        if (!active) {
+          _lodash2.default.extend(flags, { canceled: true });
+        }
+
+        if (rendered) {
+          _lodash2.default.extend(flags, { active: true });
+          var _promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
+          deactivationPromises.push(_promise);
+        }
+      });
+
       _lodash2.default.extend(flags, { canceled: true });
 
       if (flags.rendered) {
         _lodash2.default.extend(flags, { active: true });
-        var _promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
-        deactivationPromises.push(_promise);
+        var _promise2 = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
+        deactivationPromises.push(_promise2);
       }
     }
   }

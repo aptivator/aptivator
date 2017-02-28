@@ -36,10 +36,6 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _canceler = require('../canceler/canceler');
-
-var _canceler2 = _interopRequireDefault(_canceler);
-
 var _fullAddressMaker = require('./lib/full-address-maker');
 
 var _fullAddressMaker2 = _interopRequireDefault(_fullAddressMaker);
@@ -63,8 +59,6 @@ var activationSequences = states.activationSequences,
 var reservedHashes = ['base', 'elements'];
 
 exports.default = function (stateParams) {
-  (0, _canceler2.default)(stateParams);
-
   var stateName = stateParams.stateName;
 
   stateParams.flags.preprocessed = true;

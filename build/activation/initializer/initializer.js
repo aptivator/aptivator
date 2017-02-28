@@ -28,10 +28,6 @@ var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _canceler = require('../canceler/canceler');
-
-var _canceler2 = _interopRequireDefault(_canceler);
-
 var _duplicatesRemover = require('./lib/duplicates-remover');
 
 var _duplicatesRemover2 = _interopRequireDefault(_duplicatesRemover);
@@ -45,8 +41,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var eventHandle = 'aptivator-goto-preprocessor';
 
 exports.default = function (stateParams) {
-  (0, _canceler2.default)(stateParams);
-
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
       var transient, startingStates, query, startedStates, transientStates;

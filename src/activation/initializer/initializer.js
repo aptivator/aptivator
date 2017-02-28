@@ -2,16 +2,13 @@ import _                    from 'lodash';
 import approximator         from '../../lib/approximator';
 import aptivator            from '../../lib/instance';
 import vars                 from '../../lib/vars';
-import canceler             from '../canceler/canceler';
 import duplicatesRemover    from './lib/duplicates-remover';
 import transientInitializer from './lib/transient-initializer';
 
 let eventHandle = 'aptivator-goto-preprocessor';
 
-export default stateParams => {
-  canceler(stateParams);
-  
-  return new Promise(async resolve => {
+export default stateParams => 
+  new Promise(async resolve => {
     let {transient} = stateParams.flags;
     
     _.extend(stateParams.flags, {initialized: true});    
@@ -66,4 +63,3 @@ export default stateParams => {
     
     aptivator.trigger(eventHandle);
   });
-};

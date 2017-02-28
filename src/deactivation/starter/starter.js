@@ -3,11 +3,16 @@ import aptivator from '../../lib/instance';
 import relations from '../../lib/relations';
 import vars      from '../../lib/vars';
 
-let {registry} = vars.states;
+let {deactivating, states} = vars;
+let {registry} = states;
 
 export default async params => {
   let {name, partial} = params;
   let stateConfigs = registry[name];
+
+  if(deactivating.includes(name)) {
+    return;
+  }
 
   if(!stateConfigs) {
     throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
@@ -20,6 +25,8 @@ export default async params => {
   if(!stateParams) {
     throw {errorType: 'inactive', errorMessage: `state [${name}] is not activated`};
   }
+  
+  deactivating.push(name);
   
   _.extend(stateParams.flags, {deactivating: true, partial});
 

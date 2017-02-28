@@ -22,7 +22,7 @@ exports.default = function (states, stateName) {
       };
     }
 
-    if (stateName.includes(stateConfigs.name)) {
+    if (stateName.startsWith(stateConfigs.name)) {
       return ancestorIndices.push(index);
     }
 

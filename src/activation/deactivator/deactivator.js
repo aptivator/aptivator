@@ -1,16 +1,13 @@
 import _                      from 'lodash';
 import aptivator              from '../../lib/instance';
-import canceler               from '../canceler/canceler';
 import serialStateDeactivator from './lib/serial-state-deactivator';
 
 let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {
   return `aptivator-goto-render-${key}`;
 });
 
-export default stateParams => {
-  canceler(stateParams);
-  
-  return new Promise(async (resolve, reject) => {
+export default stateParams => 
+  new Promise(async (resolve, reject) => {
     stateParams.flags.prerendered = true;
     
     let {transient} = stateParams.flags;
@@ -92,4 +89,3 @@ export default stateParams => {
 
     aptivator.trigger(eventHandle);
   });
-};

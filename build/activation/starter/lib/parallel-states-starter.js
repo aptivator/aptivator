@@ -36,7 +36,6 @@ exports.default = function (stateName, stateParams) {
     var stateConfigs = registry[relation];
     _lodash2.default.each(stateConfigs.states, function (parallelStateParams) {
       parallelStateParams = _lodash2.default.cloneDeep(parallelStateParams);
-
       var _parallelStateParams = parallelStateParams,
           parallelDirect = _parallelStateParams.direct,
           parallelRoute = _parallelStateParams.route;

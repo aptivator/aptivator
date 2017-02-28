@@ -8,10 +8,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _addresser = require('../../lib/addresser');
-
-var _addresser2 = _interopRequireDefault(_addresser);
-
 var _params = require('../../lib/params');
 
 var _params2 = _interopRequireDefault(_params);
@@ -23,10 +19,6 @@ var _relations2 = _interopRequireDefault(_relations);
 var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
-
-var _canceler = require('../canceler/canceler');
-
-var _canceler2 = _interopRequireDefault(_canceler);
 
 var _entitiesTreeBuilder = require('./lib/entities-tree-builder');
 
@@ -44,8 +36,6 @@ var resolveDefinitions = _vars2.default.resolveDefinitions,
 var registry = states.registry;
 
 exports.default = function (stateParams) {
-  (0, _canceler2.default)(stateParams);
-
   return new Promise(function (resolve, reject) {
     stateParams.flags.resolved = true;
 

@@ -2,11 +2,13 @@
 
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
 * optimize deactivation module
-* reimplement composite states as two states or more states activated simultaneously with necessary configurations
 * regarding parallel states, take a look at parallel transients
 * children states should be able to cancel ancestor parallel states
-* take a look at getting rid of viewsRegistry
 * if a state is canceled, then its launched parallel states are canceled also
+* **DONE** handle duplicate deactivations
+* **DONE** handle duplicate activations
+* **DONE** reimplement composite states as two states or more states activated simultaneously with necessary configurations
+* **DONE** take a look at getting rid of viewsRegistry (instead using activationSequence)
 * **DONE** make sure that all parallel states in the family are deactivated
 * **DONE** correct removal of ancestor parallel states
 * **DONE** take a look at preprocessor code for root state and optimize (root state is special and is best treated as placeholder for other ui parts)

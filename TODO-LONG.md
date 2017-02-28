@@ -11,6 +11,7 @@
 * Tutorial
 
 * when integrating actionify, apply it and reapply it to newly instantiated views (obviously)
+* regarding actionify, do I need to integrate it with aptivator, or the user can just invoke it in the views on an as-needed basis (like that better)
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
@@ -28,3 +29,6 @@
 * what about also adding routeRxs to set a regex pattern for a parameter
 * think about grouping state's route configs in one object
 * regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
+
+* may need an event to indicate which views are reinstantiated (e.g., instantiated:.main@app-1)
+* for above, provide $el in the callback

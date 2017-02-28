@@ -30,7 +30,9 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var registry = _vars2.default.states.registry;
+var deactivating = _vars2.default.deactivating,
+    states = _vars2.default.states;
+var registry = states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(params) {
@@ -42,26 +44,36 @@ exports.default = function () {
             name = params.name, partial = params.partial;
             stateConfigs = registry[name];
 
-            if (stateConfigs) {
+            if (!deactivating.includes(name)) {
               _context.next = 4;
+              break;
+            }
+
+            return _context.abrupt('return');
+
+          case 4:
+            if (stateConfigs) {
+              _context.next = 6;
               break;
             }
 
             throw { errorType: 'undeclared', errorMessage: 'state [' + name + '] does not exist' };
 
-          case 4:
+          case 6:
             query = { stateName: name, flags: { active: true } };
             stateParams = _instance2.default.history.findOne(query);
             family = _relations2.default.family(name);
 
             if (stateParams) {
-              _context.next = 9;
+              _context.next = 11;
               break;
             }
 
             throw { errorType: 'inactive', errorMessage: 'state [' + name + '] is not activated' };
 
-          case 9:
+          case 11:
+
+            deactivating.push(name);
 
             _lodash2.default.extend(stateParams.flags, { deactivating: true, partial: partial });
 
@@ -76,7 +88,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 12:
+          case 15:
           case 'end':
             return _context.stop();
         }

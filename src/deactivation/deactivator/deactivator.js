@@ -6,11 +6,15 @@ import relations    from '../../lib/relations';
 import vars         from '../../lib/vars';
 import deactivator  from './lib/deactivator';
 
-let {rootStateName} = vars;
+let {rootStateName, deactivating} = vars;
 let eventHandle = 'aptivator-goto-finish';
 
 export default stateParams => 
   new Promise(resolve => {
+    if(!stateParams) {
+      return resolve();
+    }
+    
     stateParams.flags.deactivating = false;
     
     let query = {flags: {active: true, deactivating: true}};
@@ -30,7 +34,7 @@ export default stateParams =>
     
     query = {flags: {active: true, deactivating: false}};
     deactivatingStates = aptivator.history.find(query);
-    
+
     let deactivationRecords = {};
     let deactivationFinalists = [];
     
@@ -39,7 +43,8 @@ export default stateParams =>
       let {partial} = flags;
       let firstAncestorName = relations.parts(stateName)[0];
       let actives = _.filter(otherActives, stateParams => {
-        return stateParams.stateName.startsWith(partial ? stateName : firstAncestorName);
+        let {stateName: otherStateName} = stateParams;
+        return otherStateName.startsWith(partial ? stateName : firstAncestorName);
       });
 
       actives.push(stateParams);
@@ -99,7 +104,7 @@ export default stateParams =>
         });
       });
       
-      _.each(deactivationFinalists, stateParams => {
+      _.each(_.uniq(deactivationFinalists), stateParams => {
         let {stateName} = stateParams;
         aptivator.trigger({handle: `exit:${stateName}`, full: true}, stateParams).then(results => {
           _.extend(stateParams.flags, {active: false, deactivated: true});
@@ -109,5 +114,6 @@ export default stateParams =>
     });
     
     resolve(animationPromise);
+    _.remove(deactivating, () => true);
     aptivator.trigger(eventHandle);
   });

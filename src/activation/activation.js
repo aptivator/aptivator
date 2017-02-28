@@ -1,4 +1,6 @@
+import _            from 'lodash';
 import aptivator    from '../lib/instance';
+import canceler     from './canceler/canceler';
 import eventer      from './eventer/eventer';
 import initializer  from './initializer/initializer';
 import preprocessor from './preprocessor/preprocessor';
@@ -11,18 +13,34 @@ import displayer    from './displayer/displayer';
 import finalizer    from './finalizer/finalizer';
 import errorer      from '../errorer/errorer'; 
 
-aptivator.activate = stateParams => 
-  starter(stateParams)
-    .then(initializer)
-    .then(eventer('start'))
-    .then(preprocessor)
-    .then(resolver)
-    .then(eventer('loading'))
-    .then(deactivator)
-    .then(renderer)
-    .then(connector)
-    .then(displayer)
-    .then(eventer('loaded'))
-    .then(eventer('enter'))
-    .then(finalizer)
-    .catch(errorer);
+let processes = [
+  initializer, 
+  eventer('start'), 
+  preprocessor, 
+  resolver, 
+  eventer('loading'), 
+  deactivator, 
+  renderer, 
+  connector, 
+  displayer, 
+  eventer('loaded'), 
+  finalizer, 
+  eventer('enter')
+];
+
+processes = processes.map(process => {
+  return stateParams => {
+    if(!stateParams) {
+      return;
+    }
+    
+    canceler(stateParams);
+    return process(stateParams);
+  };
+});
+
+aptivator.activate = stateParams => {
+  let promise = starter(stateParams);
+  _.each(processes, process => promise = promise.then(process));
+  return promise.catch(errorer);
+};

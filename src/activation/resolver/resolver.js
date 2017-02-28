@@ -1,19 +1,15 @@
 import _                   from 'lodash';
-import addresser           from '../../lib/addresser';
 import params              from '../../lib/params';
 import relations           from '../../lib/relations';
 import vars                from '../../lib/vars';
-import canceler            from '../canceler/canceler';
 import entitiesTreeBuilder from './lib/entities-tree-builder';
 import resolvesProcessor   from './lib/resolves-processor';
 
 let {resolveDefinitions, resolveParams, states} = vars;
 let {registry} = states;
 
-export default stateParams => {
-  canceler(stateParams);
-  
-  return new Promise((resolve, reject) => {
+export default stateParams => 
+  new Promise((resolve, reject) => {
     stateParams.flags.resolved = true;
     
     if(stateParams.flags.noResolves) {
@@ -37,4 +33,3 @@ export default stateParams => {
       });
     }().then(() => resolve(stateParams)).catch(reject);
   });
-};

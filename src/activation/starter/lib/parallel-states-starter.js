@@ -14,7 +14,6 @@ export default (stateName, stateParams) => {
     let stateConfigs = registry[relation];
     _.each(stateConfigs.states, parallelStateParams => {
       parallelStateParams = _.cloneDeep(parallelStateParams);
-      
       let {direct: parallelDirect, route: parallelRoute} = parallelStateParams;
       
       if(direct && parallelDirect) {

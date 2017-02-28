@@ -4,7 +4,6 @@ import addresser            from '../../lib/addresser';
 import error                from '../../lib/error';
 import relations            from '../../lib/relations';
 import vars                 from '../../lib/vars';
-import canceler             from '../canceler/canceler';
 import fullAddressMaker     from './lib/full-address-maker';
 import resolvesNormalizer   from './lib/resolves-normalizer';
 import viewNormalizer       from './lib/view-normalizer';
@@ -14,8 +13,6 @@ let {activationSequences, registry} = states;
 let reservedHashes = ['base', 'elements'];
 
 export default stateParams => {
-  canceler(stateParams);
-  
   let {stateName} = stateParams;
   stateParams.flags.preprocessed = true;
   

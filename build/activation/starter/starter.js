@@ -16,21 +16,21 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _vars = require('../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 var _fragment = require('../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);
 
-var _historyAdder = require('../../history/history-adder');
-
-var _historyAdder2 = _interopRequireDefault(_historyAdder);
-
 var _route = require('../../lib/route');
 
 var _route2 = _interopRequireDefault(_route);
+
+var _vars = require('../../lib/vars');
+
+var _vars2 = _interopRequireDefault(_vars);
+
+var _historyAdder = require('../../history/history-adder');
+
+var _historyAdder2 = _interopRequireDefault(_historyAdder);
 
 var _defaultFlags = require('./lib/default-flags');
 
@@ -42,28 +42,41 @@ var _parallelStatesStarter2 = _interopRequireDefault(_parallelStatesStarter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var registry = _vars2.default.states.registry;
+var activating = _vars2.default.activating,
+    states = _vars2.default.states;
+var registry = states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
-    var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, stateConfigs;
+    var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, transient, stateConfigs, tracker;
 
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             stateName = stateParams.stateName, _stateParams$name = stateParams.name, name = _stateParams$name === undefined ? stateName : _stateParams$name, _stateParams$flags = stateParams.flags, flags = _stateParams$flags === undefined ? {} : _stateParams$flags, route = stateParams.route, routeValues = stateParams.routeValues;
-            _flags = flags, silent = _flags.silent, parallel = _flags.parallel;
+            _flags = flags, silent = _flags.silent, parallel = _flags.parallel, transient = _flags.transient;
             stateConfigs = registry[name];
+            tracker = activating[transient ? 'transient' : 'regular'];
 
             if (stateConfigs) {
-              _context.next = 5;
+              _context.next = 6;
               break;
             }
 
             throw { errorType: 'undeclared', errorMessage: 'state [' + name + '] does not exist' };
 
-          case 5:
+          case 6:
+            if (!tracker.includes(name)) {
+              _context.next = 8;
+              break;
+            }
+
+            return _context.abrupt('return');
+
+          case 8:
+
+            tracker.push(name);
 
             if (_lodash2.default.isEmpty(flags)) {
               flags = stateParams.flags = {};
@@ -96,7 +109,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 12:
+          case 16:
           case 'end':
             return _context.stop();
         }

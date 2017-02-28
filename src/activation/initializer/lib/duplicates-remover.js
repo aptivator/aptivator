@@ -25,28 +25,41 @@ export default startedStates => {
     let pendingSerialState = aptivator.history.findOne(query);
 
     if(pendingSerialState) {
-      let {flags, transientStateParams, stateName} = pendingSerialState;
-      let {flags: transientFlags, stateName: transientStateName, owners} = transientStateParams;
+      let {flags, transientStateParams, stateName, parallels} = pendingSerialState;
+      let {flags: transientFlags, stateName: transientStateName, owners, transientParallels} = transientStateParams;
 
       owners.delete(pendingSerialState);
       
       if(!owners.size) {
         let {active, rendered} = transientFlags;
         if(!active) {
-          let flagsUpdate = {canceled: true};
+          _.extend(transientFlags, {canceled: true});
           
-          if(rendered) {
-            _.extend(flagsUpdate, {active: true});
-          }
           
-          _.extend(transientFlags, flagsUpdate);
+          
         }
         
         if(rendered) {
+          _.extend(transientFlags, {active: true});
           let promise = aptivator.deactivate({name: transientStateName}).catch(_.noop);
           deactivationPromises.push(promise);
         }
       }
+      
+      _.each(false, stateParams => {
+        let {flags, stateName} = stateParams;
+        let {active, rendered} = flags;
+        
+        if(!active) {
+          _.extend(flags, {canceled: true});
+        }
+        
+        if(rendered) {
+          _.extend(flags, {active: true});
+          let promise = aptivator.deactivate({name: stateName}).catch(_.noop);
+          deactivationPromises.push(promise);
+        }
+      });
       
       _.extend(flags, {canceled: true});
       

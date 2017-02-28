@@ -1,21 +1,29 @@
 import _                     from 'lodash';
-import vars                  from '../../lib/vars';
 import fragment              from '../../lib/fragment';
-import historyAdder          from '../../history/history-adder';
 import route_                from '../../lib/route';
+import vars                  from '../../lib/vars';
+import historyAdder          from '../../history/history-adder';
 import defaultFlags          from './lib/default-flags';
 import parallelStatesStarter from './lib/parallel-states-starter';
 
-let {registry} = vars.states;
+let {activating, states} = vars;
+let {registry} = states;
 
 export default async stateParams => {
   let {stateName, name = stateName, flags = {}, route, routeValues} = stateParams;
-  let {silent, parallel} = flags;
+  let {silent, parallel, transient} = flags;
   let stateConfigs = registry[name];
+  let tracker = activating[transient ? 'transient' : 'regular'];
   
   if(!stateConfigs) {
     throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
   }
+  
+  if(tracker.includes(name)) {
+    return;
+  }
+  
+  tracker.push(name);
   
   if(_.isEmpty(flags)) {
     flags = stateParams.flags = {};

@@ -30,7 +30,7 @@ aptivator.on({
 
 aptivator.state('app-2.form', {
   route: 'form',
-  states: ['header', 'app-2.about', 'app-2.info'],
+  states: ['header', 'app-2.info', 'app-2.about'],
   resolves: {
     main: function() {
       return 'main';

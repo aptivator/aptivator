@@ -38,12 +38,17 @@ var _deactivator2 = _interopRequireDefault(_deactivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var rootStateName = _vars2.default.rootStateName;
+var rootStateName = _vars2.default.rootStateName,
+    deactivating = _vars2.default.deactivating;
 
 var eventHandle = 'aptivator-goto-finish';
 
 exports.default = function (stateParams) {
   return new Promise(function (resolve) {
+    if (!stateParams) {
+      return resolve();
+    }
+
     stateParams.flags.deactivating = false;
 
     var query = { flags: { active: true, deactivating: true } };
@@ -77,7 +82,9 @@ exports.default = function (stateParams) {
 
       var firstAncestorName = _relations2.default.parts(stateName)[0];
       var actives = _lodash2.default.filter(otherActives, function (stateParams) {
-        return stateParams.stateName.startsWith(partial ? stateName : firstAncestorName);
+        var otherStateName = stateParams.stateName;
+
+        return otherStateName.startsWith(partial ? stateName : firstAncestorName);
       });
 
       actives.push(stateParams);
@@ -152,7 +159,7 @@ exports.default = function (stateParams) {
         });
       });
 
-      _lodash2.default.each(deactivationFinalists, function (stateParams) {
+      _lodash2.default.each(_lodash2.default.uniq(deactivationFinalists), function (stateParams) {
         var stateName = stateParams.stateName;
 
         _instance2.default.trigger({ handle: 'exit:' + stateName, full: true }, stateParams).then(function (results) {
@@ -163,6 +170,9 @@ exports.default = function (stateParams) {
     });
 
     resolve(animationPromise);
+    _lodash2.default.remove(deactivating, function () {
+      return true;
+    });
     _instance2.default.trigger(eventHandle);
   });
 };

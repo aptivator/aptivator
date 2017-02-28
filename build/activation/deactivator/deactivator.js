@@ -24,10 +24,6 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _canceler = require('../canceler/canceler');
-
-var _canceler2 = _interopRequireDefault(_canceler);
-
 var _serialStateDeactivator = require('./lib/serial-state-deactivator');
 
 var _serialStateDeactivator2 = _interopRequireDefault(_serialStateDeactivator);
@@ -39,8 +35,6 @@ var eventHandles = _lodash2.default.mapValues({ transient: '', regular: '' }, fu
 });
 
 exports.default = function (stateParams) {
-  (0, _canceler2.default)(stateParams);
-
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
       var transient, _eventHandle, _query, loadingTransients, serialTransients, eventHandle, query, loadingRegulars, loadedRegulars, transientStates, transientPromises, deactivationPromises, serialRegular, promise;

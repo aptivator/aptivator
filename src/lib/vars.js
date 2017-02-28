@@ -1,9 +1,16 @@
 import Backbone from 'backbone';
 
 export default {
+  activating: {
+    transient: [],
+    regular: []
+  },
+  
   configs: {},
   
   dataParams: {},
+  
+  deactivating: [],
   
   eventRegistry: {},
   

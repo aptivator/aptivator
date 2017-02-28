@@ -5,7 +5,7 @@ aptivator.state('app-2.loading', {
   transient: {
     delay: 100
   },
-  //states: ['loading'],
+  states: ['loading'],
   view: LoadingView,
   parentSelector: '.main',
   data: {

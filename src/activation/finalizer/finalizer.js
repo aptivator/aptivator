@@ -1,9 +1,6 @@
-import _        from 'lodash';
-import canceler from '../canceler/canceler';
+import _ from 'lodash';
 
 export default stateParams => {
-  canceler(stateParams);
-  
   _.extend(stateParams.flags, {pending: false, active: true});
   
   if(stateParams.time) {
