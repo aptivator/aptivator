@@ -5,10 +5,10 @@ import vars             from '../../../lib/vars';
 import elementAssembler from './element-assembler';
 
 let {spaceSplitter, states} = vars;
-let {activationRecords, registry} = states;
+let {activationRecords, activationSequences, registry} = states;
 
 export default function animationsAssembler(stateName, animationType, animations, fromStateName) {
-  let {viewsRegistry, animate = {}, uniqueAddress} = registry[stateName];
+  let {animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
   let {active, instance} = activationRecords[uniqueAddress];
   let {$el} = instance;
@@ -54,9 +54,13 @@ export default function animationsAssembler(stateName, animationType, animations
     elementAssembler(selector, selectorConfigs, stateName, $el, animations);
   });
   
-  _.each(viewsRegistry, (viewConfigs, uniqueAddress) => {
+  _.each(activationSequences[stateName], viewConfigs => {
+    if(viewConfigs.stateName !== stateName) {
+      return;
+    }
+    
+    let {uniqueAddress, viewHash, animate, addressStateName} = viewConfigs;
     let {$el} = activationRecords[uniqueAddress].instance;
-    let {viewHash, animate, addressStateName} = viewConfigs;
     let viewSettingsPath = [stateName, viewHash];
     let viewSettings = _.get(animations, viewSettingsPath);
     

@@ -21,7 +21,6 @@ export default {
     let stateName = addresser.stateName(uniqueAddress);
     let stateConfigs = registry[stateName];
     let activationRecord = activationRecords[uniqueAddress] || {};
-    let activationSequence = activationSequences[stateName];
     
     if(!activationRecord.active && !detach.focal) {
       return;
@@ -31,7 +30,7 @@ export default {
     detach = _.isUndefined(detachFocal) && detachFull || detachFocal;
   
     if(stateConfigs.uniqueAddress === uniqueAddress) {
-      _.each(activationSequence, viewConfigs => {
+      _.each(activationSequences[stateName], viewConfigs => {
         let {uniqueAddress, stateName: viewStateName} = viewConfigs;
         if(viewStateName === stateName) {
           hider(uniqueAddress, detach);

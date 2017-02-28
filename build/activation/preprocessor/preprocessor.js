@@ -74,7 +74,7 @@ exports.default = function (stateParams) {
 
     var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
 
-    if (previousSequence && !_lodash2.default.isEmpty(activationSequence)) {
+    if (previousSequence && !_lodash2.default.isEmpty(activationSequence) && !_relations2.default.isRoot(stateName)) {
       return _lodash2.default.each(activationSequence, function (viewConfigs) {
         if (!previousSequence.includes(viewConfigs)) {
           previousSequence.push(viewConfigs);
@@ -106,8 +106,6 @@ exports.default = function (stateParams) {
     if (_relations2.default.isRoot(stateName)) {
       return;
     }
-
-    var viewsRegistry = stateConfigs.viewsRegistry = {};
 
     if ((view || template) && !views) {
       var viewHash = stateConfigs.parentSelector || '';
@@ -174,9 +172,7 @@ exports.default = function (stateParams) {
       _lodash2.default.extend(viewConfigs, { address: address, main: main, view: view, uniqueAddress: uniqueAddress, fullAddress: fullAddress, stateName: stateName, viewHash: viewHash, addressSelector: addressSelector, addressStateName: addressStateName });
 
       (0, _viewNormalizer2.default)(viewConfigs);
-      viewsRegistry[uniqueAddress] = viewConfigs;
       activationSequence.push(viewConfigs);
-
       preprocess(addressStateName, activationSequence);
     });
 

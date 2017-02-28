@@ -39,7 +39,5 @@ exports.default = {
     transient: []
   },
 
-  transientDelay: 300,
-
-  viewsRegistry: {}
+  transientDelay: 300
 };

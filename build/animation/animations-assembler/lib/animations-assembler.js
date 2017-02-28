@@ -39,10 +39,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var spaceSplitter = _vars2.default.spaceSplitter,
     states = _vars2.default.states;
 var activationRecords = states.activationRecords,
+    activationSequences = states.activationSequences,
     registry = states.registry;
 function animationsAssembler(stateName, animationType, animations, fromStateName) {
   var _registry$stateName = registry[stateName],
-      viewsRegistry = _registry$stateName.viewsRegistry,
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
       uniqueAddress = _registry$stateName.uniqueAddress;
@@ -106,11 +106,16 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
     (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
   });
 
-  _lodash2.default.each(viewsRegistry, function (viewConfigs, uniqueAddress) {
-    var $el = activationRecords[uniqueAddress].instance.$el;
-    var viewHash = viewConfigs.viewHash,
+  _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
+    if (viewConfigs.stateName !== stateName) {
+      return;
+    }
+
+    var uniqueAddress = viewConfigs.uniqueAddress,
+        viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,
         addressStateName = viewConfigs.addressStateName;
+    var $el = activationRecords[uniqueAddress].instance.$el;
 
     var viewSettingsPath = [stateName, viewHash];
     var viewSettings = _lodash2.default.get(animations, viewSettingsPath);

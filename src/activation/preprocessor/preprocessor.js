@@ -24,7 +24,7 @@ export default stateParams => {
 
     let activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     
-    if(previousSequence && !_.isEmpty(activationSequence)) {
+    if(previousSequence && !_.isEmpty(activationSequence) && !relations.isRoot(stateName)) {
       return _.each(activationSequence, viewConfigs => {
         if(!previousSequence.includes(viewConfigs)) {
           previousSequence.push(viewConfigs);
@@ -51,8 +51,6 @@ export default stateParams => {
     if(relations.isRoot(stateName)) {
       return;
     }
-    
-    let viewsRegistry = stateConfigs.viewsRegistry = {};
     
     if((view || template) && !views) {
       let viewHash = stateConfigs.parentSelector || '';
@@ -107,9 +105,7 @@ export default stateParams => {
       _.extend(viewConfigs, {address, main, view, uniqueAddress, fullAddress, stateName, viewHash, addressSelector, addressStateName});
       
       viewNormalizer(viewConfigs);
-      viewsRegistry[uniqueAddress] = viewConfigs;
       activationSequence.push(viewConfigs);
-      
       preprocess(addressStateName, activationSequence);
     });
     

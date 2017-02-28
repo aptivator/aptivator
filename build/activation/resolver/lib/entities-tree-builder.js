@@ -18,7 +18,7 @@ exports.default = function (entityNames) {
   var tree = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   return entityNames.reduce(function (tree, entityName) {
     var hasAt = entityName.includes('@');
-    var stateName = hasAt ? _addresser2.default.stateName(entityName) : entityName;
+    var stateName = _addresser2.default.stateName(entityName);
     var family = _relations2.default.family(stateName);
     var current = tree;
 

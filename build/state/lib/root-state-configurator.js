@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -26,7 +22,10 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var activationRecords = _vars2.default.states.activationRecords;
+var rootStateName = _vars2.default.rootStateName,
+    states = _vars2.default.states;
+var activationRecords = states.activationRecords,
+    activationSequences = states.activationSequences;
 
 exports.default = function (stateConfigs) {
   var view = stateConfigs.view,
@@ -40,10 +39,6 @@ exports.default = function (stateConfigs) {
     _error2.default.throw('root state should have a designated view', 'state setter');
   }
 
-  var instance = new view();
-  instance.render();
-  activationRecords[uniqueAddress] = { instance: instance, active: true };
-
   if (!resolveConfigs) {
     resolveConfigs = {
       duration: 0,
@@ -55,6 +50,12 @@ exports.default = function (stateConfigs) {
     detachHidden = false;
   }
 
-  var configs = { root: true, uniqueAddress: uniqueAddress, viewsRegistry: (0, _defineProperty3.default)({}, uniqueAddress, {}), detachHidden: detachHidden, resolveConfigs: resolveConfigs };
+  var instance = new view();
+  var configs = { root: true, uniqueAddress: uniqueAddress, viewHash: '', detachHidden: detachHidden, resolveConfigs: resolveConfigs };
+
   _lodash2.default.extend(stateConfigs, configs);
+  instance.render();
+
+  activationRecords[uniqueAddress] = { instance: instance, active: true };
+  activationSequences[rootStateName] = [_lodash2.default.omit(stateConfigs, 'animate')];
 };
