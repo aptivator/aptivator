@@ -1,12 +1,16 @@
 # TODOs
 
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
-* take a look at preprocessor code for root state and optimize
 * optimize deactivation module
 * reimplement composite states as two states or more states activated simultaneously with necessary configurations
 * regarding parallel states, take a look at parallel transients
 * children states should be able to cancel ancestor parallel states
 * take a look at getting rid of viewsRegistry
+* if a state is canceled, then its launched parallel states are canceled also
+* **DONE** make sure that all parallel states in the family are deactivated
+* **DONE** correct removal of ancestor parallel states
+* **DONE** take a look at preprocessor code for root state and optimize (root state is special and is best treated as placeholder for other ui parts)
+* **DONE** change hierarchySorter() to handle objects
 * **DONE** move root state instantiation to state module
 * **DONE** refactor start module
 * **DONE** allow to use a template property on the state instead of a view to tell framework to create a view (will create a plain ItemView)

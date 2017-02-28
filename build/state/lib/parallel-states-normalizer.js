@@ -11,7 +11,9 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (states, stateName) {
-  return _lodash2.default.each(states, function (stateConfigs, index) {
+  var ancestorIndices = [];
+
+  _lodash2.default.each(states, function (stateConfigs, index) {
     if (_lodash2.default.isString(stateConfigs)) {
       stateConfigs = {
         name: stateConfigs,
@@ -21,7 +23,7 @@ exports.default = function (states, stateName) {
     }
 
     if (stateName.includes(stateConfigs.name)) {
-      return states.splice(index, 1);
+      return ancestorIndices.push(index);
     }
 
     if (!stateConfigs.flags) {
@@ -31,5 +33,11 @@ exports.default = function (states, stateName) {
     _lodash2.default.extend(stateConfigs.flags, { parallel: true });
 
     states.splice(index, 1, stateConfigs);
+  });
+
+  ancestorIndices.sort().reverse();
+
+  _lodash2.default.each(ancestorIndices, function (index) {
+    states.splice(index, 1);
   });
 };

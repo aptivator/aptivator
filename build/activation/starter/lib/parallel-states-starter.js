@@ -54,7 +54,7 @@ exports.default = function (stateName, stateParams) {
         delete parallelStateParams.route;
       }
 
-      _lodash2.default.extend(parallelStateParams.flgas, { transient: transient });
+      _lodash2.default.extend(parallelStateParams.flags, { transient: transient });
 
       _instance2.default.activate(parallelStateParams);
     });

@@ -29,7 +29,7 @@ export default (stateName, stateParams) => {
         delete parallelStateParams.route;
       }
 
-      _.extend(parallelStateParams.flgas, {transient: transient});
+      _.extend(parallelStateParams.flags, {transient});
       
       aptivator.activate(parallelStateParams);      
     });

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 
-export default (states, stateName) => 
+export default (states, stateName) => {
+  let ancestorIndices = [];
+  
   _.each(states, (stateConfigs, index) => {
     if(_.isString(stateConfigs)) {
       stateConfigs = {
@@ -11,7 +13,7 @@ export default (states, stateName) =>
     }
     
     if(stateName.includes(stateConfigs.name)) {
-      return states.splice(index, 1);
+      return ancestorIndices.push(index);
     }
     
     if(!stateConfigs.flags) {
@@ -22,3 +24,10 @@ export default (states, stateName) =>
     
     states.splice(index, 1, stateConfigs);
   });
+  
+  ancestorIndices.sort().reverse();
+  
+  _.each(ancestorIndices, index => {
+    states.splice(index, 1);
+  });
+};

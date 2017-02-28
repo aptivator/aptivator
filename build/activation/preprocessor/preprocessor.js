@@ -104,7 +104,7 @@ exports.default = function (stateParams) {
     }
 
     if (_relations2.default.isRoot(stateName)) {
-      return stateConfigs.viewsRegistry = (0, _defineProperty3.default)({}, stateConfigs.uniqueAddress, {});
+      return;
     }
 
     var viewsRegistry = stateConfigs.viewsRegistry = {};

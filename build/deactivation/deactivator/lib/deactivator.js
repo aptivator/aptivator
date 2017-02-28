@@ -16,10 +16,6 @@ var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
-var _detachFlagger = require('./detach-flagger');
-
-var _detachFlagger2 = _interopRequireDefault(_detachFlagger);
-
 var _hider = require('./hider');
 
 var _hider2 = _interopRequireDefault(_hider);
@@ -51,19 +47,11 @@ exports.default = {
     var uniqueAddress = name.includes('@') ? name : registry[name].uniqueAddress;
     var stateName = _addresser2.default.stateName(uniqueAddress);
     var stateConfigs = registry[stateName];
-    var viewAddresses = new Set([uniqueAddress]);
     var activationRecord = activationRecords[uniqueAddress] || {};
+    var activationSequence = activationSequences[stateName];
 
     if (!activationRecord.active && !detach.focal) {
       return;
-    }
-
-    if (stateConfigs.uniqueAddress === uniqueAddress) {
-      _lodash2.default.each(stateConfigs.viewsRegistry, function (viewConfigs, uniqueAddress) {
-        if (viewConfigs.addressStateName !== stateName) {
-          viewAddresses.add(uniqueAddress);
-        }
-      });
     }
 
     var _detach = detach,
@@ -71,10 +59,18 @@ exports.default = {
         detachChildren = _detach.children,
         detachFull = _detach.full;
 
+    detach = _lodash2.default.isUndefined(detachFocal) && detachFull || detachFocal;
 
-    viewAddresses.forEach(function (uniqueAddress) {
-      (0, _hider2.default)(uniqueAddress, (0, _detachFlagger2.default)(detachFocal, detachFull));
-    });
+    if (stateConfigs.uniqueAddress === uniqueAddress) {
+      _lodash2.default.each(activationSequence, function (viewConfigs) {
+        var uniqueAddress = viewConfigs.uniqueAddress,
+            viewStateName = viewConfigs.stateName;
+
+        if (viewStateName === stateName) {
+          (0, _hider2.default)(uniqueAddress, detach);
+        }
+      });
+    }
 
     detach = { focal: detachChildren, full: detachFull };
 

@@ -20,6 +20,10 @@ var _instance = require('../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
+var _relations = require('../../lib/relations');
+
+var _relations2 = _interopRequireDefault(_relations);
+
 var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -30,7 +34,7 @@ var registry = _vars2.default.states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(params) {
-    var name, partial, stateConfigs, query, stateParams;
+    var name, partial, stateConfigs, query, stateParams, family;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -48,27 +52,31 @@ exports.default = function () {
           case 4:
             query = { stateName: name, flags: { active: true } };
             stateParams = _instance2.default.history.findOne(query);
+            family = _relations2.default.family(name);
 
             if (stateParams) {
-              _context.next = 8;
+              _context.next = 9;
               break;
             }
 
             throw { errorType: 'inactive', errorMessage: 'state [' + name + '] is not activated' };
 
-          case 8:
+          case 9:
 
             _lodash2.default.extend(stateParams.flags, { deactivating: true, partial: partial });
 
-            _lodash2.default.each(stateConfigs.states, function (parallelStateParams) {
-              var name = parallelStateParams.name;
+            _lodash2.default.each(family, function (relation) {
+              var stateConfigs = registry[relation];
+              _lodash2.default.each(stateConfigs.states, function (stateParams) {
+                var name = stateParams.name;
 
-              _instance2.default.deactivate({ name: name }).catch(_lodash2.default.noop);
+                _instance2.default.deactivate({ name: name }).catch(_lodash2.default.noop);
+              });
             });
 
             return _context.abrupt('return', stateParams);
 
-          case 11:
+          case 12:
           case 'end':
             return _context.stop();
         }

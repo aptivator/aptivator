@@ -49,7 +49,7 @@ export default stateParams => {
     }
     
     if(relations.isRoot(stateName)) {
-      return stateConfigs.viewsRegistry = {[stateConfigs.uniqueAddress]: {}};
+      return;
     }
     
     let viewsRegistry = stateConfigs.viewsRegistry = {};
