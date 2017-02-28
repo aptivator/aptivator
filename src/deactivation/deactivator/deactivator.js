@@ -104,7 +104,7 @@ export default stateParams =>
         });
       });
       
-      _.each(_.uniq(deactivationFinalists), stateParams => {
+      _.each(deactivationFinalists, stateParams => {
         let {stateName} = stateParams;
         aptivator.trigger({handle: `exit:${stateName}`, full: true}, stateParams).then(results => {
           _.extend(stateParams.flags, {active: false, deactivated: true});
