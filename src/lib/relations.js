@@ -37,7 +37,12 @@ export default {
   
   hierarchySorter(desc) {
     return (...args) => {
-      let [length1, length2] = args.map(stateName => this.parts(stateName).length);
+      let [length1, length2] = args.map(stateName => {
+        if(_.isObject(stateName)) {
+          ({stateName} = stateName);
+        }
+        return this.parts(stateName).length;
+      });
       
       if(desc) {
         [length2, length1] = [length1, length2];

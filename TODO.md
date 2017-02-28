@@ -3,11 +3,12 @@
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
 * take a look at preprocessor code for root state and optimize
 * optimize deactivation module
-* refactor start module
 * reimplement composite states as two states or more states activated simultaneously with necessary configurations
 * regarding parallel states, take a look at parallel transients
 * children states should be able to cancel ancestor parallel states
 * take a look at getting rid of viewsRegistry
+* **DONE** move root state instantiation to state module
+* **DONE** refactor start module
 * **DONE** allow to use a template property on the state instead of a view to tell framework to create a view (will create a plain ItemView)
 * **DONE** what about giving params to hooks callbacks (no need, all the data is already bolted to stateParams)
 * **DONE** let params assembler receive either an address or stateName and not family

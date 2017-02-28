@@ -69,15 +69,15 @@ exports.default = function (stateParams) {
 
   stateParams.flags.preprocessed = true;
 
-  !function preprocess(stateName, previous) {
+  !function preprocess(stateName, previousSequence) {
     var stateConfigs = registry[stateName];
 
     var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
 
-    if (previous && !_lodash2.default.isEmpty(activationSequence)) {
+    if (previousSequence && !_lodash2.default.isEmpty(activationSequence)) {
       return _lodash2.default.each(activationSequence, function (viewConfigs) {
-        if (!previous.includes(viewConfigs)) {
-          previous.push(viewConfigs);
+        if (!previousSequence.includes(viewConfigs)) {
+          previousSequence.push(viewConfigs);
         }
       });
     }
@@ -184,24 +184,11 @@ exports.default = function (stateParams) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
     }
 
-    if (previous) {
-      preprocess(stateName, previous);
+    if (previousSequence) {
+      preprocess(stateName, previousSequence);
     }
 
-    activationSequence.sort(function () {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var _args$map = args.map(function (viewConfigs) {
-        return _relations2.default.parts(viewConfigs.stateName).length;
-      }),
-          _args$map2 = (0, _slicedToArray3.default)(_args$map, 2),
-          length1 = _args$map2[0],
-          length2 = _args$map2[1];
-
-      return length1 - length2;
-    });
+    activationSequence.sort(_relations2.default.hierarchySorter());
   }(stateName);
 
   return stateParams;

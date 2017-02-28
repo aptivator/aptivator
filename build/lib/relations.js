@@ -65,6 +65,10 @@ exports.default = {
       }
 
       var _args$map = args.map(function (stateName) {
+        if (_lodash2.default.isObject(stateName)) {
+          var _stateName = stateName;
+          stateName = _stateName.stateName;
+        }
         return _this.parts(stateName).length;
       }),
           _args$map2 = (0, _slicedToArray3.default)(_args$map, 2),
