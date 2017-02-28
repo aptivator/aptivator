@@ -55,6 +55,6 @@ exports.default = function (stateConfigs) {
     detachHidden = false;
   }
 
-  var configs = { root: true, uniqueAddress: uniqueAddress, view: view, viewsRegistry: (0, _defineProperty3.default)({}, uniqueAddress, {}), detachHidden: detachHidden, resolveConfigs: resolveConfigs };
+  var configs = { root: true, uniqueAddress: uniqueAddress, viewsRegistry: (0, _defineProperty3.default)({}, uniqueAddress, {}), detachHidden: detachHidden, resolveConfigs: resolveConfigs };
   _lodash2.default.extend(stateConfigs, configs);
 };

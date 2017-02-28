@@ -28,6 +28,6 @@ export default stateConfigs => {
     detachHidden = false;
   }
   
-  let configs = {root: true, uniqueAddress, view, viewsRegistry: {[uniqueAddress]: {}}, detachHidden, resolveConfigs};
+  let configs = {root: true, uniqueAddress, viewsRegistry: {[uniqueAddress]: {}}, detachHidden, resolveConfigs};
   _.extend(stateConfigs, configs);
 };

@@ -39,16 +39,18 @@ var _missingParentsAssembler2 = _interopRequireDefault(_missingParentsAssembler)
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var queue = _vars2.default.states.queue;
-var defaultState = _vars2.default.configs.defaultState;
 
 
 _instance2.default.start = function () {
   return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-    var missingParents;
+    var defaultState, missingParents;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            defaultState = _vars2.default.configs.defaultState;
+
+
             if (queue.length) {
               missingParents = (0, _missingParentsAssembler2.default)(queue);
 
@@ -72,7 +74,7 @@ _instance2.default.start = function () {
               _instance2.default.activate({ stateName: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
             }
 
-          case 3:
+          case 4:
           case 'end':
             return _context.stop();
         }

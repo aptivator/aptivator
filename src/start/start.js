@@ -7,10 +7,11 @@ import vars                    from '../lib/vars';
 import missingParentsAssembler from './lib/missing-parents-assembler';
 
 let {queue} = vars.states;
-let {defaultState} = vars.configs;
 
 aptivator.start = () => 
   !async function() {
+    let {defaultState} = vars.configs;
+    
     if(queue.length) {
       let missingParents = missingParentsAssembler(queue);
       error.throw(`undeclared parent states: [${missingParents}]`, 'starter');
