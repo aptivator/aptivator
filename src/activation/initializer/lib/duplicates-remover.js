@@ -1,6 +1,7 @@
 import _         from 'lodash';
 import aptivator from '../../../lib/instance';
 import error     from '../../../lib/error';
+import canceler  from './canceler';
 
 export default async startedStates => {
   let serialStates = _.filter(startedStates, {flags: {parallel: false}});
@@ -24,48 +25,9 @@ export default async startedStates => {
   
   let query = {flags: {parallel: false, pending: true, canceled: false, transient: false, preprocessed: true}};
   let pendingSerialState = aptivator.history.findOne(query);
-
-  let deactivationPromises = [];
-  let taggedStateNames = [];
-
-  !function canceler(stateParams = pendingSerialState) {
-    if(!stateParams) {
-      return;
-    }
-    
-    let {stateName} = stateParams;
-    
-    if(taggedStateNames.includes(stateName)) {
-      return;
-    }
-    
-    taggedStateNames.push(stateName);
-    
-    let {flags, transientStateParams, parallels} = stateParams;
-    let {owners} = transientStateParams || {};
-    
-    if(owners) {
-      owners.delete(stateParams);
-    }
-    
-    _.extend(flags, {canceled: true});
-    
-    console.log(`clearing ${stateName}`);
-    
-    if(flags.rendered) {
-      _.extend(flags, {active: true});
-      let promise = aptivator.deactivate({name: stateName}).catch(_.noop);
-      deactivationPromises.push(promise);
-    }
-    
-    if(owners && !owners.size) {
-      canceler(transientStateParams);
-    }
-    
-    _.each(parallels, stateParams => canceler(stateParams));
-  }();
-
-  await Promise.all(deactivationPromises);
+  let promises = canceler(pendingSerialState);
+  
+  await Promise.all(promises);
   
   return startedStates;
 };

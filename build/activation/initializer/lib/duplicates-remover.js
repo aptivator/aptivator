@@ -24,11 +24,15 @@ var _error = require('../../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _canceler = require('./canceler');
+
+var _canceler2 = _interopRequireDefault(_canceler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(startedStates) {
-    var serialStates, serialStatesDuplicates, query, pendingSerialState, deactivationPromises, taggedStateNames;
+    var serialStates, serialStatesDuplicates, query, pendingSerialState, promises;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -59,63 +63,14 @@ exports.default = function () {
           case 8:
             query = { flags: { parallel: false, pending: true, canceled: false, transient: false, preprocessed: true } };
             pendingSerialState = _instance2.default.history.findOne(query);
-            deactivationPromises = [];
-            taggedStateNames = [];
+            promises = (0, _canceler2.default)(pendingSerialState);
+            _context.next = 13;
+            return Promise.all(promises);
 
-
-            !function canceler() {
-              var stateParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : pendingSerialState;
-
-              if (!stateParams) {
-                return;
-              }
-
-              var stateName = stateParams.stateName;
-
-
-              if (taggedStateNames.includes(stateName)) {
-                return;
-              }
-
-              taggedStateNames.push(stateName);
-
-              var flags = stateParams.flags,
-                  transientStateParams = stateParams.transientStateParams,
-                  parallels = stateParams.parallels;
-
-              var _ref2 = transientStateParams || {},
-                  owners = _ref2.owners;
-
-              if (owners) {
-                owners.delete(stateParams);
-              }
-
-              _lodash2.default.extend(flags, { canceled: true });
-
-              console.log('clearing ' + stateName);
-
-              if (flags.rendered) {
-                _lodash2.default.extend(flags, { active: true });
-                var promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
-                deactivationPromises.push(promise);
-              }
-
-              if (owners && !owners.size) {
-                canceler(transientStateParams);
-              }
-
-              _lodash2.default.each(parallels, function (stateParams) {
-                return canceler(stateParams);
-              });
-            }();
-
-            _context.next = 15;
-            return Promise.all(deactivationPromises);
-
-          case 15:
+          case 13:
             return _context.abrupt('return', startedStates);
 
-          case 16:
+          case 14:
           case 'end':
             return _context.stop();
         }
