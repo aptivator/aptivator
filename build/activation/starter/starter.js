@@ -67,14 +67,18 @@ exports.default = function () {
             throw { errorType: 'undeclared', errorMessage: 'state [' + name + '] does not exist' };
 
           case 6:
-            if (!tracker.includes(name)) {
-              _context.next = 8;
+            if (!((parallel || transient) && tracker.includes(name))) {
+              _context.next = 9;
               break;
+            }
+
+            if (_lodash2.default.isObject(stateParams)) {
+              stateParams.flags.canceled = true;
             }
 
             return _context.abrupt('return');
 
-          case 8:
+          case 9:
 
             tracker.push(name);
 
@@ -103,13 +107,13 @@ exports.default = function () {
               _lodash2.default.extend(stateParams, { route: route });
             }
 
-            (0, _parallelStatesStarter2.default)(name, stateParams);
+            (0, _parallelStatesStarter2.default)(stateParams);
 
             (0, _historyAdder2.default)(stateParams);
 
             return _context.abrupt('return', stateParams);
 
-          case 16:
+          case 17:
           case 'end':
             return _context.stop();
         }

@@ -159,7 +159,7 @@ exports.default = function (stateParams) {
         });
       });
 
-      _lodash2.default.each(_lodash2.default.uniq(deactivationFinalists), function (stateParams) {
+      _lodash2.default.each(deactivationFinalists, function (stateParams) {
         var stateName = stateParams.stateName;
 
         _instance2.default.trigger({ handle: 'exit:' + stateName, full: true }, stateParams).then(function (results) {

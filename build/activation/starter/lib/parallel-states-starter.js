@@ -24,11 +24,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var registry = _vars2.default.states.registry;
 
-exports.default = function (stateName, stateParams) {
-  var family = _relations2.default.family(stateName);
+exports.default = function (stateParams) {
   var flags = stateParams.flags,
       route = stateParams.route,
-      direct = stateParams.direct;
+      direct = stateParams.direct,
+      stateName = stateParams.stateName,
+      parallels = stateParams.parallels;
+
+  var family = _relations2.default.family(stateName);
   var transient = flags.transient;
 
 
@@ -53,9 +56,15 @@ exports.default = function (stateName, stateParams) {
         delete parallelStateParams.route;
       }
 
+      if (!parallels) {
+        parallels = stateParams.parallels = [];
+      }
+
+      parallels.push(parallelStateParams);
+
       _lodash2.default.extend(parallelStateParams.flags, { transient: transient });
 
-      _instance2.default.activate(parallelStateParams);
+      _instance2.default.activate(parallelStateParams).catch(_lodash2.default.noop);
     });
   });
 };

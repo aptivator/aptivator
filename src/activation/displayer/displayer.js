@@ -2,15 +2,11 @@ import _         from 'lodash';
 import animator  from '../../animation/animator';
 import aptivator from '../../lib/instance';
 import displayer from '../../lib/displayer';
-import vars      from '../../lib/vars';
 
-let {activating} = vars;
 let eventHandle = 'aptivator-goto-finalizer';
 
 export default stateParams => 
   new Promise(async resolve => {
-    
-    
     stateParams.flags.displayed = true;
     aptivator.once(eventHandle, () => resolve(stateParams));
     
@@ -23,10 +19,6 @@ export default stateParams =>
     
     query = {flags: {pending: true, displayed: true, canceled: false}};
     let renderedStates = aptivator.history.find(query);
-
-    let {transient} = stateParams.flags;
-    let tracker = activating[transient ? 'transient' : 'regular'];
-    
     let stateNames = _.map(renderedStates, stateParams => {
       let {stateName, rootViews} = stateParams;
       _.each(rootViews, rootView => displayer(rootView));
@@ -36,6 +28,5 @@ export default stateParams =>
     
     await animator(stateNames, 'enter');
     
-    _.remove(tracker, () => true);
     aptivator.trigger(eventHandle);
   });

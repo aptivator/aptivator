@@ -28,25 +28,18 @@ var _displayer = require('../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
 
-var _vars = require('../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var activating = _vars2.default.activating;
 
 var eventHandle = 'aptivator-goto-finalizer';
 
 exports.default = function (stateParams) {
   return new Promise(function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
-      var query, renderingStates, renderedStates, transient, tracker, stateNames;
+      var query, renderingStates, renderedStates, stateNames;
       return _regenerator2.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-
               stateParams.flags.displayed = true;
               _instance2.default.once(eventHandle, function () {
                 return resolve(stateParams);
@@ -66,8 +59,6 @@ exports.default = function (stateParams) {
 
               query = { flags: { pending: true, displayed: true, canceled: false } };
               renderedStates = _instance2.default.history.find(query);
-              transient = stateParams.flags.transient;
-              tracker = activating[transient ? 'transient' : 'regular'];
               stateNames = _lodash2.default.map(renderedStates, function (stateParams) {
                 var stateName = stateParams.stateName,
                     rootViews = stateParams.rootViews;
@@ -78,17 +69,14 @@ exports.default = function (stateParams) {
                 delete stateParams.rootViews;
                 return stateName;
               });
-              _context.next = 13;
+              _context.next = 11;
               return (0, _animator2.default)(stateNames, 'enter');
 
-            case 13:
+            case 11:
 
-              _lodash2.default.remove(tracker, function () {
-                return true;
-              });
               _instance2.default.trigger(eventHandle);
 
-            case 15:
+            case 12:
             case 'end':
               return _context.stop();
           }

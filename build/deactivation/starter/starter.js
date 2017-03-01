@@ -69,7 +69,7 @@ exports.default = function () {
               break;
             }
 
-            throw { errorType: 'inactive', errorMessage: 'state [' + name + '] is not activated' };
+            return _context.abrupt('return');
 
           case 11:
 

@@ -4,6 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -18,85 +26,104 @@ var _error2 = _interopRequireDefault(_error);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (startedStates) {
-  var serialStates = _lodash2.default.filter(startedStates, { flags: { parallel: false } });
-  var serialStatesDuplicates = serialStates.reverse().slice(1);
-
-  if (serialStatesDuplicates.length) {
-    _error2.default.warn('included two serial states in an activation', 'initializer');
-  }
-
-  serialStates = _lodash2.default.difference(serialStates, serialStatesDuplicates);
-
-  serialStatesDuplicates.forEach(function (stateParams) {
-    _lodash2.default.extend(stateParams.flags, { active: false, canceled: true, pending: false, duplicateSerial: true });
-  });
-
-  startedStates = _lodash2.default.difference(startedStates, serialStatesDuplicates);
-
-  var deactivationPromises = [];
-
-  if (serialStates.length) {
-    var query = { flags: { parallel: false, pending: true, canceled: false, transient: false, preprocessed: true } };
-    var pendingSerialState = _instance2.default.history.findOne(query);
-
-    if (pendingSerialState) {
-      var flags = pendingSerialState.flags,
-          transientStateParams = pendingSerialState.transientStateParams,
-          stateName = pendingSerialState.stateName,
-          parallels = pendingSerialState.parallels;
-      var transientFlags = transientStateParams.flags,
-          transientStateName = transientStateParams.stateName,
-          owners = transientStateParams.owners,
-          transientParallels = transientStateParams.transientParallels;
+exports.default = function () {
+  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(startedStates) {
+    var serialStates, serialStatesDuplicates, query, pendingSerialState, deactivationPromises, taggedStateNames;
+    return _regenerator2.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            serialStates = _lodash2.default.filter(startedStates, { flags: { parallel: false } });
+            serialStatesDuplicates = serialStates.reverse().slice(1);
 
 
-      owners.delete(pendingSerialState);
+            if (serialStatesDuplicates.length) {
+              _error2.default.warn('included two serial states in an activation', 'initializer');
+            }
 
-      if (!owners.size) {
-        var active = transientFlags.active,
-            rendered = transientFlags.rendered;
+            serialStates = _lodash2.default.difference(serialStates, serialStatesDuplicates);
 
-        if (!active) {
-          _lodash2.default.extend(transientFlags, { canceled: true });
-        }
+            serialStatesDuplicates.forEach(function (stateParams) {
+              _lodash2.default.extend(stateParams.flags, { active: false, canceled: true, pending: false, duplicateSerial: true });
+            });
 
-        if (rendered) {
-          _lodash2.default.extend(transientFlags, { active: true });
-          var promise = _instance2.default.deactivate({ name: transientStateName }).catch(_lodash2.default.noop);
-          deactivationPromises.push(promise);
+            startedStates = _lodash2.default.difference(startedStates, serialStatesDuplicates);
+
+            if (serialStates.length) {
+              _context.next = 8;
+              break;
+            }
+
+            return _context.abrupt('return', startedStates);
+
+          case 8:
+            query = { flags: { parallel: false, pending: true, canceled: false, transient: false, preprocessed: true } };
+            pendingSerialState = _instance2.default.history.findOne(query);
+            deactivationPromises = [];
+            taggedStateNames = [];
+
+
+            !function canceler() {
+              var stateParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : pendingSerialState;
+
+              if (!stateParams) {
+                return;
+              }
+
+              var stateName = stateParams.stateName;
+
+
+              if (taggedStateNames.includes(stateName)) {
+                return;
+              }
+
+              taggedStateNames.push(stateName);
+
+              var flags = stateParams.flags,
+                  transientStateParams = stateParams.transientStateParams,
+                  parallels = stateParams.parallels;
+
+              var _ref2 = transientStateParams || {},
+                  owners = _ref2.owners;
+
+              if (owners) {
+                owners.delete(stateParams);
+              }
+
+              _lodash2.default.extend(flags, { canceled: true });
+
+              console.log('clearing ' + stateName);
+
+              if (flags.rendered) {
+                _lodash2.default.extend(flags, { active: true });
+                var promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
+                deactivationPromises.push(promise);
+              }
+
+              if (owners && !owners.size) {
+                canceler(transientStateParams);
+              }
+
+              _lodash2.default.each(parallels, function (stateParams) {
+                return canceler(stateParams);
+              });
+            }();
+
+            _context.next = 15;
+            return Promise.all(deactivationPromises);
+
+          case 15:
+            return _context.abrupt('return', startedStates);
+
+          case 16:
+          case 'end':
+            return _context.stop();
         }
       }
+    }, _callee, undefined);
+  }));
 
-      _lodash2.default.each(false, function (stateParams) {
-        var flags = stateParams.flags,
-            stateName = stateParams.stateName;
-        var active = flags.active,
-            rendered = flags.rendered;
-
-
-        if (!active) {
-          _lodash2.default.extend(flags, { canceled: true });
-        }
-
-        if (rendered) {
-          _lodash2.default.extend(flags, { active: true });
-          var _promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
-          deactivationPromises.push(_promise);
-        }
-      });
-
-      _lodash2.default.extend(flags, { canceled: true });
-
-      if (flags.rendered) {
-        _lodash2.default.extend(flags, { active: true });
-        var _promise2 = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
-        deactivationPromises.push(_promise2);
-      }
-    }
-  }
-
-  return Promise.all(deactivationPromises).then(function () {
-    return startedStates;
-  });
-};
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}();

@@ -5,7 +5,11 @@ import vars                 from '../../lib/vars';
 import duplicatesRemover    from './lib/duplicates-remover';
 import transientInitializer from './lib/transient-initializer';
 
-let eventHandle = 'aptivator-goto-preprocessor';
+let {activating} = vars;
+
+let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {
+  return `aptivator-goto-preprocessor-${key}`;
+});
 
 export default stateParams => 
   new Promise(async resolve => {
@@ -14,12 +18,26 @@ export default stateParams =>
     _.extend(stateParams.flags, {initialized: true});    
     
     if(transient) {
-      return resolve(stateParams);
+      let eventHandle = eventHandles.transient;
+      
+      aptivator.once(eventHandle, () => resolve(stateParams));
+      
+      let query = {flags: {transient: true, initialized: false}};
+      let startingTransients = aptivator.history.find(query);
+      
+      if(startingTransients.length) {
+        return;
+      }
+      
+      _.remove(activating.transient, () => true);
+      return aptivator.trigger(eventHandle);
     }
+    
+    let eventHandle = eventHandles.regular;
     
     aptivator.once(eventHandle, () => resolve(stateParams));
     
-    let startingStates = aptivator.history.find({flags: {initialized: false}});
+    let startingStates = aptivator.history.find({flags: {initialized: false, transient: false}});
     
     if(startingStates.length) {
       return;
@@ -29,6 +47,8 @@ export default stateParams =>
     let startedStates = aptivator.history.find(query);
     
     startedStates = await duplicatesRemover(startedStates);
+    
+    _.remove(activating.regular, () => true);
 
     let transientStates = aptivator.history.find(stateParams => {
       let {active, pending, canceled, transient} = stateParams.flags;
@@ -50,6 +70,10 @@ export default stateParams =>
         if(!transientStateParams) {
           transientStateParams = transientInitializer(transientStateName);
           transientStates[transientStateName] = transientStateParams;
+        }
+        
+        if(!transientStateParams.owners) {
+          transientStateParams.owners = new Set();
         }
         
         transientStateParams.owners.add(stateParams);

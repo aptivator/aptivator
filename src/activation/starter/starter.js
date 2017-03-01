@@ -19,7 +19,11 @@ export default async stateParams => {
     throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
   }
   
-  if(tracker.includes(name)) {
+  if((parallel || transient) && tracker.includes(name)) {
+    if(_.isObject(stateParams)) {
+      stateParams.flags.canceled = true;
+    }
+    
     return;
   }
   
@@ -50,7 +54,7 @@ export default async stateParams => {
     _.extend(stateParams, {route});
   }
   
-  parallelStatesStarter(name, stateParams);
+  parallelStatesStarter(stateParams);
   
   historyAdder(stateParams);
   

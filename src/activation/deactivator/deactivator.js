@@ -51,7 +51,7 @@ export default stateParams =>
     let transientStates = loadedRegulars.reduce((transientStates, stateParams) => {
       return transientStates.add(stateParams.transientStateParams);
     }, new Set());
-      
+    
     let transientPromises = [...transientStates].reduce((promises, stateParams) => {
       let {promise, timeout} = stateParams.transientConfigs || {};
       

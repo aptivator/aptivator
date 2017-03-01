@@ -5,6 +5,7 @@ var aptivator = require('aptivator');
 var App2FormView = require('./form');
 var PlusView = require('./plus');
 
+/*
 aptivator.on({
   error: {
     callbacks: function(e, stateParams) {
@@ -27,6 +28,7 @@ aptivator.on({
     }
   }
 });
+*/
 
 aptivator.state('app-2.form', {
   route: 'form',

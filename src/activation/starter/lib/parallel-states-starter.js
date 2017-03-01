@@ -5,9 +5,9 @@ import vars      from '../../../lib/vars';
 
 let {registry} = vars.states;
 
-export default (stateName, stateParams) => {
+export default stateParams => {
+  let {flags, route, direct, stateName, parallels} = stateParams;
   let family = relations.family(stateName);
-  let {flags, route, direct} = stateParams;
   let {transient} = flags;
   
   _.each(family, relation => {
@@ -27,10 +27,16 @@ export default (stateName, stateParams) => {
       } else {
         delete parallelStateParams.route;
       }
+      
+      if(!parallels) {
+        parallels = stateParams.parallels = [];
+      }
+      
+      parallels.push(parallelStateParams);
 
       _.extend(parallelStateParams.flags, {transient});
       
-      aptivator.activate(parallelStateParams);      
+      aptivator.activate(parallelStateParams).catch(_.noop);      
     });
   });
 };

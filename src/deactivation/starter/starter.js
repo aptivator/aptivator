@@ -23,7 +23,7 @@ export default async params => {
   let family = relations.family(name);
   
   if(!stateParams) {
-    throw {errorType: 'inactive', errorMessage: `state [${name}] is not activated`};
+    return;
   }
   
   deactivating.push(name);
