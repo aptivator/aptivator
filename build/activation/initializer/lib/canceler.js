@@ -16,13 +16,8 @@ var _instance2 = _interopRequireDefault(_instance);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function canceler(stateParams) {
-  if (!canceler.promises) {
-    _lodash2.default.extend(canceler, { promises: [], stateNames: [] });
-  }
-
-  var promises = canceler.promises,
-      stateNames = canceler.stateNames;
-
+  var promises = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var stateNames = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   if (!stateParams) {
     return promises;
@@ -32,7 +27,7 @@ function canceler(stateParams) {
 
 
   if (stateNames.includes(stateName)) {
-    return;
+    return promises;
   }
 
   stateNames.push(stateName);
@@ -57,11 +52,11 @@ function canceler(stateParams) {
   }
 
   if (owners && !owners.size) {
-    canceler(transientStateParams);
+    canceler(transientStateParams, promises, stateNames);
   }
 
   _lodash2.default.each(parallels, function (stateParams) {
-    return canceler(stateParams);
+    return canceler(stateParams, promises, stateNames);
   });
 
   return promises;

@@ -7,6 +7,7 @@
 * note that when using multiple classes for animation, these classes should not override the previous class's animation or transition property
 * note that best practice is for root state is to be blank and be a template placeholder for other states
 * root state must have a singular view (not a template).  Within a view an el property designates the element where app will be placed
+* note when activating two serial states simultaneously, the last one will be canceled
 * Sprinkle comments throughout code
 * Tutorial
 

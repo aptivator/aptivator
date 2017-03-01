@@ -20,10 +20,6 @@ var _instance = require('../../../lib/instance');
 
 var _instance2 = _interopRequireDefault(_instance);
 
-var _error = require('../../../lib/error');
-
-var _error2 = _interopRequireDefault(_error);
-
 var _canceler = require('./canceler');
 
 var _canceler2 = _interopRequireDefault(_canceler);
@@ -41,10 +37,6 @@ exports.default = function () {
             serialStatesDuplicates = serialStates.reverse().slice(1);
 
 
-            if (serialStatesDuplicates.length) {
-              _error2.default.warn('included two serial states in an activation', 'initializer');
-            }
-
             serialStates = _lodash2.default.difference(serialStates, serialStatesDuplicates);
 
             serialStatesDuplicates.forEach(function (stateParams) {
@@ -54,23 +46,23 @@ exports.default = function () {
             startedStates = _lodash2.default.difference(startedStates, serialStatesDuplicates);
 
             if (serialStates.length) {
-              _context.next = 8;
+              _context.next = 7;
               break;
             }
 
             return _context.abrupt('return', startedStates);
 
-          case 8:
+          case 7:
             query = { flags: { parallel: false, pending: true, canceled: false, transient: false, preprocessed: true } };
             pendingSerialState = _instance2.default.history.findOne(query);
             promises = (0, _canceler2.default)(pendingSerialState);
-            _context.next = 13;
+            _context.next = 12;
             return Promise.all(promises);
 
-          case 13:
+          case 12:
             return _context.abrupt('return', startedStates);
 
-          case 14:
+          case 13:
           case 'end':
             return _context.stop();
         }

@@ -3,6 +3,7 @@
 * in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
 * optimize deactivation module
 * children states should be able to cancel ancestor parallel states
+* handle parallel states activation when a focal state is activated with augment flag
 * **DONE** if a state is canceled, then its launched parallel states are canceled also
 * **DONE** regarding parallel states, take a look at parallel transients
 * **DONE** handle duplicate deactivations

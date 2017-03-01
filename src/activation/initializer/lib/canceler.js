@@ -1,13 +1,7 @@
 import _         from 'lodash';
 import aptivator from '../../../lib/instance';
 
-export default function canceler(stateParams) {
-  if(!canceler.promises) {
-    _.extend(canceler, {promises: [], stateNames: []});
-  }
-  
-  let {promises, stateNames} = canceler;
-  
+export default function canceler(stateParams, promises = [], stateNames = []) {
   if(!stateParams) {
     return promises;
   }
@@ -15,9 +9,9 @@ export default function canceler(stateParams) {
   let {stateName} = stateParams;
   
   if(stateNames.includes(stateName)) {
-    return;
+    return promises;
   }
-  
+
   stateNames.push(stateName);
   
   let {flags, transientStateParams, parallels} = stateParams;
@@ -36,10 +30,10 @@ export default function canceler(stateParams) {
   }
   
   if(owners && !owners.size) {
-    canceler(transientStateParams);
+    canceler(transientStateParams, promises, stateNames);
   }
   
-  _.each(parallels, stateParams => canceler(stateParams));
+  _.each(parallels, stateParams => canceler(stateParams, promises, stateNames));
   
   return promises;
 }

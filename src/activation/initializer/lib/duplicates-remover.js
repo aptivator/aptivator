@@ -1,15 +1,10 @@
 import _         from 'lodash';
 import aptivator from '../../../lib/instance';
-import error     from '../../../lib/error';
 import canceler  from './canceler';
 
 export default async startedStates => {
   let serialStates = _.filter(startedStates, {flags: {parallel: false}});
   let serialStatesDuplicates = serialStates.reverse().slice(1);
-  
-  if(serialStatesDuplicates.length) {
-    error.warn('included two serial states in an activation', 'initializer');
-  }
   
   serialStates = _.difference(serialStates, serialStatesDuplicates);
 
