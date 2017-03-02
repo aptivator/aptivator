@@ -5,6 +5,8 @@ import vars                 from '../../lib/vars';
 import duplicatesRemover    from './lib/duplicates-remover';
 import transientInitializer from './lib/transient-initializer';
 
+let {activating} = vars;
+
 let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {
   return `aptivator-goto-preprocessor-${key}`;
 });
@@ -78,5 +80,7 @@ export default stateParams =>
       stateParams.time = _.now();
     }
 
+    _.remove(activating.transient, () => true);
+    _.remove(activating.regular, () => true);
     aptivator.trigger(eventHandle);
   });

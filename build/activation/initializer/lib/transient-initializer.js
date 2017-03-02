@@ -19,6 +19,7 @@ var _vars2 = _interopRequireDefault(_vars);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (stateName) {
+  var immediate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   var transient = _vars2.default.states.registry[stateName].transient;
 
   var _ref = _lodash2.default.isObject(transient) ? transient : {},
@@ -31,7 +32,9 @@ exports.default = function (stateName) {
   var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: parallel, transient: true, noResolves: noResolves } };
   var transientConfigs = stateParams.transientConfigs = {};
 
-  if (!_lodash2.default.isNumber(delay)) {
+  if (immediate) {
+    delay = 0;
+  } else if (!_lodash2.default.isNumber(delay)) {
     var transientDelay = _vars2.default.configs.transientDelay;
 
     delay = _lodash2.default.isNumber(transientDelay) ? transientDelay : _vars2.default.transientDelay;

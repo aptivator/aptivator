@@ -38,6 +38,9 @@ var _transientInitializer2 = _interopRequireDefault(_transientInitializer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var activating = _vars2.default.activating;
+
+
 var eventHandles = _lodash2.default.mapValues({ transient: '', regular: '' }, function (value, key) {
   return 'aptivator-goto-preprocessor-' + key;
 });
@@ -145,9 +148,15 @@ exports.default = function (stateParams) {
                 stateParams.time = _lodash2.default.now();
               }
 
+              _lodash2.default.remove(activating.transient, function () {
+                return true;
+              });
+              _lodash2.default.remove(activating.regular, function () {
+                return true;
+              });
               _aptivator2.default.trigger(eventHandle);
 
-            case 25:
+            case 27:
             case 'end':
               return _context.stop();
           }

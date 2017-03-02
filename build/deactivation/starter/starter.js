@@ -30,50 +30,52 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var registry = _vars2.default.states.registry;
+var deactivating = _vars2.default.deactivating,
+    states = _vars2.default.states;
+var registry = states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(params) {
-    var name, partial, stateConfigs, query, duplicateStateParams, stateParams, flags, family;
+    var name, partial, stateConfigs, query, stateParams, flags, family;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             name = params.name, partial = params.partial;
             stateConfigs = registry[name];
-            query = { stateName: name, flags: { deactivating: true } };
-            duplicateStateParams = _aptivator2.default.history.findOne(query);
 
-            if (!duplicateStateParams) {
-              _context.next = 6;
+            if (!deactivating.includes(name)) {
+              _context.next = 4;
               break;
             }
 
             return _context.abrupt('return');
 
-          case 6:
+          case 4:
             if (stateConfigs) {
-              _context.next = 8;
+              _context.next = 6;
               break;
             }
 
             throw { errorType: 'undeclared', errorMessage: 'state [' + name + '] does not exist' };
 
-          case 8:
-
+          case 6:
             query = { stateName: name, flags: { active: true } };
             stateParams = _aptivator2.default.history.findOne(query);
-            flags = stateParams.flags;
-            family = flags.spliced ? [name] : _relations2.default.family(name);
 
             if (stateParams) {
-              _context.next = 14;
+              _context.next = 10;
               break;
             }
 
             return _context.abrupt('return');
 
-          case 14:
+          case 10:
+            flags = stateParams.flags;
+            family = flags.spliced ? [name] : _relations2.default.family(name);
+
+
+            deactivating.push(name);
 
             _lodash2.default.extend(flags, { deactivating: true, partial: partial });
 
@@ -88,7 +90,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 17:
+          case 16:
           case 'end':
             return _context.stop();
         }

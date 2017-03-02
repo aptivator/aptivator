@@ -38,7 +38,8 @@ var _deactivator2 = _interopRequireDefault(_deactivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var rootStateName = _vars2.default.rootStateName;
+var rootStateName = _vars2.default.rootStateName,
+    deactivating = _vars2.default.deactivating;
 
 var eventHandle = 'aptivator-goto-finish';
 
@@ -169,5 +170,8 @@ exports.default = function (stateParams) {
 
     resolve(animationPromise);
     _aptivator2.default.trigger(eventHandle);
+    _lodash2.default.remove(deactivating, function () {
+      return true;
+    });
   });
 };

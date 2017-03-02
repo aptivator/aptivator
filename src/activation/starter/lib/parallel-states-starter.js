@@ -3,6 +3,8 @@ import aptivator from '../../../lib/aptivator';
 import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars';
 
+import transientInitializer from '../../initializer/lib/transient-initializer';
+
 let {registry} = vars.states;
 
 export default stateParams => {
@@ -13,6 +15,7 @@ export default stateParams => {
   _.each(family, relation => {
     let stateConfigs = registry[relation];
     _.each(stateConfigs.states, parallelStateParams => {
+      let {name} = parallelStateParams;
       parallelStateParams = _.cloneDeep(parallelStateParams);
       let {direct: parallelDirect, route: parallelRoute} = parallelStateParams;
       
@@ -32,11 +35,17 @@ export default stateParams => {
         parallels = stateParams.parallels = [];
       }
       
+      if(transient) {
+        parallelStateParams = transientInitializer(name, true);
+      } else {
+        _.extend(parallelStateParams.flags, {transient, spliced});
+      
+        aptivator.activate(parallelStateParams).catch(_.noop); 
+      }
+      
       parallels.push(parallelStateParams);
 
-      _.extend(parallelStateParams.flags, {transient, spliced});
-      
-      aptivator.activate(parallelStateParams).catch(_.noop);      
+           
     });
   });
 };

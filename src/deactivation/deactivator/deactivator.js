@@ -6,7 +6,7 @@ import relations    from '../../lib/relations';
 import vars         from '../../lib/vars';
 import deactivator  from './lib/deactivator';
 
-let {rootStateName} = vars;
+let {rootStateName, deactivating} = vars;
 let eventHandle = 'aptivator-goto-finish';
 
 export default stateParams => 
@@ -113,4 +113,5 @@ export default stateParams =>
     
     resolve(animationPromise);
     aptivator.trigger(eventHandle);
+    _.remove(deactivating, () => true);
   });
