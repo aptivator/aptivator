@@ -1,6 +1,6 @@
 import _            from 'lodash';
 import approximator from '../../lib/approximator';
-import aptivator    from '../../lib/instance';
+import aptivator    from '../../lib/aptivator';
 import vars         from '../../lib/vars';
 
 export default () => {

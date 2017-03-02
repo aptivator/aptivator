@@ -1,5 +1,5 @@
 import _         from 'lodash';
-import aptivator from '../lib/instance';
+import aptivator from '../lib/aptivator';
 import on        from './on/on';
 import once       from './once/once';
 import off       from './off/off';

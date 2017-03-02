@@ -1,6 +1,6 @@
 import _                       from 'lodash';
 import Backbone                from 'backbone';
-import aptivator               from '../lib/instance';
+import aptivator               from '../lib/aptivator';
 import error                   from '../lib/error';
 import fragment                from '../lib/fragment';
 import vars                    from '../lib/vars';
@@ -31,6 +31,6 @@ aptivator.start = () =>
     */
     
     if(!fragment.get() && defaultState) {
-      aptivator.activate({stateName: defaultState, direct: {running: true}}).catch(_.noop);
+      aptivator.activate({stateName: defaultState, direct: {running: true, spliced: true}}).catch(_.noop);
     }
   }().catch(error.errorer);

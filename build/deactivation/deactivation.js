@@ -1,8 +1,8 @@
 'use strict';
 
-var _instance = require('../lib/instance');
+var _aptivator = require('../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _errorer = require('../errorer/errorer');
 
@@ -18,6 +18,6 @@ var _deactivator2 = _interopRequireDefault(_deactivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_instance2.default.deactivate = function (params) {
+_aptivator2.default.deactivate = function (params) {
   return (0, _starter2.default)(params).then(_deactivator2.default).catch(_errorer2.default);
 };

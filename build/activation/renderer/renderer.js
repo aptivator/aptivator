@@ -8,6 +8,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _relations = require('../../lib/relations');
+
+var _relations2 = _interopRequireDefault(_relations);
+
 var _vars = require('../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
@@ -30,11 +34,15 @@ var _renderingPreparer2 = _interopRequireDefault(_renderingPreparer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var activationSequences = _vars2.default.states.activationSequences;
+var rootStateName = _vars2.default.rootStateName,
+    states = _vars2.default.states;
+var activationSequences = states.activationSequences;
 
 exports.default = function (stateParams) {
   stateParams.flags.rendered = true;
-  var augment = stateParams.flags.augment;
+  var flags = stateParams.flags,
+      beginningStateName = stateParams.beginningStateName;
+  var spliced = flags.spliced;
 
 
   _lodash2.default.each(activationSequences[stateParams.stateName], function (viewConfigs) {
@@ -42,8 +50,22 @@ exports.default = function (stateParams) {
       (0, _renderingPreparer2.default)(viewConfigs);
     }
 
-    if (augment && viewConfigs.record.active) {
+    if (spliced && viewConfigs.record.active) {
       return;
+    }
+
+    var main = viewConfigs.main,
+        stateName = viewConfigs.stateName;
+
+
+    if (main && _lodash2.default.isUndefined(beginningStateName)) {
+      if (_relations2.default.isRoot(_relations2.default.parent(stateName))) {
+        beginningStateName = rootStateName;
+      } else {
+        beginningStateName = stateName;
+      }
+
+      _lodash2.default.extend(stateParams, { beginningStateName: beginningStateName });
     }
 
     if (_cacheAssessor2.default.total(viewConfigs, stateParams)) {

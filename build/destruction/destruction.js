@@ -1,8 +1,8 @@
 'use strict';
 
-var _instance = require('../lib/instance');
+var _aptivator = require('../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _error = require('../lib/error');
 
@@ -17,7 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var activationRecords = _vars2.default.states.activationRecords;
 
 
-_instance2.default.destroy = function (params) {
+_aptivator2.default.destroy = function (params) {
   var name = params.name;
 
   var activationRecord = activationRecords[name];

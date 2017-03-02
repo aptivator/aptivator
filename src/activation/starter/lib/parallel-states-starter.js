@@ -1,5 +1,5 @@
 import _         from 'lodash';
-import aptivator from '../../../lib/instance';
+import aptivator from '../../../lib/aptivator';
 import relations from '../../../lib/relations';
 import vars      from '../../../lib/vars';
 
@@ -8,7 +8,7 @@ let {registry} = vars.states;
 export default stateParams => {
   let {flags, route, direct, stateName, parallels} = stateParams;
   let family = relations.family(stateName);
-  let {transient} = flags;
+  let {transient, spliced} = flags;
   
   _.each(family, relation => {
     let stateConfigs = registry[relation];
@@ -34,7 +34,7 @@ export default stateParams => {
       
       parallels.push(parallelStateParams);
 
-      _.extend(parallelStateParams.flags, {transient});
+      _.extend(parallelStateParams.flags, {transient, spliced});
       
       aptivator.activate(parallelStateParams).catch(_.noop);      
     });

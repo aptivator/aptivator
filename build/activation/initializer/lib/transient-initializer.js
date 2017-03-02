@@ -8,9 +8,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../../../lib/instance');
+var _aptivator = require('../../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _vars = require('../../../lib/vars');
 
@@ -22,9 +22,13 @@ exports.default = function (stateName) {
   var transient = _vars2.default.states.registry[stateName].transient;
 
   var _ref = _lodash2.default.isObject(transient) ? transient : {},
-      delay = _ref.delay;
+      delay = _ref.delay,
+      _ref$parallel = _ref.parallel,
+      parallel = _ref$parallel === undefined ? false : _ref$parallel,
+      _ref$noResolves = _ref.noResolves,
+      noResolves = _ref$noResolves === undefined ? false : _ref$noResolves;
 
-  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: false, transient: true } };
+  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: parallel, transient: true, noResolves: noResolves } };
   var transientConfigs = stateParams.transientConfigs = {};
 
   if (!_lodash2.default.isNumber(delay)) {
@@ -33,12 +37,8 @@ exports.default = function (stateName) {
     delay = _lodash2.default.isNumber(transientDelay) ? transientDelay : _vars2.default.transientDelay;
   }
 
-  if (_lodash2.default.isObject(transient)) {
-    _lodash2.default.extend(stateParams.flags, _lodash2.default.pick(transient, ['noResolves']));
-  }
-
   transientConfigs.timeout = setTimeout(function () {
-    var promise = _instance2.default.activate(stateParams);
+    var promise = _aptivator2.default.activate(stateParams);
     promise = promise.then(_lodash2.default.noop, function (e) {
       return Promise.reject(e);
     });

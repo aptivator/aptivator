@@ -1,5 +1,5 @@
 import _         from 'lodash';
-import aptivator from '../../../lib/instance';
+import aptivator from '../../../lib/aptivator';
 
 export default (eventsConfigs, handlePartsBase, once) => {
   _.each(eventsConfigs, (configs, eventName) => {

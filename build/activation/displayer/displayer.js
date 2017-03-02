@@ -20,9 +20,9 @@ var _animator = require('../../animation/animator');
 
 var _animator2 = _interopRequireDefault(_animator);
 
-var _instance = require('../../lib/instance');
+var _aptivator = require('../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _displayer = require('../../lib/displayer');
 
@@ -41,12 +41,12 @@ exports.default = function (stateParams) {
           switch (_context.prev = _context.next) {
             case 0:
               stateParams.flags.displayed = true;
-              _instance2.default.once(eventHandle, function () {
+              _aptivator2.default.once(eventHandle, function () {
                 return resolve(stateParams);
               });
 
               query = { flags: { pending: true, rendered: true, displayed: false, canceled: false } };
-              renderingStates = _instance2.default.history.find(query);
+              renderingStates = _aptivator2.default.history.find(query);
 
               if (!renderingStates.length) {
                 _context.next = 6;
@@ -58,23 +58,24 @@ exports.default = function (stateParams) {
             case 6:
 
               query = { flags: { pending: true, displayed: true, canceled: false } };
-              renderedStates = _instance2.default.history.find(query);
+              renderedStates = _aptivator2.default.history.find(query);
               stateNames = _lodash2.default.map(renderedStates, function (stateParams) {
                 var stateName = stateParams.stateName,
-                    rootViews = stateParams.rootViews;
+                    rootViews = stateParams.rootViews,
+                    beginningStateName = stateParams.beginningStateName;
 
                 _lodash2.default.each(rootViews, function (rootView) {
                   return (0, _displayer2.default)(rootView);
                 });
                 delete stateParams.rootViews;
-                return stateName;
+                return [beginningStateName, stateName];
               });
               _context.next = 11;
               return (0, _animator2.default)(stateNames, 'enter');
 
             case 11:
 
-              _instance2.default.trigger(eventHandle);
+              _aptivator2.default.trigger(eventHandle);
 
             case 12:
             case 'end':

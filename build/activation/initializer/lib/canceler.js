@@ -9,9 +9,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../../../lib/instance');
+var _aptivator = require('../../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,7 +47,7 @@ function canceler(stateParams) {
 
   if (flags.rendered) {
     _lodash2.default.extend(flags, { active: true });
-    var promise = _instance2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
+    var promise = _aptivator2.default.deactivate({ name: stateName }).catch(_lodash2.default.noop);
     promises.push(promise);
   }
 

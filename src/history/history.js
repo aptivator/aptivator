@@ -1,5 +1,5 @@
 import _           from 'lodash';
-import aptivator   from '../lib/instance';
+import aptivator   from '../lib/aptivator';
 import vars        from '../lib/vars';
 
 let {history} = vars.states;

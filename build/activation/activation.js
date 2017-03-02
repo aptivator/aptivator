@@ -4,9 +4,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../lib/instance');
+var _aptivator = require('../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _canceler = require('./canceler/canceler');
 
@@ -71,7 +71,7 @@ processes = processes.map(function (process) {
   };
 });
 
-_instance2.default.activate = function (stateParams) {
+_aptivator2.default.activate = function (stateParams) {
   var promise = (0, _starter2.default)(stateParams);
   _lodash2.default.each(processes, function (process) {
     return promise = promise.then(process);

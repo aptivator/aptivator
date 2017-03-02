@@ -1,5 +1,5 @@
 import _                      from 'lodash';
-import aptivator              from '../lib/instance';
+import aptivator              from '../lib/aptivator';
 import storageActionGenerator from './lib/storage-action-generator';
 
 aptivator.m = new Map();

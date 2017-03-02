@@ -20,9 +20,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../../lib/instance');
+var _aptivator = require('../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _serialStateDeactivator = require('./lib/serial-state-deactivator');
 
@@ -55,12 +55,12 @@ exports.default = function (stateParams) {
               _eventHandle = eventHandles.transient;
 
 
-              _instance2.default.once(_eventHandle, function () {
+              _aptivator2.default.once(_eventHandle, function () {
                 return resolve(stateParams);
               });
 
               _query = { flags: { pending: true, transient: true, loading: false, canceled: false, prerendered: false } };
-              loadingTransients = _instance2.default.history.find(_query);
+              loadingTransients = _aptivator2.default.history.find(_query);
 
               if (!loadingTransients.length) {
                 _context.next = 9;
@@ -72,7 +72,7 @@ exports.default = function (stateParams) {
             case 9:
 
               _query = { flags: { transient: true, pending: true, loading: true, canceled: false, parallel: false } };
-              serialTransients = _instance2.default.history.findOne(_query);
+              serialTransients = _aptivator2.default.history.findOne(_query);
 
               if (!serialTransients) {
                 _context.next = 14;
@@ -83,18 +83,18 @@ exports.default = function (stateParams) {
               return (0, _serialStateDeactivator2.default)();
 
             case 14:
-              return _context.abrupt('return', _instance2.default.trigger(_eventHandle));
+              return _context.abrupt('return', _aptivator2.default.trigger(_eventHandle));
 
             case 15:
               eventHandle = eventHandles.regular;
 
 
-              _instance2.default.once(eventHandle, function () {
+              _aptivator2.default.once(eventHandle, function () {
                 return resolve(stateParams);
               });
 
               query = { flags: { pending: true, transient: false, prerendered: false, canceled: false } };
-              loadingRegulars = _instance2.default.history.find(query);
+              loadingRegulars = _aptivator2.default.history.find(query);
 
               if (!loadingRegulars.length) {
                 _context.next = 21;
@@ -106,7 +106,7 @@ exports.default = function (stateParams) {
             case 21:
 
               query = { flags: { pending: true, transient: false, canceled: false, loading: true } };
-              loadedRegulars = _instance2.default.history.find(query);
+              loadedRegulars = _aptivator2.default.history.find(query);
               transientStates = loadedRegulars.reduce(function (transientStates, stateParams) {
                 return transientStates.add(stateParams.transientStateParams);
               }, new Set());
@@ -136,7 +136,7 @@ exports.default = function (stateParams) {
 
 
               transientStates.forEach(function (stateParams) {
-                var promise = _instance2.default.deactivate({ name: stateParams.stateName }).catch(_lodash2.default.noop);
+                var promise = _aptivator2.default.deactivate({ name: stateParams.stateName }).catch(_lodash2.default.noop);
                 deactivationPromises.push(promise);
               });
 
@@ -154,7 +154,7 @@ exports.default = function (stateParams) {
 
             case 33:
 
-              _instance2.default.trigger(eventHandle);
+              _aptivator2.default.trigger(eventHandle);
 
             case 34:
             case 'end':

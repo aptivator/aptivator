@@ -8,9 +8,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../../../lib/instance');
+var _aptivator = require('../../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _relations = require('../../../lib/relations');
 
@@ -32,7 +32,8 @@ exports.default = function (stateParams) {
       parallels = stateParams.parallels;
 
   var family = _relations2.default.family(stateName);
-  var transient = flags.transient;
+  var transient = flags.transient,
+      spliced = flags.spliced;
 
 
   _lodash2.default.each(family, function (relation) {
@@ -62,9 +63,9 @@ exports.default = function (stateParams) {
 
       parallels.push(parallelStateParams);
 
-      _lodash2.default.extend(parallelStateParams.flags, { transient: transient });
+      _lodash2.default.extend(parallelStateParams.flags, { transient: transient, spliced: spliced });
 
-      _instance2.default.activate(parallelStateParams).catch(_lodash2.default.noop);
+      _aptivator2.default.activate(parallelStateParams).catch(_lodash2.default.noop);
     });
   });
 };

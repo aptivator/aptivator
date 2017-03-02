@@ -1,4 +1,4 @@
-import aptivator from '../lib/instance';
+import aptivator from '../lib/aptivator';
 import error     from '../lib/error';
 import vars      from '../lib/vars';
 

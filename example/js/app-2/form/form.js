@@ -21,7 +21,7 @@ module.exports = Marionette.ItemView.extend({
   
   weave: function(evt) {
     if(this.weaveToggle) {
-      aptivator.activate({name: 'app-2.form.message', flags: {parallel: true, augment: true, noResolves: true}});
+      aptivator.activate({name: 'app-2.form.message', flags: {parallel: true, spliced: true, noResolves: true}});
       this.weaveToggle = false;
     } else {
       aptivator.deactivate({name: 'app-2.form.message', partial: true});

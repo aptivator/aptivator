@@ -8,6 +8,6 @@ import './activation/activation';
 import './deactivation/deactivation';
 import './destruction/destruction';
 
-import instance from './lib/instance';
+import aptivator from './lib/aptivator';
 
-module.exports = instance;
+module.exports = aptivator;

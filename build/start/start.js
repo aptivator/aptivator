@@ -16,9 +16,9 @@ var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
 
-var _instance = require('../lib/instance');
+var _aptivator = require('../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _error = require('../lib/error');
 
@@ -41,7 +41,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var queue = _vars2.default.states.queue;
 
 
-_instance2.default.start = function () {
+_aptivator2.default.start = function () {
   return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     var defaultState, missingParents;
     return _regenerator2.default.wrap(function _callee$(_context) {
@@ -71,7 +71,7 @@ _instance2.default.start = function () {
             */
 
             if (!_fragment2.default.get() && defaultState) {
-              _instance2.default.activate({ stateName: defaultState, direct: { running: true } }).catch(_lodash2.default.noop);
+              _aptivator2.default.activate({ stateName: defaultState, direct: { running: true, spliced: true } }).catch(_lodash2.default.noop);
             }
 
           case 4:

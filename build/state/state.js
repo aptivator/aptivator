@@ -20,9 +20,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _instance = require('../lib/instance');
+var _aptivator = require('../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _error = require('../lib/error');
 
@@ -59,7 +59,7 @@ var registry = states.registry,
     queue = states.queue;
 
 
-_instance2.default.state = function (stateName, stateConfigs) {
+_aptivator2.default.state = function (stateName, stateConfigs) {
   return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     var transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods;
     return _regenerator2.default.wrap(function _callee$(_context) {
@@ -104,7 +104,7 @@ _instance2.default.state = function (stateName, stateConfigs) {
             }
 
             _lodash2.default.each(eventMethods, function (eventsConfigs, eventMethod) {
-              _instance2.default[eventMethod](_lodash2.default.mapValues(eventsConfigs, function (eventConfigs) {
+              _aptivator2.default[eventMethod](_lodash2.default.mapValues(eventsConfigs, function (eventConfigs) {
                 return (0, _defineProperty3.default)({}, stateName, eventConfigs);
               }));
             });
@@ -120,11 +120,11 @@ _instance2.default.state = function (stateName, stateConfigs) {
             registry[stateName] = stateConfigs;
 
             _lodash2.default.each(substates, function (stateConfigs, subStateName) {
-              _instance2.default.state(stateName + '.' + subStateName, stateConfigs);
+              _aptivator2.default.state(stateName + '.' + subStateName, stateConfigs);
             });
 
             if (queue.length) {
-              _instance2.default.state.apply(_instance2.default, (0, _toConsumableArray3.default)(queue.pop()));
+              _aptivator2.default.state.apply(_aptivator2.default, (0, _toConsumableArray3.default)(queue.pop()));
             }
 
           case 18:

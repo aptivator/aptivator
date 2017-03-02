@@ -1,4 +1,4 @@
-import aptivator    from '../lib/instance';
+import aptivator    from '../lib/aptivator';
 import error        from '../lib/error';
 import hookResulter from '../lib/hook-resulter';
 

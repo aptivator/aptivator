@@ -7,7 +7,7 @@ import elementAssembler from './element-assembler';
 let {spaceSplitter, states} = vars;
 let {activationRecords, activationSequences, registry} = states;
 
-export default function animationsAssembler(stateName, animationType, animations, fromStateName) {
+export default function animationsAssembler(stateName, stateNames, animationType, animations, fromStateName) {
   let {animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
   let {active, instance} = activationRecords[uniqueAddress];
@@ -131,7 +131,7 @@ export default function animationsAssembler(stateName, animationType, animations
   
   if(!fromStateName) {
     _.each(_.omit(animationSettings, 'self'), (animationSettings, toStateName) => {
-      animationsAssembler(toStateName, animationType, animations, stateName);
+      animationsAssembler(toStateName, stateNames, animationType, animations, stateName);
     });
   }
 }

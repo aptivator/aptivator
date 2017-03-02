@@ -1,5 +1,5 @@
 import _                        from 'lodash';
-import aptivator                from '../lib/instance';
+import aptivator                from '../lib/aptivator';
 import error_                   from '../lib/error';
 import relations                from '../lib/relations';
 import vars                     from '../lib/vars';

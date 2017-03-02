@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _instance = require('../../lib/instance');
+var _aptivator = require('../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _hookResulter = require('../../lib/hook-resulter');
 
@@ -28,7 +28,7 @@ exports.default = function (hookName) {
         resolve(stateParams);
       }
 
-      _instance2.default.trigger({ handle: handle, full: true }, stateParams).then(function (results) {
+      _aptivator2.default.trigger({ handle: handle, full: true }, stateParams).then(function (results) {
         (0, _hookResulter2.default)(hookName, stateParams, results);
 
         if (sync) {

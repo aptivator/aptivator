@@ -20,9 +20,9 @@ var _approximator = require('../../lib/approximator');
 
 var _approximator2 = _interopRequireDefault(_approximator);
 
-var _instance = require('../../lib/instance');
+var _aptivator = require('../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _vars = require('../../lib/vars');
 
@@ -37,9 +37,6 @@ var _transientInitializer = require('./lib/transient-initializer');
 var _transientInitializer2 = _interopRequireDefault(_transientInitializer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var activating = _vars2.default.activating;
-
 
 var eventHandles = _lodash2.default.mapValues({ transient: '', regular: '' }, function (value, key) {
   return 'aptivator-goto-preprocessor-' + key;
@@ -60,19 +57,19 @@ exports.default = function (stateParams) {
               _lodash2.default.extend(stateParams.flags, { initialized: true });
 
               if (!transient) {
-                _context.next = 11;
+                _context.next = 10;
                 break;
               }
 
               _eventHandle = eventHandles.transient;
 
 
-              _instance2.default.once(_eventHandle, function () {
+              _aptivator2.default.once(_eventHandle, function () {
                 return resolve(stateParams);
               });
 
               _query = { flags: { transient: true, initialized: false } };
-              startingTransients = _instance2.default.history.find(_query);
+              startingTransients = _aptivator2.default.history.find(_query);
 
               if (!startingTransients.length) {
                 _context.next = 9;
@@ -82,53 +79,41 @@ exports.default = function (stateParams) {
               return _context.abrupt('return');
 
             case 9:
+              return _context.abrupt('return', _aptivator2.default.trigger(_eventHandle));
 
-              _lodash2.default.remove(activating.transient, function () {
-                return true;
-              });
-              return _context.abrupt('return', _instance2.default.trigger(_eventHandle));
-
-            case 11:
+            case 10:
               eventHandle = eventHandles.regular;
 
 
-              _instance2.default.once(eventHandle, function () {
+              _aptivator2.default.once(eventHandle, function () {
                 return resolve(stateParams);
               });
 
-              startingStates = _instance2.default.history.find({ flags: { initialized: false, transient: false } });
+              startingStates = _aptivator2.default.history.find({ flags: { initialized: false, transient: false } });
 
               if (!startingStates.length) {
-                _context.next = 16;
+                _context.next = 15;
                 break;
               }
 
               return _context.abrupt('return');
 
-            case 16:
+            case 15:
               query = { flags: { pending: true, initialized: true, preprocessed: false, canceled: false } };
-              startedStates = _instance2.default.history.find(query);
-              _context.next = 20;
+              startedStates = _aptivator2.default.history.find(query);
+              _context.next = 19;
               return (0, _duplicatesRemover2.default)(startedStates);
 
-            case 20:
+            case 19:
               startedStates = _context.sent;
-
-
-              _lodash2.default.remove(activating.regular, function () {
-                return true;
-              });
-
-              transientStates = _instance2.default.history.find(function (stateParams) {
+              transientStates = _aptivator2.default.history.find(function (stateParams) {
                 var _stateParams$flags = stateParams.flags,
                     active = _stateParams$flags.active,
                     pending = _stateParams$flags.pending,
                     canceled = _stateParams$flags.canceled,
                     transient = _stateParams$flags.transient;
 
-                if (transient && (active || pending) && !canceled) {
-                  return true;
-                }
+                return transient && (active || pending) && !canceled;
               });
 
 
@@ -160,9 +145,9 @@ exports.default = function (stateParams) {
                 stateParams.time = _lodash2.default.now();
               }
 
-              _instance2.default.trigger(eventHandle);
+              _aptivator2.default.trigger(eventHandle);
 
-            case 27:
+            case 25:
             case 'end':
               return _context.stop();
           }

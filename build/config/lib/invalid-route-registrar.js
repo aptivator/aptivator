@@ -12,9 +12,9 @@ var _approximator = require('../../lib/approximator');
 
 var _approximator2 = _interopRequireDefault(_approximator);
 
-var _instance = require('../../lib/instance');
+var _aptivator = require('../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _vars = require('../../lib/vars');
 
@@ -40,6 +40,6 @@ exports.default = function () {
       return alert('Provided route [' + hash + '] is invalid');
     }
 
-    _instance2.default.activate({ stateName: stateName, route: { fragment: hash } }).catch(_lodash2.default.noop);
+    _aptivator2.default.activate({ stateName: stateName, route: { fragment: hash } }).catch(_lodash2.default.noop);
   });
 };

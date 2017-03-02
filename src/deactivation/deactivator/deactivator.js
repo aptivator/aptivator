@@ -1,12 +1,12 @@
 import _            from 'lodash';
 import animator     from '../../animation/animator';
-import aptivator    from '../../lib/instance';
+import aptivator    from '../../lib/aptivator';
 import hookResulter from '../../lib/hook-resulter';
 import relations    from '../../lib/relations';
 import vars         from '../../lib/vars';
 import deactivator  from './lib/deactivator';
 
-let {rootStateName, deactivating} = vars;
+let {rootStateName} = vars;
 let eventHandle = 'aptivator-goto-finish';
 
 export default stateParams => 
@@ -27,38 +27,40 @@ export default stateParams =>
   
     let otherActives = aptivator.history.find(stateParams => {
       let {active, deactivating} = stateParams.flags;
-      if(active && _.isUndefined(deactivating)) {
-        return true;
-      }
+      return active && _.isUndefined(deactivating);
     });
     
     query = {flags: {active: true, deactivating: false}};
     deactivatingStates = aptivator.history.find(query);
 
-    let deactivationRecords = {};
-    let deactivationFinalists = [];
+    let ancestorGroupings = {};
+    let triggerables = [];
     
     _.each(deactivatingStates, stateParams => {
       let {stateName, flags} = stateParams;
       let {partial} = flags;
-      let firstAncestorName = relations.parts(stateName)[0];
+      let ancestor = relations.parts(stateName)[0];
+      let comparator = partial ? stateName : ancestor;
+      let operator = partial ? 'gt' : 'gte';
       let actives = _.filter(otherActives, stateParams => {
-        let {stateName: otherStateName} = stateParams;
-        return otherStateName.startsWith(partial ? stateName : firstAncestorName);
+        let {stateName} = stateParams;
+        if(stateName.startsWith(comparator)) {
+          return _[operator](stateName.length, comparator.length);
+        }
       });
 
       actives.push(stateParams);
-      deactivationFinalists.push(...actives);
+      triggerables.push(...actives);
       _.remove(otherActives, stateParams => actives.includes(stateParams));
       
-      let record = deactivationRecords[firstAncestorName];
+      let grouping = ancestorGroupings[ancestor];
     
-      if(!record) {
-        record = {stateNames: [], min: stateName, max: stateName};
-        deactivationRecords[firstAncestorName] = record;
+      if(!grouping) {
+        grouping = {stateNames: [], min: stateName, max: stateName};
+        ancestorGroupings[ancestor] = grouping;
       }
 
-      let {min, max, stateNames} = record;
+      let {min, max, stateNames} = grouping;
 
       _.each(actives, stateParams => {
         let {stateName, flags} = stateParams;
@@ -66,12 +68,10 @@ export default stateParams =>
         
         stateNames.push(stateName);
         
-        if(!partial) {
-          if(min !== rootStateName) {
+        if(!relations.isRoot(min)) {
+          if(!partial) {
             min = rootStateName;
-          }
-        } else {
-          if(min.length > stateName.length) {
+          } else if(min.length > stateName.length) {
             min = stateName;
           }
         }
@@ -82,20 +82,20 @@ export default stateParams =>
       });
       
       stateNames.sort(relations.hierarchySorter());
-      _.extend(record, {min, max});
+      _.extend(grouping, {min, max});
     });
     
-    let stateNamePairs = _.reduce(deactivationRecords, (pairs, record) => {
-      let {min, stateNames} = record;
+    let stateNamePairs = _.reduce(ancestorGroupings, (pairs, grouping) => {
+      let {min, stateNames} = grouping;
       _.each(stateNames, stateName => pairs.push([min, stateName]));
       return pairs;
     }, []);
     
     let animationPromise = animator(stateNamePairs, 'exit').then(() => {
-      _.each(deactivationRecords, record => {
-        let {min, max, stateNames} = record;
+      _.each(ancestorGroupings, grouping => {
+        let {min, max, stateNames} = grouping;
         
-        if(min === rootStateName) {
+        if(relations.isRoot(min)) {
           return deactivator.full({name: max});
         }
         
@@ -104,16 +104,13 @@ export default stateParams =>
         });
       });
       
-      _.each(deactivationFinalists, stateParams => {
-        let {stateName} = stateParams;
-        aptivator.trigger({handle: `exit:${stateName}`, full: true}, stateParams).then(results => {
-          _.extend(stateParams.flags, {active: false, deactivated: true});
-          hookResulter('exit', stateParams, results);
-        });
+      _.each(triggerables, stateParams => {
+        _.extend(stateParams.flags, {active: false, deactivated: true});
+        let triggerObj = {handle: `exit:${stateParams.stateName}`, full: true, args: [stateParams]};
+        aptivator.trigger(triggerObj).then(results => hookResulter('exit', stateParams, results));
       });
     });
     
     resolve(animationPromise);
-    _.remove(deactivating, () => true);
     aptivator.trigger(eventHandle);
   });

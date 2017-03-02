@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import Backbone                 from 'backbone';
-import aptivator from '../../lib/instance';
-import route_ from '../../lib/route';
-import vars from '../../lib/vars';
+import _         from 'lodash';
+import Backbone  from 'backbone';
+import aptivator from '../../lib/aptivator';
+import route_    from '../../lib/route';
+import vars      from '../../lib/vars';
 
 let {router} = vars;
 

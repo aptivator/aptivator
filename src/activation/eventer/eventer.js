@@ -1,4 +1,4 @@
-import aptivator    from '../../lib/instance';
+import aptivator    from '../../lib/aptivator';
 import hookResulter from '../../lib/hook-resulter';
 
 let syncHookNames = ['start', 'loading'];

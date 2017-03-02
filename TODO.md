@@ -1,9 +1,17 @@
 # TODOs
 
-* in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor
-* optimize deactivation module
-* children states should be able to cancel ancestor parallel states
-* handle parallel states activation when a focal state is activated with augment flag
+* **DONE** in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor (for now it's been solved differently)
+* **DONE** children states should be able to cancel ancestor parallel states (solved differently, for spliced states parallels are activated only if they are inactive)
+* **DONE** remove activating and deactivating and instead use history module (duh...)
+* **DONE** optimize deactivation module
+* **DONE** for spliced states, if ancestor or its parallels are active, then do not activate the states
+* **DONE** change lib/instance to lib/aptivator
+* **DONE** handle parallel states activation when a focal state is activated with augment flag
+* **DONE** change augment flag to splice
+* **DONE** when integrating actionify, apply it and reapply it to newly instantiated views (obviously) (for now, there appears to be no need to integrate the two)
+* **DONE** regarding actionify, do I need to integrate it with aptivator, or the user can just invoke it in the views on an as-needed basis (like that better)
+* **DONE** may need an event to indicate which views are reinstantiated (e.g., instantiated:.main@app-1)
+* **DONE** for above, provide $el in the callback (these were added with actionify/ngify in mind)
 * **DONE** if a state is canceled, then its launched parallel states are canceled also
 * **DONE** regarding parallel states, take a look at parallel transients
 * **DONE** handle duplicate deactivations

@@ -5,11 +5,9 @@ var LoadingView = require('../../../loading/loading');
 aptivator.state('app-2.form.message', {
   animate: {
     enter: {
-      root: null,
       self: 'aptivator-fade-in'
     },
     exit: {
-      root: null,
       self: 'aptivator-fade-out'
     }
   },

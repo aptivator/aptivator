@@ -11,16 +11,9 @@ var _backbone2 = _interopRequireDefault(_backbone);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-  activating: {
-    transient: [],
-    regular: []
-  },
-
   configs: {},
 
   dataParams: {},
-
-  deactivating: [],
 
   eventRegistry: {},
 

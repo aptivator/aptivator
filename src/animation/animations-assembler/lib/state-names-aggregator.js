@@ -4,7 +4,9 @@ import vars      from '../../../lib/vars';
 
 let {rootStateName} = vars;
 
-export default function stateNamesAggregator(stateNames) {
+export default stateNames => {
+  let originals = [];
+  
   stateNames = _.reduce(stateNames, (stateNames, stateNameArr) => {
     if(!_.isArray(stateNameArr)) {
       stateNameArr = [rootStateName, stateNameArr];
@@ -15,14 +17,19 @@ export default function stateNamesAggregator(stateNames) {
     let minIndex = family.indexOf(min);
     
     family = family.slice(minIndex);
-    
+    originals.push(stateName);
     stateNames.push(...family);
     return stateNames;
   }, []);
   
   stateNames = _.uniq(stateNames);
-  stateNames = _.difference(stateNames, [rootStateName]);
-  stateNames.sort(relations.hierarchySorter()).unshift(rootStateName);
   
-  return stateNames;
-}
+  stateNames.sort(relations.hierarchySorter());
+  
+  if(stateNames.includes(rootStateName)) {
+    stateNames = _.difference(stateNames, [rootStateName]);
+    stateNames.unshift(rootStateName);
+  }
+  
+  return _.extend(stateNames, {originals});
+};

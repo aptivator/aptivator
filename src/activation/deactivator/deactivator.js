@@ -1,5 +1,5 @@
 import _                      from 'lodash';
-import aptivator              from '../../lib/instance';
+import aptivator              from '../../lib/aptivator';
 import serialStateDeactivator from './lib/serial-state-deactivator';
 
 let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {

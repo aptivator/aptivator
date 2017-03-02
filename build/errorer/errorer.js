@@ -12,9 +12,9 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _instance = require('../lib/instance');
+var _aptivator = require('../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _error = require('../lib/error');
 
@@ -49,7 +49,7 @@ exports.default = function () {
                   errorHandles.push({ handle: handle, full: true });
                 }
 
-                _instance2.default.trigger(errorHandles, errorType, stateParams).then(function (results) {
+                _aptivator2.default.trigger(errorHandles, errorType, stateParams).then(function (results) {
                   if (stateName) {
                     (0, _hookResulter2.default)(errorType, stateParams, results);
                   }

@@ -12,9 +12,9 @@ var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
 
-var _instance = require('../../lib/instance');
+var _aptivator = require('../../lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 var _route = require('../../lib/route');
 
@@ -47,7 +47,7 @@ exports.default = function (stateConfigs, parentConfigs) {
       }
 
       var route = _route2.default.parts.assemble(stateName, _lodash2.default.compact(routeValues));
-      _instance2.default.activate({ stateName: stateName, route: route }).catch(_lodash2.default.noop);
+      _aptivator2.default.activate({ stateName: stateName, route: route }).catch(_lodash2.default.noop);
     });
   }
 };

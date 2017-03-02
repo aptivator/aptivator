@@ -1,34 +1,35 @@
 import _         from 'lodash';
-import aptivator from '../../lib/instance';
+import aptivator from '../../lib/aptivator';
 import relations from '../../lib/relations';
 import vars      from '../../lib/vars';
 
-let {deactivating, states} = vars;
-let {registry} = states;
+let {registry} = vars.states;
 
 export default async params => {
   let {name, partial} = params;
   let stateConfigs = registry[name];
 
-  if(deactivating.includes(name)) {
+  let query = {stateName: name, flags: {deactivating: true}};
+  let duplicateStateParams = aptivator.history.findOne(query);
+  
+  if(duplicateStateParams) {
     return;
   }
-
+  
   if(!stateConfigs) {
     throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
   }
   
-  let query = {stateName: name, flags: {active: true}};
+  query = {stateName: name, flags: {active: true}};
   let stateParams = aptivator.history.findOne(query);
-  let family = relations.family(name);
+  let {flags} = stateParams;
+  let family = flags.spliced ? [name] : relations.family(name);
   
   if(!stateParams) {
     return;
   }
   
-  deactivating.push(name);
-  
-  _.extend(stateParams.flags, {deactivating: true, partial});
+  _.extend(flags, {deactivating: true, partial});
 
   _.each(family, relation => {
     let stateConfigs = registry[relation];

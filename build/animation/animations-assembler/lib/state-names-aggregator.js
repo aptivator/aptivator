@@ -12,8 +12,6 @@ var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
-exports.default = stateNamesAggregator;
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -29,7 +27,10 @@ var _vars2 = _interopRequireDefault(_vars);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootStateName = _vars2.default.rootStateName;
-function stateNamesAggregator(stateNames) {
+
+exports.default = function (stateNames) {
+  var originals = [];
+
   stateNames = _lodash2.default.reduce(stateNames, function (stateNames, stateNameArr) {
     if (!_lodash2.default.isArray(stateNameArr)) {
       stateNameArr = [rootStateName, stateNameArr];
@@ -44,14 +45,19 @@ function stateNamesAggregator(stateNames) {
     var minIndex = family.indexOf(min);
 
     family = family.slice(minIndex);
-
+    originals.push(stateName);
     stateNames.push.apply(stateNames, (0, _toConsumableArray3.default)(family));
     return stateNames;
   }, []);
 
   stateNames = _lodash2.default.uniq(stateNames);
-  stateNames = _lodash2.default.difference(stateNames, [rootStateName]);
-  stateNames.sort(_relations2.default.hierarchySorter()).unshift(rootStateName);
 
-  return stateNames;
-}
+  stateNames.sort(_relations2.default.hierarchySorter());
+
+  if (stateNames.includes(rootStateName)) {
+    stateNames = _lodash2.default.difference(stateNames, [rootStateName]);
+    stateNames.unshift(rootStateName);
+  }
+
+  return _lodash2.default.extend(stateNames, { originals: originals });
+};

@@ -1,5 +1,5 @@
 import _            from 'lodash';
-import aptivator    from '../lib/instance';
+import aptivator    from '../lib/aptivator';
 import canceler     from './canceler/canceler';
 import eventer      from './eventer/eventer';
 import initializer  from './initializer/initializer';

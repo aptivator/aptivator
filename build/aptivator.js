@@ -18,10 +18,10 @@ require('./deactivation/deactivation');
 
 require('./destruction/destruction');
 
-var _instance = require('./lib/instance');
+var _aptivator = require('./lib/aptivator');
 
-var _instance2 = _interopRequireDefault(_instance);
+var _aptivator2 = _interopRequireDefault(_aptivator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = _instance2.default;
+module.exports = _aptivator2.default;
