@@ -1,5 +1,8 @@
 # TODOs
 
+* **DONE** put back dependencies support
+* **DONE** in partial deactivator, use views of stateConfigs instead of using activationSequence
+* **DONE** polish launching of parallel transient states in parallel-states-starter module
 * **DONE** put back activating and deactivating collections, these are session stores and work as intended unlike using history
 * **DONE** in animator, allow overriding animation settings if there are no other ancestors between the state and the overridden ancestor (for now it's been solved differently)
 * **DONE** children states should be able to cancel ancestor parallel states (solved differently, for spliced states parallels are activated only if they are inactive)

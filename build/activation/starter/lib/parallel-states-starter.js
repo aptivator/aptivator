@@ -37,19 +37,17 @@ exports.default = function (stateParams) {
 
   var family = _relations2.default.family(stateName);
   var transient = flags.transient,
+      noResolves = flags.noResolves,
       spliced = flags.spliced;
 
 
   _lodash2.default.each(family, function (relation) {
     var stateConfigs = registry[relation];
     _lodash2.default.each(stateConfigs.states, function (parallelStateParams) {
-      var _parallelStateParams = parallelStateParams,
-          name = _parallelStateParams.name;
-
       parallelStateParams = _lodash2.default.cloneDeep(parallelStateParams);
-      var _parallelStateParams2 = parallelStateParams,
-          parallelDirect = _parallelStateParams2.direct,
-          parallelRoute = _parallelStateParams2.route;
+      var _parallelStateParams = parallelStateParams,
+          parallelDirect = _parallelStateParams.direct,
+          parallelRoute = _parallelStateParams.route;
 
 
       if (direct && parallelDirect) {
@@ -68,11 +66,11 @@ exports.default = function (stateParams) {
         parallels = stateParams.parallels = [];
       }
 
-      if (transient) {
-        parallelStateParams = (0, _transientInitializer2.default)(name, true);
-      } else {
-        _lodash2.default.extend(parallelStateParams.flags, { transient: transient, spliced: spliced });
+      _lodash2.default.extend(parallelStateParams.flags, { transient: transient, noResolves: noResolves, spliced: spliced });
 
+      if (transient) {
+        parallelStateParams = (0, _transientInitializer2.default)(parallelStateParams, true);
+      } else {
         _aptivator2.default.activate(parallelStateParams).catch(_lodash2.default.noop);
       }
 

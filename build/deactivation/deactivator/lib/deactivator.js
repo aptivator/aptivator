@@ -61,7 +61,7 @@ exports.default = {
     detach = _lodash2.default.isUndefined(detachFocal) && detachFull || detachFocal;
 
     if (stateConfigs.uniqueAddress === uniqueAddress) {
-      _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
+      _lodash2.default.each(stateConfigs.views, function (viewConfigs) {
         var uniqueAddress = viewConfigs.uniqueAddress,
             viewStateName = viewConfigs.stateName;
 

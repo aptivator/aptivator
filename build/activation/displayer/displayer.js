@@ -64,8 +64,10 @@ exports.default = function (stateParams) {
                     rootViews = stateParams.rootViews,
                     beginningStateName = stateParams.beginningStateName;
 
-                _lodash2.default.each(rootViews, function (rootView) {
-                  return (0, _displayer2.default)(rootView);
+                setTimeout(function () {
+                  return _lodash2.default.each(rootViews, function (rootView) {
+                    return (0, _displayer2.default)(rootView);
+                  });
                 });
                 delete stateParams.rootViews;
                 return [beginningStateName, stateName];

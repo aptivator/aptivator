@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var aptivator = require('aptivator');
 var Marionette = require('backbone.marionette');
 var formTpl = require('./form.tpl');
@@ -14,12 +15,23 @@ module.exports = Marionette.ItemView.extend({
   template: formTpl,
   
   events: {
-    'click button': 'weave'
+    'click button': 'weave',
+    'keyup input:eq(1)': 'inputer'
+  },
+  
+  inputer: function(evt) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve($(evt.target).val());
+      });
+    });
   },
   
   weaveToggle: true,
   
   weave: function(evt) {
+    evt.preventDefault();
+    
     if(this.weaveToggle) {
       aptivator.activate({name: 'app-2.form.message', flags: {parallel: true, spliced: true, noResolves: true}});
       this.weaveToggle = false;
@@ -28,6 +40,6 @@ module.exports = Marionette.ItemView.extend({
       this.weaveToggle = true;
     }
     
-    return false;
+    return 'message';
   }  
 });

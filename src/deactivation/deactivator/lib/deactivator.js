@@ -30,7 +30,7 @@ export default {
     detach = _.isUndefined(detachFocal) && detachFull || detachFocal;
   
     if(stateConfigs.uniqueAddress === uniqueAddress) {
-      _.each(activationSequences[stateName], viewConfigs => {
+      _.each(stateConfigs.views, viewConfigs => {
         let {uniqueAddress, stateName: viewStateName} = viewConfigs;
         if(viewStateName === stateName) {
           hider(uniqueAddress, detach);

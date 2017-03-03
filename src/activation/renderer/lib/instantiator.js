@@ -31,6 +31,15 @@ export default (viewConfigs, stateParams) => {
   instance.on('destroy', () => {
     deactivator.partial({name: uniqueAddress, detach: {focal: true, children: true}});
     region.current.delete(uniqueAddress);
+    
+    if(record.dependency) {
+      record.dependency = undefined;
+    }
+    
+    if(record.dependent) {
+      record.dependent = undefined;
+    }
+    
     delete record.instance;
   });
 

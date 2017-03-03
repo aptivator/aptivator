@@ -22,7 +22,7 @@ export default stateParams =>
     
     let stateNames = _.map(renderedStates, stateParams => {
       let {stateName, rootViews, beginningStateName} = stateParams;
-      _.each(rootViews, rootView => displayer(rootView));
+      setTimeout(() => _.each(rootViews, rootView => displayer(rootView)));
       delete stateParams.rootViews;
       return [beginningStateName, stateName];
     });

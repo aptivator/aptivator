@@ -18,18 +18,24 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (stateName) {
-  var immediate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  var transient = _vars2.default.states.registry[stateName].transient;
+exports.default = function (stateName, immediate) {
+  var stateParams = stateName;
 
-  var _ref = _lodash2.default.isObject(transient) ? transient : {},
-      delay = _ref.delay,
-      _ref$parallel = _ref.parallel,
-      parallel = _ref$parallel === undefined ? false : _ref$parallel,
-      _ref$noResolves = _ref.noResolves,
-      noResolves = _ref$noResolves === undefined ? false : _ref$noResolves;
+  if (!_lodash2.default.isObject(stateParams)) {
+    var transient = _vars2.default.states.registry[stateName].transient;
 
-  var stateParams = { stateName: stateName, owners: new Set(), flags: { parallel: parallel, transient: true, noResolves: noResolves } };
+    var _ref = _lodash2.default.isObject(transient) ? transient : {},
+        delay = _ref.delay,
+        _ref$parallel = _ref.parallel,
+        parallel = _ref$parallel === undefined ? false : _ref$parallel,
+        _ref$noResolves = _ref.noResolves,
+        noResolves = _ref$noResolves === undefined ? false : _ref$noResolves;
+
+    stateParams = { stateName: stateName, flags: { parallel: parallel, transient: true, noResolves: noResolves } };
+  }
+
+  _lodash2.default.extend(stateParams, { owners: new Set() });
+
   var transientConfigs = stateParams.transientConfigs = {};
 
   if (immediate) {

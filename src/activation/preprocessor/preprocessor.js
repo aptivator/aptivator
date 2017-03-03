@@ -61,13 +61,23 @@ export default stateParams => {
     let mainCount = 0;
     
     _.each(stateConfigs.views, (viewConfigs, viewHash) => {
-      let {address = viewHash, main, resolves, data, view, template} = viewConfigs;
+      let {address = viewHash, main, resolves, data, view, template, deps} = viewConfigs;
       let fullAddress = fullAddressMaker(address, stateName);
       let [addressSelector, addressStateName] = addresser.parts(fullAddress);
       let uniqueAddress = addresser.uniqueAddress(stateName);
       
       if(reservedHashes.includes(viewHash)) {
         error.throw(`view hashes - ${reservedHashes.join(', ')} - are reserved`, 'preprocessor');
+      }
+      
+      if(deps) {
+        let {connectingViews} = stateConfigs;
+        
+        if(!connectingViews) {
+          connectingViews = stateConfigs.connectingViews = [];
+        }
+        
+        connectingViews.push(viewConfigs);
       }
       
       if(template && !view) {

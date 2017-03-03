@@ -16,10 +16,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _aptivator = require('../../lib/aptivator');
-
-var _aptivator2 = _interopRequireDefault(_aptivator);
-
 var _fragment = require('../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);

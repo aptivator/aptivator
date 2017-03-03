@@ -10,11 +10,11 @@
 * note when activating two serial states simultaneously, the last one will be canceled
 * Sprinkle comments throughout code
 * Tutorial
-
 * start exploring how to write tests
 * start exploring how to rollup and bundle the frameweork for distribution
+* make sure everything works well across various browsers
+
 * add back non-views to states (useful when setting up dependencies), but first implement dependencies
-* put back dependencies support
 
 * when assembling parameters, consider caching some of these to optimize performance
 

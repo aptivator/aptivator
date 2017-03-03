@@ -1,5 +1,4 @@
 import _                     from 'lodash';
-import aptivator             from '../../lib/aptivator';
 import fragment              from '../../lib/fragment';
 import route_                from '../../lib/route';
 import vars                  from '../../lib/vars';

@@ -119,7 +119,8 @@ exports.default = function (stateParams) {
           resolves = viewConfigs.resolves,
           data = viewConfigs.data,
           view = viewConfigs.view,
-          template = viewConfigs.template;
+          template = viewConfigs.template,
+          deps = viewConfigs.deps;
 
       var fullAddress = (0, _fullAddressMaker2.default)(address, stateName);
 
@@ -132,6 +133,17 @@ exports.default = function (stateParams) {
 
       if (reservedHashes.includes(viewHash)) {
         _error2.default.throw('view hashes - ' + reservedHashes.join(', ') + ' - are reserved', 'preprocessor');
+      }
+
+      if (deps) {
+        var connectingViews = stateConfigs.connectingViews;
+
+
+        if (!connectingViews) {
+          connectingViews = stateConfigs.connectingViews = [];
+        }
+
+        connectingViews.push(viewConfigs);
       }
 
       if (template && !view) {

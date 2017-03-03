@@ -55,6 +55,23 @@ aptivator.state('app-2.form', {
     
     '.plus@self': {
       view: PlusView,
+      deps: {
+        views: {
+          '.main': {
+            intercept: {
+              'click button': {
+                storeAs: 'result',
+                receivers: ['handler'],
+                local: true
+              },
+              'inputer': {
+                storeAs: 'input-text',
+                receivers: ['texter']
+              }
+            }
+          }
+        }
+      },
       resolves: {
         something: function(p) {
           return 'something';

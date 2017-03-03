@@ -2,10 +2,17 @@ import _         from 'lodash';
 import aptivator from '../../../lib/aptivator';
 import vars      from '../../../lib/vars';
 
-export default (stateName, immediate = false) => {
-  let {transient} = vars.states.registry[stateName];
-  let {delay, parallel = false, noResolves = false} = _.isObject(transient) ? transient : {};
-  let stateParams = {stateName, owners: new Set(), flags: {parallel, transient: true, noResolves}};
+export default (stateName, immediate) => {
+  let stateParams = stateName;
+  
+  if(!_.isObject(stateParams)) {
+    let {transient} = vars.states.registry[stateName];
+    var {delay, parallel = false, noResolves = false} = _.isObject(transient) ? transient : {};
+    stateParams = {stateName, flags: {parallel, transient: true, noResolves}};
+  }
+  
+  _.extend(stateParams, {owners: new Set()});
+  
   let transientConfigs = stateParams.transientConfigs = {};
   
   if(immediate) {
