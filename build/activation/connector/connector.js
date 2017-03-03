@@ -107,7 +107,11 @@ exports.default = function (stateParams) {
 
           storeAses.push(storeAs);
 
-          var methodHash = (dependency + '-' + intercepted).replace(/\s+/g, '-');
+          var methodHash = (depHash + '-' + intercepted).replace(/\s+/g, '-');
+
+          if (dependency) {
+            overriddenMethods.add(methodHash);
+          }
 
           if (!overriddenMethods.has(methodHash)) {
             (function () {

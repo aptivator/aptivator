@@ -64,7 +64,11 @@ export default stateParams => {
           
           storeAses.push(storeAs);
           
-          let methodHash = `${dependency}-${intercepted}`.replace(/\s+/g, '-');
+          let methodHash = `${depHash}-${intercepted}`.replace(/\s+/g, '-');
+          
+          if(dependency) {
+            overriddenMethods.add(methodHash);
+          }
           
           if(!overriddenMethods.has(methodHash)) {
             let method = events[intercepted] || intercepted;

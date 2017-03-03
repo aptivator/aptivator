@@ -1,5 +1,6 @@
 # TODOs
 
+* **DONE** for connector, make sure that dependencies activation is applied only to dependency or dependent instances that are freshly instantiated
 * **DONE** put back dependencies support
 * **DONE** in partial deactivator, use views of stateConfigs instead of using activationSequence
 * **DONE** polish launching of parallel transient states in parallel-states-starter module
