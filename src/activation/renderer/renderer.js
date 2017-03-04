@@ -15,15 +15,16 @@ export default stateParams => {
   let {spliced} = flags;
 
   _.each(activationSequences[stateParams.stateName], viewConfigs => {
-    if(!viewConfigs.record) {
+    let {record = {}, main, stateName} = viewConfigs;
+    let {ui, active} = record;
+    
+    if(_.isEmpty(record)) {
       renderingPreparer(viewConfigs);
     }
     
-    if(spliced && viewConfigs.record.active) {
+    if(spliced && active) {
       return;
     }
-    
-    let {main, stateName} = viewConfigs;
     
     if(main && _.isUndefined(beginningStateName)) {
       if(relations.isRoot(relations.parent(stateName))) {
@@ -36,7 +37,11 @@ export default stateParams => {
     }
     
     if(cacheAssessor.total(viewConfigs, stateParams)) {
-      return displayer(viewConfigs, stateParams, cacheAssessor);
+      if(ui) {
+        displayer(viewConfigs, stateParams, cacheAssessor);
+      }
+      
+      return;
     }
     
     instantiator(viewConfigs, stateParams);

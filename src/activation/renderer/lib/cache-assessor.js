@@ -7,14 +7,18 @@ let {registry} = states;
 
 export default {
   explicit(viewConfigs) {
-    let {stateName, record, cache: viewCache} = viewConfigs;
+    let {stateName, record, cache: viewCacheFlag} = viewConfigs;
     let {instance} = record;
     let stateConfigs = registry[stateName];
-    let {cache: stateCache} = stateConfigs;
+    let {cache: stateCacheFlag} = stateConfigs;
     let cache;
     
     if(instance) {
-      cache = viewCache || stateCache;
+      if(!_.isUndefined(viewCacheFlag)) {
+        cache = viewCacheFlag;
+      } else if(!_.isUndefined(stateCacheFlag)) {
+        cache = stateCacheFlag;
+      }
     }
 
     return this.explicit.cache = cache;

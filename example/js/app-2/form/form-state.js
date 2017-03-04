@@ -53,6 +53,33 @@ aptivator.state('app-2.form', {
       main: true
     },
     
+    'hidden': {
+      cache: false,
+      view: (function() {
+        function Tracker(params) {
+          console.log('instantiating...', params);
+        }
+        
+        Tracker.prototype.printer = function(data) {
+          console.log('from non-view', data.result);
+        };
+        
+        return Tracker;
+      })(),
+      deps: {
+        views: {
+          '.main': {
+            intercept: {
+              'click button': {
+                storeAs: 'result',
+                receivers: ['printer']
+              }
+            }
+          }
+        }
+      }
+    },
+    
     '.plus@self': {
       view: PlusView,
       deps: {

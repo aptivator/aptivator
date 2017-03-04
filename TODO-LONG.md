@@ -14,8 +14,6 @@
 * start exploring how to rollup and bundle the frameweork for distribution
 * make sure everything works well across various browsers
 
-* add back non-views to states (useful when setting up dependencies), but first implement dependencies
-
 * when assembling parameters, consider caching some of these to optimize performance
 
 * do not forget to put callback support for animator

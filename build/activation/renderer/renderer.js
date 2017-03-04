@@ -46,17 +46,21 @@ exports.default = function (stateParams) {
 
 
   _lodash2.default.each(activationSequences[stateParams.stateName], function (viewConfigs) {
-    if (!viewConfigs.record) {
+    var _viewConfigs$record = viewConfigs.record,
+        record = _viewConfigs$record === undefined ? {} : _viewConfigs$record,
+        main = viewConfigs.main,
+        stateName = viewConfigs.stateName;
+    var ui = record.ui,
+        active = record.active;
+
+
+    if (_lodash2.default.isEmpty(record)) {
       (0, _renderingPreparer2.default)(viewConfigs);
     }
 
-    if (spliced && viewConfigs.record.active) {
+    if (spliced && active) {
       return;
     }
-
-    var main = viewConfigs.main,
-        stateName = viewConfigs.stateName;
-
 
     if (main && _lodash2.default.isUndefined(beginningStateName)) {
       if (_relations2.default.isRoot(_relations2.default.parent(stateName))) {
@@ -69,7 +73,11 @@ exports.default = function (stateParams) {
     }
 
     if (_cacheAssessor2.default.total(viewConfigs, stateParams)) {
-      return (0, _displayer2.default)(viewConfigs, stateParams, _cacheAssessor2.default);
+      if (ui) {
+        (0, _displayer2.default)(viewConfigs, stateParams, _cacheAssessor2.default);
+      }
+
+      return;
     }
 
     (0, _instantiator2.default)(viewConfigs, stateParams);

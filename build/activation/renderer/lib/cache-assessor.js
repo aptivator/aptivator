@@ -25,16 +25,20 @@ exports.default = {
   explicit: function explicit(viewConfigs) {
     var stateName = viewConfigs.stateName,
         record = viewConfigs.record,
-        viewCache = viewConfigs.cache;
+        viewCacheFlag = viewConfigs.cache;
     var instance = record.instance;
 
     var stateConfigs = registry[stateName];
-    var stateCache = stateConfigs.cache;
+    var stateCacheFlag = stateConfigs.cache;
 
     var cache = void 0;
 
     if (instance) {
-      cache = viewCache || stateCache;
+      if (!_lodash2.default.isUndefined(viewCacheFlag)) {
+        cache = viewCacheFlag;
+      } else if (!_lodash2.default.isUndefined(stateCacheFlag)) {
+        cache = stateCacheFlag;
+      }
     }
 
     return this.explicit.cache = cache;

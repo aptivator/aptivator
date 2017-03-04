@@ -1,4 +1,5 @@
 import _                 from 'lodash';
+import Backbone          from 'backbone';
 import displayer         from '../../../lib/displayer';
 import params            from '../../../lib/params';
 import relations         from '../../../lib/relations';
@@ -8,19 +9,24 @@ import viewApi from './view-api';
 
 export default (viewConfigs, stateParams) => {
   let {view, record, region, uniqueAddress, detachHidden, addressStateName} = viewConfigs;
-  let {instance} = record;
+  let {instance, ui} = record;
   
-  if(instance) {
+  if(instance && ui) {
     instance.destroy();
   }
   
   let viewParameters = params.assemble(uniqueAddress, stateParams);
   
   instance = new view(viewParameters);
+  _.extend(record, {instance, active: true});
+  
+  if(!(instance instanceof Backbone.View)) {
+    return _.extend(instance, Backbone.Events);
+  }
+  
+  _.extend(record, {detached: true, detach: detachHidden, ui: true});
   
   region.current.add(uniqueAddress);
-  _.extend(record, {active: true, instance, detached: true, detach: detachHidden});
-  
   let serializeData = instance.serializeData;
   
   instance.serializeData = function(...args) {

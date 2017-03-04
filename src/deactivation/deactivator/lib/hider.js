@@ -6,9 +6,9 @@ let {activationRecords} = vars.states;
 
 export default (uniqueAddress, detach) => {
   let activationRecord = activationRecords[uniqueAddress];
-  let {instance} = activationRecord || {};
+  let {instance, ui} = activationRecord || {};
   
-  if(!(activationRecord && instance)) {
+  if(!(ui && activationRecord && instance)) {
     return;
   }
   

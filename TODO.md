@@ -1,5 +1,7 @@
 # TODOs
 
+* remove some of the error messages such as canceled, etc.
+* **DONE** add back non-views to states (useful when setting up dependencies), but first implement dependencies
 * **DONE** for connector, make sure that dependencies activation is applied only to dependency or dependent instances that are freshly instantiated
 * **DONE** put back dependencies support
 * **DONE** in partial deactivator, use views of stateConfigs instead of using activationSequence

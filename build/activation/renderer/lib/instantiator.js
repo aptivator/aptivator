@@ -8,6 +8,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _backbone = require('backbone');
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
 var _displayer = require('../../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
@@ -41,20 +45,26 @@ exports.default = function (viewConfigs, stateParams) {
       uniqueAddress = viewConfigs.uniqueAddress,
       detachHidden = viewConfigs.detachHidden,
       addressStateName = viewConfigs.addressStateName;
-  var instance = record.instance;
+  var instance = record.instance,
+      ui = record.ui;
 
 
-  if (instance) {
+  if (instance && ui) {
     instance.destroy();
   }
 
   var viewParameters = _params2.default.assemble(uniqueAddress, stateParams);
 
   instance = new view(viewParameters);
+  _lodash2.default.extend(record, { instance: instance, active: true });
+
+  if (!(instance instanceof _backbone2.default.View)) {
+    return _lodash2.default.extend(instance, _backbone2.default.Events);
+  }
+
+  _lodash2.default.extend(record, { detached: true, detach: detachHidden, ui: true });
 
   region.current.add(uniqueAddress);
-  _lodash2.default.extend(record, { active: true, instance: instance, detached: true, detach: detachHidden });
-
   var serializeData = instance.serializeData;
 
   instance.serializeData = function () {

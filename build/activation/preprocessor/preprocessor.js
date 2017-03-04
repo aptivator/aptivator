@@ -16,9 +16,13 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _backbone = require('backbone.marionette');
+var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
+
+var _backbone3 = require('backbone.marionette');
+
+var _backbone4 = _interopRequireDefault(_backbone3);
 
 var _addresser = require('../../lib/addresser');
 
@@ -147,7 +151,7 @@ exports.default = function (stateParams) {
       }
 
       if (template && !view) {
-        view = _backbone2.default.ItemView.extend({ template: template });
+        view = _backbone4.default.ItemView.extend({ template: template });
       }
 
       if (addressStateName !== parentStateName) {

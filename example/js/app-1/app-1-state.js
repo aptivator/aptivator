@@ -24,6 +24,25 @@ route = {
 };
 */
 
+aptivator.state('app-3', {
+  route: {
+    values: ['one', 22],
+    rx: '',
+    path: 'app-3(/:one)(/:two)',
+    params: {
+      one: {
+        value: 'one',
+        assert: /^\d+$/
+      },
+      
+      two: {
+        value: 22,
+        assert: [22, 23, 24, 25]
+      }
+    }
+  }
+});
+
 aptivator.on({
   start: function dmitriy(stateParams) {
     return 'dmitriy';

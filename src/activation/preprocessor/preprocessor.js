@@ -1,4 +1,5 @@
 import _                    from 'lodash';
+import Backbone             from 'backbone';
 import Marionette           from 'backbone.marionette';
 import addresser            from '../../lib/addresser';
 import error                from '../../lib/error';
@@ -110,7 +111,7 @@ export default stateParams => {
       }
       
       _.extend(viewConfigs, {address, main, view, uniqueAddress, fullAddress, stateName, viewHash, addressSelector, addressStateName});
-      
+    
       viewNormalizer(viewConfigs);
       activationSequence.push(viewConfigs);
       preprocess(addressStateName, activationSequence);

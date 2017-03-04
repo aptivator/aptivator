@@ -24,9 +24,10 @@ exports.default = function (uniqueAddress, detach) {
   var activationRecord = activationRecords[uniqueAddress];
 
   var _ref = activationRecord || {},
-      instance = _ref.instance;
+      instance = _ref.instance,
+      ui = _ref.ui;
 
-  if (!(activationRecord && instance)) {
+  if (!(ui && activationRecord && instance)) {
     return;
   }
 
