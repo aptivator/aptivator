@@ -48,7 +48,7 @@ var _rootStateConfigurator = require('./lib/root-state-configurator');
 
 var _rootStateConfigurator2 = _interopRequireDefault(_rootStateConfigurator);
 
-var _routeConfigurator = require('./lib/route-configurator');
+var _routeConfigurator = require('./route-configurator/route-configurator');
 
 var _routeConfigurator2 = _interopRequireDefault(_routeConfigurator);
 

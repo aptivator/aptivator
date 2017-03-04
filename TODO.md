@@ -1,5 +1,6 @@
 # TODOs
 
+* break route lib module into smaller files and group them in a route directory
 * remove some of the error messages such as canceled, etc.
 * **DONE** add back non-views to states (useful when setting up dependencies), but first implement dependencies
 * **DONE** for connector, make sure that dependencies activation is applied only to dependency or dependent instances that are freshly instantiated

@@ -14,8 +14,6 @@ export default stateParams => {
     let {views: stateViews, connectingViews} = registry[relation];
     let overriddenMethods = new Set();
     
-    console.log(registry[relation]);
-    
     _.each(connectingViews, viewConfigs => {
       let storeAses = [];
       let params = {};

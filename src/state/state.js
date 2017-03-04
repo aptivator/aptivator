@@ -6,7 +6,7 @@ import vars                     from '../lib/vars';
 import otherStateRegistrar      from './lib/other-state-registrar';
 import parallelStatesNormalizer from './lib/parallel-states-normalizer';
 import rootStateConfigurator    from './lib/root-state-configurator';
-import routeConfigurator        from './lib/route-configurator';
+import routeConfigurator        from './route-configurator/route-configurator';
 
 let {states} = vars;
 let {registry, queue} = states;

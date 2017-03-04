@@ -2,46 +2,6 @@ var _ = require('lodash');
 var aptivator = require('aptivator');
 var App1View = require('./app-1');
 var HeaderView = require('../header/header');
-/*
-route = {
-  path: 'app-1(/:one)(/:two)',
-  params: {
-    one: {
-      value: 'one',
-      assert: ['test', 'another']
-    },
-    
-    two: {
-      value: 22,
-      assert: /^d+$/i
-    }
-  },
-  values: ['one', 22],
-  assert: {
-    one: ['test', 'another'],
-    two: /^d+$/i
-  }
-};
-*/
-
-aptivator.state('app-3', {
-  route: {
-    values: ['one', 22],
-    rx: '',
-    path: 'app-3(/:one)(/:two)',
-    params: {
-      one: {
-        value: 'one',
-        assert: /^\d+$/
-      },
-      
-      two: {
-        value: 22,
-        assert: [22, 23, 24, 25]
-      }
-    }
-  }
-});
 
 aptivator.on({
   start: function dmitriy(stateParams) {
@@ -67,7 +27,9 @@ aptivator.on({
 aptivator.state('app-1', {
   substates: {
     'another': {
-      route: 'another',
+      route: {
+        path: 'another/:three'
+      },
       views: {
         '.main@root': {
           view: HeaderView,
@@ -76,8 +38,18 @@ aptivator.state('app-1', {
       }
     }
   },
-  route: 'app-1/:one/:two',
-  routeValues: ['one', 22],
+  route: {
+    path: 'app-1/:one/:two',
+    params: {
+      one: {
+        value: 'one'
+      },
+      two: {
+        value: 22,
+        asserter: /^one|two$/
+      }
+    }
+  },
   states: [{
     name: 'header',
     direct: true,

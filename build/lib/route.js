@@ -18,8 +18,6 @@ var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var routePartCleanRx = /[\(\/\:\)\*]/g;
-
 exports.default = {
   parts: {
     assemble: function assemble(stateName, routeValues) {
@@ -53,79 +51,6 @@ exports.default = {
 
       var fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
       return _lodash2.default.extend(routeObj, { fragment: fragment, stateName: stateName });
-    },
-
-
-    parse: function parse(parentConfigs, stateConfigs) {
-      var routeParts = stateConfigs.route.match(/\/?[^\/]+/g);
-      var hasSplat = parentConfigs.hasSplat,
-          hasOptional = parentConfigs.hasOptional;
-
-      var paramNames = (parentConfigs.routeParts || []).reduce(function (paramNames, routePart) {
-        if (!_lodash2.default.isUndefined(routePart.required)) {
-          paramNames.push(routePart.name);
-        }
-        return paramNames;
-      }, []);
-
-      routeParts = !routeParts ? [] : routeParts.map(function (routePart) {
-        routePart = routePart.replace(/[\s\/]+/g, '');
-
-        if (!routePart.match(/[\*\:]/g)) {
-          if (hasSplat || hasOptional) {
-            _error2.default.throw('cannot declare a regular route part after a splat or optional parameter', 'routing');
-          }
-
-          return {
-            name: routePart.replace(routePartCleanRx, '')
-          };
-        }
-
-        var paramParts = routePart.split(':');
-        var isSplat = routePart.startsWith('*');
-        var required = !routePart.includes(')');
-
-        if (isSplat) {
-          if (hasSplat) {
-            _error2.default.throw('route can have only one splat', 'routing');
-          }
-
-          if (hasOptional) {
-            _error2.default.throw('splat cannot be declared after an optional parameter', 'routing');
-          }
-        }
-
-        if (required) {
-          if (hasSplat || hasOptional) {
-            _error2.default.throw('required parameter cannot be declared after a splat or optional parameter', 'routing');
-          }
-        }
-
-        if (!required && hasSplat) {
-          _error2.default.throw('optional parameter cannot be declared after a splat', 'routing');
-        }
-
-        if (!hasSplat && isSplat) {
-          stateConfigs.hasSplat = hasSplat = isSplat;
-        }
-
-        if (!hasOptional && !required) {
-          stateConfigs.hasOptional = hasOptional = !required;
-        }
-
-        var prefix = isSplat ? '' : paramParts[0];
-        var name = isSplat ? routePart.slice(1) : paramParts[1].replace(routePartCleanRx, '');
-
-        if (paramNames.includes(name)) {
-          _error2.default.throw('parameter [' + name + '] has already been declared', 'routing');
-        }
-
-        paramNames.push(name);
-
-        return { required: required, prefix: prefix, name: name };
-      });
-
-      return (parentConfigs.routeParts || []).concat(routeParts);
     }
   }
 };

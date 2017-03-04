@@ -2,8 +2,6 @@ import _        from 'lodash';
 import error    from './error';
 import vars     from './vars';
 
-const routePartCleanRx = /[\(\/\:\)\*]/g;
-
 export default {
   parts: {
     assemble(stateName, routeValues) {
@@ -37,76 +35,6 @@ export default {
       
       let fragment = fragmentParts.join('/').replace(/(\/+)/g, '/');
       return _.extend(routeObj, {fragment, stateName});
-    },
-    
-    parse: (parentConfigs, stateConfigs) => {
-      let routeParts = stateConfigs.route.match(/\/?[^\/]+/g);
-      let {hasSplat, hasOptional} = parentConfigs;
-      let paramNames = (parentConfigs.routeParts || []).reduce((paramNames, routePart) => {
-        if(!_.isUndefined(routePart.required)) {
-          paramNames.push(routePart.name);
-        }
-        return paramNames;
-      }, []);
-      
-      routeParts = !routeParts ? [] : routeParts.map(routePart => {
-        routePart = routePart.replace(/[\s\/]+/g, '');
-        
-        if(!routePart.match(/[\*\:]/g)) {
-          if(hasSplat || hasOptional) {
-            error.throw('cannot declare a regular route part after a splat or optional parameter', 'routing');
-          }
-          
-          return {
-            name: routePart.replace(routePartCleanRx, '')
-          };
-        }
-        
-        let paramParts = routePart.split(':');
-        let isSplat = routePart.startsWith('*');
-        let required = !routePart.includes(')');
-        
-        if(isSplat) {
-          if(hasSplat) {
-            error.throw('route can have only one splat', 'routing');
-          }
-          
-          if(hasOptional) {
-            error.throw('splat cannot be declared after an optional parameter', 'routing');
-          }
-        }
-        
-        if(required) {
-          if(hasSplat || hasOptional) {
-            error.throw('required parameter cannot be declared after a splat or optional parameter', 'routing');
-          }
-        }
-        
-        if(!required && hasSplat) {
-          error.throw('optional parameter cannot be declared after a splat', 'routing');
-        }
-        
-        if(!hasSplat && isSplat) {
-          stateConfigs.hasSplat = hasSplat = isSplat;
-        }
-        
-        if(!hasOptional && !required) {
-          stateConfigs.hasOptional = hasOptional = !required;
-        }
-        
-        let prefix = isSplat ? '' : paramParts[0];
-        let name = isSplat ? routePart.slice(1) : paramParts[1].replace(routePartCleanRx, '');
-        
-        if(paramNames.includes(name)) {
-          error.throw(`parameter [${name}] has already been declared`, 'routing');
-        }
-        
-        paramNames.push(name);
-        
-        return {required, prefix, name};
-      });
-      
-      return (parentConfigs.routeParts || []).concat(routeParts);
     }
   }
 };
