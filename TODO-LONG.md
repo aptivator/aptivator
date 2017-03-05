@@ -22,7 +22,4 @@
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory
 
-* what about adding routeEnums to make sure that some route values are constrained
-* what about also adding routeRxs to set a regex pattern for a parameter
-* think about grouping state's route configs in one object
-* regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
+

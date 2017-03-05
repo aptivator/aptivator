@@ -13,6 +13,7 @@ export default stateParams => {
   _.each(family, relation => {
     let {views: stateViews, connectingViews} = registry[relation];
     let overriddenMethods = new Set();
+    let dependencyRecords = [];
     
     _.each(connectingViews, viewConfigs => {
       let storeAses = [];
@@ -39,6 +40,8 @@ export default stateParams => {
         if(dependent && dependency) {
           return;
         }
+        
+        console.log(viewConfigs, depHash);
         
         let {receivers, intercept} = depConfigs;
         
@@ -69,7 +72,7 @@ export default stateParams => {
           if(dependency) {
             overriddenMethods.add(methodHash);
           }
-          
+
           if(!overriddenMethods.has(methodHash)) {
             let method = events[intercepted] || intercepted;
             let callback = dependencyInstance[method];
@@ -109,7 +112,7 @@ export default stateParams => {
             }
             
             _.each(receivers, receiver => {
-              receiver = _.partial(receiver, storeAs, _);
+              receiver = _.partial(receiver, _, storeAs);
               instance.listenTo(dependencyInstance, methodHash, receiver);
             });
           });
@@ -118,12 +121,13 @@ export default stateParams => {
         });
         
         delete depReceivers[depHash];
-        
-        _.extend(record, {dependency: true});
+        dependencyRecords.push(record);
       });
       
       _.extend(record, {dependent: true});
     });
+    
+    _.each(dependencyRecords, record => _.extend(record, {dependency: true}));
   });
   
   return stateParams;  

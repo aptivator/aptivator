@@ -22,7 +22,7 @@ module.exports = Marionette.ItemView.extend({
   inputer: function(evt) {
     return new Promise(function(resolve, reject) {
       setTimeout(function() {
-        resolve($(evt.target).val());
+        reject($(evt.target).val());
       });
     });
   },

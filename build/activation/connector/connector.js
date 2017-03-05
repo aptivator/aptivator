@@ -39,6 +39,7 @@ exports.default = function (stateParams) {
         connectingViews = _registry$relation.connectingViews;
 
     var overriddenMethods = new Set();
+    var dependencyRecords = [];
 
     _lodash2.default.each(connectingViews, function (viewConfigs) {
       var storeAses = [];
@@ -76,6 +77,8 @@ exports.default = function (stateParams) {
         if (dependent && dependency) {
           return;
         }
+
+        console.log(viewConfigs, depHash);
 
         var receivers = depConfigs.receivers,
             intercept = depConfigs.intercept;
@@ -160,7 +163,7 @@ exports.default = function (stateParams) {
             }
 
             _lodash2.default.each(receivers, function (receiver) {
-              receiver = _lodash2.default.partial(receiver, storeAs, _lodash2.default);
+              receiver = _lodash2.default.partial(receiver, _lodash2.default, storeAs);
               instance.listenTo(dependencyInstance, methodHash, receiver);
             });
           });
@@ -169,11 +172,14 @@ exports.default = function (stateParams) {
         });
 
         delete depReceivers[depHash];
-
-        _lodash2.default.extend(record, { dependency: true });
+        dependencyRecords.push(record);
       });
 
       _lodash2.default.extend(record, { dependent: true });
+    });
+
+    _lodash2.default.each(dependencyRecords, function (record) {
+      return _lodash2.default.extend(record, { dependency: true });
     });
   });
 

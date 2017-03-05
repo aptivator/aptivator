@@ -1,6 +1,12 @@
 # TODOs
 
 * remove some of the error messages such as canceled, etc.
+* **DONE** connect errorer module to receiver-class in connected
+* **DONE** what about adding routeEnums to make sure that some route values are constrained (for now regexes can be used to handle enums)
+* **DONE** what about also adding routeRxs to set a regex pattern for a parameter
+* **DONE** think about grouping state's route configs in one object
+* **DONE** regarding above, make changes to fragment module's functions that use routeRx if RegExps support is added for route params
+* **DONE** simplify receiver-class (connector module) by removing resolver and rejector
 * **DONE** break route lib module into smaller files and group them in a route directory
 * **DONE** spin login to launch an error state into its own file/module
 * **DONE** add back non-views to states (useful when setting up dependencies), but first implement dependencies
