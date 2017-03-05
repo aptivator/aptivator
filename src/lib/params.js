@@ -1,8 +1,8 @@
-import _            from 'lodash';
-import addresser    from './addresser';
-import relations    from './relations';
-import route_       from './route';
-import vars         from './vars';
+import _              from 'lodash';
+import addresser      from './addresser';
+import relations      from './relations';
+import routeAssembler from './route/route-assembler';
+import vars           from './vars';
 
 let {dataParams, resolveParams} = vars;
 
@@ -15,22 +15,23 @@ export default {
     let targetEntityName = _.nth(family, -1);
     let targetStateName = addresser.stateName(targetEntityName);
     let targetStateConfigs = vars.states.registry[targetStateName];
-    let {error} = targetStateConfigs;
+    let {error, route: routeConfigs} = targetStateConfigs;
     
-    if(route && targetStateConfigs.route) {
-      let {routeParts} = targetStateConfigs;
-      if(routeParts.length) {
-        let routeParamNames = routeParts.reduce((names, routeParamConfigs) => {
-          if(!_.isUndefined(routeParamConfigs.required)) {
-            names.push(routeParamConfigs.name);
-          }
-          return names;
-        }, []);
+    if(route && !_.isEmpty(routeConfigs)) {
+      let {parts} = routeConfigs;
+      let names = _.reduce(parts, (names, part) => {
+        let {name, required} = part;
         
-        let routeValues = _.values(_.pick(route.params, routeParamNames));
-        
-        _.extend(params, {route: route_.parts.assemble(targetStateName, routeValues)});
-        params.route.fragment = route.fragment;
+        if(!_.isUndefined(required)) {
+          names.push(name);
+        }
+        return names;
+      }, []);
+      
+      let values = _.values(_.pick(route.params, names));
+      
+      if(values.length) {
+        _.extend(params, {route: routeAssembler(targetStateName, values)});
       }
     }
     

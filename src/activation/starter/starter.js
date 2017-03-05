@@ -1,6 +1,6 @@
 import _                     from 'lodash';
 import fragment              from '../../lib/fragment';
-import route_                from '../../lib/route';
+import routeAssembler        from '../../lib/route/route-assembler';
 import vars                  from '../../lib/vars';
 import historyAdder          from '../../history/history-adder';
 import defaultFlags          from './lib/default-flags';
@@ -36,12 +36,16 @@ export default async stateParams => {
     delete stateParams.name;
   }
   
-  if(stateConfigs.route && !route) {
+  let {route: routeConfigs} = stateConfigs;
+  
+  if(!_.isEmpty(routeConfigs) && !route) {
+    let {values} = routeConfigs;
+    
     if(!routeValues) {
-      routeValues = stateConfigs.routeValues;
+      routeValues = values;
     }
     
-    route = route_.parts.assemble(name, routeValues);
+    route = routeAssembler(name, routeValues);
     
     if(!(silent || parallel)) {
       fragment.set(route.fragment);

@@ -2,10 +2,6 @@ var aptivator = require('aptivator');
 var MainView = require('./main/main');
 
 aptivator.state('root', {
-  route: {
-    path: ''
-  },
-  routeEnum: {},
   view: MainView,
   animate: {
     enter: {

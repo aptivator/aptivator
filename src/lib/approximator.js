@@ -12,12 +12,13 @@ export default {
     
     for(let stateName in registry) {
       let stateConfigs = registry[stateName];
+      let {route} = stateConfigs;
       
-      if(!stateConfigs.route) {
+      if(!route) {
         continue;
       }
       
-      if(stateConfigs.routeRx.test(hash)) {
+      if(route.rx.test(hash)) {
         return stateName;
       }
     }

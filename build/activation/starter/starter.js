@@ -20,9 +20,9 @@ var _fragment = require('../../lib/fragment');
 
 var _fragment2 = _interopRequireDefault(_fragment);
 
-var _route = require('../../lib/route');
+var _routeAssembler = require('../../lib/route/route-assembler');
 
-var _route2 = _interopRequireDefault(_route);
+var _routeAssembler2 = _interopRequireDefault(_routeAssembler);
 
 var _vars = require('../../lib/vars');
 
@@ -48,7 +48,7 @@ var registry = states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
-    var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, transient, stateConfigs, tracker;
+    var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, transient, stateConfigs, tracker, routeConfigs, values;
 
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -89,12 +89,18 @@ exports.default = function () {
               delete stateParams.name;
             }
 
-            if (stateConfigs.route && !route) {
+            routeConfigs = stateConfigs.route;
+
+
+            if (!_lodash2.default.isEmpty(routeConfigs) && !route) {
+              values = routeConfigs.values;
+
+
               if (!routeValues) {
-                routeValues = stateConfigs.routeValues;
+                routeValues = values;
               }
 
-              route = _route2.default.parts.assemble(name, routeValues);
+              route = (0, _routeAssembler2.default)(name, routeValues);
 
               if (!(silent || parallel)) {
                 _fragment2.default.set(route.fragment);
@@ -109,7 +115,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 16:
+          case 17:
           case 'end':
             return _context.stop();
         }

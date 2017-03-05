@@ -16,9 +16,9 @@ var _aptivator = require('../../lib/aptivator');
 
 var _aptivator2 = _interopRequireDefault(_aptivator);
 
-var _route = require('../../lib/route');
+var _routeAssembler = require('../../lib/route/route-assembler');
 
-var _route2 = _interopRequireDefault(_route);
+var _routeAssembler2 = _interopRequireDefault(_routeAssembler);
 
 var _vars = require('../../lib/vars');
 
@@ -42,33 +42,41 @@ exports.default = function (stateConfigs, parentConfigs) {
       route = stateConfigs.route;
   var _parentConfigs$route = parentConfigs.route,
       parentRoute = _parentConfigs$route === undefined ? {} : _parentConfigs$route;
-  var _route$path = route.path,
+
+
+  if (_lodash2.default.isString(route)) {
+    route = { path: route };
+    _lodash2.default.extend(stateConfigs, { route: route });
+  }
+
+  var _route = route,
+      _route$path = _route.path,
       path = _route$path === undefined ? '' : _route$path;
   var _parentRoute$path = parentRoute.path,
       parentPath = _parentRoute$path === undefined ? '' : _parentRoute$path;
 
+  path = (parentPath && parentPath + '/') + path;
 
-  if (path && !abstract) {
-    path = (parentPath && parentPath + '/') + path;
+  if (path) {
     var rx = _backbone2.default.Router.prototype._routeToRegExp(path);
   }
 
   (0, _routeParser2.default)(route, parentRoute);
-
   (0, _valuesAssertersAssembler2.default)(route, parentRoute);
-
   _lodash2.default.extend(route, { path: path, rx: rx });
 
-  console.log(route);
-
-  if (rx) {
+  if (!abstract) {
     router.route(rx, stateName, function () {
       for (var _len = arguments.length, routeValues = Array(_len), _key = 0; _key < _len; _key++) {
         routeValues[_key] = arguments[_key];
       }
 
-      var route = _route2.default.parts.assemble(stateName, _lodash2.default.compact(routeValues));
-      _aptivator2.default.activate({ stateName: stateName, route: route }).catch(_lodash2.default.noop);
+      try {
+        var _route2 = (0, _routeAssembler2.default)(stateName, _lodash2.default.compact(routeValues), true);
+        _aptivator2.default.activate({ stateName: stateName, route: _route2 }).catch(_lodash2.default.noop);
+      } catch (e) {
+        console.error(e);
+      }
     });
   }
 };

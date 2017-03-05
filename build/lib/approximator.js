@@ -24,12 +24,14 @@ exports.default = {
 
     for (var stateName in registry) {
       var stateConfigs = registry[stateName];
+      var route = stateConfigs.route;
 
-      if (!stateConfigs.route) {
+
+      if (!route) {
         continue;
       }
 
-      if (stateConfigs.routeRx.test(hash)) {
+      if (route.rx.test(hash)) {
         return stateName;
       }
     }

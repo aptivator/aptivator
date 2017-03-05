@@ -16,9 +16,9 @@ var _relations = require('./relations');
 
 var _relations2 = _interopRequireDefault(_relations);
 
-var _route = require('./route');
+var _routeAssembler = require('./route/route-assembler');
 
-var _route2 = _interopRequireDefault(_route);
+var _routeAssembler2 = _interopRequireDefault(_routeAssembler);
 
 var _vars = require('./vars');
 
@@ -43,24 +43,28 @@ exports.default = {
     var targetEntityName = _lodash2.default.nth(family, -1);
     var targetStateName = _addresser2.default.stateName(targetEntityName);
     var targetStateConfigs = _vars2.default.states.registry[targetStateName];
-    var error = targetStateConfigs.error;
+    var error = targetStateConfigs.error,
+        routeConfigs = targetStateConfigs.route;
 
 
-    if (route && targetStateConfigs.route) {
-      var routeParts = targetStateConfigs.routeParts;
+    if (route && !_lodash2.default.isEmpty(routeConfigs)) {
+      var parts = routeConfigs.parts;
 
-      if (routeParts.length) {
-        var routeParamNames = routeParts.reduce(function (names, routeParamConfigs) {
-          if (!_lodash2.default.isUndefined(routeParamConfigs.required)) {
-            names.push(routeParamConfigs.name);
-          }
-          return names;
-        }, []);
+      var names = _lodash2.default.reduce(parts, function (names, part) {
+        var name = part.name,
+            required = part.required;
 
-        var routeValues = _lodash2.default.values(_lodash2.default.pick(route.params, routeParamNames));
 
-        _lodash2.default.extend(params, { route: _route2.default.parts.assemble(targetStateName, routeValues) });
-        params.route.fragment = route.fragment;
+        if (!_lodash2.default.isUndefined(required)) {
+          names.push(name);
+        }
+        return names;
+      }, []);
+
+      var values = _lodash2.default.values(_lodash2.default.pick(route.params, names));
+
+      if (values.length) {
+        _lodash2.default.extend(params, { route: (0, _routeAssembler2.default)(targetStateName, values) });
       }
     }
 

@@ -45,8 +45,8 @@ aptivator.state('app-1', {
         value: 'one'
       },
       two: {
-        value: 22,
-        asserter: /^one|two$/
+        value: 'one',
+        asserter: /^one|two|test$/
       }
     }
   },

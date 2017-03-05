@@ -8,6 +8,7 @@
 * note that best practice is for root state is to be blank and be a template placeholder for other states
 * root state must have a singular view (not a template).  Within a view an el property designates the element where app will be placed
 * note when activating two serial states simultaneously, the last one will be canceled
+* note that for class assignment on the view element itself will require using View instead of just a template
 * note when writing animations, forwards option can be very helpful
 * Sprinkle comments throughout code
 * Tutorial
@@ -15,7 +16,7 @@
 * start exploring how to rollup and bundle the frameweork for distribution
 * make sure everything works well across various browsers (this is a concern for animation, the app changes flicker in some browsers)
 
-* when assembling parameters, consider caching some of these to optimize performance
+* when assembling parameters, consider caching some of these to optimize performance (perhaps memoization??)
 
 * do not forget to put callback support for animator
 * parent state that does not have a view, just resolves and data

@@ -8,8 +8,14 @@ var aptivator = require('aptivator');
 var App2View = require('./app-2');
 
 aptivator.state('app-2', {
-  route: 'app-2/:one',
-  routeValues: ['1'],
+  route: {
+    path: 'app-2/:one',
+    params: {
+      one: {
+        value: '1'
+      }
+    }
+  },
   abstract: true,
   resolves: {
     murmansk: function() {

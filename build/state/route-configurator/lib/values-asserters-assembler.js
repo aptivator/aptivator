@@ -63,7 +63,8 @@ exports.default = function (route, parentRoute) {
   }
 
   _lodash2.default.extend(route, {
-    values: parentValues.concat(values), allValues: allValues,
+    allValues: allValues,
+    values: parentValues.concat(values),
     asserters: parentAsserters.concat(asserters)
   });
 };

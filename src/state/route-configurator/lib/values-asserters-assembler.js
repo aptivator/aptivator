@@ -36,7 +36,8 @@ export default (route, parentRoute) => {
   }
   
   _.extend(route, {
-    values: parentValues.concat(values), allValues,
+    allValues,
+    values: parentValues.concat(values),
     asserters: parentAsserters.concat(asserters)
   });
 };
