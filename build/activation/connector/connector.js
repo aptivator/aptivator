@@ -28,6 +28,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var registry = _vars2.default.states.registry;
 
+var moduleName = 'connector';
+
 exports.default = function (stateParams) {
   var stateName = stateParams.stateName;
 
@@ -71,14 +73,12 @@ exports.default = function (stateParams) {
 
 
         if (_lodash2.default.isEmpty(record)) {
-          _error2.default.throw('dependency [' + depHash + '] view does not exist', 'connector');
+          _error2.default.throw('dependency [' + depHash + '] view does not exist', moduleName);
         }
 
         if (dependent && dependency) {
           return;
         }
-
-        console.log(viewConfigs, depHash);
 
         var receivers = depConfigs.receivers,
             intercept = depConfigs.intercept;
@@ -97,7 +97,7 @@ exports.default = function (stateParams) {
 
 
           if (!storeAs) {
-            _error2.default.throw('[storeAs] property should be defined for every intercepted method', 'connector');
+            _error2.default.throw('[storeAs] property should be defined for every intercepted method', moduleName);
           }
 
           if (storeAses.includes(storeAs)) {
@@ -105,7 +105,7 @@ exports.default = function (stateParams) {
           }
 
           if (!events[intercepted] && !dependencyInstance[intercepted]) {
-            _error2.default.throw('event or method [' + intercepted + '] is not included in the [' + depHash + '] dependency', 'connector');
+            _error2.default.throw('event or method [' + intercepted + '] is not included in the [' + depHash + '] dependency', moduleName);
           }
 
           storeAses.push(storeAs);

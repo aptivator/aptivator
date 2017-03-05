@@ -5,6 +5,7 @@ import vars               from '../../lib/vars';
 import receiversGenerator from  './lib/receivers-generator';
 
 let {registry} = vars.states;
+let moduleName = 'connector';
 
 export default stateParams => {
   let {stateName} = stateParams;
@@ -34,14 +35,12 @@ export default stateParams => {
         let {events = {}, delegateEvents} = dependencyInstance;
         
         if(_.isEmpty(record)) {
-          error.throw(`dependency [${depHash}] view does not exist`, 'connector');
+          error.throw(`dependency [${depHash}] view does not exist`, moduleName);
         }
         
         if(dependent && dependency) {
           return;
         }
-        
-        console.log(viewConfigs, depHash);
         
         let {receivers, intercept} = depConfigs;
         
@@ -54,7 +53,7 @@ export default stateParams => {
           let {storeAs, debounce, receivers, local} = interceptConfigs;
           
           if(!storeAs) {
-            error.throw(`[storeAs] property should be defined for every intercepted method`, 'connector');
+            error.throw(`[storeAs] property should be defined for every intercepted method`, moduleName);
           }
           
           if(storeAses.includes(storeAs)) {
@@ -62,7 +61,7 @@ export default stateParams => {
           }
           
           if(!events[intercepted] && !dependencyInstance[intercepted]) {
-            error.throw(`event or method [${intercepted}] is not included in the [${depHash}] dependency`, 'connector');
+            error.throw(`event or method [${intercepted}] is not included in the [${depHash}] dependency`, moduleName);
           }
           
           storeAses.push(storeAs);

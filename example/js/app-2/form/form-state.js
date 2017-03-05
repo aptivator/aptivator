@@ -56,9 +56,7 @@ aptivator.state('app-2.form', {
     'hidden': {
       cache: false,
       view: (function() {
-        function Tracker(params) {
-          console.log('instantiating...', params);
-        }
+        function Tracker(params) {}
         
         Tracker.prototype.printer = function(data) {
           console.log('from non-view', data.result);
