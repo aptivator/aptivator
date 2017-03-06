@@ -35,7 +35,7 @@ exports.default = function (hookName) {
           return resolve(stateParams);
         }
       }, function (e) {
-        return reject({ errorType: e, stateParams: stateParams });
+        return reject({ type: e, stateParams: stateParams });
       });
     });
   };

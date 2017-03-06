@@ -16,7 +16,7 @@ export default async stateParams => {
   let tracker = activating[transient ? 'transient' : 'regular'];
   
   if(!stateConfigs) {
-    throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
+    throw {type: 'undeclared', message: `state [${name}] does not exist`};
   }
   
   if((parallel || transient) && tracker.includes(name)) {

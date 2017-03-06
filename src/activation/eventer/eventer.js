@@ -20,5 +20,5 @@ export default hookName =>
         if(sync) {
           return resolve(stateParams);
         }
-      }, e => reject({errorType: e, stateParams}));
+      }, e => reject({type: e, stateParams}));
     });

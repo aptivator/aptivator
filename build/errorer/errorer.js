@@ -34,24 +34,24 @@ exports.default = function () {
           case 0:
             if (!(e instanceof Error)) {
               (function () {
-                var errorType = e.errorType,
-                    errorMessage = e.errorMessage,
+                var type = e.type,
+                    message = e.message,
                     _e$stateParams = e.stateParams,
                     stateParams = _e$stateParams === undefined ? {} : _e$stateParams;
                 var stateName = stateParams.stateName;
 
                 var eventName = 'error';
-                var errorHandles = [eventName + ':' + errorType];
-                var errorToPrint = _error2.default.message('' + errorType + (errorMessage ? ': ' + errorMessage : ''), 'errorer');
+                var errorHandles = [eventName + ':' + type];
+                var errorToPrint = _error2.default.message('' + type + (message ? ': ' + message : ''), 'errorer');
 
                 if (stateName) {
-                  var handle = eventName + ':' + stateName + ':' + errorType;
+                  var handle = eventName + ':' + stateName + ':' + type;
                   errorHandles.push({ handle: handle, full: true });
                 }
 
-                _aptivator2.default.trigger(errorHandles, errorType, stateParams).then(function (results) {
+                _aptivator2.default.trigger(errorHandles, type, stateParams).then(function (results) {
                   if (stateName) {
-                    (0, _hookResulter2.default)(errorType, stateParams, results);
+                    (0, _hookResulter2.default)(type, stateParams, results);
                   }
                 });
 

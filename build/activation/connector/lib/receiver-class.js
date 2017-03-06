@@ -69,7 +69,7 @@ var _class = function () {
 
         method(data);
       }).catch(function (e) {
-        return (0, _errorer2.default)({ errorType: e });
+        return (0, _errorer2.default)({ type: e });
       }).catch(_lodash2.default.noop);
     }
   }]);

@@ -2,7 +2,7 @@
 
 * move interactive module from example to aptivator
 * in deactivator, prevent going to hider if view instance is not of a ui type
-* remove some of the error messages such as canceled, etc.
+* **DONE** remove some of the error messages such as canceled, etc. (i.e., remove error triggers and instead print to console)
 * **DONE** connect errorer module to receiver-class in connected
 * **DONE** what about adding routeEnums to make sure that some route values are constrained (for now regexes can be used to handle enums)
 * **DONE** what about also adding routeRxs to set a regex pattern for a parameter

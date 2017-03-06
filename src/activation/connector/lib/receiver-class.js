@@ -31,6 +31,6 @@ export default class {
       }
       
       method(data);       
-    }).catch(e => errorer({errorType: e})).catch(_.noop);
+    }).catch(e => errorer({type: e})).catch(_.noop);
   }
 }

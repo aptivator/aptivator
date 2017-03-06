@@ -57,7 +57,7 @@ exports.default = function () {
               break;
             }
 
-            throw { errorType: 'undeclared', errorMessage: 'state [' + name + '] does not exist' };
+            throw { type: 'undeclared', message: 'state [' + name + '] does not exist' };
 
           case 6:
             query = { stateName: name, flags: { active: true } };

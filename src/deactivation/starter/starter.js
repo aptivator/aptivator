@@ -15,7 +15,7 @@ export default async params => {
   }
   
   if(!stateConfigs) {
-    throw {errorType: 'undeclared', errorMessage: `state [${name}] does not exist`};
+    throw {type: 'undeclared', message: `state [${name}] does not exist`};
   }
   
   let query = {stateName: name, flags: {active: true}};

@@ -4,20 +4,20 @@ import hookResulter from '../lib/hook-resulter';
 
 export default async e => {
   if(!(e instanceof Error)) {
-    let {errorType, errorMessage, stateParams = {}} = e;
+    let {type, message, stateParams = {}} = e;
     let {stateName} = stateParams;
     let eventName = 'error';
-    let errorHandles = [`${eventName}:${errorType}`];
-    let errorToPrint = error.message(`${errorType}${errorMessage ? ': ' + errorMessage : ''}`, 'errorer');
+    let errorHandles = [`${eventName}:${type}`];
+    let errorToPrint = error.message(`${type}${message ? ': ' + message : ''}`, 'errorer');
     
     if(stateName) {
-      let handle = `${eventName}:${stateName}:${errorType}`;
+      let handle = `${eventName}:${stateName}:${type}`;
       errorHandles.push({handle, full: true});
     }
     
-    aptivator.trigger(errorHandles, errorType, stateParams).then(results => {
+    aptivator.trigger(errorHandles, type, stateParams).then(results => {
       if(stateName) {
-        hookResulter(errorType, stateParams, results);
+        hookResulter(type, stateParams, results);
       }
     });
     
