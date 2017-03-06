@@ -1,7 +1,3 @@
-import _            from 'lodash';
-import approximator from './approximator';
-import aptivator    from './aptivator';
-
 export default {
   message(errorMessage, moduleName) {
     return `aptivator: ${moduleName && moduleName + ': ' || ''}${errorMessage}`;

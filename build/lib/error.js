@@ -3,21 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _approximator = require('./approximator');
-
-var _approximator2 = _interopRequireDefault(_approximator);
-
-var _aptivator = require('./aptivator');
-
-var _aptivator2 = _interopRequireDefault(_aptivator);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 exports.default = {
   message: function message(errorMessage, moduleName) {
     return 'aptivator: ' + (moduleName && moduleName + ': ' || '') + errorMessage;

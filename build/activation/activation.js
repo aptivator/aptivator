@@ -66,7 +66,10 @@ processes = processes.map(function (process) {
       return;
     }
 
-    (0, _canceler2.default)(stateParams);
+    if ((0, _canceler2.default)(stateParams)) {
+      return;
+    }
+
     return process(stateParams);
   };
 });

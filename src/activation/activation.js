@@ -34,7 +34,10 @@ processes = processes.map(process => {
       return;
     }
     
-    canceler(stateParams);
+    if(canceler(stateParams)) {
+      return;
+    }
+    
     return process(stateParams);
   };
 });
