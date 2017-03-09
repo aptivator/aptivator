@@ -1,45 +1,40 @@
 import _             from 'lodash';
 import addresser     from '../../../lib/addresser';
+import relations     from '../../../lib/relations';
 import vars          from '../../../lib/vars';
 import hider         from './hider';
 
-let {activationRecords, activationSequences, registry} = vars.states;
+let {activationRecords, activationSequences} = vars.states;
 
 export default {
   full(params) {
     let stateName = addresser.stateName(params.name);
-    let activationSequence = activationSequences[stateName];
-    
-    _.each(activationSequence, viewConfigs => {
-      this.partial({name: viewConfigs.uniqueAddress});
+    let family = relations.family(stateName).slice(1);
+    _.each(family, stateName => {
+      this.partial({name: stateName});
     });
   },
   
   partial(params) {
+    let stateName = addresser.stateName(params.name);
+    _.each(activationSequences[stateName], viewConfigs => {
+      this.focal({name: viewConfigs.uniqueAddress});
+    });
+  },
+  
+  focal(params) {
     let {name, detach = {}} = params;
-    let uniqueAddress = name.includes('@') ? name : registry[name].uniqueAddress;
-    let stateName = addresser.stateName(uniqueAddress);
-    let stateConfigs = registry[stateName];
-    let activationRecord = activationRecords[uniqueAddress] || {};
+    let activationRecord = activationRecords[name];
     let {focal: detachFocal, children: detachChildren, full: detachFull} = detach;
     detach = _.isUndefined(detachFocal) && detachFull || detachFocal;
   
-    console.log(stateName, activationSequences[stateName]);
-  
-    if(stateConfigs.uniqueAddress === uniqueAddress) {
-      _.each(stateConfigs.views, viewConfigs => {
-        let {stateName: viewStateName, record} = viewConfigs;
-        if(viewStateName === stateName && record.ui) {
-          hider(record, detach);
-        }
-      });
-    }
+    hider(activationRecord, detach);
     
     detach = {focal: detachChildren, full: detachFull};
     
     _.each(activationRecord.regions, regionObj => {
       regionObj.current.forEach(uniqueAddress => {
-        this.partial({name: uniqueAddress, detach: _.clone(detach)});
+        this.focal({name: uniqueAddress, detach: _.clone(detach)});
       });
     });    
   }

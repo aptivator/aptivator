@@ -41,46 +41,50 @@ var activationSequences = states.activationSequences;
 exports.default = function (stateParams) {
   stateParams.flags.rendered = true;
   var flags = stateParams.flags,
-      beginningStateName = stateParams.beginningStateName;
+      beginningStateName = stateParams.beginningStateName,
+      stateName = stateParams.stateName;
   var spliced = flags.spliced;
 
+  var family = _relations2.default.family(stateName).slice(1);
 
-  _lodash2.default.each(activationSequences[stateParams.stateName], function (viewConfigs) {
-    var _viewConfigs$record = viewConfigs.record,
-        record = _viewConfigs$record === undefined ? {} : _viewConfigs$record,
-        main = viewConfigs.main,
-        stateName = viewConfigs.stateName;
-    var ui = record.ui,
-        active = record.active;
+  _lodash2.default.each(family, function (stateName) {
+    _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
+      var _viewConfigs$record = viewConfigs.record,
+          record = _viewConfigs$record === undefined ? {} : _viewConfigs$record,
+          main = viewConfigs.main,
+          stateName = viewConfigs.stateName;
+      var ui = record.ui,
+          active = record.active;
 
 
-    if (_lodash2.default.isEmpty(record)) {
-      (0, _renderingPreparer2.default)(viewConfigs);
-    }
-
-    if (spliced && active) {
-      return;
-    }
-
-    if (main && _lodash2.default.isUndefined(beginningStateName)) {
-      if (_relations2.default.isRoot(_relations2.default.parent(stateName))) {
-        beginningStateName = rootStateName;
-      } else {
-        beginningStateName = stateName;
+      if (_lodash2.default.isEmpty(record)) {
+        (0, _renderingPreparer2.default)(viewConfigs);
       }
 
-      _lodash2.default.extend(stateParams, { beginningStateName: beginningStateName });
-    }
-
-    if (_cacheAssessor2.default.total(viewConfigs, stateParams)) {
-      if (ui) {
-        (0, _displayer2.default)(viewConfigs, stateParams, _cacheAssessor2.default);
+      if (spliced && active) {
+        return;
       }
 
-      return;
-    }
+      if (main && _lodash2.default.isUndefined(beginningStateName)) {
+        if (_relations2.default.isRoot(_relations2.default.parent(stateName))) {
+          beginningStateName = rootStateName;
+        } else {
+          beginningStateName = stateName;
+        }
 
-    (0, _instantiator2.default)(viewConfigs, stateParams);
+        _lodash2.default.extend(stateParams, { beginningStateName: beginningStateName });
+      }
+
+      if (_cacheAssessor2.default.total(viewConfigs, stateParams)) {
+        if (ui) {
+          (0, _displayer2.default)(viewConfigs, stateParams, _cacheAssessor2.default);
+        }
+
+        return;
+      }
+
+      (0, _instantiator2.default)(viewConfigs, stateParams);
+    });
   });
 
   return stateParams;

@@ -77,7 +77,7 @@ exports.default = function (viewConfigs, stateParams) {
   };
 
   instance.on('destroy', function () {
-    _deactivator2.default.partial({ name: uniqueAddress, detach: { focal: true, children: true } });
+    _deactivator2.default.focal({ name: uniqueAddress, detach: { focal: true, children: true } });
     region.current.delete(uniqueAddress);
 
     _lodash2.default.extend(record, { active: false });

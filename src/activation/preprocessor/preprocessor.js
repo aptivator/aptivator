@@ -16,23 +16,14 @@ export default stateParams => {
   let {stateName} = stateParams;
   stateParams.flags.preprocessed = true;
   
-  !function preprocess(stateName, previousSequence) {
+  !function preprocess(stateName) {
     let stateConfigs = registry[stateName];
 
-    let activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
-    
-    if(previousSequence && !_.isEmpty(activationSequence) && !relations.isRoot(stateName)) {
-      return _.each(activationSequence, viewConfigs => {
-        if(!previousSequence.includes(viewConfigs)) {
-          previousSequence.push(viewConfigs);
-        }
-      });
-    }
-    
     if(stateConfigs.resolveAddresses) {
       return;
     }
-    
+
+    let activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     let {data, resolves, view, views, template} = stateConfigs;
     let resolveAddresses = stateConfigs.resolveAddresses = [];
     
@@ -113,17 +104,13 @@ export default stateParams => {
     
       viewNormalizer(viewConfigs);
       activationSequence.push(viewConfigs);
-      preprocess(addressStateName, activationSequence);
+      preprocess(addressStateName);
     });
     
     if(!mainCount && viewCount) {
       error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
 
-    if(previousSequence) {
-      preprocess(stateName, previousSequence);
-    }
-    
     activationSequence.sort(relations.hierarchySorter());
   }(stateName);
   

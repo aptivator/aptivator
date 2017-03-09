@@ -110,10 +110,6 @@ function animationsAssembler(stateName, stateNames, animationType, animations, f
   }
 
   _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
-    if (viewConfigs.stateName !== stateName) {
-      return;
-    }
-
     var uniqueAddress = viewConfigs.uniqueAddress,
         viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,

@@ -11,40 +11,43 @@ let {activationSequences} = states;
 
 export default stateParams => {
   stateParams.flags.rendered = true;
-  let {flags, beginningStateName} = stateParams;
+  let {flags, beginningStateName, stateName} = stateParams;
   let {spliced} = flags;
+  let family = relations.family(stateName).slice(1);
 
-  _.each(activationSequences[stateParams.stateName], viewConfigs => {
-    let {record = {}, main, stateName} = viewConfigs;
-    let {ui, active} = record;
-    
-    if(_.isEmpty(record)) {
-      renderingPreparer(viewConfigs);
-    }
-    
-    if(spliced && active) {
-      return;
-    }
-    
-    if(main && _.isUndefined(beginningStateName)) {
-      if(relations.isRoot(relations.parent(stateName))) {
-        beginningStateName = rootStateName;
-      } else {
-        beginningStateName = stateName;
+  _.each(family, stateName =>{
+    _.each(activationSequences[stateName], viewConfigs => {
+      let {record = {}, main, stateName} = viewConfigs;
+      let {ui, active} = record;
+      
+      if(_.isEmpty(record)) {
+        renderingPreparer(viewConfigs);
       }
       
-      _.extend(stateParams, {beginningStateName});
-    }
-    
-    if(cacheAssessor.total(viewConfigs, stateParams)) {
-      if(ui) {
-        displayer(viewConfigs, stateParams, cacheAssessor);
+      if(spliced && active) {
+        return;
       }
       
-      return;
-    }
-    
-    instantiator(viewConfigs, stateParams);
+      if(main && _.isUndefined(beginningStateName)) {
+        if(relations.isRoot(relations.parent(stateName))) {
+          beginningStateName = rootStateName;
+        } else {
+          beginningStateName = stateName;
+        }
+        
+        _.extend(stateParams, {beginningStateName});
+      }
+      
+      if(cacheAssessor.total(viewConfigs, stateParams)) {
+        if(ui) {
+          displayer(viewConfigs, stateParams, cacheAssessor);
+        }
+        
+        return;
+      }
+      
+      instantiator(viewConfigs, stateParams);      
+    });
   });
 
   return stateParams;

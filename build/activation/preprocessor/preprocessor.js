@@ -16,13 +16,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _backbone = require('backbone');
+var _backbone = require('backbone.marionette');
 
 var _backbone2 = _interopRequireDefault(_backbone);
-
-var _backbone3 = require('backbone.marionette');
-
-var _backbone4 = _interopRequireDefault(_backbone3);
 
 var _addresser = require('../../lib/addresser');
 
@@ -67,23 +63,14 @@ exports.default = function (stateParams) {
 
   stateParams.flags.preprocessed = true;
 
-  !function preprocess(stateName, previousSequence) {
+  !function preprocess(stateName) {
     var stateConfigs = registry[stateName];
-
-    var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
-
-    if (previousSequence && !_lodash2.default.isEmpty(activationSequence) && !_relations2.default.isRoot(stateName)) {
-      return _lodash2.default.each(activationSequence, function (viewConfigs) {
-        if (!previousSequence.includes(viewConfigs)) {
-          previousSequence.push(viewConfigs);
-        }
-      });
-    }
 
     if (stateConfigs.resolveAddresses) {
       return;
     }
 
+    var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     var data = stateConfigs.data,
         resolves = stateConfigs.resolves,
         view = stateConfigs.view,
@@ -151,7 +138,7 @@ exports.default = function (stateParams) {
       }
 
       if (template && !view) {
-        view = _backbone4.default.ItemView.extend({ template: template });
+        view = _backbone2.default.ItemView.extend({ template: template });
       }
 
       if (addressStateName !== parentStateName) {
@@ -183,15 +170,11 @@ exports.default = function (stateParams) {
 
       (0, _viewNormalizer2.default)(viewConfigs);
       activationSequence.push(viewConfigs);
-      preprocess(addressStateName, activationSequence);
+      preprocess(addressStateName);
     });
 
     if (!mainCount && viewCount) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
-    }
-
-    if (previousSequence) {
-      preprocess(stateName, previousSequence);
     }
 
     activationSequence.sort(_relations2.default.hierarchySorter());

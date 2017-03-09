@@ -57,10 +57,6 @@ export default function animationsAssembler(stateName, stateNames, animationType
   }
   
   _.each(activationSequences[stateName], viewConfigs => {
-    if(viewConfigs.stateName !== stateName) {
-      return;
-    }
-    
     let {uniqueAddress, viewHash, animate, addressStateName} = viewConfigs;
     let {$el} = activationRecords[uniqueAddress].instance || {};
     
