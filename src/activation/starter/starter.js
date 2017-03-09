@@ -19,13 +19,6 @@ export default async stateParams => {
   if(!stateConfigs) {
     throw {type: 'undeclared', message: `state [${name}] does not exist`};
   }
-  
-  let query = {stateName: name, flags: {active: true}};
-  let activeStatesParams = aptivator.history.find(query);
-  
-  _.each(activeStatesParams, stateParams => {
-    _.extend(stateParams.flags, {active: false});
-  });
 
   if((parallel || transient) && tracker.includes(name)) {
     return;

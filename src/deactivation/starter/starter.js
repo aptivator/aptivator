@@ -2,6 +2,7 @@ import _         from 'lodash';
 import aptivator from '../../lib/aptivator';
 import relations from '../../lib/relations';
 import vars      from '../../lib/vars';
+import inactor   from './lib/inactor';
 
 let {deactivating, states} = vars;
 let {registry} = states;
@@ -9,6 +10,8 @@ let {registry} = states;
 export default async params => {
   let {name, partial} = params;
   let stateConfigs = registry[name];
+
+  console.log(`deactivating ${name}`);
 
   if(deactivating.includes(name)) {
     return;
@@ -19,11 +22,14 @@ export default async params => {
   }
   
   let query = {stateName: name, flags: {active: true}};
-  let stateParams = aptivator.history.findOne(query);
+  let statesParams = aptivator.history.find(query);
+  let stateParams = statesParams[0];
   
   if(!stateParams) {
     return;
   }
+  
+  inactor(statesParams.slice(1));
   
   let {flags} = stateParams;
   let family = flags.spliced ? [name] : relations.family(name);

@@ -52,7 +52,7 @@ var registry = states.registry;
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(stateParams) {
-    var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, transient, stateConfigs, tracker, query, activeStatesParams, routeConfigs, values;
+    var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, transient, stateConfigs, tracker, routeConfigs, values;
 
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -71,22 +71,14 @@ exports.default = function () {
             throw { type: 'undeclared', message: 'state [' + name + '] does not exist' };
 
           case 6:
-            query = { stateName: name, flags: { active: true } };
-            activeStatesParams = _aptivator2.default.history.find(query);
-
-
-            _lodash2.default.each(activeStatesParams, function (stateParams) {
-              _lodash2.default.extend(stateParams.flags, { active: false });
-            });
-
             if (!((parallel || transient) && tracker.includes(name))) {
-              _context.next = 11;
+              _context.next = 8;
               break;
             }
 
             return _context.abrupt('return');
 
-          case 11:
+          case 8:
 
             tracker.push(name);
 
@@ -127,7 +119,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 20:
+          case 17:
           case 'end':
             return _context.stop();
         }

@@ -79,7 +79,7 @@ export default stateParams =>
     });
     
     let serialRegular = _.find(loadedRegulars, {flags: {parallel: false}});
-    
+
     if(!transientPromises.hasSerial && serialRegular) {
       let promise = serialStateDeactivator();
       deactivationPromises.push(promise);
