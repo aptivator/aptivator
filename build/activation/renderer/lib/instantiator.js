@@ -80,6 +80,8 @@ exports.default = function (viewConfigs, stateParams) {
     _deactivator2.default.partial({ name: uniqueAddress, detach: { focal: true, children: true } });
     region.current.delete(uniqueAddress);
 
+    _lodash2.default.extend(record, { active: false });
+
     if (record.dependency) {
       record.dependency = undefined;
     }

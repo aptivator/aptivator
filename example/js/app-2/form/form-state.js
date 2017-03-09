@@ -68,7 +68,7 @@ aptivator.state('app-2.form', {
         views: {
           '.main': {
             intercept: {
-              'click button': {
+              'click button:eq(0)': {
                 storeAs: 'result',
                 receivers: ['printer']
               }
@@ -84,7 +84,7 @@ aptivator.state('app-2.form', {
         views: {
           '.main': {
             intercept: {
-              'click button': {
+              'click button:eq(0)': {
                 storeAs: 'result',
                 receivers: ['handler'],
                 local: true

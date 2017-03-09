@@ -1,24 +1,19 @@
 import _             from 'lodash';
 import hideClassName from '../../../lib/hide-class';
-import vars          from '../../../lib/vars';
 
-let {activationRecords} = vars.states;
-
-export default (uniqueAddress, detach) => {
-  let activationRecord = activationRecords[uniqueAddress];
-  let {instance, ui} = activationRecord || {};
+export default (record, detach) => {
+  let {active, instance = {}} = record;
+  let {$el} = instance;
   
-  if(!(ui && activationRecord && instance)) {
+  if((!active && !detach) || !$el) {
     return;
   }
   
-  let {$el} = instance;
-  
   if(!detach) {
-    detach = activationRecord.detach;
+    ({detach} = record);
   }
   
-  _.extend(activationRecord, {active: false, detached: detach});
+  _.extend(record, {active: false, detached: detach});
   
   if(detach) {
     return $el.removeClass(hideClassName).detach();  

@@ -38,6 +38,8 @@ export default (viewConfigs, stateParams) => {
     deactivator.partial({name: uniqueAddress, detach: {focal: true, children: true}});
     region.current.delete(uniqueAddress);
     
+    _.extend(record, {active: false});
+    
     if(record.dependency) {
       record.dependency = undefined;
     }

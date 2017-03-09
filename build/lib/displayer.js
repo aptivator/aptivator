@@ -15,14 +15,21 @@ exports.default = function (viewConfigs) {
       parentRecord = viewConfigs.parentRecord,
       addressSelector = viewConfigs.addressSelector;
   var detached = record.detached,
-      instance = record.instance;
+      _record$instance = record.instance,
+      instance = _record$instance === undefined ? {} : _record$instance;
   var $el = instance.$el;
 
 
+  if (!$el) {
+    return;
+  }
+
   record.active = true;
 
+  $el.removeClass(_hideClass2.default);
+
   if (!detached) {
-    return $el.removeClass(_hideClass2.default);
+    return;
   }
 
   var $parentEl = parentRecord.instance.$el;

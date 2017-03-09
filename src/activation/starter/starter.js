@@ -1,4 +1,5 @@
 import _                     from 'lodash';
+import aptivator             from '../../lib/aptivator';
 import fragment              from '../../lib/fragment';
 import routeAssembler        from '../../lib/route/route-assembler';
 import vars                  from '../../lib/vars';
@@ -19,6 +20,13 @@ export default async stateParams => {
     throw {type: 'undeclared', message: `state [${name}] does not exist`};
   }
   
+  let query = {stateName: name, flags: {active: true}};
+  let activeStatesParams = aptivator.history.find(query);
+  
+  _.each(activeStatesParams, stateParams => {
+    _.extend(stateParams.flags, {active: false});
+  });
+
   if((parallel || transient) && tracker.includes(name)) {
     return;
   }

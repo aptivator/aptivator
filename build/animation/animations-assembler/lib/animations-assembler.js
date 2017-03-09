@@ -50,7 +50,8 @@ function animationsAssembler(stateName, stateNames, animationType, animations, f
       animationSettings = _animate$animationTyp === undefined ? {} : _animate$animationTyp;
   var _activationRecords$un = activationRecords[uniqueAddress],
       active = _activationRecords$un.active,
-      instance = _activationRecords$un.instance;
+      _activationRecords$un2 = _activationRecords$un.instance,
+      instance = _activationRecords$un2 === undefined ? {} : _activationRecords$un2;
   var $el = instance.$el;
 
   var stateNameToUse = stateName;
@@ -102,9 +103,11 @@ function animationsAssembler(stateName, stateNames, animationType, animations, f
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
 
-  _lodash2.default.each(self_.elements, function (selectorConfigs, selector) {
-    (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
-  });
+  if ($el) {
+    _lodash2.default.each(self_.elements, function (selectorConfigs, selector) {
+      (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
+    });
+  }
 
   _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
     if (viewConfigs.stateName !== stateName) {
@@ -115,7 +118,13 @@ function animationsAssembler(stateName, stateNames, animationType, animations, f
         viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,
         addressStateName = viewConfigs.addressStateName;
-    var $el = activationRecords[uniqueAddress].instance.$el;
+
+    var _ref2 = activationRecords[uniqueAddress].instance || {},
+        $el = _ref2.$el;
+
+    if (!$el) {
+      return;
+    }
 
     var viewSettingsPath = [stateName, viewHash];
     var viewSettings = _lodash2.default.get(animations, viewSettingsPath);
@@ -150,9 +159,9 @@ function animationsAssembler(stateName, stateNames, animationType, animations, f
       animate = (0, _defineProperty3.default)({}, animationType, animate);
     }
 
-    var _ref2 = animate || {};
+    var _ref3 = animate || {};
 
-    animate = _ref2[animationType];
+    animate = _ref3[animationType];
 
 
     if (fromStateName || _lodash2.default.isUndefined(animate)) {

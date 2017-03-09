@@ -48,11 +48,6 @@ exports.default = {
     var stateName = _addresser2.default.stateName(uniqueAddress);
     var stateConfigs = registry[stateName];
     var activationRecord = activationRecords[uniqueAddress] || {};
-
-    if (!activationRecord.active && !detach.focal) {
-      return;
-    }
-
     var _detach = detach,
         detachFocal = _detach.focal,
         detachChildren = _detach.children,
@@ -60,13 +55,15 @@ exports.default = {
 
     detach = _lodash2.default.isUndefined(detachFocal) && detachFull || detachFocal;
 
+    console.log(stateName, activationSequences[stateName]);
+
     if (stateConfigs.uniqueAddress === uniqueAddress) {
       _lodash2.default.each(stateConfigs.views, function (viewConfigs) {
-        var uniqueAddress = viewConfigs.uniqueAddress,
-            viewStateName = viewConfigs.stateName;
+        var viewStateName = viewConfigs.stateName,
+            record = viewConfigs.record;
 
-        if (viewStateName === stateName) {
-          (0, _hider2.default)(uniqueAddress, detach);
+        if (viewStateName === stateName && record.ui) {
+          (0, _hider2.default)(record, detach);
         }
       });
     }

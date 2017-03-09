@@ -21,23 +21,20 @@ export default {
     let stateName = addresser.stateName(uniqueAddress);
     let stateConfigs = registry[stateName];
     let activationRecord = activationRecords[uniqueAddress] || {};
-    
-    if(!activationRecord.active && !detach.focal) {
-      return;
-    }
-  
     let {focal: detachFocal, children: detachChildren, full: detachFull} = detach;
     detach = _.isUndefined(detachFocal) && detachFull || detachFocal;
   
+    console.log(stateName, activationSequences[stateName]);
+  
     if(stateConfigs.uniqueAddress === uniqueAddress) {
       _.each(stateConfigs.views, viewConfigs => {
-        let {uniqueAddress, stateName: viewStateName} = viewConfigs;
-        if(viewStateName === stateName) {
-          hider(uniqueAddress, detach);
+        let {stateName: viewStateName, record} = viewConfigs;
+        if(viewStateName === stateName && record.ui) {
+          hider(record, detach);
         }
-      });  
+      });
     }
-
+    
     detach = {focal: detachChildren, full: detachFull};
     
     _.each(activationRecord.regions, regionObj => {

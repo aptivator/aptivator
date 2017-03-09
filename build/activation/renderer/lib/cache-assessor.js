@@ -44,7 +44,8 @@ exports.default = {
     return this.explicit.cache = cache;
   },
   implicit: function implicit(viewConfigs, stateParams) {
-    var uniqueAddress = viewConfigs.uniqueAddress;
+    var uniqueAddress = viewConfigs.uniqueAddress,
+        record = viewConfigs.record;
 
     var params = _params2.default.assemble(uniqueAddress, stateParams);
 
@@ -55,7 +56,7 @@ exports.default = {
       delete params.route.stateName;
     }
 
-    if (_lodash2.default.isEqual(paramsMap[uniqueAddress], params)) {
+    if (record.instance && _lodash2.default.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;
     }
 

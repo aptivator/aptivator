@@ -12,33 +12,24 @@ var _hideClass = require('../../../lib/hide-class');
 
 var _hideClass2 = _interopRequireDefault(_hideClass);
 
-var _vars = require('../../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var activationRecords = _vars2.default.states.activationRecords;
-
-exports.default = function (uniqueAddress, detach) {
-  var activationRecord = activationRecords[uniqueAddress];
-
-  var _ref = activationRecord || {},
-      instance = _ref.instance,
-      ui = _ref.ui;
-
-  if (!(ui && activationRecord && instance)) {
-    return;
-  }
-
+exports.default = function (record, detach) {
+  var active = record.active,
+      _record$instance = record.instance,
+      instance = _record$instance === undefined ? {} : _record$instance;
   var $el = instance.$el;
 
 
-  if (!detach) {
-    detach = activationRecord.detach;
+  if (!active && !detach || !$el) {
+    return;
   }
 
-  _lodash2.default.extend(activationRecord, { active: false, detached: detach });
+  if (!detach) {
+    detach = record.detach;
+  }
+
+  _lodash2.default.extend(record, { active: false, detached: detach });
 
   if (detach) {
     return $el.removeClass(_hideClass2.default).detach();

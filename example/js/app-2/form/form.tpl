@@ -15,6 +15,7 @@
     placeholder = "Zip code" autocomplete = "off" bxv-required />
   </div>
   <button class = "btn btn-default" bxv-deps = "{selector: 'input', silent: true, disable: true}">Send info</button>
+  <button class = "btn btn-default">Deactivate</button>
 </form>
 <div class = "plus"></div>
 <div class = "main"></div>

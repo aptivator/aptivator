@@ -25,7 +25,7 @@ export default {
   },
   
   implicit(viewConfigs, stateParams) {
-    let {uniqueAddress} = viewConfigs;
+    let {uniqueAddress, record} = viewConfigs;
     let params = params_.assemble(uniqueAddress, stateParams);
 
     delete params.data; 
@@ -35,7 +35,7 @@ export default {
       delete params.route.stateName;
     }
 
-    if(_.isEqual(paramsMap[uniqueAddress], params)) {
+    if(record.instance && _.isEqual(paramsMap[uniqueAddress], params)) {
       return this.implicit.cache = true;
     }
 

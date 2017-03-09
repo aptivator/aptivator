@@ -15,7 +15,8 @@ module.exports = Marionette.ItemView.extend({
   template: formTpl,
   
   events: {
-    'click button': 'weave',
+    'click button:eq(0)': 'weave',
+    'click button:eq(1)': 'deactivate',
     'keyup input:eq(1)': 'inputer'
   },
   
@@ -27,19 +28,14 @@ module.exports = Marionette.ItemView.extend({
     });
   },
   
-  weaveToggle: true,
+  deactivate: function(evt) {
+    evt.preventDefault();
+    aptivator.deactivate({name: 'app-2.form.message', partial: true});
+  },
   
   weave: function(evt) {
     evt.preventDefault();
-    
-    if(this.weaveToggle) {
-      aptivator.activate({name: 'app-2.form.message', flags: {parallel: true, spliced: true, noResolves: true}});
-      this.weaveToggle = false;
-    } else {
-      aptivator.deactivate({name: 'app-2.form.message', partial: true});
-      this.weaveToggle = true;
-    }
-    
+    aptivator.activate({name: 'app-2.form.message', flags: {parallel: true, spliced: true, noResolves: true}});
     return 'message';
   }  
 });

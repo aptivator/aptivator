@@ -10,7 +10,7 @@ let {activationRecords, activationSequences, registry} = states;
 export default function animationsAssembler(stateName, stateNames, animationType, animations, fromStateName) {
   let {animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
-  let {active, instance} = activationRecords[uniqueAddress];
+  let {active, instance = {}} = activationRecords[uniqueAddress];
   let {$el} = instance;
   let stateNameToUse = stateName;
   
@@ -50,9 +50,11 @@ export default function animationsAssembler(stateName, stateNames, animationType
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
   
-  _.each(self_.elements, (selectorConfigs, selector) => {
-    elementAssembler(selector, selectorConfigs, stateName, $el, animations);
-  });
+  if($el) {
+    _.each(self_.elements, (selectorConfigs, selector) => {
+      elementAssembler(selector, selectorConfigs, stateName, $el, animations);
+    });
+  }
   
   _.each(activationSequences[stateName], viewConfigs => {
     if(viewConfigs.stateName !== stateName) {
@@ -60,7 +62,12 @@ export default function animationsAssembler(stateName, stateNames, animationType
     }
     
     let {uniqueAddress, viewHash, animate, addressStateName} = viewConfigs;
-    let {$el} = activationRecords[uniqueAddress].instance;
+    let {$el} = activationRecords[uniqueAddress].instance || {};
+    
+    if(!$el) {
+      return;
+    }
+    
     let viewSettingsPath = [stateName, viewHash];
     let viewSettings = _.get(animations, viewSettingsPath);
     
