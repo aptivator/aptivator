@@ -11,8 +11,6 @@ export default async params => {
   let {name, partial} = params;
   let stateConfigs = registry[name];
 
-  console.log(`deactivating ${name}`);
-
   if(deactivating.includes(name)) {
     return;
   }

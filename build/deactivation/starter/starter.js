@@ -48,37 +48,34 @@ exports.default = function () {
             name = params.name, partial = params.partial;
             stateConfigs = registry[name];
 
-
-            console.log('deactivating ' + name);
-
             if (!deactivating.includes(name)) {
-              _context.next = 5;
+              _context.next = 4;
               break;
             }
 
             return _context.abrupt('return');
 
-          case 5:
+          case 4:
             if (stateConfigs) {
-              _context.next = 7;
+              _context.next = 6;
               break;
             }
 
             throw { type: 'undeclared', message: 'state [' + name + '] does not exist' };
 
-          case 7:
+          case 6:
             query = { stateName: name, flags: { active: true } };
             statesParams = _aptivator2.default.history.find(query);
             stateParams = statesParams[0];
 
             if (stateParams) {
-              _context.next = 12;
+              _context.next = 11;
               break;
             }
 
             return _context.abrupt('return');
 
-          case 12:
+          case 11:
 
             (0, _inactor2.default)(statesParams.slice(1));
 
@@ -101,7 +98,7 @@ exports.default = function () {
 
             return _context.abrupt('return', stateParams);
 
-          case 19:
+          case 18:
           case 'end':
             return _context.stop();
         }
