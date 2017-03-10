@@ -1,5 +1,6 @@
 import _                from 'lodash';
 import error            from '../../../lib/error';
+import params_          from '../../../lib/params';
 import relations        from '../../../lib/relations';
 import vars             from '../../../lib/vars';
 import elementAssembler from './element-assembler';
@@ -7,14 +8,14 @@ import elementAssembler from './element-assembler';
 let {spaceSplitter, states} = vars;
 let {activationRecords, activationSequences, registry} = states;
 
-export default function animationsAssembler(stateName, animationType, animations, fromStateName) {
+export default function animationsAssembler(stateName, stateParams, animationType, animations, fromStateName) {
   let {animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
   let {active, instance = {}} = activationRecords[uniqueAddress];
   let {$el} = instance;
   let stateNameToUse = stateName;
   
-  if(!_.isObject(animationSettings)) {
+  if(!_.isPlainObject(animationSettings)) {
     animationSettings = {[stateNameToUse]: animationSettings};
   }
   
@@ -34,17 +35,22 @@ export default function animationsAssembler(stateName, animationType, animations
   
   let {[stateNameToUse]: self_} = animationSettings;
   
-  if(!_.isObject(self_)) {
+  if(!_.isPlainObject(self_)) {
     self_ = {base: self_};
   }
 
   let {base} = self_;
 
-  if(!_.isObject(base)) {
+  if(!_.isPlainObject(base)) {
     base = {classes: base};
   }
   
   let {classes: baseClasses, add: baseAdd, remove: baseRemove} = base;
+  
+  if(_.isFunction(baseClasses)) {
+    let params = params_.assemble(stateName, stateParams);
+    baseClasses = baseClasses(params);
+  }
   
   if(_.isString(baseClasses)) {
     baseClasses = baseClasses.trim().split(spaceSplitter);
@@ -52,7 +58,7 @@ export default function animationsAssembler(stateName, animationType, animations
   
   if($el) {
     _.each(self_.elements, (selectorConfigs, selector) => {
-      elementAssembler(selector, selectorConfigs, stateName, $el, animations);
+      elementAssembler({selector, selectorConfigs, stateName, stateParams, $el, animations});
     });
   }
   
@@ -87,7 +93,7 @@ export default function animationsAssembler(stateName, animationType, animations
       }
     }
     
-    if(!_.isObject(animate)) {
+    if(!_.isPlainObject(animate)) {
       animate = {[animationType]: animate};
     }
     
@@ -97,14 +103,19 @@ export default function animationsAssembler(stateName, animationType, animations
       animate = self_[viewHash];
     }
   
-    if(!_.isObject(animate)) {
+    if(!_.isPlainObject(animate)) {
       animate = {classes: animate};
     }
     
     let {classes: viewClasses, add, remove, elements} = animate;
     
+    if(_.isFunction(viewClasses)) {
+      let params = params_.assemble(uniqueAddress, stateParams);
+      viewClasses = viewClasses(params);
+    }
+    
     _.each(elements, (selectorConfigs, selector) => {
-      elementAssembler(selector, selectorConfigs, stateName, $el, animations);
+      elementAssembler({selector, selectorConfigs, uniqueAddress, stateParams, $el, animations});
     });
     
     if(_.isString(viewClasses)) {
@@ -134,7 +145,7 @@ export default function animationsAssembler(stateName, animationType, animations
   
   if(!fromStateName) {
     _.each(_.omit(animationSettings, 'self'), (animationSettings, toStateName) => {
-      animationsAssembler(toStateName, animationType, animations, stateName);
+      animationsAssembler(toStateName, stateParams, animationType, animations, stateName);
     });
   }
 }

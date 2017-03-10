@@ -22,6 +22,10 @@ var _error = require('../../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _params2 = require('../../../lib/params');
+
+var _params3 = _interopRequireDefault(_params2);
+
 var _relations = require('../../../lib/relations');
 
 var _relations2 = _interopRequireDefault(_relations);
@@ -41,7 +45,7 @@ var spaceSplitter = _vars2.default.spaceSplitter,
 var activationRecords = states.activationRecords,
     activationSequences = states.activationSequences,
     registry = states.registry;
-function animationsAssembler(stateName, animationType, animations, fromStateName) {
+function animationsAssembler(stateName, stateParams, animationType, animations, fromStateName) {
   var _registry$stateName = registry[stateName],
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
@@ -56,7 +60,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
 
   var stateNameToUse = stateName;
 
-  if (!_lodash2.default.isObject(animationSettings)) {
+  if (!_lodash2.default.isPlainObject(animationSettings)) {
     animationSettings = (0, _defineProperty3.default)({}, stateNameToUse, animationSettings);
   }
 
@@ -81,7 +85,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       self_ = _animationSettings2[stateNameToUse];
 
 
-  if (!_lodash2.default.isObject(self_)) {
+  if (!_lodash2.default.isPlainObject(self_)) {
     self_ = { base: self_ };
   }
 
@@ -89,7 +93,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       base = _self_.base;
 
 
-  if (!_lodash2.default.isObject(base)) {
+  if (!_lodash2.default.isPlainObject(base)) {
     base = { classes: base };
   }
 
@@ -99,13 +103,18 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       baseRemove = _base.remove;
 
 
+  if (_lodash2.default.isFunction(baseClasses)) {
+    var params = _params3.default.assemble(stateName, stateParams);
+    baseClasses = baseClasses(params);
+  }
+
   if (_lodash2.default.isString(baseClasses)) {
     baseClasses = baseClasses.trim().split(spaceSplitter);
   }
 
   if ($el) {
     _lodash2.default.each(self_.elements, function (selectorConfigs, selector) {
-      (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
+      (0, _elementAssembler2.default)({ selector: selector, selectorConfigs: selectorConfigs, stateName: stateName, stateParams: stateParams, $el: $el, animations: animations });
     });
   }
 
@@ -151,7 +160,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       }
     }
 
-    if (!_lodash2.default.isObject(animate)) {
+    if (!_lodash2.default.isPlainObject(animate)) {
       animate = (0, _defineProperty3.default)({}, animationType, animate);
     }
 
@@ -164,7 +173,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
       animate = self_[viewHash];
     }
 
-    if (!_lodash2.default.isObject(animate)) {
+    if (!_lodash2.default.isPlainObject(animate)) {
       animate = { classes: animate };
     }
 
@@ -175,8 +184,13 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
         elements = _animate2.elements;
 
 
+    if (_lodash2.default.isFunction(viewClasses)) {
+      var _params = _params3.default.assemble(uniqueAddress, stateParams);
+      viewClasses = viewClasses(_params);
+    }
+
     _lodash2.default.each(elements, function (selectorConfigs, selector) {
-      (0, _elementAssembler2.default)(selector, selectorConfigs, stateName, $el, animations);
+      (0, _elementAssembler2.default)({ selector: selector, selectorConfigs: selectorConfigs, uniqueAddress: uniqueAddress, stateParams: stateParams, $el: $el, animations: animations });
     });
 
     if (_lodash2.default.isString(viewClasses)) {
@@ -208,7 +222,7 @@ function animationsAssembler(stateName, animationType, animations, fromStateName
 
   if (!fromStateName) {
     _lodash2.default.each(_lodash2.default.omit(animationSettings, 'self'), function (animationSettings, toStateName) {
-      animationsAssembler(toStateName, animationType, animations, stateName);
+      animationsAssembler(toStateName, stateParams, animationType, animations, stateName);
     });
   }
 }

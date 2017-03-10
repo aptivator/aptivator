@@ -4,14 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -28,33 +20,42 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var rootStateName = _vars2.default.rootStateName;
 
-exports.default = function (stateNames) {
-  stateNames = _lodash2.default.reduce(stateNames, function (stateNames, stateNameArr) {
-    if (!_lodash2.default.isArray(stateNameArr)) {
-      stateNameArr = [rootStateName, stateNameArr];
-    }
-
-    var _stateNameArr = stateNameArr,
-        _stateNameArr2 = (0, _slicedToArray3.default)(_stateNameArr, 2),
-        min = _stateNameArr2[0],
-        stateName = _stateNameArr2[1];
+exports.default = function (animationStates) {
+  animationStates = _lodash2.default.reduce(animationStates, function (animationStates, animationState) {
+    var stateParams = animationState.stateParams,
+        stateName = animationState.stateName,
+        beginningStateName = animationState.beginningStateName,
+        primary = animationState.primary;
 
     var family = _relations2.default.family(stateName);
-    var minIndex = family.indexOf(min);
+    var beginningIndex = family.indexOf(beginningStateName);
+    family = family.slice(beginningIndex);
 
-    family = family.slice(minIndex);
-    stateNames.push.apply(stateNames, (0, _toConsumableArray3.default)(family));
-    return stateNames;
+    _lodash2.default.each(family, function (stateName) {
+      var existingIndex = _lodash2.default.findIndex(animationStates, { stateName: stateName });
+
+      if (existingIndex > -1) {
+        if (primary) {
+          animationStates.splice(existingIndex, 1);
+        } else {
+          return;
+        }
+      }
+
+      animationStates.push({ stateName: stateName, stateParams: stateParams });
+    });
+
+    return animationStates;
   }, []);
 
-  stateNames = _lodash2.default.uniq(stateNames);
+  animationStates.sort(_relations2.default.hierarchySorter());
 
-  stateNames.sort(_relations2.default.hierarchySorter());
+  var rootIndex = _lodash2.default.findIndex(animationStates, { stateName: rootStateName });
 
-  if (stateNames.includes(rootStateName)) {
-    stateNames = _lodash2.default.difference(stateNames, [rootStateName]);
-    stateNames.unshift(rootStateName);
+  if (rootIndex > -1) {
+    var rootState = animationStates.splice(rootIndex, 1)[0];
+    animationStates.unshift(rootState);
   }
 
-  return stateNames;
+  return animationStates;
 };

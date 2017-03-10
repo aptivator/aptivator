@@ -18,10 +18,13 @@ var _stateNamesAggregator2 = _interopRequireDefault(_stateNamesAggregator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (stateNames, animationType) {
-  stateNames = (0, _stateNamesAggregator2.default)(stateNames);
-  return _lodash2.default.reduce(stateNames, function (animations, stateName) {
-    (0, _animationsAssembler2.default)(stateName, animationType, animations);
+exports.default = function (animationStates, animationType) {
+  animationStates = (0, _stateNamesAggregator2.default)(animationStates);
+  return _lodash2.default.reduce(animationStates, function (animations, animationState) {
+    var stateName = animationState.stateName,
+        stateParams = animationState.stateParams;
+
+    (0, _animationsAssembler2.default)(stateName, stateParams, animationType, animations);
     return animations;
   }, {});
 };

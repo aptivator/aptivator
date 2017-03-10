@@ -4,29 +4,38 @@ import vars      from '../../../lib/vars';
 
 let {rootStateName} = vars;
 
-export default stateNames => {
-  stateNames = _.reduce(stateNames, (stateNames, stateNameArr) => {
-    if(!_.isArray(stateNameArr)) {
-      stateNameArr = [rootStateName, stateNameArr];
-    }
-  
-    let [min, stateName] = stateNameArr;
+export default animationStates => {
+  animationStates = _.reduce(animationStates, (animationStates, animationState) => {
+    let {stateParams, stateName, beginningStateName, primary} = animationState;
     let family = relations.family(stateName);
-    let minIndex = family.indexOf(min);
+    let beginningIndex = family.indexOf(beginningStateName);
+    family = family.slice(beginningIndex);
     
-    family = family.slice(minIndex);
-    stateNames.push(...family);
-    return stateNames;
+    _.each(family, stateName => {
+      let existingIndex = _.findIndex(animationStates, {stateName});
+      
+      if(existingIndex > -1) {
+        if(primary) {
+          animationStates.splice(existingIndex, 1);
+        } else {
+          return;
+        }
+      }
+      
+      animationStates.push({stateName, stateParams});
+    });
+    
+    return animationStates;
   }, []);
   
-  stateNames = _.uniq(stateNames);
+  animationStates.sort(relations.hierarchySorter());
   
-  stateNames.sort(relations.hierarchySorter());
+  let rootIndex = _.findIndex(animationStates, {stateName: rootStateName});
   
-  if(stateNames.includes(rootStateName)) {
-    stateNames = _.difference(stateNames, [rootStateName]);
-    stateNames.unshift(rootStateName);
+  if(rootIndex > -1) {
+    let rootState = animationStates.splice(rootIndex, 1)[0];
+    animationStates.unshift(rootState);
   }
   
-  return stateNames;
+  return animationStates;
 };

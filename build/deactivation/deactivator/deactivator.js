@@ -98,7 +98,7 @@ exports.default = function (stateParams) {
       var grouping = ancestorGroupings[ancestor];
 
       if (!grouping) {
-        grouping = { stateNames: [], min: stateName, max: stateName };
+        grouping = { stateNames: [], min: stateName, max: stateName, stateParams: stateParams };
         ancestorGroupings[ancestor] = grouping;
       }
 
@@ -133,17 +133,21 @@ exports.default = function (stateParams) {
       _lodash2.default.extend(grouping, { min: min, max: max });
     });
 
-    var stateNamePairs = _lodash2.default.reduce(ancestorGroupings, function (pairs, grouping) {
+    var animationStates = _lodash2.default.reduce(ancestorGroupings, function (animationStates, grouping) {
       var min = grouping.min,
-          stateNames = grouping.stateNames;
+          max = grouping.max,
+          deactivatingStateParams = grouping.stateParams;
 
-      _lodash2.default.each(stateNames, function (stateName) {
-        return pairs.push([min, stateName]);
-      });
-      return pairs;
+      var primary = stateParams === deactivatingStateParams;
+      animationStates.push({
+        beginningStateName: min,
+        stateName: max,
+        stateParams: deactivatingStateParams,
+        primary: primary });
+      return animationStates;
     }, []);
 
-    var animationPromise = (0, _animator2.default)(stateNamePairs, 'exit').then(function () {
+    var animationPromise = (0, _animator2.default)(animationStates, 'exit').then(function () {
       _lodash2.default.each(ancestorGroupings, function (grouping) {
         var min = grouping.min,
             max = grouping.max,

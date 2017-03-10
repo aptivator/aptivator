@@ -56,7 +56,7 @@ export default stateParams =>
       let grouping = ancestorGroupings[ancestor];
     
       if(!grouping) {
-        grouping = {stateNames: [], min: stateName, max: stateName};
+        grouping = {stateNames: [], min: stateName, max: stateName, stateParams};
         ancestorGroupings[ancestor] = grouping;
       }
 
@@ -85,13 +85,18 @@ export default stateParams =>
       _.extend(grouping, {min, max});
     });
     
-    let stateNamePairs = _.reduce(ancestorGroupings, (pairs, grouping) => {
-      let {min, stateNames} = grouping;
-      _.each(stateNames, stateName => pairs.push([min, stateName]));
-      return pairs;
+    let animationStates = _.reduce(ancestorGroupings, (animationStates, grouping) => {
+      let {min, max, stateParams: deactivatingStateParams} = grouping;
+      let primary = stateParams === deactivatingStateParams;
+      animationStates.push({
+        beginningStateName: min, 
+        stateName: max, 
+        stateParams: deactivatingStateParams, 
+        primary});
+      return animationStates;
     }, []);
     
-    let animationPromise = animator(stateNamePairs, 'exit').then(() => {
+    let animationPromise = animator(animationStates, 'exit').then(() => {
       _.each(ancestorGroupings, grouping => {
         let {min, max, stateNames} = grouping;
         

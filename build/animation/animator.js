@@ -14,7 +14,7 @@ var _animationsExecutor2 = _interopRequireDefault(_animationsExecutor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (stateNames, animationType) {
-  var animations = (0, _animationsAssembler2.default)(stateNames, animationType);
+exports.default = function (animationStates, animationType) {
+  var animations = (0, _animationsAssembler2.default)(animationStates, animationType);
   return (0, _animationsExecutor2.default)(animations);
 };

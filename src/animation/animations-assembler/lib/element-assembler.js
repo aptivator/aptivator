@@ -1,25 +1,33 @@
 import _         from 'lodash';
+import params_   from '../../../lib/params';
 import vars      from '../../../lib/vars';
 
 let {spaceSplitter} = vars;
 
-export default (selector, selectorConfigs, stateName, $parentEl, animations) => {
-  let selectorAddress = `${selector}@${stateName}@${selector}`;
-  let selectorSettingsPath = [stateName, selectorAddress];
+export default params => {
+  let {selector, selectorConfigs, stateName, uniqueAddress, stateParams, $el: $parentEl, animations} = params;
+  let entityName = stateName || uniqueAddress;
+  let selectorAddress = `${selector}@${entityName}@${selector}`;
+  let selectorSettingsPath = [entityName, selectorAddress];
   let selectorSettings = _.get(animations, selectorSettingsPath);
 
   if(!selectorSettings) {
     _.set(animations, selectorSettingsPath, selectorSettings = {$el: $parentEl.find(selector), classes: []});
   }
   
-  if(!_.isObject(selectorConfigs)) {
+  if(!_.isPlainObject(selectorConfigs)) {
     selectorConfigs = {classes: selectorConfigs};
   }
   
   let {classes: selectorClasses, add, remove} = selectorConfigs;
   
+  if(_.isFunction(selectorClasses)) {
+    let params = params_.assemble(entityName, stateParams);
+    selectorClasses = selectorClasses(params);
+  }
+  
   if(_.isNull(selectorClasses)) {
-    return delete animations[stateName][selectorAddress];
+    return delete animations[entityName][selectorAddress];
   }
   
   if(_.isString(selectorClasses)) {
