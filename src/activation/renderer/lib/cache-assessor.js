@@ -1,6 +1,6 @@
-import _         from 'lodash';
-import params_   from '../../../lib/params';
-import vars      from '../../../lib/vars';
+import _               from 'lodash';
+import paramsAssembler from '../../../lib/params-assembler';
+import vars            from '../../../lib/vars';
 
 let {paramsMap, states} = vars;
 let {registry} = states;
@@ -26,7 +26,7 @@ export default {
   
   implicit(viewConfigs, stateParams) {
     let {uniqueAddress, record} = viewConfigs;
-    let params = params_.assemble(uniqueAddress, stateParams);
+    let params = paramsAssembler(uniqueAddress, stateParams);
 
     delete params.data; 
     

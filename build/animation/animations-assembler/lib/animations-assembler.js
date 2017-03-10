@@ -26,10 +26,6 @@ var _error = require('../../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
-var _params2 = require('../../../lib/params');
-
-var _params3 = _interopRequireDefault(_params2);
-
 var _relations = require('../../../lib/relations');
 
 var _relations2 = _interopRequireDefault(_relations);
@@ -41,6 +37,10 @@ var _vars2 = _interopRequireDefault(_vars);
 var _elementAssembler = require('./element-assembler');
 
 var _elementAssembler2 = _interopRequireDefault(_elementAssembler);
+
+var _callbackRunner = require('./callback-runner');
+
+var _callbackRunner2 = _interopRequireDefault(_callbackRunner);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -110,8 +110,7 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
 
 
   if (_lodash2.default.isFunction(baseClasses)) {
-    var params = _params3.default.assemble(stateName, stateParams);
-    baseClasses = baseClasses(params);
+    baseClasses = (0, _callbackRunner2.default)(baseClasses, stateName, stateParams);
   }
 
   if (_lodash2.default.isString(baseClasses)) {
@@ -191,8 +190,7 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
 
 
     if (_lodash2.default.isFunction(viewClasses)) {
-      var _params = _params3.default.assemble(uniqueAddress, stateParams);
-      viewClasses = viewClasses(_params);
+      viewClasses = (0, _callbackRunner2.default)(viewClasses, uniqueAddress, stateParams);
     }
 
     _lodash2.default.each(elements, function (selectorConfigs, selector) {

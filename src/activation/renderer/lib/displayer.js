@@ -1,5 +1,5 @@
 import displayer         from '../../../lib/displayer';
-import params            from '../../../lib/params';
+import paramsAssembler   from '../../../lib/params-assembler';
 import relations         from '../../../lib/relations';
 import rootViewRegistrar from './root-view-registrar';
 
@@ -12,8 +12,8 @@ export default (viewConfigs, stateParams, cacheAssessor) => {
     
     if(receiver) {
       let {instance} = viewConfigs.record;
-      let viewParameters = params.assemble(uniqueAddress, stateParams);
-      instance[receiver](viewParameters);
+      let params = paramsAssembler(uniqueAddress, stateParams);
+      instance[receiver](params);
     }
   }
 

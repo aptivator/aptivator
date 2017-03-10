@@ -1,10 +1,10 @@
 # TODOs
 
 * allow values assigned as array in route object when declaring a state
-* when assembling parameters, consider caching some of these to optimize performance (perhaps memoization??)
-* regarding parameters assembly, for hooks, animation callbacks, etc., take a look if the function waits for params; if, yes, then assemble them
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* **DONE** when assembling parameters, consider caching some of these to optimize performance (perhaps memoization??) (fornow, postpone)
+* **DONE** regarding parameters assembly, for hooks, animation callbacks, etc., take a look if the function waits for params; if, yes, then assemble them
 * **DONE** take a look at eliminating activationSequences (was eliminated)
 * **DONE** it seems that activationRecords could be eliminated (everything could be kept within viewConfigs)
 * **DONE** when an individual view is destroyed, make sure that it is animated (if animations applies) (destroy method gets overridden)

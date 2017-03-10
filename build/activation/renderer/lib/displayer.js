@@ -8,9 +8,9 @@ var _displayer = require('../../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
 
-var _params = require('../../../lib/params');
+var _paramsAssembler = require('../../../lib/params-assembler');
 
-var _params2 = _interopRequireDefault(_params);
+var _paramsAssembler2 = _interopRequireDefault(_paramsAssembler);
 
 var _relations = require('../../../lib/relations');
 
@@ -36,8 +36,8 @@ exports.default = function (viewConfigs, stateParams, cacheAssessor) {
     if (receiver) {
       var instance = viewConfigs.record.instance;
 
-      var viewParameters = _params2.default.assemble(uniqueAddress, stateParams);
-      instance[receiver](viewParameters);
+      var params = (0, _paramsAssembler2.default)(uniqueAddress, stateParams);
+      instance[receiver](params);
     }
   }
 

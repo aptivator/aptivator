@@ -12,13 +12,13 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _params2 = require('../../../lib/params');
-
-var _params3 = _interopRequireDefault(_params2);
-
 var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
+
+var _callbackRunner = require('./callback-runner');
+
+var _callbackRunner2 = _interopRequireDefault(_callbackRunner);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53,8 +53,7 @@ exports.default = function (params) {
 
 
   if (_lodash2.default.isFunction(selectorClasses)) {
-    var _params = _params3.default.assemble(entityName, stateParams);
-    selectorClasses = selectorClasses(_params);
+    selectorClasses = (0, _callbackRunner2.default)(selectorClasses, entityName, stateParams);
   }
 
   if (_lodash2.default.isNull(selectorClasses)) {

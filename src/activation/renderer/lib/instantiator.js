@@ -2,7 +2,7 @@ import _                 from 'lodash';
 import Backbone          from 'backbone';
 import animator          from '../../../animation/animator';
 import displayer         from '../../../lib/displayer';
-import params            from '../../../lib/params';
+import paramsAssembler   from '../../../lib/params-assembler';
 import relations         from '../../../lib/relations';
 import deactivator       from '../../../deactivation/deactivator/lib/deactivator';
 import rootViewRegistrar from './root-view-registrar';
@@ -16,9 +16,9 @@ export default (viewConfigs, stateParams) => {
     instance.destroy();
   }
   
-  let viewParameters = params.assemble(uniqueAddress, stateParams);
+  let params = paramsAssembler(uniqueAddress, stateParams);
   
-  instance = new view(viewParameters);
+  instance = new view(params);
   _.extend(record, {instance, active: true});
   
   if(!(instance instanceof Backbone.View)) {

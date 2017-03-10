@@ -1,10 +1,10 @@
 import _                from 'lodash';
 import addresser        from '../../../lib/addresser';
 import error            from '../../../lib/error';
-import params_          from '../../../lib/params';
 import relations        from '../../../lib/relations';
 import vars             from '../../../lib/vars';
 import elementAssembler from './element-assembler';
+import callbackRunner   from './callback-runner';
 
 let {spaceSplitter, states} = vars;
 let {registry} = states;
@@ -51,8 +51,7 @@ export default function animationsAssembler(entityName, stateParams, animationTy
   let {classes: baseClasses, add: baseAdd, remove: baseRemove} = base;
   
   if(_.isFunction(baseClasses)) {
-    let params = params_.assemble(stateName, stateParams);
-    baseClasses = baseClasses(params);
+    baseClasses = callbackRunner(baseClasses, stateName, stateParams);
   }
   
   if(_.isString(baseClasses)) {
@@ -113,8 +112,7 @@ export default function animationsAssembler(entityName, stateParams, animationTy
     let {classes: viewClasses, add, remove, elements} = animate;
     
     if(_.isFunction(viewClasses)) {
-      let params = params_.assemble(uniqueAddress, stateParams);
-      viewClasses = viewClasses(params);
+      viewClasses = callbackRunner(viewClasses, uniqueAddress, stateParams);
     }
     
     _.each(elements, (selectorConfigs, selector) => {

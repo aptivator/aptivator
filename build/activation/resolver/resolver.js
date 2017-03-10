@@ -8,9 +8,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _params = require('../../lib/params');
+var _paramsAssembler = require('../../lib/params-assembler');
 
-var _params2 = _interopRequireDefault(_params);
+var _paramsAssembler2 = _interopRequireDefault(_paramsAssembler);
 
 var _relations = require('../../lib/relations');
 
@@ -56,8 +56,8 @@ exports.default = function (stateParams) {
       return new Promise(function (resolve, reject) {
         var promises = [];
         _lodash2.default.keys(node).forEach(function (entityName) {
-          var resolverParams = _params2.default.assemble(entityName, stateParams);
-          var promise = (0, _resolvesProcessor2.default)(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);
+          var params = (0, _paramsAssembler2.default)(entityName, stateParams);
+          var promise = (0, _resolvesProcessor2.default)(resolveDefinitions[entityName], resolveParams, entityName, params);
           promises.push(promise.then(function () {
             return process(node[entityName]);
           }).catch(reject));

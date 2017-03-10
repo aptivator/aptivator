@@ -8,9 +8,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _params = require('../../../lib/params');
+var _paramsAssembler = require('../../../lib/params-assembler');
 
-var _params2 = _interopRequireDefault(_params);
+var _paramsAssembler2 = _interopRequireDefault(_paramsAssembler);
 
 var _vars = require('../../../lib/vars');
 
@@ -47,7 +47,7 @@ exports.default = {
     var uniqueAddress = viewConfigs.uniqueAddress,
         record = viewConfigs.record;
 
-    var params = _params2.default.assemble(uniqueAddress, stateParams);
+    var params = (0, _paramsAssembler2.default)(uniqueAddress, stateParams);
 
     delete params.data;
 

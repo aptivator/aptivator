@@ -1,6 +1,6 @@
-import _         from 'lodash';
-import params_   from '../../../lib/params';
-import vars      from '../../../lib/vars';
+import _              from 'lodash';
+import vars           from '../../../lib/vars';
+import callbackRunner from './callback-runner';
 
 let {spaceSplitter} = vars;
 
@@ -22,8 +22,7 @@ export default params => {
   let {classes: selectorClasses, add, remove} = selectorConfigs;
   
   if(_.isFunction(selectorClasses)) {
-    let params = params_.assemble(entityName, stateParams);
-    selectorClasses = selectorClasses(params);
+    selectorClasses = callbackRunner(selectorClasses, entityName, stateParams);
   }
   
   if(_.isNull(selectorClasses)) {

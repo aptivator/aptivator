@@ -28,9 +28,9 @@ var _displayer = require('../../../lib/displayer');
 
 var _displayer2 = _interopRequireDefault(_displayer);
 
-var _params = require('../../../lib/params');
+var _paramsAssembler = require('../../../lib/params-assembler');
 
-var _params2 = _interopRequireDefault(_params);
+var _paramsAssembler2 = _interopRequireDefault(_paramsAssembler);
 
 var _relations = require('../../../lib/relations');
 
@@ -65,9 +65,9 @@ exports.default = function (viewConfigs, stateParams) {
     instance.destroy();
   }
 
-  var viewParameters = _params2.default.assemble(uniqueAddress, stateParams);
+  var params = (0, _paramsAssembler2.default)(uniqueAddress, stateParams);
 
-  instance = new view(viewParameters);
+  instance = new view(params);
   _lodash2.default.extend(record, { instance: instance, active: true });
 
   if (!(instance instanceof _backbone2.default.View)) {

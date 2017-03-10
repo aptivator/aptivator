@@ -1,5 +1,5 @@
 import _                   from 'lodash';
-import params              from '../../lib/params';
+import paramsAssembler     from '../../lib/params-assembler';
 import relations           from '../../lib/relations';
 import vars                from '../../lib/vars';
 import entitiesTreeBuilder from './lib/entities-tree-builder';
@@ -25,8 +25,8 @@ export default stateParams =>
       return new Promise((resolve, reject) => {
         let promises = [];
         _.keys(node).forEach(entityName => {
-          let resolverParams = params.assemble(entityName, stateParams);
-          let promise = resolvesProcessor(resolveDefinitions[entityName], resolveParams, entityName, resolverParams);
+          let params = paramsAssembler(entityName, stateParams);
+          let promise = resolvesProcessor(resolveDefinitions[entityName], resolveParams, entityName, params);
           promises.push(promise.then(() => process(node[entityName])).catch(reject));
         });
         Promise.all(promises).then(resolve).catch(reject);
