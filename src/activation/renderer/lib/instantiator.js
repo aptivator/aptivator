@@ -1,5 +1,6 @@
 import _                 from 'lodash';
 import Backbone          from 'backbone';
+import animator          from '../../../animation/animator';
 import displayer         from '../../../lib/displayer';
 import params            from '../../../lib/params';
 import relations         from '../../../lib/relations';
@@ -27,14 +28,27 @@ export default (viewConfigs, stateParams) => {
   _.extend(record, {detached: true, detach: detachHidden, ui: true});
   
   region.current.add(uniqueAddress);
-  let serializeData = instance.serializeData;
+  let {destroy, serializeData} = instance;
   
   instance.serializeData = function(...args) {
     var data = serializeData && serializeData.apply(this, args);
     return _.extend(this.options, data, {aptivator: viewApi});
   };
   
-  instance.on('destroy', () => {
+  instance.destroy = async function(params = {}) {
+    let {animate} = params;
+    
+    let animationState = {
+      stateParams,
+      beginningStateName: uniqueAddress,
+      stateName: uniqueAddress,
+      primary: true
+    };
+    
+    if(animate) {
+      await animator(animationState, 'exit');
+    }
+    
     deactivator.focal({name: uniqueAddress, detach: {focal: true, children: true}});
     region.current.delete(uniqueAddress);
     
@@ -48,8 +62,10 @@ export default (viewConfigs, stateParams) => {
       record.dependent = undefined;
     }
     
-    delete record.instance;
-  });
+    delete record.instance;  
+    
+    destroy.call(this);
+  };
 
   instance.render();
 

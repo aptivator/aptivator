@@ -1,4 +1,5 @@
 import _                from 'lodash';
+import addresser        from '../../../lib/addresser';
 import error            from '../../../lib/error';
 import params_          from '../../../lib/params';
 import relations        from '../../../lib/relations';
@@ -8,7 +9,9 @@ import elementAssembler from './element-assembler';
 let {spaceSplitter, states} = vars;
 let {activationRecords, activationSequences, registry} = states;
 
-export default function animationsAssembler(stateName, stateParams, animationType, animations, fromStateName) {
+export default function animationsAssembler(entityName, stateParams, animationType, animations, fromStateName) {
+  let hasAt = entityName.includes('@');
+  let stateName = addresser.stateName(entityName);
   let {animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
   let {active, instance = {}} = activationRecords[uniqueAddress];
@@ -66,7 +69,7 @@ export default function animationsAssembler(stateName, stateParams, animationTyp
     let {uniqueAddress, viewHash, animate, addressStateName} = viewConfigs;
     let {$el} = activationRecords[uniqueAddress].instance || {};
     
-    if(!$el) {
+    if((hasAt && uniqueAddress !== entityName) || !$el) {
       return;
     }
     
@@ -143,7 +146,7 @@ export default function animationsAssembler(stateName, stateParams, animationTyp
     }
   });
   
-  if(!fromStateName) {
+  if(!fromStateName && !hasAt) {
     _.each(_.omit(animationSettings, 'self'), (animationSettings, toStateName) => {
       animationsAssembler(toStateName, stateParams, animationType, animations, stateName);
     });

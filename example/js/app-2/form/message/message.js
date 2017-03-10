@@ -9,7 +9,7 @@ module.exports = Marionette.ItemView.extend({
   },
   
   remover: function() {
-    this.destroy();
+    this.destroy({animate: true});
     return false;
   }
 });

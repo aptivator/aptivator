@@ -18,6 +18,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _addresser = require('../../../lib/addresser');
+
+var _addresser2 = _interopRequireDefault(_addresser);
+
 var _error = require('../../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -45,7 +49,9 @@ var spaceSplitter = _vars2.default.spaceSplitter,
 var activationRecords = states.activationRecords,
     activationSequences = states.activationSequences,
     registry = states.registry;
-function animationsAssembler(stateName, stateParams, animationType, animations, fromStateName) {
+function animationsAssembler(entityName, stateParams, animationType, animations, fromStateName) {
+  var hasAt = entityName.includes('@');
+  var stateName = _addresser2.default.stateName(entityName);
   var _registry$stateName = registry[stateName],
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
@@ -127,7 +133,7 @@ function animationsAssembler(stateName, stateParams, animationType, animations, 
     var _ref2 = activationRecords[uniqueAddress].instance || {},
         $el = _ref2.$el;
 
-    if (!$el) {
+    if (hasAt && uniqueAddress !== entityName || !$el) {
       return;
     }
 
@@ -220,7 +226,7 @@ function animationsAssembler(stateName, stateParams, animationType, animations, 
     }
   });
 
-  if (!fromStateName) {
+  if (!fromStateName && !hasAt) {
     _lodash2.default.each(_lodash2.default.omit(animationSettings, 'self'), function (animationSettings, toStateName) {
       animationsAssembler(toStateName, stateParams, animationType, animations, stateName);
     });

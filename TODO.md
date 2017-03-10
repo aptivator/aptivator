@@ -1,10 +1,12 @@
 # TODOs
 
-* when an individual view is destroyed, make sure that it is animated (if animations applies)
+* it seems that activationRecords could be eliminated (everything could be kept within viewConfigs)
 * allow values assigned as array in route object when declaring a state
 * when assembling parameters, consider caching some of these to optimize performance (perhaps memoization??)
+* regarding parameters assembly, for hooks, animation callbacks, etc., take a look if the function waits for params; if, yes, then assemble them
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* **DONE** when an individual view is destroyed, make sure that it is animated (if animations applies) (destroy method gets overridden)
 * **DONE** do not forget to put callback support for animator
 * **DONE** take a look at animation activation for spliced states (if beginningStateName is undefined, then that activated state is not animated)
 * **DONE** fix interactive example

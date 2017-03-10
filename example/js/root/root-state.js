@@ -9,7 +9,8 @@ aptivator.state('root', {
         base: 'aptivator-fade-in',
         elements: {
           '.main': function() {
-            return 'border-blue';
+            //return 'border-blue';
+            return null;
           }
         }
       }
