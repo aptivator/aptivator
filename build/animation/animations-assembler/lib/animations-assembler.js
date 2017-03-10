@@ -41,7 +41,7 @@ var spaceSplitter = _vars2.default.spaceSplitter,
 var activationRecords = states.activationRecords,
     activationSequences = states.activationSequences,
     registry = states.registry;
-function animationsAssembler(stateName, stateNames, animationType, animations, fromStateName) {
+function animationsAssembler(stateName, animationType, animations, fromStateName) {
   var _registry$stateName = registry[stateName],
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
@@ -208,7 +208,7 @@ function animationsAssembler(stateName, stateNames, animationType, animations, f
 
   if (!fromStateName) {
     _lodash2.default.each(_lodash2.default.omit(animationSettings, 'self'), function (animationSettings, toStateName) {
-      animationsAssembler(toStateName, stateNames, animationType, animations, stateName);
+      animationsAssembler(toStateName, animationType, animations, stateName);
     });
   }
 }

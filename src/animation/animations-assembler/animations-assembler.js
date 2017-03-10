@@ -5,7 +5,7 @@ import stateNamesAggregator from './lib/state-names-aggregator';
 export default (stateNames, animationType) => {
   stateNames = stateNamesAggregator(stateNames);
   return _.reduce(stateNames, (animations, stateName) => {
-    animationsAssembler(stateName, stateNames.originals, animationType, animations);
+    animationsAssembler(stateName, animationType, animations);
     return animations;
   }, {});
 };

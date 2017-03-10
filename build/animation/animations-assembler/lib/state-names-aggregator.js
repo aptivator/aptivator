@@ -29,8 +29,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var rootStateName = _vars2.default.rootStateName;
 
 exports.default = function (stateNames) {
-  var originals = [];
-
   stateNames = _lodash2.default.reduce(stateNames, function (stateNames, stateNameArr) {
     if (!_lodash2.default.isArray(stateNameArr)) {
       stateNameArr = [rootStateName, stateNameArr];
@@ -45,7 +43,6 @@ exports.default = function (stateNames) {
     var minIndex = family.indexOf(min);
 
     family = family.slice(minIndex);
-    originals.push(stateName);
     stateNames.push.apply(stateNames, (0, _toConsumableArray3.default)(family));
     return stateNames;
   }, []);
@@ -59,5 +56,5 @@ exports.default = function (stateNames) {
     stateNames.unshift(rootStateName);
   }
 
-  return _lodash2.default.extend(stateNames, { originals: originals });
+  return stateNames;
 };

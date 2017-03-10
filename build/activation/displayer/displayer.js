@@ -77,18 +77,14 @@ exports.default = function (stateParams) {
 
                 return stateNames;
               }, []);
-
-
-              console.log(stateNames);
-
-              _context.next = 12;
+              _context.next = 11;
               return (0, _animator2.default)(stateNames, 'enter');
 
-            case 12:
+            case 11:
 
               _aptivator2.default.trigger(eventHandle);
 
-            case 13:
+            case 12:
             case 'end':
               return _context.stop();
           }

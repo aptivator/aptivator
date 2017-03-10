@@ -21,7 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (stateNames, animationType) {
   stateNames = (0, _stateNamesAggregator2.default)(stateNames);
   return _lodash2.default.reduce(stateNames, function (animations, stateName) {
-    (0, _animationsAssembler2.default)(stateName, stateNames.originals, animationType, animations);
+    (0, _animationsAssembler2.default)(stateName, animationType, animations);
     return animations;
   }, {});
 };

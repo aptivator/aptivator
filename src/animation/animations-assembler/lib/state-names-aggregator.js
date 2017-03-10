@@ -5,8 +5,6 @@ import vars      from '../../../lib/vars';
 let {rootStateName} = vars;
 
 export default stateNames => {
-  let originals = [];
-  
   stateNames = _.reduce(stateNames, (stateNames, stateNameArr) => {
     if(!_.isArray(stateNameArr)) {
       stateNameArr = [rootStateName, stateNameArr];
@@ -17,7 +15,6 @@ export default stateNames => {
     let minIndex = family.indexOf(min);
     
     family = family.slice(minIndex);
-    originals.push(stateName);
     stateNames.push(...family);
     return stateNames;
   }, []);
@@ -31,5 +28,5 @@ export default stateNames => {
     stateNames.unshift(rootStateName);
   }
   
-  return _.extend(stateNames, {originals});
+  return stateNames;
 };
