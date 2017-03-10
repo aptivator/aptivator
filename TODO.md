@@ -6,7 +6,7 @@
 * do not forget to put callback support for animator
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
-* take a look at animation activation for spliced states
+* **DONE** take a look at animation activation for spliced states (if beginningStateName is undefined, then that activated state is not animated)
 * **DONE** fix interactive example
 * **DONE** in connector, a function that intercepts a receiving function is not working
 * **DONE** move interactive module from example to aptivator

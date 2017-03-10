@@ -42,7 +42,7 @@ exports.default = function (viewConfigs, stateParams, cacheAssessor) {
   }
 
   if (_relations2.default.isRoot(addressStateName)) {
-    (0, _rootViewRegistrar2.default)(viewConfigs, stateParams);
+    return (0, _rootViewRegistrar2.default)(viewConfigs, stateParams);
   }
 
   (0, _displayer2.default)(viewConfigs);

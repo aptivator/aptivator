@@ -18,7 +18,7 @@ export default (viewConfigs, stateParams, cacheAssessor) => {
   }
 
   if(relations.isRoot(addressStateName)) {
-    rootViewRegistrar(viewConfigs, stateParams);
+    return rootViewRegistrar(viewConfigs, stateParams);
   }
 
   displayer(viewConfigs);

@@ -59,7 +59,7 @@ exports.default = function (stateParams) {
 
               query = { flags: { pending: true, displayed: true, canceled: false } };
               renderedStates = _aptivator2.default.history.find(query);
-              stateNames = _lodash2.default.map(renderedStates, function (stateParams) {
+              stateNames = _lodash2.default.reduce(renderedStates, function (stateNames, stateParams) {
                 var stateName = stateParams.stateName,
                     rootViews = stateParams.rootViews,
                     beginningStateName = stateParams.beginningStateName;
@@ -70,16 +70,25 @@ exports.default = function (stateParams) {
                   });
                 });
                 delete stateParams.rootViews;
-                return [beginningStateName, stateName];
-              });
-              _context.next = 11;
+
+                if (beginningStateName) {
+                  stateNames.push([beginningStateName, stateName]);
+                }
+
+                return stateNames;
+              }, []);
+
+
+              console.log(stateNames);
+
+              _context.next = 12;
               return (0, _animator2.default)(stateNames, 'enter');
 
-            case 11:
+            case 12:
 
               _aptivator2.default.trigger(eventHandle);
 
-            case 12:
+            case 13:
             case 'end':
               return _context.stop();
           }

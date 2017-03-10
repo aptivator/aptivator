@@ -20,12 +20,17 @@ export default stateParams =>
     query = {flags: {pending: true, displayed: true, canceled: false}};
     let renderedStates = aptivator.history.find(query);
     
-    let stateNames = _.map(renderedStates, stateParams => {
+    let stateNames = _.reduce(renderedStates, (stateNames, stateParams) => {
       let {stateName, rootViews, beginningStateName} = stateParams;
       setTimeout(() => _.each(rootViews, rootView => displayer(rootView)));
       delete stateParams.rootViews;
-      return [beginningStateName, stateName];
-    });
+      
+      if(beginningStateName) {
+        stateNames.push([beginningStateName, stateName]);
+      }
+      
+      return stateNames;
+    }, []);
     
     await animator(stateNames, 'enter');
     
