@@ -37,8 +37,6 @@ exports.default = {
   spaceSplitter: /\s+/,
 
   states: {
-    activationRecords: {},
-    activationSequences: {},
     error: [],
     history: [],
     queue: [],

@@ -26,9 +26,7 @@ var _hider2 = _interopRequireDefault(_hider);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _vars$states = _vars2.default.states,
-    activationRecords = _vars$states.activationRecords,
-    activationSequences = _vars$states.activationSequences;
+var registry = _vars2.default.states.registry;
 exports.default = {
   full: function full(params) {
     var _this = this;
@@ -43,7 +41,7 @@ exports.default = {
     var _this2 = this;
 
     var stateName = _addresser2.default.stateName(params.name);
-    _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
+    _lodash2.default.each(registry[stateName].views, function (viewConfigs) {
       _this2.focal({ name: viewConfigs.uniqueAddress });
     });
   },
@@ -54,7 +52,7 @@ exports.default = {
         _params$detach = params.detach,
         detach = _params$detach === undefined ? {} : _params$detach;
 
-    var activationRecord = activationRecords[name];
+    var record = _addresser2.default.record(name);
     var _detach = detach,
         detachFocal = _detach.focal,
         detachChildren = _detach.children,
@@ -62,11 +60,11 @@ exports.default = {
 
     detach = _lodash2.default.isUndefined(detachFocal) && detachFull || detachFocal;
 
-    (0, _hider2.default)(activationRecord, detach);
+    (0, _hider2.default)(record, detach);
 
     detach = { focal: detachChildren, full: detachFull };
 
-    _lodash2.default.each(activationRecord.regions, function (regionObj) {
+    _lodash2.default.each(record.regions, function (regionObj) {
       regionObj.current.forEach(function (uniqueAddress) {
         _this3.focal({ name: uniqueAddress, detach: _lodash2.default.clone(detach) });
       });

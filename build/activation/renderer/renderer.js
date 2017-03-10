@@ -36,7 +36,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var rootStateName = _vars2.default.rootStateName,
     states = _vars2.default.states;
-var activationSequences = states.activationSequences;
+var registry = states.registry;
 
 exports.default = function (stateParams) {
   stateParams.flags.rendered = true;
@@ -48,7 +48,7 @@ exports.default = function (stateParams) {
   var family = _relations2.default.family(stateName).slice(1);
 
   _lodash2.default.each(family, function (stateName) {
-    _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
+    _lodash2.default.each(registry[stateName].views, function (viewConfigs) {
       var _viewConfigs$record = viewConfigs.record,
           record = _viewConfigs$record === undefined ? {} : _viewConfigs$record,
           main = viewConfigs.main,

@@ -60,7 +60,7 @@ exports.default = function (stateParams) {
       }
 
       _lodash2.default.each(views, function (depConfigs, depHash) {
-        var _ref = stateViews[depHash] || {},
+        var _ref = _lodash2.default.filter(stateViews, { viewHash: depHash })[0] || {},
             _ref$record = _ref.record,
             record = _ref$record === undefined ? {} : _ref$record;
 

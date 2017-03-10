@@ -16,16 +16,7 @@ var _error = require('../../lib/error');
 
 var _error2 = _interopRequireDefault(_error);
 
-var _vars = require('../../lib/vars');
-
-var _vars2 = _interopRequireDefault(_vars);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var rootStateName = _vars2.default.rootStateName,
-    states = _vars2.default.states;
-var activationRecords = states.activationRecords,
-    activationSequences = states.activationSequences;
 
 exports.default = function (stateConfigs) {
   var view = stateConfigs.view,
@@ -51,11 +42,11 @@ exports.default = function (stateConfigs) {
   }
 
   var instance = new view();
-  var configs = { root: true, uniqueAddress: uniqueAddress, viewHash: '', detachHidden: detachHidden, resolveConfigs: resolveConfigs };
+  var record = { instance: instance };
+  var configs = { root: true, uniqueAddress: uniqueAddress, detachHidden: detachHidden, resolveConfigs: resolveConfigs, record: record };
 
   _lodash2.default.extend(stateConfigs, configs);
   instance.render();
 
-  activationRecords[uniqueAddress] = { instance: instance, active: true };
-  activationSequences[rootStateName] = [_lodash2.default.omit(stateConfigs, 'animate')];
+  stateConfigs.views = [_lodash2.default.omit(stateConfigs, 'animate')];
 };

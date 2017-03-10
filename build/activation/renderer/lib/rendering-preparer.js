@@ -8,25 +8,25 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _addresser = require('../../../lib/addresser');
+
+var _addresser2 = _interopRequireDefault(_addresser);
+
 var _vars = require('../../../lib/vars');
 
 var _vars2 = _interopRequireDefault(_vars);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _vars$states = _vars2.default.states,
-    activationRecords = _vars$states.activationRecords,
-    registry = _vars$states.registry;
+var registry = _vars2.default.states.registry;
 
 exports.default = function (viewConfigs) {
-  var uniqueAddress = viewConfigs.uniqueAddress,
-      addressSelector = viewConfigs.addressSelector,
+  var addressSelector = viewConfigs.addressSelector,
       addressStateName = viewConfigs.addressStateName;
   var parentUniqueAddress = registry[addressStateName].uniqueAddress;
 
-  var record = activationRecords[uniqueAddress] = {};
-  var parentRecord = activationRecords[parentUniqueAddress];
+  var parentRecord = _addresser2.default.record(parentUniqueAddress);
   var parentRegions = parentRecord.regions || (parentRecord.regions = {});
   var region = parentRegions[addressSelector] || (parentRegions[addressSelector] = { current: new Set() });
-  _lodash2.default.extend(viewConfigs, { record: record, region: region, parentRecord: parentRecord });
+  _lodash2.default.extend(viewConfigs, { record: {}, region: region, parentRecord: parentRecord });
 };

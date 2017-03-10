@@ -4,7 +4,7 @@ import relations     from '../../../lib/relations';
 import vars          from '../../../lib/vars';
 import hider         from './hider';
 
-let {activationRecords, activationSequences} = vars.states;
+let {registry} = vars.states;
 
 export default {
   full(params) {
@@ -17,22 +17,22 @@ export default {
   
   partial(params) {
     let stateName = addresser.stateName(params.name);
-    _.each(activationSequences[stateName], viewConfigs => {
+    _.each(registry[stateName].views, viewConfigs => {
       this.focal({name: viewConfigs.uniqueAddress});
     });
   },
   
   focal(params) {
     let {name, detach = {}} = params;
-    let activationRecord = activationRecords[name];
+    let record = addresser.record(name);
     let {focal: detachFocal, children: detachChildren, full: detachFull} = detach;
     detach = _.isUndefined(detachFocal) && detachFull || detachFocal;
   
-    hider(activationRecord, detach);
+    hider(record, detach);
     
     detach = {focal: detachChildren, full: detachFull};
     
-    _.each(activationRecord.regions, regionObj => {
+    _.each(record.regions, regionObj => {
       regionObj.current.forEach(uniqueAddress => {
         this.focal({name: uniqueAddress, detach: _.clone(detach)});
       });

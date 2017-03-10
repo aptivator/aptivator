@@ -38,5 +38,11 @@ exports.default = {
   },
   stateName: function stateName(address) {
     return address.includes('@') ? this.parts(address)[1] : address;
+  },
+  record: function record(address) {
+    var stateName = this.stateName(address);
+    var views = registry[stateName].views;
+
+    return _lodash2.default.filter(views, { uniqueAddress: address })[0].record;
   }
 };

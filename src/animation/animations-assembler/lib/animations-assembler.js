@@ -7,14 +7,14 @@ import vars             from '../../../lib/vars';
 import elementAssembler from './element-assembler';
 
 let {spaceSplitter, states} = vars;
-let {activationRecords, activationSequences, registry} = states;
+let {registry} = states;
 
 export default function animationsAssembler(entityName, stateParams, animationType, animations, fromStateName) {
   let hasAt = entityName.includes('@');
   let stateName = addresser.stateName(entityName);
   let {animate = {}, uniqueAddress} = registry[stateName];
   let {[animationType]: animationSettings = {}} = animate;
-  let {active, instance = {}} = activationRecords[uniqueAddress];
+  let {active, instance = {}} = addresser.record(uniqueAddress);
   let {$el} = instance;
   let stateNameToUse = stateName;
   
@@ -65,9 +65,9 @@ export default function animationsAssembler(entityName, stateParams, animationTy
     });
   }
   
-  _.each(activationSequences[stateName], viewConfigs => {
+  _.each(registry[stateName].views, viewConfigs => {
     let {uniqueAddress, viewHash, animate, addressStateName} = viewConfigs;
-    let {$el} = activationRecords[uniqueAddress].instance || {};
+    let {$el} = addresser.record(uniqueAddress).instance || {};
     
     if((hasAt && uniqueAddress !== entityName) || !$el) {
       return;

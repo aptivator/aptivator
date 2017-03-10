@@ -29,7 +29,7 @@ export default stateParams => {
       }
       
       _.each(views, (depConfigs, depHash) => {
-        let {record = {}} = stateViews[depHash] || {};
+        let {record = {}} = _.filter(stateViews, {viewHash: depHash})[0] || {};
         let {dependency, instance: dependencyInstance} = record;
         let {events = {}, delegateEvents} = dependencyInstance;
         

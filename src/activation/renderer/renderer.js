@@ -7,7 +7,7 @@ import instantiator      from './lib/instantiator';
 import renderingPreparer from './lib/rendering-preparer';
 
 let {rootStateName, states} = vars;
-let {activationSequences} = states;
+let {registry} = states;
 
 export default stateParams => {
   stateParams.flags.rendered = true;
@@ -16,7 +16,7 @@ export default stateParams => {
   let family = relations.family(stateName).slice(1);
 
   _.each(family, stateName =>{
-    _.each(activationSequences[stateName], viewConfigs => {
+    _.each(registry[stateName].views, viewConfigs => {
       let {record = {}, main, stateName} = viewConfigs;
       let {ui, active} = record;
       

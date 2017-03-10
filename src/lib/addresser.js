@@ -25,5 +25,11 @@ export default {
   
   stateName(address) {
     return address.includes('@') ? this.parts(address)[1] : address;
+  },
+  
+  record(address) {
+    let stateName = this.stateName(address);
+    let {views} = registry[stateName];
+    return _.filter(views, {uniqueAddress: address})[0].record;
   }
 };

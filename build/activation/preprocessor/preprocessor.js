@@ -53,8 +53,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var dataParams = _vars2.default.dataParams,
     resolveDefinitions = _vars2.default.resolveDefinitions,
     states = _vars2.default.states;
-var activationSequences = states.activationSequences,
-    registry = states.registry;
+var registry = states.registry;
 
 var reservedHashes = ['base', 'elements'];
 
@@ -70,7 +69,6 @@ exports.default = function (stateParams) {
       return;
     }
 
-    var activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     var data = stateConfigs.data,
         resolves = stateConfigs.resolves,
         view = stateConfigs.view,
@@ -78,6 +76,7 @@ exports.default = function (stateParams) {
         template = stateConfigs.template;
 
     var resolveAddresses = stateConfigs.resolveAddresses = [];
+    var viewsArray = [];
 
     if (data) {
       dataParams[stateName] = data;
@@ -94,16 +93,14 @@ exports.default = function (stateParams) {
 
     if ((view || template) && !views) {
       var viewHash = stateConfigs.parentSelector || '';
-      _lodash2.default.extend(stateConfigs, {
-        views: (0, _defineProperty3.default)({}, viewHash, _lodash2.default.pick(stateConfigs, ['view', 'template', 'cache']))
-      });
+      views = (0, _defineProperty3.default)({}, viewHash, _lodash2.default.pick(stateConfigs, ['view', 'template', 'cache']));
     }
 
     var parentStateName = _relations2.default.parent(stateName);
-    var viewCount = _lodash2.default.keys(stateConfigs.views).length;
+    var viewCount = _lodash2.default.keys(views).length;
     var mainCount = 0;
 
-    _lodash2.default.each(stateConfigs.views, function (viewConfigs, viewHash) {
+    _lodash2.default.each(views, function (viewConfigs, viewHash) {
       var _viewConfigs$address = viewConfigs.address,
           address = _viewConfigs$address === undefined ? viewHash : _viewConfigs$address,
           main = viewConfigs.main,
@@ -169,7 +166,7 @@ exports.default = function (stateParams) {
       _lodash2.default.extend(viewConfigs, { address: address, main: main, view: view, uniqueAddress: uniqueAddress, fullAddress: fullAddress, stateName: stateName, viewHash: viewHash, addressSelector: addressSelector, addressStateName: addressStateName });
 
       (0, _viewNormalizer2.default)(viewConfigs);
-      activationSequence.push(viewConfigs);
+      viewsArray.push(viewConfigs);
       preprocess(addressStateName);
     });
 
@@ -177,7 +174,8 @@ exports.default = function (stateParams) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
     }
 
-    activationSequence.sort(_relations2.default.hierarchySorter());
+    viewsArray.sort(_relations2.default.hierarchySorter());
+    _lodash2.default.extend(stateConfigs, { views: viewsArray });
   }(stateName);
 
   return stateParams;

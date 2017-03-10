@@ -1,10 +1,6 @@
 import _         from 'lodash';
 import addresser from '../../lib/addresser';
 import error     from '../../lib/error';
-import vars      from '../../lib/vars';
-
-let {rootStateName, states} = vars;
-let {activationRecords, activationSequences} = states;
 
 export default stateConfigs => {
   let {view, stateName, resolveConfigs, detachHidden} = stateConfigs;
@@ -26,11 +22,11 @@ export default stateConfigs => {
   }
   
   let instance = new view();
-  let configs = {root: true, uniqueAddress, viewHash: '', detachHidden, resolveConfigs};
+  let record = {instance};
+  let configs = {root: true, uniqueAddress, detachHidden, resolveConfigs, record};
   
   _.extend(stateConfigs, configs);
   instance.render();
   
-  activationRecords[uniqueAddress] = {instance, active: true};
-  activationSequences[rootStateName] = [_.omit(stateConfigs, 'animate')];
+  stateConfigs.views = [_.omit(stateConfigs, 'animate')];
 };

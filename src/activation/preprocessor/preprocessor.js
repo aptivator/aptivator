@@ -9,7 +9,7 @@ import resolvesNormalizer   from './lib/resolves-normalizer';
 import viewNormalizer       from './lib/view-normalizer';
 
 let {dataParams, resolveDefinitions, states} = vars;
-let {activationSequences, registry} = states;
+let {registry} = states;
 let reservedHashes = ['base', 'elements'];
 
 export default stateParams => {
@@ -23,9 +23,9 @@ export default stateParams => {
       return;
     }
 
-    let activationSequence = activationSequences[stateName] || (activationSequences[stateName] = []);
     let {data, resolves, view, views, template} = stateConfigs;
     let resolveAddresses = stateConfigs.resolveAddresses = [];
+    let viewsArray = [];
     
     if(data) {
       dataParams[stateName] = data;
@@ -42,16 +42,14 @@ export default stateParams => {
     
     if((view || template) && !views) {
       let viewHash = stateConfigs.parentSelector || '';
-      _.extend(stateConfigs, {
-        views: {[viewHash]: _.pick(stateConfigs, ['view', 'template', 'cache'])}
-      });
+      views = {[viewHash]: _.pick(stateConfigs, ['view', 'template', 'cache'])};
     }
     
     let parentStateName = relations.parent(stateName);
-    let viewCount = _.keys(stateConfigs.views).length;
+    let viewCount = _.keys(views).length;
     let mainCount = 0;
     
-    _.each(stateConfigs.views, (viewConfigs, viewHash) => {
+    _.each(views, (viewConfigs, viewHash) => {
       let {address = viewHash, main, resolves, data, view, template, deps} = viewConfigs;
       let fullAddress = fullAddressMaker(address, stateName);
       let [addressSelector, addressStateName] = addresser.parts(fullAddress);
@@ -103,7 +101,7 @@ export default stateParams => {
       _.extend(viewConfigs, {address, main, view, uniqueAddress, fullAddress, stateName, viewHash, addressSelector, addressStateName});
     
       viewNormalizer(viewConfigs);
-      activationSequence.push(viewConfigs);
+      viewsArray.push(viewConfigs);
       preprocess(addressStateName);
     });
     
@@ -111,7 +109,8 @@ export default stateParams => {
       error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
 
-    activationSequence.sort(relations.hierarchySorter());
+    viewsArray.sort(relations.hierarchySorter());
+    _.extend(stateConfigs, {views: viewsArray});
   }(stateName);
   
   return stateParams;

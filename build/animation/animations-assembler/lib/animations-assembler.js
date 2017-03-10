@@ -46,9 +46,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var spaceSplitter = _vars2.default.spaceSplitter,
     states = _vars2.default.states;
-var activationRecords = states.activationRecords,
-    activationSequences = states.activationSequences,
-    registry = states.registry;
+var registry = states.registry;
 function animationsAssembler(entityName, stateParams, animationType, animations, fromStateName) {
   var hasAt = entityName.includes('@');
   var stateName = _addresser2.default.stateName(entityName);
@@ -58,10 +56,12 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
       uniqueAddress = _registry$stateName.uniqueAddress;
   var _animate$animationTyp = animate[animationType],
       animationSettings = _animate$animationTyp === undefined ? {} : _animate$animationTyp;
-  var _activationRecords$un = activationRecords[uniqueAddress],
-      active = _activationRecords$un.active,
-      _activationRecords$un2 = _activationRecords$un.instance,
-      instance = _activationRecords$un2 === undefined ? {} : _activationRecords$un2;
+
+  var _addresser$record = _addresser2.default.record(uniqueAddress),
+      active = _addresser$record.active,
+      _addresser$record$ins = _addresser$record.instance,
+      instance = _addresser$record$ins === undefined ? {} : _addresser$record$ins;
+
   var $el = instance.$el;
 
   var stateNameToUse = stateName;
@@ -124,13 +124,13 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
     });
   }
 
-  _lodash2.default.each(activationSequences[stateName], function (viewConfigs) {
+  _lodash2.default.each(registry[stateName].views, function (viewConfigs) {
     var uniqueAddress = viewConfigs.uniqueAddress,
         viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,
         addressStateName = viewConfigs.addressStateName;
 
-    var _ref2 = activationRecords[uniqueAddress].instance || {},
+    var _ref2 = _addresser2.default.record(uniqueAddress).instance || {},
         $el = _ref2.$el;
 
     if (hasAt && uniqueAddress !== entityName || !$el) {
