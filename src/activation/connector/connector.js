@@ -13,7 +13,6 @@ export default stateParams => {
   
   _.each(family, relation => {
     let {views: stateViews, connectingViews} = registry[relation];
-    let overriddenMethods = new Set();
     let dependencyRecords = [];
     
     _.each(connectingViews, viewConfigs => {
@@ -67,14 +66,10 @@ export default stateParams => {
           storeAses.push(storeAs);
           
           let methodHash = `${depHash}-${intercepted}`.replace(/\s+/g, '-');
+          let method = events[intercepted] || intercepted;
+          let callback = dependencyInstance[method];
           
-          if(dependency) {
-            overriddenMethods.add(methodHash);
-          }
-
-          if(!overriddenMethods.has(methodHash)) {
-            let method = events[intercepted] || intercepted;
-            let callback = dependencyInstance[method];
+          if(!callback.overriddenByAptivator) {
             let triggerer = result => dependencyInstance.trigger(methodHash, result);
             triggerer = _.debounce(triggerer, debounce || 0);
             
@@ -84,11 +79,11 @@ export default stateParams => {
               return result;
             };
             
+            dependencyInstance[method].overriddenByAptivator = true;
+            
             if(delegateEvents) {
               dependencyInstance.delegateEvents();
             }
-            
-            overriddenMethods.add(methodHash);
           }
           
           if(receivers) {

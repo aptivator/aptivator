@@ -8,5 +8,6 @@ require('./app-2/app-2-state');
 require('./error/error-state');
 require('./loading/loading-state');
 require('./hybrid/hybrid-state');
+require('./interactive/interactive-state');
 
 require('aptivator').start();

@@ -5,14 +5,12 @@ export default class {
   constructor(instance, receiver, receiverConfigs, params) {
     let {events = {}} = instance;
     let method = events[receiver] || receiver;
-    method = instance[method].bind(instance);
-    
     _.extend(this, {data: {}, instance, method, receiverConfigs, params});
     return this.handler.bind(this);
   }
 
   handler(result, storeAs) {
-    let {data, receiverConfigs, params, method} = this;
+    let {data, receiverConfigs, params, instance, method} = this;
     let {complete, reset} = receiverConfigs;
     let previous = Promise.resolve(data[storeAs]);
     let current = Promise.resolve(result);
@@ -30,7 +28,7 @@ export default class {
         }
       }
       
-      method(data);       
+      instance[method](_.clone(data));
     }).catch(e => errorer({type: e})).catch(_.noop);
   }
 }

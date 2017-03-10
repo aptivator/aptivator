@@ -1,12 +1,15 @@
 # TODOs
 
-* move interactive module from example to aptivator
 * when an individual view is destroyed, make sure that it is animated (if animations applies)
 * allow values assigned as array in route object when declaring a state
 * when assembling parameters, consider caching some of these to optimize performance (perhaps memoization??)
 * do not forget to put callback support for animator
 * parent state that does not have a view, just resolves and data
-* finalize state destruction api (can be useful when login out and wanting to clear states from memory
+* finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* take a look at animation activation for spliced states
+* **DONE** fix interactive example
+* **DONE** in connector, a function that intercepts a receiving function is not working
+* **DONE** move interactive module from example to aptivator
 * **DONE** finish refactored deactivation module, eliminate animation and deactivation bugs
 * **DONE** does it make sense to break activationSequences for each state only and then link them dynamically rather than hard-wiring in preprocessor
 * **DONE** address all moments with spliced state destruction and deactivation (make it work)

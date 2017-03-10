@@ -40,7 +40,6 @@ exports.default = function (stateParams) {
         stateViews = _registry$relation.views,
         connectingViews = _registry$relation.connectingViews;
 
-    var overriddenMethods = new Set();
     var dependencyRecords = [];
 
     _lodash2.default.each(connectingViews, function (viewConfigs) {
@@ -111,15 +110,11 @@ exports.default = function (stateParams) {
           storeAses.push(storeAs);
 
           var methodHash = (depHash + '-' + intercepted).replace(/\s+/g, '-');
+          var method = events[intercepted] || intercepted;
+          var callback = dependencyInstance[method];
 
-          if (dependency) {
-            overriddenMethods.add(methodHash);
-          }
-
-          if (!overriddenMethods.has(methodHash)) {
+          if (!callback.overriddenByAptivator) {
             (function () {
-              var method = events[intercepted] || intercepted;
-              var callback = dependencyInstance[method];
               var triggerer = function triggerer(result) {
                 return dependencyInstance.trigger(methodHash, result);
               };
@@ -135,11 +130,11 @@ exports.default = function (stateParams) {
                 return result;
               };
 
+              dependencyInstance[method].overriddenByAptivator = true;
+
               if (delegateEvents) {
                 dependencyInstance.delegateEvents();
               }
-
-              overriddenMethods.add(methodHash);
             })();
           }
 

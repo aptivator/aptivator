@@ -15,7 +15,8 @@ aptivator.state('header', {
   data: {
     links: {
       'app-1': 'Application 1',
-      'app-2.info': 'Application 2'
+      'app-2.info': 'Application 2',
+      'interactive': 'Interactive'
     }
   }
 });

@@ -9,6 +9,7 @@
 * root state must have a singular view (not a template).  Within a view an el property designates the element where app will be placed
 * note when activating two serial states simultaneously, the last one will be canceled
 * note that for class assignment on the view element itself will require using View instead of just a template
+* note that all heavy async processing must happen before rendering
 * note when writing animations, forwards option can be very helpful
 * Sprinkle comments throughout code
 * Tutorial

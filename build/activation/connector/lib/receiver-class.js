@@ -29,8 +29,6 @@ var _class = function () {
         events = _instance$events === undefined ? {} : _instance$events;
 
     var method = events[receiver] || receiver;
-    method = instance[method].bind(instance);
-
     _lodash2.default.extend(this, { data: {}, instance: instance, method: method, receiverConfigs: receiverConfigs, params: params });
     return this.handler.bind(this);
   }
@@ -43,6 +41,7 @@ var _class = function () {
       var data = this.data,
           receiverConfigs = this.receiverConfigs,
           params = this.params,
+          instance = this.instance,
           method = this.method;
       var complete = receiverConfigs.complete,
           reset = receiverConfigs.reset;
@@ -67,7 +66,7 @@ var _class = function () {
           }
         }
 
-        method(data);
+        instance[method](_lodash2.default.clone(data));
       }).catch(function (e) {
         return (0, _errorer2.default)({ type: e });
       }).catch(_lodash2.default.noop);
