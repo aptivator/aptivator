@@ -1,8 +1,10 @@
 # TODOs
 
-* allow values assigned as array in route object when declaring a state
 * parent state that does not have a view, just resolves and data
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* **DONE** allow values assigned as array in route object when declaring a state
+* **DONE** allow asserters defined as array in route object when declaring a state
+* **DONE** rename params to paramsAssembler
 * **DONE** when assembling parameters, consider caching some of these to optimize performance (perhaps memoization??) (fornow, postpone)
 * **DONE** regarding parameters assembly, for hooks, animation callbacks, etc., take a look if the function waits for params; if, yes, then assemble them
 * **DONE** take a look at eliminating activationSequences (was eliminated)

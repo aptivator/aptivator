@@ -45,7 +45,7 @@ export default (stateName, routeValues, activating) => {
     if(_.isUndefined(required)) {
       return fragments.push(name);
     }
-    
+
     if(!routeValues[++index] && required) {
       error.throw(`expecting a value for [${name}] parameter`, moduleName);
     }

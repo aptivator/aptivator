@@ -18,12 +18,16 @@ exports.default = function (route, parentRoute) {
   var _route$params = route.params,
       params = _route$params === undefined ? {} : _route$params,
       parts = route.parts,
-      allValues = route.allValues;
+      allValues = route.allValues,
+      routeValues = route.values,
+      routeAsserters = route.asserters;
   var _parentRoute$values = parentRoute.values,
       parentValues = _parentRoute$values === undefined ? [] : _parentRoute$values,
       parentAllValues = parentRoute.allValues,
       _parentRoute$asserter = parentRoute.asserters,
       parentAsserters = _parentRoute$asserter === undefined ? [] : _parentRoute$asserter;
+
+  var index = -1;
 
   var _$reduce = _lodash2.default.reduce(parts, function (aggregator, part) {
     var name = part.name,
@@ -35,8 +39,8 @@ exports.default = function (route, parentRoute) {
 
 
     if (!_lodash2.default.isUndefined(required)) {
-      values.push(param.value);
-      asserters.push(param.asserter);
+      values.push(routeValues ? routeValues[++index] : param.value);
+      asserters.push(routeAsserters ? routeAsserters[index] : param.asserter);
     }
 
     return aggregator;

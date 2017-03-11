@@ -2,16 +2,17 @@ import _     from 'lodash';
 import error from '../../../lib/error';
 
 export default (route, parentRoute) => {
-  let {params = {}, parts, allValues} = route;
+  let {params = {}, parts, allValues, values: routeValues, asserters: routeAsserters} = route;
   let {values: parentValues = [], allValues: parentAllValues, asserters: parentAsserters = []} = parentRoute;
+  let index = -1;
   let {values, asserters} = _.reduce(parts, (aggregator, part) => {
     let {name, required} = part;
     let param = params[name] || {};
     let {values, asserters} = aggregator;
     
     if(!_.isUndefined(required)) {
-      values.push(param.value);
-      asserters.push(param.asserter);
+      values.push(routeValues ? routeValues[++index] : param.value);
+      asserters.push(routeAsserters ? routeAsserters[index] : param.asserter);
     }
     
     return aggregator;

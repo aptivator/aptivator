@@ -40,12 +40,10 @@ aptivator.state('app-1', {
   },
   route: {
     path: 'app-1/:one/:two',
+    values: ['one', 'one'],
+    asserters: [undefined, /^one|two|test$/],
     params: {
-      one: {
-        value: 'one'
-      },
       two: {
-        value: 'one',
         asserter: /^one|two|test$/
       }
     }
