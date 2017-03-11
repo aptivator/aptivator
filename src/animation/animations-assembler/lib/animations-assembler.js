@@ -4,7 +4,7 @@ import error            from '../../../lib/error';
 import relations        from '../../../lib/relations';
 import vars             from '../../../lib/vars';
 import elementAssembler from './element-assembler';
-import callbackRunner   from './callback-runner';
+import callbacker       from './callbacker';
 
 let {spaceSplitter, states} = vars;
 let {registry} = states;
@@ -56,7 +56,7 @@ export default function animationsAssembler(entityName, stateParams, animationTy
   let {classes: baseClasses, add: baseAdd, remove: baseRemove} = base;
   
   if(_.isFunction(baseClasses)) {
-    baseClasses = callbackRunner(baseClasses, stateName, stateParams);
+    baseClasses = callbacker(baseClasses, stateName, stateParams);
   }
   
   if(_.isString(baseClasses)) {

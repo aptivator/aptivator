@@ -1,6 +1,7 @@
 # TODOs
 
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* **DONE** is it possible to do deactivation from old or transient to new state after rendering stage? (not quite)
 * **DONE** assert that non-view states cannot be navigated to directly
 * **DONE** parent state that does not have a view, just resolves and data
 * **DONE** allow values assigned as array in route object when declaring a state

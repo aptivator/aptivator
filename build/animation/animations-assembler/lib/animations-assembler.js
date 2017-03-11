@@ -38,9 +38,9 @@ var _elementAssembler = require('./element-assembler');
 
 var _elementAssembler2 = _interopRequireDefault(_elementAssembler);
 
-var _callbackRunner = require('./callback-runner');
+var _callbacker = require('./callbacker');
 
-var _callbackRunner2 = _interopRequireDefault(_callbackRunner);
+var _callbacker2 = _interopRequireDefault(_callbacker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -116,7 +116,7 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
 
 
   if (_lodash2.default.isFunction(baseClasses)) {
-    baseClasses = (0, _callbackRunner2.default)(baseClasses, stateName, stateParams);
+    baseClasses = (0, _callbacker2.default)(baseClasses, stateName, stateParams);
   }
 
   if (_lodash2.default.isString(baseClasses)) {
@@ -196,7 +196,7 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
 
 
     if (_lodash2.default.isFunction(viewClasses)) {
-      viewClasses = (0, _callbackRunner2.default)(viewClasses, uniqueAddress, stateParams);
+      viewClasses = callbackRunner(viewClasses, uniqueAddress, stateParams);
     }
 
     _lodash2.default.each(elements, function (selectorConfigs, selector) {
