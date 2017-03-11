@@ -58,8 +58,9 @@ var registry = states.registry;
 var reservedHashes = ['base', 'elements'];
 
 exports.default = function (stateParams) {
-  var stateName = stateParams.stateName;
+  var startingStateName = stateParams.stateName;
 
+  var processed = [];
   stateParams.flags.preprocessed = true;
 
   !function preprocess(stateName) {
@@ -92,7 +93,16 @@ exports.default = function (stateParams) {
     }
 
     if ((view || template) && !views) {
-      var viewHash = stateConfigs.parentSelector || '';
+      var _stateConfigs$parentS = stateConfigs.parentSelector,
+          parentSelector = _stateConfigs$parentS === undefined ? '' : _stateConfigs$parentS,
+          parentState = stateConfigs.parentState;
+
+      var viewHash = parentSelector;
+
+      if (parentState) {
+        viewHash += '@' + parentState;
+      }
+
       views = (0, _defineProperty3.default)({}, viewHash, _lodash2.default.pick(stateConfigs, ['view', 'template', 'cache']));
     }
 
@@ -174,9 +184,21 @@ exports.default = function (stateParams) {
       _error2.default.throw('state [' + stateName + '] must have a designated main view', 'preprocessor');
     }
 
-    viewsArray.sort(_relations2.default.hierarchySorter());
-    _lodash2.default.extend(stateConfigs, { views: viewsArray });
-  }(stateName);
+    if (viewCount) {
+      viewsArray.sort(_relations2.default.hierarchySorter());
+      _lodash2.default.extend(stateConfigs, { views: viewsArray });
+    }
+
+    processed.push(stateName);
+
+    if (startingStateName === stateName) {
+      var family = _relations2.default.family(startingStateName).slice(1);
+      var remaining = _lodash2.default.difference(family, processed);
+      _lodash2.default.each(remaining, function (stateName) {
+        return preprocess(stateName);
+      });
+    }
+  }(startingStateName);
 
   return stateParams;
 };

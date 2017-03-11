@@ -2,3 +2,4 @@
   This page was built using the first version of the Marionette-UIRouter, which is based
   on Angular's ui-router.
 </div>
+<p><strong><%= resolves.tester %></strong></p>

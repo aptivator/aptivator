@@ -12,7 +12,7 @@
         <li><a href = "<%= aptivator.href('app-1') %>">Application 1</a></li>
         <li><a href = "<%= aptivator.href('app-2.info') %>">Home</a></li>
         <li><a href = "<%= aptivator.href('app-2.form') %>">Form</a></li>
-        <li><a href = "<%= aptivator.href('app-2.about') %>">About</a></li>
+        <li><a href = "<%= aptivator.href('app-2.about.tester') %>">About</a></li>
       </ul>
     </div>
   </div>

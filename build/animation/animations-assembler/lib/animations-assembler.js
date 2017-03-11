@@ -54,6 +54,12 @@ function animationsAssembler(entityName, stateParams, animationType, animations,
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
       uniqueAddress = _registry$stateName.uniqueAddress;
+
+
+  if (!uniqueAddress) {
+    return;
+  }
+
   var _animate$animationTyp = animate[animationType],
       animationSettings = _animate$animationTyp === undefined ? {} : _animate$animationTyp;
 

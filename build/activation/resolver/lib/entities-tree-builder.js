@@ -17,7 +17,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (entityNames) {
   var tree = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   return entityNames.reduce(function (tree, entityName) {
-    var hasAt = entityName.includes('@');
     var stateName = _addresser2.default.stateName(entityName);
     var family = _relations2.default.family(stateName);
     var current = tree;
@@ -29,7 +28,7 @@ exports.default = function (entityNames) {
       return tree;
     }, tree);
 
-    if (hasAt) {
+    if (entityName.includes('@')) {
       current[entityName] = null;
     }
 

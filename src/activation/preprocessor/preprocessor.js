@@ -13,7 +13,8 @@ let {registry} = states;
 let reservedHashes = ['base', 'elements'];
 
 export default stateParams => {
-  let {stateName} = stateParams;
+  let {stateName: startingStateName} = stateParams;
+  let processed = [];
   stateParams.flags.preprocessed = true;
   
   !function preprocess(stateName) {
@@ -41,7 +42,13 @@ export default stateParams => {
     }
     
     if((view || template) && !views) {
-      let viewHash = stateConfigs.parentSelector || '';
+      let {parentSelector = '', parentState} = stateConfigs;
+      let viewHash = parentSelector;
+      
+      if(parentState) {
+        viewHash += '@' + parentState;
+      }
+      
       views = {[viewHash]: _.pick(stateConfigs, ['view', 'template', 'cache'])};
     }
     
@@ -109,9 +116,19 @@ export default stateParams => {
       error.throw(`state [${stateName}] must have a designated main view`, 'preprocessor');
     }
 
-    viewsArray.sort(relations.hierarchySorter());
-    _.extend(stateConfigs, {views: viewsArray});
-  }(stateName);
+    if(viewCount) {
+      viewsArray.sort(relations.hierarchySorter());
+      _.extend(stateConfigs, {views: viewsArray});
+    }
+    
+    processed.push(stateName);
+    
+    if(startingStateName === stateName) {
+      let family = relations.family(startingStateName).slice(1);
+      let remaining = _.difference(family, processed);
+      _.each(remaining, stateName => preprocess(stateName));
+    }
+  }(startingStateName);
   
   return stateParams;
 };

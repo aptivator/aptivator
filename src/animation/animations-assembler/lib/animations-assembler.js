@@ -13,6 +13,11 @@ export default function animationsAssembler(entityName, stateParams, animationTy
   let hasAt = entityName.includes('@');
   let stateName = addresser.stateName(entityName);
   let {animate = {}, uniqueAddress} = registry[stateName];
+  
+  if(!uniqueAddress) {
+    return;
+  }
+  
   let {[animationType]: animationSettings = {}} = animate;
   let {active, instance = {}} = addresser.record(uniqueAddress);
   let {$el} = instance;

@@ -3,7 +3,6 @@ import relations from '../../../lib/relations';
 
 export default (entityNames, tree = {}) => 
   entityNames.reduce((tree, entityName) => {
-    let hasAt = entityName.includes('@');
     let stateName = addresser.stateName(entityName);
     let family = relations.family(stateName);
     let current = tree;
@@ -15,7 +14,7 @@ export default (entityNames, tree = {}) =>
       return tree;
     }, tree);
     
-    if(hasAt) {
+    if(entityName.includes('@')) {
       current[entityName] = null;
     }
     
