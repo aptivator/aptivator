@@ -61,7 +61,7 @@ var registry = states.registry,
 
 _aptivator2.default.state = function (stateName, stateConfigs) {
   return !(0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-    var transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods;
+    var transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods, template, view, views;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -89,6 +89,12 @@ _aptivator2.default.state = function (stateName, stateConfigs) {
             return _context.abrupt('return', queue.push([stateName, stateConfigs]));
 
           case 9:
+            template = stateConfigs.template, view = stateConfigs.view, views = stateConfigs.views;
+
+
+            if (!(template || view || views)) {
+              stateConfigs.abstract = true;
+            }
 
             if (transient || error) {
               (0, _otherStateRegistrar2.default)(stateName, states[transient ? 'transient' : 'error']);
@@ -127,7 +133,7 @@ _aptivator2.default.state = function (stateName, stateConfigs) {
               _aptivator2.default.state.apply(_aptivator2.default, (0, _toConsumableArray3.default)(queue.pop()));
             }
 
-          case 18:
+          case 20:
           case 'end':
             return _context.stop();
         }

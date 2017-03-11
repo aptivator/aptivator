@@ -1,7 +1,7 @@
 # TODOs
 
-* assert that non-view states cannot be navigated to directly
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* **DONE** assert that non-view states cannot be navigated to directly
 * **DONE** parent state that does not have a view, just resolves and data
 * **DONE** allow values assigned as array in route object when declaring a state
 * **DONE** allow asserters defined as array in route object when declaring a state

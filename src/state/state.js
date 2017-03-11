@@ -32,6 +32,12 @@ aptivator.state = (stateName, stateConfigs) =>
       return queue.push([stateName, stateConfigs]);
     }
     
+    let {template, view, views} = stateConfigs;
+    
+    if(!(template || view || views)) {
+      stateConfigs.abstract = true;
+    }
+    
     if(transient || error) {
       otherStateRegistrar(stateName, states[transient ? 'transient' : 'error']);
       delete stateConfigs.route;
