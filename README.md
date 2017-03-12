@@ -12,7 +12,7 @@ specific modules that are a core identity of the developed software, delegating
 all the module declaration and management logic to the framework.
 
 For example, suppose an accounting software is constructed and is composed of 
-general ledger, reporting, invoicing, user management, and authentication programs.  
+general ledger, reporting, invoicing, user management, and authentication programs. 
 The authentication can be further broken into login, logout, sign up, and forgot 
 sub-applications.  And, forgot component can be decomposed into forgot password and 
 forgot username programs.  In total, there may be tens of these smaller modules in the 
