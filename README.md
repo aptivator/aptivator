@@ -6,7 +6,7 @@ designed to minimize the complexity of the derived software and to reduce
 the complexity-driven costs of time, effort, and resources.  Aptivator employs 
 hierarchical modularity as the mechanism to structure, manage, and simplify code 
 bureaucracy.  Each application is seen as consisting of sub-applications and 
-Aptivator provides an explicit process to declare and manage software hierarchy.  
+Aptivator provides an explicit process to declare and manage software hierarchy.
 By providing an architectural frame, Aptivator allows developers greater focus 
 on specific modules that are a core identity of the developed software, 
 delegating all the module declaration and management logic to the framework.
