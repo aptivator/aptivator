@@ -27,7 +27,7 @@ sub-components.  The framework can thus serve as a plug-'n-play architecture,
 allowing construction of new applications out of existing modules declaratively 
 and with minimal configuration.
 
-The framework was lightly influenced by [Angular]'s [UI-Router], which views 
+The framework was lightly influenced by [Angular]'s [UI-Router], which presents 
 its-derived applications as a tree of states.  UI-Router provides a 
 transactional mechanism to shift from one application state to another.  Some 
 parts of UI-Router's application programming interface (API) such as states 
@@ -37,7 +37,8 @@ functionality such as parallel state activation mechanism, state caching, error
 and transient states, concurrent states, animations api, intra-state inter-views 
 dependencies, and full regular expression support in route parameters.
 
-For more information, please visit [Aptivator Documentation Project].
+For more information and to get started with the framework, please visit 
+[Aptivator Documentation Project].
 
 [Aptivator Documentation Project]: https://github.com/aptivator/aptivator-docs
 [Angular]: https://angularjs.org/
