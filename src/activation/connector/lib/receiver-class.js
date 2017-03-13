@@ -15,7 +15,7 @@ export default class {
     let previous = Promise.resolve(data[storeAs]);
     let current = Promise.resolve(result);
     
-    previous.then(() => current).then(result => {
+    data[storeAs] = previous.then(() => current).then(result => {
       data[storeAs] = result;
       
       if(complete) {
