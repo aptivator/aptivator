@@ -14,4 +14,4 @@
 * Sprinkle comments throughout code
 * Tutorial
 * start exploring how to write tests
-* start exploring how to rollup and bundle the frameweork for distribution
+
