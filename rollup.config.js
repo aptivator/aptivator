@@ -9,9 +9,9 @@ export default {
   format: 'umd',
   globals: {
     backbone: 'Backbone',
+    'backbone.marionette': 'Marionette',
     jquery: '$',
-    lodash: '_',
-    'backbone.marionette': 'Marionette'
+    lodash: '_'
   },
   external: ['backbone', 'backbone.marionette', 'jquery', 'lodash'],
   plugins: [
