@@ -1,7 +1,7 @@
 {
   "name": "aptivator",
   "version": "0.0.1",
-  "description": "Plug-'n-play architectural framework for Backbone- and Marionette-based applications",
+  "description": "Architectural framework for Backbone- and Marionette-based applications",
   "main": "./dist/aptivator",
   "repository": { 
     "type": "git", 
