@@ -2,10 +2,15 @@
   "name": "aptivator",
   "version": "0.0.1",
   "description": "Architectural framework for Backbone- and Marionette-based applications",
+  "author": "Dmitriy A. Nesterkin",
+  "license": "GPLv3",
   "main": "./dist/aptivator",
   "repository": { 
     "type": "git", 
     "url": "https://github.com/aptivator/aptivator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aptivator/aptivator/issues"
   },
   "dependencies": {
     "backbone": "~1.3.3",
@@ -30,7 +35,5 @@
   },
   "scripts": {
     "build": "rollup -c"
-  },
-  "author": "Dmitriy A. Nesterkin",
-  "license": "GPLv3"
+  }
 }

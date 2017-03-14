@@ -13,10 +13,10 @@ delegating all the module declaration and management logic to the framework.
 
 For example, suppose an accounting software is constructed and is composed of 
 general ledger, reporting, invoicing, user management, and authentication 
-programs. The authentication, to pick one, can be further broken into login, 
-logout, sign up, and forgot sub-applications.  And, forgot component can be 
-decomposed into forgot password and forgot username programs.  In total, there 
-may be tens of these smaller modules in the main software.  Gluing the 
+programs. The authentication, to pick just one, can be further broken into 
+login, logout, sign up, and forgot sub-applications.  And, forgot component can 
+be decomposed into forgot password and forgot username programs.  In total, 
+there may be tens of these smaller modules in the main software.  Gluing the 
 components hierarchically together into what becomes one focal program may be 
 challenging.  The challenge gets exacerbated when the woven components must be 
 reusable, easily navigatable to in a live browser application, and stable as 
