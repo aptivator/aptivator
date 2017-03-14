@@ -3,6 +3,8 @@
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
 * take a look at animation flickering in Mozilla
 * allow child state route path to be used as is without concatenation with parent route
+* figure out what flags a developer can set for transient states (already can noResolves and parallel) (spliced?)
+* **DONE** make sure that handler for receiver class stores promise in the data object
 * **DONE** finish README.md
 * **DONE** make sure everything works well across various browsers (this is a concern for animation, the app changes flicker in some browsers) (use forwards keyword)
 * **DONE** is it possible to do deactivation from old or transient to new state after rendering stage? (not quite)

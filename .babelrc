@@ -1,9 +1,8 @@
 {
-  "presets": ["es2015", "stage-3"],
+  "presets": [["es2015", {"modules": false}], "stage-3"],
   "plugins": [
+    "external-helpers",        
     "transform-async-functions",
-    ["transform-runtime", {
-      "polyfill": false,
-      "regenerator": true
-    }]]
+    ["transform-runtime", {"polyfill": false, "regenerator": true}]
+  ]
 }
