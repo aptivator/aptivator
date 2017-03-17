@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Architectural framework for Backbone- and Marionette-based applications",
   "author": "Dmitriy A. Nesterkin",
-  "license": "GPLv3",
+  "license": "MIT",
   "main": "./dist/aptivator.js",
   "jsnext:main": "./dist/aptivator.es.js",
   "repository": { 

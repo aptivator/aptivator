@@ -10,6 +10,7 @@
 * note when activating two serial states simultaneously, the last one will be canceled
 * note that for class assignment on the view element itself will require using View instead of just a template
 * note that all heavy async processing must happen before rendering
+* note that because of strict mode some template converters will not work because of with and their templates should have a namespace variable
 * note when writing animations, forwards option can be very helpful
 * Sprinkle comments throughout code
 * Tutorial
