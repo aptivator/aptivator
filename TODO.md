@@ -5,7 +5,9 @@
 * allow child state route path to be used as is without concatenation with parent route
 * figure out what flags a developer can set for transient states (already can noResolves and parallel) (spliced?)
 * in vars export each individual variable
-* add templateVars when settings configs
+* make sure that splat is optional
+* **DONE** spin example out and convert to to ES2015
+* **DONE** add templateVars when settings configs
 * **DONE** start exploring how to rollup and bundle the frameweork for distribution (using rollup - works well)
 * **DONE** make sure that handler for receiver class stores promise in the data object
 * **DONE** finish README.md

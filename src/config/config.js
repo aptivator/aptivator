@@ -3,7 +3,13 @@ import aptivator             from '../lib/aptivator';
 import vars                  from '../lib/vars';
 import invalidRouteRegistrar from './lib/invalid-route-registrar';
 
-aptivator.config = configs => {
-  _.extend(vars.configs, configs);
+let {configs} = vars;
+
+aptivator.config = settings => {
+  if(!settings.templateVars) {
+    settings.templateVars = {};
+  }
+  
+  _.extend(configs, settings);
   invalidRouteRegistrar();
 };

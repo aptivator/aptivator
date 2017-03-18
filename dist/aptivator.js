@@ -2638,8 +2638,15 @@ var invalidRouteRegistrar = (function () {
   vars.router.route('*error', errorStater);
 });
 
-aptivator.config = function (configs) {
-  _.extend(vars.configs, configs);
+var configs = vars.configs;
+
+
+aptivator.config = function (settings) {
+  if (!settings.templateVars) {
+    settings.templateVars = {};
+  }
+
+  _.extend(configs, settings);
   invalidRouteRegistrar();
 };
 
@@ -5024,7 +5031,7 @@ var instantiator = (function (viewConfigs, stateParams) {
     }
 
     var data = serializeData && serializeData.apply(this, args);
-    return _.extend(this.options, data, { aptivator: viewApi });
+    return _.extend(this.options, data, { aptivator: viewApi }, vars.configs.templateVars);
   };
 
   instance.destroy = function () {
