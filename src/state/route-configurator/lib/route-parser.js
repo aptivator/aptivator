@@ -24,7 +24,7 @@ export default (route, parentRoute) => {
       
       return {name: part.replace(routePartCleanRx, '')};
     }
-    
+
     let paramParts = part.split(':');
     let isSplat = part.startsWith('*');
     let required = isSplat ? false : !part.includes(')');
@@ -66,7 +66,7 @@ export default (route, parentRoute) => {
     
     names.push(name);
     
-    return {required, prefix, name};
+    return {required, prefix, name, splat: isSplat};
   });
   
   _.extend(route, {parts: parentParts.concat(parts)});

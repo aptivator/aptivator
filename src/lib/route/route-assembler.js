@@ -40,14 +40,20 @@ export default (stateName, routeValues, activating) => {
   }
   
   _.each(parts, part => {
-    let {required, name, prefix} = part;
+    let {required, name, prefix, splat} = part;
     
     if(_.isUndefined(required)) {
       return fragments.push(name);
     }
 
-    if(!routeValues[++index] && required) {
-      error.throw(`expecting a value for [${name}] parameter`, moduleName);
+    if(!routeValues[++index]) {
+      if(required) {
+        error.throw(`expecting a value for [${name}] parameter`, moduleName);
+      }
+      
+      if(splat) {
+        routeValues[index] = '/';
+      }
     }
     
     if(routeValues[index]) {

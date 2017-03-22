@@ -2814,15 +2814,22 @@ var routeAssembler = (function (stateName, routeValues, activating) {
   _.each(parts, function (part) {
     var required = part.required,
         name = part.name,
-        prefix = part.prefix;
+        prefix = part.prefix,
+        splat = part.splat;
 
 
     if (_.isUndefined(required)) {
       return fragments.push(name);
     }
 
-    if (!routeValues[++index] && required) {
-      error$1.throw('expecting a value for [' + name + '] parameter', moduleName);
+    if (!routeValues[++index]) {
+      if (required) {
+        error$1.throw('expecting a value for [' + name + '] parameter', moduleName);
+      }
+
+      if (splat) {
+        routeValues[index] = '/';
+      }
     }
 
     if (routeValues[index]) {
@@ -2866,7 +2873,7 @@ var routeParser = (function (route, parentRoute) {
 
     var paramParts = part.split(':');
     var isSplat = part.startsWith('*');
-    var required = isSplat || !part.includes(')');
+    var required = isSplat ? false : !part.includes(')');
 
     if (isSplat) {
       if (hasSplat) {
@@ -2905,7 +2912,7 @@ var routeParser = (function (route, parentRoute) {
 
     names.push(name);
 
-    return { required: required, prefix: prefix, name: name };
+    return { required: required, prefix: prefix, name: name, splat: isSplat };
   });
 
   _.extend(route, { parts: parentParts.concat(parts) });

@@ -2,7 +2,8 @@
 
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
 * allow child state route path to be used as is without concatenation with parent route
-* make sure that splat is optional
+* **DONE** make sure that empty splats are initialized with forward slash (/)
+* **DONE** make sure that splat is optional
 * **DONE** take a look at animation flickering in Mozilla (seems to be working good)
 * **DONE** figure out what flags a developer can set for transient states (already can noResolves and parallel) (spliced?)
 * **DONE** in vars export each individual variable
