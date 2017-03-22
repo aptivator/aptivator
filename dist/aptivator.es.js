@@ -2860,7 +2860,7 @@ var routeParser = (function (route, parentRoute) {
 
     var paramParts = part.split(':');
     var isSplat = part.startsWith('*');
-    var required = !part.includes(')');
+    var required = isSplat || !part.includes(')');
 
     if (isSplat) {
       if (hasSplat) {

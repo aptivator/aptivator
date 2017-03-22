@@ -1,10 +1,10 @@
 # TODOs
 
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
-* take a look at animation flickering in Mozilla
 * allow child state route path to be used as is without concatenation with parent route
-* figure out what flags a developer can set for transient states (already can noResolves and parallel) (spliced?)
 * make sure that splat is optional
+* **DONE** take a look at animation flickering in Mozilla (seems to be working good)
+* **DONE** figure out what flags a developer can set for transient states (already can noResolves and parallel) (spliced?)
 * **DONE** in vars export each individual variable
 * **DONE** start exploring how to write tests
 * **DONE** spin example out and convert to to ES2015
