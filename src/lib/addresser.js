@@ -1,7 +1,6 @@
 import _    from 'lodash';
-import vars from './vars';
 
-let {registry} = vars.states;
+import {registry} from './vars';
 
 export default {
   isStateAddress(address) {

@@ -1,8 +1,7 @@
 import _         from 'lodash';
 import addresser from '../../../lib/addresser';
-import vars      from '../../../lib/vars';
 
-let {registry} = vars.states;
+import {registry} from '../../../lib/vars';
 
 export default viewConfigs => {
   let {addressSelector, addressStateName} = viewConfigs;

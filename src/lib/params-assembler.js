@@ -2,9 +2,8 @@ import _              from 'lodash';
 import addresser      from './addresser';
 import relations      from './relations';
 import routeAssembler from './route/route-assembler';
-import vars           from './vars';
 
-let {dataParams, resolveParams} = vars;
+import {dataParams, registry, resolveParams} from './vars';
 
 export default (entityName, stateParams) => {
   let {direct, route, stateName, hooks} = stateParams;
@@ -13,7 +12,7 @@ export default (entityName, stateParams) => {
   let family = relations.family(entityName);
   let targetEntityName = _.nth(family, -1);
   let targetStateName = addresser.stateName(targetEntityName);
-  let targetStateConfigs = vars.states.registry[targetStateName];
+  let targetStateConfigs = registry[targetStateName];
   let {error, route: routeConfigs} = targetStateConfigs;
   
   if(route && !_.isEmpty(routeConfigs)) {

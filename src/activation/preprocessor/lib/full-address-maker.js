@@ -1,12 +1,13 @@
 import addresser from '../../../lib/addresser';
 import relations from '../../../lib/relations';
-import vars      from '../../../lib/vars';
+
+import {rootStateName} from '../../../lib/vars';
 
 export default (viewAddress, containerStateName) => {
   let [selector, stateName] = addresser.parts(viewAddress);
   
   if(stateName === '') {
-    stateName = vars.rootStateName;
+    stateName = rootStateName;
   } else if(!stateName) {
     stateName = relations.parent(containerStateName);
   } else if(stateName === 'self') {

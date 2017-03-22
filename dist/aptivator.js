@@ -11,45 +11,24 @@ $ = 'default' in $ ? $['default'] : $;
 
 var aptivator = {};
 
-var vars = {
-  activating: {
-    transient: [],
-    regular: []
-  },
-
-  configs: {},
-
-  dataParams: {},
-
-  deactivating: [],
-
-  eventRegistry: {},
-
-  paramsMap: {},
-
-  rootStateName: 'root',
-
-  router: new Backbone.Router(),
-
-  resolveDefinitions: {},
-
-  resolveParams: {},
-
-  spaceSplitter: /\s+/,
-
-  states: {
-    error: [],
-    history: [],
-    queue: [],
-    registry: {},
-    transient: []
-  },
-
-  transientDelay: 300
-};
-
-var history = vars.states.history;
-
+var activatingRegulars = [];
+var activatingTransients = [];
+var configs = {};
+var dataParams = {};
+var deactivating = [];
+var errorRegistry = [];
+var eventRegistry = {};
+var history = [];
+var paramsMap = {};
+var queue = [];
+var registry = {};
+var resolveDefinitions = {};
+var resolveParams = {};
+var rootStateName = 'root';
+var router = new Backbone.Router();
+var spaceSplitter = /\s+/;
+var transientDelay = 300;
+var transientRegistry = [];
 
 aptivator.history = {
   find: function find(predicate) {
@@ -697,10 +676,6 @@ exports.default = function (arr) {
 
 var _toConsumableArray = unwrapExports(toConsumableArray);
 
-var eventRegistry = vars.eventRegistry;
-var spaceSplitter = vars.spaceSplitter;
-
-
 var registrar = (function (events, callback, context, once) {
   if (_.isString(events)) {
     events = events.trim().split(spaceSplitter);
@@ -915,16 +890,13 @@ exports.default = function () {
 
 var _slicedToArray = unwrapExports(slicedToArray);
 
-var eventRegistry$2 = vars.eventRegistry;
-
-
 function callbacker$1(events, mainArgs) {
   var callbacks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   events.forEach(function (event) {
     if (_.isString(event)) {
-      if (!_.isEmpty(eventRegistry$2[event])) {
-        var eventRecord = { handle: event, callbacks: eventRegistry$2[event] };
+      if (!_.isEmpty(eventRegistry[event])) {
+        var eventRecord = { handle: event, callbacks: eventRegistry[event] };
 
         if (mainArgs) {
           _.extend(eventRecord, { args: mainArgs });
@@ -957,16 +929,13 @@ function callbacker$1(events, mainArgs) {
   return callbacks;
 }
 
-var spaceSplitter$1 = vars.spaceSplitter;
-
-
 var levels = function levels(record) {
   return record.handle.split(':').length;
 };
 
 var callbacker = (function (events, mainArgs) {
   if (_.isString(events)) {
-    events = events.split(spaceSplitter$1);
+    events = events.split(spaceSplitter);
   }
 
   if (!_.isArray(events)) {
@@ -980,14 +949,11 @@ var callbacker = (function (events, mainArgs) {
   });
 });
 
-var eventRegistry$1 = vars.eventRegistry;
-
-
 var off = (function (events, callback, context) {
   if (!events) {
-    events = _.keys(eventRegistry$1);
+    events = _.keys(eventRegistry);
     return events.forEach(function (event) {
-      return delete eventRegistry$1[event];
+      return delete eventRegistry[event];
     });
   }
 
@@ -1837,16 +1803,16 @@ var setTask            = _global.setImmediate;
 var clearTask          = _global.clearImmediate;
 var MessageChannel     = _global.MessageChannel;
 var counter            = 0;
-var queue              = {};
+var queue$1              = {};
 var ONREADYSTATECHANGE = 'onreadystatechange';
 var defer;
 var channel;
 var port;
 var run = function(){
   var id = +this;
-  if(queue.hasOwnProperty(id)){
-    var fn = queue[id];
-    delete queue[id];
+  if(queue$1.hasOwnProperty(id)){
+    var fn = queue$1[id];
+    delete queue$1[id];
     fn();
   }
 };
@@ -1858,14 +1824,14 @@ if(!setTask || !clearTask){
   setTask = function setImmediate(fn){
     var args = [], i = 1;
     while(arguments.length > i)args.push(arguments[i++]);
-    queue[++counter] = function(){
+    queue$1[++counter] = function(){
       _invoke(typeof fn == 'function' ? fn : Function(fn), args);
     };
     defer(counter);
     return counter;
   };
   clearTask = function clearImmediate(id){
-    delete queue[id];
+    delete queue$1[id];
   };
   // Node.js 0.8-
   if(_cof(process$2) == 'process'){
@@ -2434,9 +2400,6 @@ _.each({ l: localStorage, s: sessionStorage }, function (store, storeAbbr) {
   };
 });
 
-var registry$1 = vars.states.registry;
-
-
 var addresser = {
   isStateAddress: function isStateAddress(address) {
     if (!address.includes('@')) {
@@ -2444,7 +2407,7 @@ var addresser = {
     }
 
     var stateName = this.stateName(address);
-    return registry$1[stateName].uniqueAddress === address;
+    return registry[stateName].uniqueAddress === address;
   },
   uniqueAddress: function uniqueAddress(stateName) {
     return _.uniqueId('aptivator-id-') + '@' + stateName;
@@ -2463,7 +2426,7 @@ var addresser = {
   },
   record: function record(address) {
     var stateName = this.stateName(address);
-    var views = registry$1[stateName].views;
+    var views = registry[stateName].views;
 
     return _.filter(views, { uniqueAddress: address })[0].record;
   }
@@ -2471,7 +2434,7 @@ var addresser = {
 
 var relations = {
   isRoot: function isRoot(stateName) {
-    return stateName === vars.rootStateName;
+    return stateName === rootStateName;
   },
 
   parts: function parts(stateName) {
@@ -2491,7 +2454,7 @@ var relations = {
     });
 
     if (!this.isRoot(stateName)) {
-      family.unshift(vars.rootStateName);
+      family.unshift(rootStateName);
     }
 
     if (entityName.includes('@')) {
@@ -2533,10 +2496,6 @@ var relations = {
   }
 };
 
-var states = vars.states;
-var registry = states.registry;
-
-
 var approximator = {
   fromHash: function fromHash(hash) {
     if (!hash) {
@@ -2560,14 +2519,16 @@ var approximator = {
     return this.fromHash(hash.split('/').slice(0, -1).join('/'));
   },
   fromStateName: function fromStateName(stateType, searchStateName) {
+    var otherRegistry = stateType === 'error' ? errorRegistry : transientRegistry;
+
     if (!searchStateName) {
-      return states[stateType].root;
+      return otherRegistry.root;
     }
 
     var searchStateNameParts = relations.parts(searchStateName);
     var max = 0;
 
-    states[stateType].forEach(function (stateName) {
+    otherRegistry.forEach(function (stateName) {
       var stateNameParts = relations.parts(stateName);
 
       if (stateNameParts.length > searchStateNameParts.length) {
@@ -2597,13 +2558,13 @@ var fragment = {
 
   set: function set(route) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    return vars.router.navigate(route, options);
+    return router.navigate(route, options);
   },
 
   toState: function toState() {
     var fragment = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get();
 
-    return _.filter(vars.states.registry, function (stateConfigs, stateName) {
+    return _.filter(registry, function (stateConfigs, stateName) {
       var abstract = stateConfigs.abstract,
           routeRx = stateConfigs.routeRx;
 
@@ -2635,11 +2596,8 @@ var errorStater = (function () {
 });
 
 var invalidRouteRegistrar = (function () {
-  vars.router.route('*error', errorStater);
+  return router.route('*error', errorStater);
 });
-
-var configs = vars.configs;
-
 
 aptivator.config = function (settings) {
   if (!settings.templateVars) {
@@ -2813,12 +2771,10 @@ var routeAsserter = (function (values, asserters) {
   return true;
 });
 
-var registry$3 = vars.states.registry;
-
 var moduleName = 'route assembler';
 
 var routeAssembler = (function (stateName, routeValues, activating) {
-  var stateConfigs = registry$3[stateName];
+  var stateConfigs = registry[stateName];
 
   if (!stateConfigs) {
     error$1.throw('state [' + stateName + '] does not exist', moduleName);
@@ -3014,9 +2970,6 @@ var valuesAssertersAssembler = (function (route, parentRoute) {
   });
 });
 
-var router = vars.router;
-
-
 var routeConfigurator = (function (stateConfigs, parentConfigs) {
   var abstract = stateConfigs.abstract,
       stateName = stateConfigs.stateName,
@@ -3062,11 +3015,6 @@ var routeConfigurator = (function (stateConfigs, parentConfigs) {
   }
 });
 
-var states$1 = vars.states;
-var registry$2 = states$1.registry;
-var queue$1 = states$1.queue;
-
-
 aptivator.state = function (stateName, stateConfigs) {
   return !_asyncToGenerator(index.mark(function _callee() {
     var transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods, template, view, views;
@@ -3074,7 +3022,7 @@ aptivator.state = function (stateName, stateConfigs) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            if (registry$2[stateName]) {
+            if (registry[stateName]) {
               error$1.throw('state [' + stateName + '] has already been declared', 'state declaration');
             }
 
@@ -3086,7 +3034,7 @@ aptivator.state = function (stateName, stateConfigs) {
 
             transient = stateConfigs.transient, error = stateConfigs.error, on = stateConfigs.on, once = stateConfigs.once, parallelStates = stateConfigs.states, substates = stateConfigs.substates, route = stateConfigs.route, root = stateConfigs.root;
             parentStateName = root || relations.parent(stateName);
-            parentConfigs = root ? {} : registry$2[parentStateName];
+            parentConfigs = root ? {} : registry[parentStateName];
             eventMethods = {};
 
             if (parentConfigs) {
@@ -3094,7 +3042,7 @@ aptivator.state = function (stateName, stateConfigs) {
               break;
             }
 
-            return _context.abrupt('return', queue$1.push([stateName, stateConfigs]));
+            return _context.abrupt('return', queue.push([stateName, stateConfigs]));
 
           case 9:
             template = stateConfigs.template, view = stateConfigs.view, views = stateConfigs.views;
@@ -3105,7 +3053,7 @@ aptivator.state = function (stateName, stateConfigs) {
             }
 
             if (transient || error) {
-              otherStateRegistrar(stateName, states$1[transient ? 'transient' : 'error']);
+              otherStateRegistrar(stateName, transient ? transientRegistry : errorRegistry);
               delete stateConfigs.route;
             }
 
@@ -3131,14 +3079,14 @@ aptivator.state = function (stateName, stateConfigs) {
               routeConfigurator(stateConfigs, parentConfigs);
             }
 
-            registry$2[stateName] = stateConfigs;
+            registry[stateName] = stateConfigs;
 
             _.each(substates, function (stateConfigs, subStateName) {
               aptivator.state(stateName + '.' + subStateName, stateConfigs);
             });
 
-            if (queue$1.length) {
-              aptivator.state.apply(aptivator, _toConsumableArray(queue$1.pop()));
+            if (queue.length) {
+              aptivator.state.apply(aptivator, _toConsumableArray(queue.pop()));
             }
 
           case 20:
@@ -3196,9 +3144,6 @@ var missingParentsAssembler = (function (queue) {
   return parentNames.reverse().join(', ');
 });
 
-var queue$2 = vars.states.queue;
-
-
 aptivator.start = function () {
   return !_asyncToGenerator(index.mark(function _callee() {
     var defaultState, missingParents;
@@ -3206,11 +3151,11 @@ aptivator.start = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            defaultState = vars.configs.defaultState;
+            defaultState = configs.defaultState;
 
 
-            if (queue$2.length) {
-              missingParents = missingParentsAssembler(queue$2);
+            if (queue.length) {
+              missingParents = missingParentsAssembler(queue);
 
               error$1.throw('undeclared parent states: [' + missingParents + ']', 'starter');
             }
@@ -3229,7 +3174,7 @@ aptivator.start = function () {
             */
 
             if (!fragment.get() && defaultState) {
-              aptivator.activate({ stateName: defaultState, direct: { running: true, spliced: true } }).catch(_.noop);
+              aptivator.activate({ stateName: defaultState, direct: { running: true } }).catch(_.noop);
             }
 
           case 4:
@@ -3411,7 +3356,7 @@ var transientInitializer = (function (stateName, immediate) {
   var stateParams = stateName;
 
   if (!_.isObject(stateParams)) {
-    var transient = vars.states.registry[stateName].transient;
+    var transient = registry[stateName].transient;
 
     var _ref = _.isObject(transient) ? transient : {},
         delay = _ref.delay,
@@ -3430,9 +3375,9 @@ var transientInitializer = (function (stateName, immediate) {
   if (immediate) {
     delay = 0;
   } else if (!_.isNumber(delay)) {
-    var transientDelay = vars.configs.transientDelay;
+    var transientDelay_ = configs.transientDelay;
 
-    delay = _.isNumber(transientDelay) ? transientDelay : vars.transientDelay;
+    delay = _.isNumber(transientDelay_) ? transientDelay_ : transientDelay;
   }
 
   transientConfigs.timeout = setTimeout(function () {
@@ -3448,9 +3393,6 @@ var transientInitializer = (function (stateName, immediate) {
 });
 
 var _this$1 = undefined;
-
-var activating = vars.activating;
-
 
 var eventHandles = _.mapValues({ transient: '', regular: '' }, function (value, key) {
   return 'aptivator-goto-preprocessor-' + key;
@@ -3555,14 +3497,14 @@ var initializer = (function (stateParams) {
                 }
               });
 
-              if (vars.configs.showRuntime) {
+              if (configs.showRuntime) {
                 stateParams.time = _.now();
               }
 
-              _.remove(activating.transient, function () {
+              _.remove(activatingRegulars, function () {
                 return true;
               });
-              _.remove(activating.regular, function () {
+              _.remove(activatingTransients, function () {
                 return true;
               });
               aptivator.trigger(eventHandle);
@@ -3588,7 +3530,7 @@ var fullAddressMaker = (function (viewAddress, containerStateName) {
       stateName = _addresser$parts2[1];
 
   if (stateName === '') {
-    stateName = vars.rootStateName;
+    stateName = rootStateName;
   } else if (!stateName) {
     stateName = relations.parent(containerStateName);
   } else if (stateName === 'self') {
@@ -3603,8 +3545,8 @@ var storeFlag = 2;
 var bothFlags = 1 | 2;
 
 
-var resolvesNormalizer = (function (configs, entityName) {
-  var resolves = configs.resolves;
+var resolvesNormalizer = (function (configs$$1, entityName) {
+  var resolves = configs$$1.resolves;
 
   var hasAt = entityName.includes('@');
   var stateName = hasAt ? addresser.stateName(entityName) : entityName;
@@ -3627,7 +3569,7 @@ var resolvesNormalizer = (function (configs, entityName) {
 
     !function normalizeResolves() {
       var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var viewConfigs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : hasAt && configs;
+      var viewConfigs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : hasAt && configs$$1;
 
       if (index >= family.length || status === bothFlags) {
         return;
@@ -3636,7 +3578,7 @@ var resolvesNormalizer = (function (configs, entityName) {
       var stateConfigs = viewConfigs;
 
       if (!stateConfigs) {
-        stateConfigs = vars.states.registry[family[index++]];
+        stateConfigs = registry[family[index++]];
       }
 
       if (stateConfigs.resolveConfigs) {
@@ -3675,7 +3617,7 @@ var viewNormalizer = (function (viewConfigs) {
     for (var _iterator = family[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var relation = _step.value;
 
-      var stateConfigs = vars.states.registry[relation];
+      var stateConfigs = registry[relation];
       if (!_.isUndefined(stateConfigs.detachHidden)) {
         viewConfigs.detachHidden = stateConfigs.detachHidden;
         break;
@@ -3697,11 +3639,6 @@ var viewNormalizer = (function (viewConfigs) {
   }
 });
 
-var dataParams = vars.dataParams;
-var resolveDefinitions = vars.resolveDefinitions;
-var states$2 = vars.states;
-var registry$4 = states$2.registry;
-
 var reservedHashes = ['base', 'elements'];
 
 var preprocessor = (function (stateParams) {
@@ -3711,7 +3648,7 @@ var preprocessor = (function (stateParams) {
   stateParams.flags.preprocessed = true;
 
   !function preprocess(stateName) {
-    var stateConfigs = registry$4[stateName];
+    var stateConfigs = registry[stateName];
 
     if (stateConfigs.resolveAddresses) {
       return;
@@ -3850,12 +3787,9 @@ var preprocessor = (function (stateParams) {
   return stateParams;
 });
 
-var history$1 = vars.states.history;
-
-
 var historyAdder = (function (state) {
-  history$1.push(state);
-  history$1.splice(0, history$1.length - vars.configs.historySize);
+  history.push(state);
+  history.splice(0, history.length - configs.historySize);
 });
 
 var defaultFlags = {
@@ -3873,9 +3807,6 @@ var defaultFlags = {
   displayed: false
 };
 
-var registry$6 = vars.states.registry;
-
-
 var parallelStatesStarter = (function (stateParams) {
   var flags = stateParams.flags,
       route = stateParams.route,
@@ -3890,7 +3821,7 @@ var parallelStatesStarter = (function (stateParams) {
 
 
   _.each(family, function (relation) {
-    var stateConfigs = registry$6[relation];
+    var stateConfigs = registry[relation];
     _.each(stateConfigs.states, function (parallelStateParams) {
       parallelStateParams = _.cloneDeep(parallelStateParams);
       var _parallelStateParams = parallelStateParams,
@@ -3929,11 +3860,6 @@ var parallelStatesStarter = (function (stateParams) {
 
 var _this$3 = undefined;
 
-var activating$1 = vars.activating;
-var states$3 = vars.states;
-var registry$5 = states$3.registry;
-
-
 var starter = (function () {
   var _ref = _asyncToGenerator(index.mark(function _callee(stateParams) {
     var stateName, _stateParams$name, name, _stateParams$flags, flags, route, routeValues, _flags, silent, parallel, transient, stateConfigs, tracker, routeConfigs, values;
@@ -3944,8 +3870,8 @@ var starter = (function () {
           case 0:
             stateName = stateParams.stateName, _stateParams$name = stateParams.name, name = _stateParams$name === undefined ? stateName : _stateParams$name, _stateParams$flags = stateParams.flags, flags = _stateParams$flags === undefined ? {} : _stateParams$flags, route = stateParams.route, routeValues = stateParams.routeValues;
             _flags = flags, silent = _flags.silent, parallel = _flags.parallel, transient = _flags.transient;
-            stateConfigs = registry$5[name];
-            tracker = activating$1[transient ? 'transient' : 'regular'];
+            stateConfigs = registry[name];
+            tracker = transient ? activatingTransients : activatingRegulars;
 
             if (stateConfigs) {
               _context.next = 6;
@@ -4016,10 +3942,6 @@ var starter = (function () {
   };
 })();
 
-var dataParams$1 = vars.dataParams;
-var resolveParams$1 = vars.resolveParams;
-
-
 var paramsAssembler = (function (entityName, stateParams) {
   var direct = stateParams.direct,
       route = stateParams.route,
@@ -4033,7 +3955,7 @@ var paramsAssembler = (function (entityName, stateParams) {
   var family = relations.family(entityName);
   var targetEntityName = _.nth(family, -1);
   var targetStateName = addresser.stateName(targetEntityName);
-  var targetStateConfigs = vars.states.registry[targetStateName];
+  var targetStateConfigs = registry[targetStateName];
   var error = targetStateConfigs.error,
       routeConfigs = targetStateConfigs.route;
 
@@ -4064,8 +3986,8 @@ var paramsAssembler = (function (entityName, stateParams) {
   }
 
   family.forEach(function (relation) {
-    _.extend(data, dataParams$1[relation]);
-    _.extend(resolves, resolveParams$1[relation]);
+    _.extend(data, dataParams[relation]);
+    _.extend(resolves, resolveParams[relation]);
   });
 
   _.each(hooks, function (hookValues, hookName) {
@@ -4185,12 +4107,6 @@ var resolvesProcessor = (function (resolves, resolveParams, storeKey, resolverPa
   });
 });
 
-var resolveDefinitions$1 = vars.resolveDefinitions;
-var resolveParams = vars.resolveParams;
-var states$4 = vars.states;
-var registry$7 = states$4.registry;
-
-
 var resolver = (function (stateParams) {
   return new Promise(function (resolve, reject) {
     stateParams.flags.resolved = true;
@@ -4202,7 +4118,7 @@ var resolver = (function (stateParams) {
     var stateName = stateParams.stateName;
 
     var resolveAddresses = relations.family(stateName).reduce(function (resolveAddresses, relation) {
-      return resolveAddresses.concat(registry$7[relation].resolveAddresses);
+      return resolveAddresses.concat(registry[relation].resolveAddresses);
     }, []);
     var tree = entitiesTreeBuilder(resolveAddresses);
 
@@ -4213,7 +4129,7 @@ var resolver = (function (stateParams) {
         var promises = [];
         _.keys(node).forEach(function (entityName) {
           var params = paramsAssembler(entityName, stateParams);
-          var promise = resolvesProcessor(resolveDefinitions$1[entityName], resolveParams, entityName, params);
+          var promise = resolvesProcessor(resolveDefinitions[entityName], resolveParams, entityName, params);
           promises.push(promise.then(function () {
             return process(node[entityName]);
           }).catch(reject));
@@ -4379,11 +4295,6 @@ var deactivator = (function (stateParams) {
   }());
 });
 
-var paramsMap = vars.paramsMap;
-var states$6 = vars.states;
-var registry$9 = states$6.registry;
-
-
 var cacheAssessor = {
   explicit: function explicit(viewConfigs) {
     var stateName = viewConfigs.stateName,
@@ -4391,7 +4302,7 @@ var cacheAssessor = {
         viewCacheFlag = viewConfigs.cache;
     var instance = record.instance;
 
-    var stateConfigs = registry$9[stateName];
+    var stateConfigs = registry[stateName];
     var stateCacheFlag = stateConfigs.cache;
 
     var cache = void 0;
@@ -4519,9 +4430,6 @@ var callbacker$2 = (function (callback, entityName, stateParams) {
   return callback(params);
 });
 
-var spaceSplitter$3 = vars.spaceSplitter;
-
-
 var elementAssembler = (function (params) {
   var selector = params.selector,
       selectorConfigs = params.selectorConfigs,
@@ -4559,7 +4467,7 @@ var elementAssembler = (function (params) {
   }
 
   if (_.isString(selectorClasses)) {
-    selectorClasses = selectorClasses.trim().split(spaceSplitter$3);
+    selectorClasses = selectorClasses.trim().split(spaceSplitter);
   }
 
   var _selectorSettings = selectorSettings,
@@ -4577,15 +4485,10 @@ var elementAssembler = (function (params) {
   }
 });
 
-var spaceSplitter$2 = vars.spaceSplitter;
-var states$7 = vars.states;
-var registry$10 = states$7.registry;
-
-
 function animationsAssembler$1(entityName, stateParams, animationType, animations, fromStateName) {
   var hasAt = entityName.includes('@');
   var stateName = addresser.stateName(entityName);
-  var _registry$stateName = registry$10[stateName],
+  var _registry$stateName = registry[stateName],
       _registry$stateName$a = _registry$stateName.animate,
       animate = _registry$stateName$a === undefined ? {} : _registry$stateName$a,
       uniqueAddress = _registry$stateName.uniqueAddress;
@@ -4617,7 +4520,7 @@ function animationsAssembler$1(entityName, stateParams, animationType, animation
       return error$1.warn('state [' + stateName + '] is not activated', 'animator');
     }
 
-    var _ref = registry$10[fromStateName].animate || {};
+    var _ref = registry[fromStateName].animate || {};
 
     var _ref$animationType = _ref[animationType];
     animationSettings = _ref$animationType === undefined ? {} : _ref$animationType;
@@ -4655,7 +4558,7 @@ function animationsAssembler$1(entityName, stateParams, animationType, animation
   }
 
   if (_.isString(baseClasses)) {
-    baseClasses = baseClasses.trim().split(spaceSplitter$2);
+    baseClasses = baseClasses.trim().split(spaceSplitter);
   }
 
   if ($el) {
@@ -4664,7 +4567,7 @@ function animationsAssembler$1(entityName, stateParams, animationType, animation
     });
   }
 
-  _.each(registry$10[stateName].views, function (viewConfigs) {
+  _.each(registry[stateName].views, function (viewConfigs) {
     var uniqueAddress = viewConfigs.uniqueAddress,
         viewHash = viewConfigs.viewHash,
         animate = viewConfigs.animate,
@@ -4731,7 +4634,7 @@ function animationsAssembler$1(entityName, stateParams, animationType, animation
 
 
     if (_.isFunction(viewClasses)) {
-      viewClasses = callbackRunner(viewClasses, uniqueAddress, stateParams);
+      viewClasses = callbacker$2(viewClasses, uniqueAddress, stateParams);
     }
 
     _.each(elements, function (selectorConfigs, selector) {
@@ -4739,7 +4642,7 @@ function animationsAssembler$1(entityName, stateParams, animationType, animation
     });
 
     if (_.isString(viewClasses)) {
-      viewClasses = viewClasses.trim().split(spaceSplitter$2);
+      viewClasses = viewClasses.trim().split(spaceSplitter);
     }
 
     if (_.isUndefined(viewClasses) && _.isNull(baseClasses)) {
@@ -4772,9 +4675,6 @@ function animationsAssembler$1(entityName, stateParams, animationType, animation
   }
 }
 
-var rootStateName$1 = vars.rootStateName;
-
-
 var stateNamesAggregator = (function (animationStates) {
   animationStates = _.reduce(animationStates, function (animationStates, animationState) {
     var stateParams = animationState.stateParams,
@@ -4805,7 +4705,7 @@ var stateNamesAggregator = (function (animationStates) {
 
   animationStates.sort(relations.hierarchySorter());
 
-  var rootIndex = _.findIndex(animationStates, { stateName: rootStateName$1 });
+  var rootIndex = _.findIndex(animationStates, { stateName: rootStateName });
 
   if (rootIndex > -1) {
     var rootState = animationStates.splice(rootIndex, 1)[0];
@@ -4935,9 +4835,6 @@ var hider = (function (record, detach) {
   $el.addClass(hideClassName);
 });
 
-var registry$11 = vars.states.registry;
-
-
 var deactivator$1 = {
   full: function full(params) {
     var _this = this;
@@ -4952,7 +4849,7 @@ var deactivator$1 = {
     var _this2 = this;
 
     var stateName = addresser.stateName(params.name);
-    _.each(registry$11[stateName].views, function (viewConfigs) {
+    _.each(registry[stateName].views, function (viewConfigs) {
       _this2.focal({ name: viewConfigs.uniqueAddress });
     });
   },
@@ -5031,7 +4928,7 @@ var instantiator = (function (viewConfigs, stateParams) {
     }
 
     var data = serializeData && serializeData.apply(this, args);
-    return _.extend(this.options, data, { aptivator: viewApi }, vars.configs.templateVars);
+    return _.extend(this.options, data, { aptivator: viewApi }, configs.templateVars);
   };
 
   instance.destroy = function () {
@@ -5099,24 +4996,16 @@ var instantiator = (function (viewConfigs, stateParams) {
   displayer$1(viewConfigs);
 });
 
-var registry$12 = vars.states.registry;
-
-
 var renderingPreparer = (function (viewConfigs) {
   var addressSelector = viewConfigs.addressSelector,
       addressStateName = viewConfigs.addressStateName;
-  var parentUniqueAddress = registry$12[addressStateName].uniqueAddress;
+  var parentUniqueAddress = registry[addressStateName].uniqueAddress;
 
   var parentRecord = addresser.record(parentUniqueAddress);
   var parentRegions = parentRecord.regions || (parentRecord.regions = {});
   var region = parentRegions[addressSelector] || (parentRegions[addressSelector] = { current: new Set() });
   _.extend(viewConfigs, { record: {}, region: region, parentRecord: parentRecord });
 });
-
-var rootStateName = vars.rootStateName;
-var states$5 = vars.states;
-var registry$8 = states$5.registry;
-
 
 var renderer = (function (stateParams) {
   stateParams.flags.rendered = true;
@@ -5128,7 +5017,7 @@ var renderer = (function (stateParams) {
   var family = relations.family(stateName).slice(1);
 
   _.each(family, function (stateName) {
-    _.each(registry$8[stateName].views, function (viewConfigs) {
+    _.each(registry[stateName].views, function (viewConfigs) {
       var _viewConfigs$record = viewConfigs.record,
           record = _viewConfigs$record === undefined ? {} : _viewConfigs$record,
           main = viewConfigs.main,
@@ -5337,8 +5226,6 @@ var receiversGenerator = (function (instance, receivers, params) {
   });
 });
 
-var registry$13 = vars.states.registry;
-
 var moduleName$1 = 'connector';
 
 var connector = (function (stateParams) {
@@ -5347,7 +5234,7 @@ var connector = (function (stateParams) {
   var family = relations.family(stateName).slice(1);
 
   _.each(family, function (relation) {
-    var _registry$relation = registry$13[relation],
+    var _registry$relation = registry[relation],
         stateViews = _registry$relation.views,
         connectingViews = _registry$relation.connectingViews;
 
@@ -5611,11 +5498,6 @@ function inactor(statesParams) {
 
 var _this$7 = undefined;
 
-var deactivating = vars.deactivating;
-var states$8 = vars.states;
-var registry$14 = states$8.registry;
-
-
 var starter$1 = (function () {
   var _ref = _asyncToGenerator(index.mark(function _callee(params) {
     var name, partial, stateConfigs, query, statesParams, stateParams, flags, family;
@@ -5624,7 +5506,7 @@ var starter$1 = (function () {
         switch (_context.prev = _context.next) {
           case 0:
             name = params.name, partial = params.partial;
-            stateConfigs = registry$14[name];
+            stateConfigs = registry[name];
 
             if (!deactivating.includes(name)) {
               _context.next = 4;
@@ -5666,7 +5548,7 @@ var starter$1 = (function () {
             _.extend(flags, { deactivating: true, partial: partial });
 
             _.each(family, function (relation) {
-              var stateConfigs = registry$14[relation];
+              var stateConfigs = registry[relation];
               _.each(stateConfigs.states, function (stateParams) {
                 var name = stateParams.name;
 
@@ -5689,9 +5571,6 @@ var starter$1 = (function () {
   };
 })();
 
-var rootStateName$2 = vars.rootStateName;
-var deactivating$1 = vars.deactivating;
-
 var eventHandle$1 = 'aptivator-goto-finish';
 
 var deactivator$2 = (function (stateParams) {
@@ -5713,9 +5592,9 @@ var deactivator$2 = (function (stateParams) {
     var otherActives = aptivator.history.find(function (stateParams) {
       var _stateParams$flags = stateParams.flags,
           active = _stateParams$flags.active,
-          deactivating = _stateParams$flags.deactivating;
+          deactivating$$1 = _stateParams$flags.deactivating;
 
-      return active && _.isUndefined(deactivating);
+      return active && _.isUndefined(deactivating$$1);
     });
 
     query = { flags: { active: true, deactivating: false } };
@@ -5769,7 +5648,7 @@ var deactivator$2 = (function (stateParams) {
 
         if (!relations.isRoot(min)) {
           if (!partial) {
-            min = rootStateName$2;
+            min = rootStateName;
           } else if (min.length > stateName.length) {
             min = stateName;
           }
@@ -5825,7 +5704,7 @@ var deactivator$2 = (function (stateParams) {
 
     resolve(animationPromise);
     aptivator.trigger(eventHandle$1);
-    _.remove(deactivating$1, function () {
+    _.remove(deactivating, function () {
       return true;
     });
   });

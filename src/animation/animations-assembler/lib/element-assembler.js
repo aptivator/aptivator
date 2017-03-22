@@ -1,8 +1,7 @@
 import _          from 'lodash';
-import vars       from '../../../lib/vars';
 import callbacker from './callbacker';
 
-let {spaceSplitter} = vars;
+import {spaceSplitter} from '../../../lib/vars';
 
 export default params => {
   let {selector, selectorConfigs, stateName, uniqueAddress, stateParams, $el: $parentEl, animations} = params;

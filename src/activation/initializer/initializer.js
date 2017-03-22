@@ -1,11 +1,10 @@
 import _                    from 'lodash';
 import approximator         from '../../lib/approximator';
 import aptivator            from '../../lib/aptivator';
-import vars                 from '../../lib/vars';
 import duplicatesRemover    from './lib/duplicates-remover';
 import transientInitializer from './lib/transient-initializer';
 
-let {activating} = vars;
+import {activatingRegulars, activatingTransients, configs} from '../../lib/vars';
 
 let eventHandles = _.mapValues({transient: '', regular: ''}, (value, key) => {
   return `aptivator-goto-preprocessor-${key}`;
@@ -76,11 +75,11 @@ export default stateParams =>
       }
     });
 
-    if(vars.configs.showRuntime) {
+    if(configs.showRuntime) {
       stateParams.time = _.now();
     }
 
-    _.remove(activating.transient, () => true);
-    _.remove(activating.regular, () => true);
+    _.remove(activatingRegulars, () => true);
+    _.remove(activatingTransients, () => true);
     aptivator.trigger(eventHandle);
   });

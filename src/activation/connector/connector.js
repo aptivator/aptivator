@@ -1,11 +1,11 @@
 import _                  from 'lodash';
 import error              from '../../lib/error';
 import relations          from '../../lib/relations';
-import vars               from '../../lib/vars';
 import receiversGenerator from  './lib/receivers-generator';
 
-let {registry} = vars.states;
-let moduleName = 'connector';
+import {registry} from '../../lib/vars';
+
+const moduleName = 'connector';
 
 export default stateParams => {
   let {stateName} = stateParams;

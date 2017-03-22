@@ -1,8 +1,7 @@
 import _         from 'lodash';
 import aptivator from '../../../lib/aptivator';
-import vars      from '../../../lib/vars';
 
-let {eventRegistry, spaceSplitter} = vars;
+import {eventRegistry, spaceSplitter} from '../../../lib/vars';
 
 export default (events, callback, context, once) => {
   if(_.isString(events)) {

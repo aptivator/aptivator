@@ -1,10 +1,9 @@
 import _                    from 'lodash';
 import aptivator            from '../../../lib/aptivator';
 import relations            from '../../../lib/relations';
-import vars                 from '../../../lib/vars';
 import transientInitializer from '../../initializer/lib/transient-initializer';
 
-let {registry} = vars.states;
+import {registry} from '../../../lib/vars';
 
 export default stateParams => {
   let {flags, route, direct, stateName, parallels} = stateParams;

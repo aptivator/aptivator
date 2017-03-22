@@ -1,8 +1,7 @@
 import _           from 'lodash';
 import aptivator   from '../lib/aptivator';
-import vars        from '../lib/vars';
 
-let {history} = vars.states;
+import {history} from '../lib/vars';
 
 aptivator.history = {
   find(predicate) {

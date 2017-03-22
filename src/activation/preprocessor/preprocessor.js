@@ -3,13 +3,12 @@ import Marionette           from 'backbone.marionette';
 import addresser            from '../../lib/addresser';
 import error                from '../../lib/error';
 import relations            from '../../lib/relations';
-import vars                 from '../../lib/vars';
 import fullAddressMaker     from './lib/full-address-maker';
 import resolvesNormalizer   from './lib/resolves-normalizer';
 import viewNormalizer       from './lib/view-normalizer';
 
-let {dataParams, resolveDefinitions, states} = vars;
-let {registry} = states;
+import {dataParams, registry, resolveDefinitions} from '../../lib/vars';
+
 let reservedHashes = ['base', 'elements'];
 
 export default stateParams => {

@@ -1,8 +1,7 @@
 import _            from 'lodash';
-import vars         from '../../lib/vars';
 import callbacker   from './lib/callbacker';
 
-let {spaceSplitter} = vars;
+import {spaceSplitter} from '../../lib/vars';
 
 let levels = record => record.handle.split(':').length;
 

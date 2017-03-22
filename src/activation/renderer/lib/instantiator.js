@@ -4,10 +4,11 @@ import animator          from '../../../animation/animator';
 import displayer         from '../../../lib/displayer';
 import paramsAssembler   from '../../../lib/params-assembler';
 import relations         from '../../../lib/relations';
-import vars              from '../../../lib/vars';
 import deactivator       from '../../../deactivation/deactivator/lib/deactivator';
 import rootViewRegistrar from './root-view-registrar';
 import viewApi           from './view-api';
+
+import {configs} from '../../../lib/vars';
 
 export default (viewConfigs, stateParams) => {
   let {view, record, region, uniqueAddress, detachHidden, addressStateName} = viewConfigs;
@@ -33,7 +34,7 @@ export default (viewConfigs, stateParams) => {
   
   instance.serializeData = function(...args) {
     var data = serializeData && serializeData.apply(this, args);
-    return _.extend(this.options, data, {aptivator: viewApi}, vars.configs.templateVars);
+    return _.extend(this.options, data, {aptivator: viewApi}, configs.templateVars);
   };
   
   instance.destroy = async function(params = {}) {

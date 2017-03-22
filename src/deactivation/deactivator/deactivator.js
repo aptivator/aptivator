@@ -3,10 +3,10 @@ import animator     from '../../animation/animator';
 import aptivator    from '../../lib/aptivator';
 import hookResulter from '../../lib/hook-resulter';
 import relations    from '../../lib/relations';
-import vars         from '../../lib/vars';
 import deactivator  from './lib/deactivator';
 
-let {rootStateName, deactivating} = vars;
+import {deactivating, rootStateName} from '../../lib/vars';
+
 let eventHandle = 'aptivator-goto-finish';
 
 export default stateParams => 

@@ -1,8 +1,6 @@
-import vars from '../lib/vars';
-
-let {history} = vars.states;
+import {configs, history} from '../lib/vars';
 
 export default state => {
   history.push(state);
-  history.splice(0, history.length - vars.configs.historySize);
+  history.splice(0, history.length - configs.historySize);
 };

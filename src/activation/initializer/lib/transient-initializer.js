@@ -1,12 +1,13 @@
 import _         from 'lodash';
 import aptivator from '../../../lib/aptivator';
-import vars      from '../../../lib/vars';
+
+import {configs, registry, transientDelay} from '../../../lib/vars';
 
 export default (stateName, immediate) => {
   let stateParams = stateName;
   
   if(!_.isObject(stateParams)) {
-    let {transient} = vars.states.registry[stateName];
+    let {transient} = registry[stateName];
     var {delay, parallel = false, noResolves = false} = _.isObject(transient) ? transient : {};
     stateParams = {stateName, flags: {parallel, transient: true, noResolves}};
   }
@@ -18,8 +19,8 @@ export default (stateName, immediate) => {
   if(immediate) {
     delay = 0;
   } else if(!_.isNumber(delay)) {
-    let {transientDelay} = vars.configs;
-    delay = _.isNumber(transientDelay) ? transientDelay : vars.transientDelay;
+    let {transientDelay: transientDelay_} = configs;
+    delay = _.isNumber(transientDelay_) ? transientDelay_ : transientDelay;
   }
   
   transientConfigs.timeout = setTimeout(() => {

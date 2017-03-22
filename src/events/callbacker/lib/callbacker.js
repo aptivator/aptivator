@@ -1,7 +1,6 @@
 import _    from 'lodash';
-import vars from '../../../lib/vars';
 
-let {eventRegistry} = vars;
+import {eventRegistry} from '../../../lib/vars';
 
 export default function callbacker(events, mainArgs, callbacks = []) {
   events.forEach(event => {

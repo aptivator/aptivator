@@ -1,8 +1,7 @@
 import _         from 'lodash';
 import relations from '../../../lib/relations';
-import vars      from '../../../lib/vars';
 
-let {rootStateName} = vars;
+import {rootStateName} from '../../../lib/vars';
 
 export default animationStates => {
   animationStates = _.reduce(animationStates, (animationStates, animationState) => {

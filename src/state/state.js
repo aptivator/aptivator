@@ -2,14 +2,12 @@ import _                        from 'lodash';
 import aptivator                from '../lib/aptivator';
 import error_                   from '../lib/error';
 import relations                from '../lib/relations';
-import vars                     from '../lib/vars';
 import otherStateRegistrar      from './lib/other-state-registrar';
 import parallelStatesNormalizer from './lib/parallel-states-normalizer';
 import rootStateConfigurator    from './lib/root-state-configurator';
 import routeConfigurator        from './route-configurator/route-configurator';
 
-let {states} = vars;
-let {registry, queue} = states;
+import {errorRegistry, queue, registry, transientRegistry} from '../lib/vars';
 
 aptivator.state = (stateName, stateConfigs) => 
   !async function() {
@@ -39,7 +37,7 @@ aptivator.state = (stateName, stateConfigs) =>
     }
     
     if(transient || error) {
-      otherStateRegistrar(stateName, states[transient ? 'transient' : 'error']);
+      otherStateRegistrar(stateName, transient ? transientRegistry : errorRegistry);
       delete stateConfigs.route;
     }
     

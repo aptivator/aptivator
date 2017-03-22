@@ -2,12 +2,10 @@ import _                from 'lodash';
 import addresser        from '../../../lib/addresser';
 import error            from '../../../lib/error';
 import relations        from '../../../lib/relations';
-import vars             from '../../../lib/vars';
 import elementAssembler from './element-assembler';
 import callbacker       from './callbacker';
 
-let {spaceSplitter, states} = vars;
-let {registry} = states;
+import {registry, spaceSplitter} from '../../../lib/vars';
 
 export default function animationsAssembler(entityName, stateParams, animationType, animations, fromStateName) {
   let hasAt = entityName.includes('@');
@@ -117,7 +115,7 @@ export default function animationsAssembler(entityName, stateParams, animationTy
     let {classes: viewClasses, add, remove, elements} = animate;
     
     if(_.isFunction(viewClasses)) {
-      viewClasses = callbackRunner(viewClasses, uniqueAddress, stateParams);
+      viewClasses = callbacker(viewClasses, uniqueAddress, stateParams);
     }
     
     _.each(elements, (selectorConfigs, selector) => {

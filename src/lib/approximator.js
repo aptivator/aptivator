@@ -1,8 +1,6 @@
 import relations from './relations';
-import vars      from './vars';
 
-let {states} = vars;
-let {registry} = states;
+import {errorRegistry, registry, transientRegistry} from './vars';
 
 export default {
   fromHash(hash) {
@@ -27,14 +25,16 @@ export default {
   },
   
   fromStateName(stateType, searchStateName) {
+    let otherRegistry = stateType === 'error' ? errorRegistry : transientRegistry;
+    
     if(!searchStateName) {
-      return states[stateType].root;
+      return otherRegistry.root;
     }
     
     let searchStateNameParts = relations.parts(searchStateName);
     let max = 0;
     
-    states[stateType].forEach(stateName => {
+    otherRegistry.forEach(stateName => {
       let stateNameParts = relations.parts(stateName);
       
       if(stateNameParts.length > searchStateNameParts.length) {

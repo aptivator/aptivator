@@ -1,7 +1,8 @@
 import _         from 'lodash';
 import addresser from '../../../lib/addresser';
 import relations from '../../../lib/relations';
-import vars      from '../../../lib/vars'; 
+
+import {registry} from '../../../lib/vars';
 
 const [durationFlag, storeFlag, bothFlags] = [1, 2, 1 | 2];
 
@@ -34,7 +35,7 @@ export default (configs, entityName) => {
       let stateConfigs = viewConfigs;
       
       if(!stateConfigs) {
-        stateConfigs = vars.states.registry[family[index++]];
+        stateConfigs = registry[family[index++]];
       }
       
       if(stateConfigs.resolveConfigs) {

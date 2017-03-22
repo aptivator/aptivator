@@ -1,10 +1,9 @@
 import _             from 'lodash';
 import addresser     from '../../../lib/addresser';
 import relations     from '../../../lib/relations';
-import vars          from '../../../lib/vars';
 import hider         from './hider';
 
-let {registry} = vars.states;
+import {registry} from '../../../lib/vars';
 
 export default {
   full(params) {

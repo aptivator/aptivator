@@ -6,6 +6,7 @@
 * figure out what flags a developer can set for transient states (already can noResolves and parallel) (spliced?)
 * in vars export each individual variable
 * make sure that splat is optional
+* **DONE** start exploring how to write tests
 * **DONE** spin example out and convert to to ES2015
 * **DONE** add templateVars when settings configs
 * **DONE** start exploring how to rollup and bundle the frameweork for distribution (using rollup - works well)

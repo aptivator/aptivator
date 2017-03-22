@@ -1,9 +1,7 @@
 import _               from 'lodash';
 import paramsAssembler from '../../../lib/params-assembler';
-import vars            from '../../../lib/vars';
 
-let {paramsMap, states} = vars;
-let {registry} = states;
+import {paramsMap, registry} from '../../../lib/vars';
 
 export default {
   explicit(viewConfigs) {

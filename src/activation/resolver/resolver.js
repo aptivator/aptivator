@@ -1,12 +1,10 @@
 import _                   from 'lodash';
 import paramsAssembler     from '../../lib/params-assembler';
 import relations           from '../../lib/relations';
-import vars                from '../../lib/vars';
 import entitiesTreeBuilder from './lib/entities-tree-builder';
 import resolvesProcessor   from './lib/resolves-processor';
 
-let {resolveDefinitions, resolveParams, states} = vars;
-let {registry} = states;
+import {registry, resolveDefinitions, resolveParams} from '../../lib/vars';
 
 export default stateParams => 
   new Promise((resolve, reject) => {

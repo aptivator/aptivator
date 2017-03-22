@@ -1,9 +1,10 @@
 import _         from 'lodash';
 import addresser from './addresser';
-import vars      from './vars';
+
+import {rootStateName} from './vars';
 
 export default {
-  isRoot: stateName => stateName === vars.rootStateName,
+  isRoot: stateName => stateName === rootStateName,
   
   parts(stateName) {
     return stateName.split('.');
@@ -21,7 +22,7 @@ export default {
     family = _.range(1, family.length + 1).map(end => family.slice(0, end).join('.'));
     
     if(!this.isRoot(stateName)) {
-      family.unshift(vars.rootStateName);
+      family.unshift(rootStateName);
     }
     
     if(entityName.includes('@')) {

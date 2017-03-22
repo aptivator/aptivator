@@ -14,5 +14,3 @@
 * note when writing animations, forwards option can be very helpful
 * Sprinkle comments throughout code
 * Tutorial
-* start exploring how to write tests
-

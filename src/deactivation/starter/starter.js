@@ -1,11 +1,9 @@
 import _         from 'lodash';
 import aptivator from '../../lib/aptivator';
 import relations from '../../lib/relations';
-import vars      from '../../lib/vars';
 import inactor   from './lib/inactor';
 
-let {deactivating, states} = vars;
-let {registry} = states;
+import {deactivating, registry} from '../../lib/vars';
 
 export default async params => {
   let {name, partial} = params;

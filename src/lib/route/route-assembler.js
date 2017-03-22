@@ -1,11 +1,11 @@
 import _             from 'lodash';
 import error         from '../error';
 import errorStater   from '../error-stater';
-import vars          from '../vars';
 import routeAsserter from './route-asserter';
 
-let {registry} = vars.states;
-let moduleName = 'route assembler';
+import {registry} from '../vars';
+
+const moduleName = 'route assembler';
 
 export default (stateName, routeValues, activating) => {
   let stateConfigs = registry[stateName];

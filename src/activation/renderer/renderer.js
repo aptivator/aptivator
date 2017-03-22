@@ -1,13 +1,11 @@
 import _                 from 'lodash';
 import relations         from '../../lib/relations';
-import vars              from '../../lib/vars';
 import cacheAssessor     from './lib/cache-assessor';
 import displayer         from './lib/displayer';
 import instantiator      from './lib/instantiator';
 import renderingPreparer from './lib/rendering-preparer';
 
-let {rootStateName, states} = vars;
-let {registry} = states;
+import {rootStateName, registry} from '../../lib/vars';
 
 export default stateParams => {
   stateParams.flags.rendered = true;

@@ -2,11 +2,10 @@ import _                        from 'lodash';
 import Backbone                 from 'backbone';
 import aptivator                from '../../lib/aptivator';
 import routeAssembler           from '../../lib/route/route-assembler';
-import vars                     from '../../lib/vars';
 import routeParser              from './lib/route-parser';
 import valuesAssertersAssembler from './lib/values-asserters-assembler';
 
-let {router} = vars;
+import {router} from '../../lib/vars';
 
 export default (stateConfigs, parentConfigs) => {
   let {abstract, stateName, route} = stateConfigs;
