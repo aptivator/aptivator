@@ -3352,14 +3352,17 @@ var transientInitializer = (function (stateName, immediate) {
   if (!_.isObject(stateParams)) {
     var transient = registry[stateName].transient;
 
-    var _ref = _.isObject(transient) ? transient : {},
-        delay = _ref.delay,
-        _ref$parallel = _ref.parallel,
-        parallel = _ref$parallel === undefined ? false : _ref$parallel,
-        _ref$noResolves = _ref.noResolves,
-        noResolves = _ref$noResolves === undefined ? false : _ref$noResolves;
+    transient = _.isPlainObject(transient) ? transient : {};
+    var _transient = transient,
+        delay = _transient.delay,
+        _transient$parallel = _transient.parallel,
+        parallel = _transient$parallel === undefined ? false : _transient$parallel,
+        _transient$noResolves = _transient.noResolves,
+        noResolves = _transient$noResolves === undefined ? false : _transient$noResolves,
+        _transient$spliced = _transient.spliced,
+        spliced = _transient$spliced === undefined ? false : _transient$spliced;
 
-    stateParams = { stateName: stateName, flags: { parallel: parallel, transient: true, noResolves: noResolves } };
+    stateParams = { stateName: stateName, flags: { parallel: parallel, transient: true, noResolves: noResolves, spliced: spliced } };
   }
 
   _.extend(stateParams, { owners: new Set() });

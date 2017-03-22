@@ -8,8 +8,9 @@ export default (stateName, immediate) => {
   
   if(!_.isObject(stateParams)) {
     let {transient} = registry[stateName];
-    var {delay, parallel = false, noResolves = false} = _.isObject(transient) ? transient : {};
-    stateParams = {stateName, flags: {parallel, transient: true, noResolves}};
+    transient = _.isPlainObject(transient) ? transient : {};
+    var {delay, parallel = false, noResolves = false, spliced = false} = transient;
+    stateParams = {stateName, flags: {parallel, transient: true, noResolves, spliced}};
   }
   
   _.extend(stateParams, {owners: new Set()});
