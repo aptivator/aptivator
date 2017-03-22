@@ -27,7 +27,7 @@ export default (route, parentRoute) => {
     
     let paramParts = part.split(':');
     let isSplat = part.startsWith('*');
-    let required = !part.includes(')') && !isSplat;
+    let required = isSplat ? false : !part.includes(')');
     
     if(isSplat) {
       if(hasSplat) {
