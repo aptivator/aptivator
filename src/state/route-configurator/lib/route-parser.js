@@ -4,7 +4,7 @@ import error from '../../../lib/error';
 const routePartCleanRx = /[\(\/\:\)\*]/g;
 
 export default (route, parentRoute) => {
-  let {path} = route;
+  let {path, standalone} = route;
   let parts = path.match(/\/?[^\/]+/g);
   let {hasSplat, hasOptional, parts: parentParts = []} = parentRoute;
   let names = parentParts.reduce((names, part) => {
@@ -69,5 +69,5 @@ export default (route, parentRoute) => {
     return {required, prefix, name, splat: isSplat};
   });
   
-  _.extend(route, {parts: parentParts.concat(parts)});
+  _.extend(route, {parts: (standalone ? [] : parentParts).concat(parts)});
 };

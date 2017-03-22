@@ -48,6 +48,7 @@ export default (stateName, routeValues, activating) => {
 
     if(!routeValues[++index]) {
       if(required) {
+        console.log(part, routeValues);
         error.throw(`expecting a value for [${name}] parameter`, moduleName);
       }
       

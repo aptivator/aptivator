@@ -16,8 +16,19 @@ export default (stateConfigs, parentConfigs) => {
     _.extend(stateConfigs, {route});
   }
   
-  let {path = ''} = route;
+  let {path = '', standalone = false} = route;
   let {path: parentPath = ''} = parentRoute;
+  
+  if(path.startsWith('^')) {
+    path = path.slice(1);
+    standalone = true;
+    _.extend(route, {path, standalone});
+  }
+  
+  if(standalone) {
+    parentPath = '';
+  }
+  
   path = (parentPath && parentPath + '/') + path;
   
   if(path) {
@@ -25,7 +36,7 @@ export default (stateConfigs, parentConfigs) => {
   }
   
   routeParser(route, parentRoute);
-  valuesAssertersAssembler(route, parentRoute);
+  valuesAssertersAssembler(route, standalone ? {} : parentRoute);
   _.extend(route, {path, rx});
   
   if(!abstract) {

@@ -2818,6 +2818,7 @@ var routeAssembler = (function (stateName, routeValues, activating) {
 
     if (!routeValues[++index]) {
       if (required) {
+        console.log(part, routeValues);
         error$1.throw('expecting a value for [' + name + '] parameter', moduleName);
       }
 
@@ -2839,7 +2840,8 @@ var routeAssembler = (function (stateName, routeValues, activating) {
 var routePartCleanRx = /[\(\/\:\)\*]/g;
 
 var routeParser = (function (route, parentRoute) {
-  var path = route.path;
+  var path = route.path,
+      standalone = route.standalone;
 
   var parts = path.match(/\/?[^\/]+/g);
   var hasSplat = parentRoute.hasSplat,
@@ -2909,7 +2911,7 @@ var routeParser = (function (route, parentRoute) {
     return { required: required, prefix: prefix, name: name, splat: isSplat };
   });
 
-  _.extend(route, { parts: parentParts.concat(parts) });
+  _.extend(route, { parts: (standalone ? [] : parentParts).concat(parts) });
 });
 
 var valuesAssertersAssembler = (function (route, parentRoute) {
@@ -2917,12 +2919,12 @@ var valuesAssertersAssembler = (function (route, parentRoute) {
       params = _route$params === undefined ? {} : _route$params,
       parts = route.parts,
       allValues = route.allValues,
-      routeValues = route.values,
-      routeAsserters = route.asserters;
+      routeValues = route.values;
+  var routeAsserters = route.asserters;
   var _parentRoute$values = parentRoute.values,
       parentValues = _parentRoute$values === undefined ? [] : _parentRoute$values,
-      parentAllValues = parentRoute.allValues,
-      _parentRoute$asserter = parentRoute.asserters,
+      parentAllValues = parentRoute.allValues;
+  var _parentRoute$asserter = parentRoute.asserters,
       parentAsserters = _parentRoute$asserter === undefined ? [] : _parentRoute$asserter;
 
   var index = -1;
@@ -2986,9 +2988,22 @@ var routeConfigurator = (function (stateConfigs, parentConfigs) {
 
   var _route = route,
       _route$path = _route.path,
-      path = _route$path === undefined ? '' : _route$path;
+      path = _route$path === undefined ? '' : _route$path,
+      _route$standalone = _route.standalone,
+      standalone = _route$standalone === undefined ? false : _route$standalone;
   var _parentRoute$path = parentRoute.path,
       parentPath = _parentRoute$path === undefined ? '' : _parentRoute$path;
+
+
+  if (path.startsWith('^')) {
+    path = path.slice(1);
+    standalone = true;
+    _.extend(route, { path: path, standalone: standalone });
+  }
+
+  if (standalone) {
+    parentPath = '';
+  }
 
   path = (parentPath && parentPath + '/') + path;
 
@@ -2997,7 +3012,7 @@ var routeConfigurator = (function (stateConfigs, parentConfigs) {
   }
 
   routeParser(route, parentRoute);
-  valuesAssertersAssembler(route, parentRoute);
+  valuesAssertersAssembler(route, standalone ? {} : parentRoute);
   _.extend(route, { path: path, rx: rx });
 
   if (!abstract) {

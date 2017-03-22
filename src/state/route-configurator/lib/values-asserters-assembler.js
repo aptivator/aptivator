@@ -2,8 +2,10 @@ import _     from 'lodash';
 import error from '../../../lib/error';
 
 export default (route, parentRoute) => {
-  let {params = {}, parts, allValues, values: routeValues, asserters: routeAsserters} = route;
-  let {values: parentValues = [], allValues: parentAllValues, asserters: parentAsserters = []} = parentRoute;
+  let {params = {}, parts, allValues, values: routeValues} = route;
+  let {asserters: routeAsserters} = route;
+  let {values: parentValues = [], allValues: parentAllValues} = parentRoute;
+  let {asserters: parentAsserters = []} = parentRoute;
   let index = -1;
   let {values, asserters} = _.reduce(parts, (aggregator, part) => {
     let {name, required} = part;
