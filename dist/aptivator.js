@@ -5674,7 +5674,7 @@ var deactivator$2 = (function (stateParams) {
 
 
         if (relations.isRoot(min)) {
-          return deactivator$1.full({ name: max });
+          deactivator$1.full({ name: max });
         }
 
         _.each(stateNames, function (stateName) {

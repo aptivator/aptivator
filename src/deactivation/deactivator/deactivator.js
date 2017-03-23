@@ -101,7 +101,7 @@ export default stateParams =>
         let {min, max, stateNames} = grouping;
         
         if(relations.isRoot(min)) {
-          return deactivator.full({name: max});
+          deactivator.full({name: max});
         }
         
         _.each(stateNames, stateName => {
