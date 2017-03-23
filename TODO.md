@@ -1,8 +1,9 @@
 # TODOs
 
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
-* optimize example build with watching and etc.
 * take a look again at state deactivation to make sure that entire spliced states clear when their parent is cleared
+* come up with a detailed plan for tests
+* **DONE** optimize example build with watching and etc.
 * **DONE** allow child state route path to be used as is without concatenation with parent route
 * **DONE** make sure that empty splats are initialized with forward slash (/)
 * **DONE** make sure that splat is optional

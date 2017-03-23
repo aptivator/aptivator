@@ -6,8 +6,8 @@
   "license": "MIT",
   "main": "./dist/aptivator.js",
   "jsnext:main": "./dist/aptivator.es.js",
-  "repository": { 
-    "type": "git", 
+  "repository": {
+    "type": "git",
     "url": "https://github.com/aptivator/aptivator.git"
   },
   "bugs": {
@@ -32,9 +32,11 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^2.0.0",
-    "rollup-plugin-uglify": "^1.0.1"
+    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-watch": "^3.2.2"
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
   }
 }
