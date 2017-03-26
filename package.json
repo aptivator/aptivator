@@ -46,7 +46,7 @@
   },
   "scripts": {
     "test": "nightwatch -e unit",
-    "deps": "node ./install-test-deps",
+    "deps": "node ./nightwatch-deps",
     "babel": "babel src --out-dir built --presets es2015 --watch",
     "rollup": "rollup -c -w",
     "watcher": "npm test && run-when-changed --watch \"dist/**/aptivator.js\" --watch \"built/**/*.js\" --watch \"tests/tests/unit/**/*.js\" --exec \"npm test\"",
