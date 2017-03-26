@@ -1,8 +1,10 @@
-var basePath = '../../../../built/';
+var basePath = '../../../built/';
 
 require(basePath + 'state/state');
 var expect = require('chai').expect;
 var addresser = require(basePath + 'lib/addresser').default;
+var registry = require(basePath + 'lib/vars').registry;
+var renderingPreparer = require(basePath + 'activation/renderer/lib/rendering-preparer').default;
 
 module.exports = {
   'lib :: addresser': {
@@ -38,9 +40,11 @@ module.exports = {
     },
     
     'outputs an activation record associated with an address': function() {
+      let stateName = 'test';
+      let viewConfigs = registry[stateName].views[0];
+      renderingPreparer(viewConfigs);
       var record = addresser.record('aptivator-id-2@test');
-      expect(record).to.be.undefined;
+      expect(record).to.be.an('object');
     }
   }  
 };
-

@@ -1,4 +1,4 @@
-var basePath = '../../../../built/';
+var basePath = '../../../built/';
 
 var expect = require('chai').expect;
 var aptivator = require(basePath + 'lib/aptivator').default;

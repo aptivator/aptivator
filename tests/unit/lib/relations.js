@@ -1,6 +1,8 @@
+var basePath = '../../../built/';
+
 var expect = require('chai').expect;
-let relations = require('../../../../built/lib/relations').default;
-var rootStateName = require('../../../../built/lib/vars').rootStateName;
+var relations = require(basePath + 'lib/relations').default;
+var rootStateName = require(basePath + 'lib/vars').rootStateName;
 
 module.exports = {
   'lib :: relations': {
