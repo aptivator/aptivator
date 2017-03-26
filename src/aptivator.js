@@ -1,6 +1,6 @@
 import './history/history';
 import './events/events';
-import './storage/storage';
+//import './storage/storage';
 import './config/config';
 import './state/state';
 import './start/start';

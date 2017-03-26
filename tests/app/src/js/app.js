@@ -1,0 +1,1 @@
+import aptivator from '../../../../dist/aptivator';

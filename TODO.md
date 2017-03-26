@@ -1,7 +1,7 @@
 # TODOs
 
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
-* come up with a detailed plan for tests (nightwatch for everything?)
+* **DONE** come up with a detailed plan for tests (nightwatch/selenium for everything?) (Yes, use nightwatch!)
 * **DONE** take a look again at state deactivation to make sure that entire spliced states clear when their parent is cleared
 * **DONE** optimize example build with watching and etc.
 * **DONE** allow child state route path to be used as is without concatenation with parent route

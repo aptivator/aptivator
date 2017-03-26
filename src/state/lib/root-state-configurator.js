@@ -3,7 +3,7 @@ import addresser from '../../lib/addresser';
 import error     from '../../lib/error';
 
 export default stateConfigs => {
-  let {view, stateName, resolveConfigs, detachHidden} = stateConfigs;
+  let {view, stateName, resolveConfigs, detachHidden, testMode} = stateConfigs;
   let uniqueAddress = addresser.uniqueAddress(stateName);
   
   if(!view) {
@@ -21,12 +21,14 @@ export default stateConfigs => {
     detachHidden = false;
   }
   
-  let instance = new view();
+  if(!testMode) {
+    var instance = new view();
+    instance.render();
+  }
   let record = {instance};
   let configs = {root: true, uniqueAddress, detachHidden, resolveConfigs, record};
   
   _.extend(stateConfigs, configs);
-  instance.render();
   
   stateConfigs.views = [_.omit(stateConfigs, 'animate')];
 };

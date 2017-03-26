@@ -2263,7 +2263,7 @@ var error$1 = {
     throw new Error(this.message(error, moduleName));
   },
   warn: function warn(error, moduleName) {
-    console.warn(this.message(error, moduleName));
+    return console.warn(this.message(error, moduleName));
   },
 
 
@@ -2341,23 +2341,6 @@ var trigger = (function () {
 })();
 
 _.extend(aptivator, { on: on, once: once, off: off, trigger: trigger });
-
-var storageActionGenerator = (function (storage, setter) {
-  return setter ? function (key, val) {
-    return storage.setItem(key, JSON.stringify(val));
-  } : function (key, val) {
-    return val = storage.getItem(key), val ? JSON.parse(val) : val;
-  };
-});
-
-aptivator.m = new Map();
-
-_.each({ l: localStorage, s: sessionStorage }, function (store, storeAbbr) {
-  aptivator[storeAbbr] = {
-    get: storageActionGenerator(store),
-    set: storageActionGenerator(store, true)
-  };
-});
 
 var addresser = {
   isStateAddress: function isStateAddress(address) {
@@ -2478,7 +2461,8 @@ var approximator = {
     return this.fromHash(hash.split('/').slice(0, -1).join('/'));
   },
   fromStateName: function fromStateName(stateType, searchStateName) {
-    var otherRegistry = stateType === 'error' ? errorRegistry : transientRegistry;
+    var isError = stateType === 'error';
+    var otherRegistry = isError ? errorRegistry : transientRegistry;
 
     if (!searchStateName) {
       return otherRegistry.root;
@@ -2659,7 +2643,8 @@ var rootStateConfigurator = (function (stateConfigs) {
   var view = stateConfigs.view,
       stateName = stateConfigs.stateName,
       resolveConfigs = stateConfigs.resolveConfigs,
-      detachHidden = stateConfigs.detachHidden;
+      detachHidden = stateConfigs.detachHidden,
+      testMode = stateConfigs.testMode;
 
   var uniqueAddress = addresser.uniqueAddress(stateName);
 
@@ -2678,12 +2663,14 @@ var rootStateConfigurator = (function (stateConfigs) {
     detachHidden = false;
   }
 
-  var instance = new view();
+  if (!testMode) {
+    var instance = new view();
+    instance.render();
+  }
   var record = { instance: instance };
   var configs = { root: true, uniqueAddress: uniqueAddress, detachHidden: detachHidden, resolveConfigs: resolveConfigs, record: record };
 
   _.extend(stateConfigs, configs);
-  instance.render();
 
   stateConfigs.views = [_.omit(stateConfigs, 'animate')];
 });
@@ -2803,8 +2790,11 @@ var routeAssembler = (function (stateName, routeValues, activating) {
 
 var routePartCleanRx = /[\(\/\:\)\*]/g;
 
-var routeParser = (function (route, parentRoute) {
-  var path = route.path,
+var routeParser = (function () {
+  var route = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var parentRoute = arguments[1];
+  var _route$path = route.path,
+      path = _route$path === undefined ? '' : _route$path,
       standalone = route.standalone;
 
   var parts = path.match(/\/?[^\/]+/g);
@@ -2940,7 +2930,8 @@ var valuesAssertersAssembler = (function (route, parentRoute) {
 var routeConfigurator = (function (stateConfigs, parentConfigs) {
   var abstract = stateConfigs.abstract,
       stateName = stateConfigs.stateName,
-      route = stateConfigs.route;
+      _stateConfigs$route = stateConfigs.route,
+      route = _stateConfigs$route === undefined ? {} : _stateConfigs$route;
   var _parentConfigs$route = parentConfigs.route,
       parentRoute = _parentConfigs$route === undefined ? {} : _parentConfigs$route;
 
@@ -2996,86 +2987,82 @@ var routeConfigurator = (function (stateConfigs, parentConfigs) {
 });
 
 aptivator.state = function (stateName, stateConfigs) {
-  return !_asyncToGenerator(index.mark(function _callee() {
-    var transient, error, on, once, parallelStates, substates, route, root, parentStateName, parentConfigs, eventMethods, template, view, views;
-    return index.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (registry[stateName]) {
-              error$1.throw('state [' + stateName + '] has already been declared', 'state declaration');
-            }
+  try {
+    if (registry[stateName]) {
+      error$1.throw('state [' + stateName + '] has already been declared', 'state declaration');
+    }
 
-            _.extend(stateConfigs, { stateName: stateName });
+    _.extend(stateConfigs, { stateName: stateName });
 
-            if (relations.isRoot(stateName)) {
-              rootStateConfigurator(stateConfigs);
-            }
+    if (relations.isRoot(stateName)) {
+      rootStateConfigurator(stateConfigs);
+    }
 
-            transient = stateConfigs.transient, error = stateConfigs.error, on = stateConfigs.on, once = stateConfigs.once, parallelStates = stateConfigs.states, substates = stateConfigs.substates, route = stateConfigs.route, root = stateConfigs.root;
-            parentStateName = root || relations.parent(stateName);
-            parentConfigs = root ? {} : registry[parentStateName];
-            eventMethods = {};
+    var transient = stateConfigs.transient,
+        error = stateConfigs.error,
+        on = stateConfigs.on,
+        once = stateConfigs.once,
+        parallelStates = stateConfigs.states,
+        substates = stateConfigs.substates,
+        route = stateConfigs.route,
+        root = stateConfigs.root;
 
-            if (parentConfigs) {
-              _context.next = 9;
-              break;
-            }
+    var parentStateName = root || relations.parent(stateName);
+    var parentConfigs = root ? {} : registry[parentStateName];
+    var eventMethods = {};
 
-            return _context.abrupt('return', queue.push([stateName, stateConfigs]));
+    if (!parentConfigs) {
+      return queue.push([stateName, stateConfigs]);
+    }
 
-          case 9:
-            template = stateConfigs.template, view = stateConfigs.view, views = stateConfigs.views;
+    var template = stateConfigs.template,
+        view = stateConfigs.view,
+        views = stateConfigs.views;
 
 
-            if (!(template || view || views)) {
-              stateConfigs.abstract = true;
-            }
+    if (!(template || view || views)) {
+      stateConfigs.abstract = true;
+    }
 
-            if (transient || error) {
-              otherStateRegistrar(stateName, transient ? transientRegistry : errorRegistry);
-              delete stateConfigs.route;
-            }
+    if (transient || error) {
+      otherStateRegistrar(stateName, transient ? transientRegistry : errorRegistry);
+      delete stateConfigs.route;
+    }
 
-            if (on) {
-              _.extend(eventMethods, { on: on });
-            }
+    if (on) {
+      _.extend(eventMethods, { on: on });
+    }
 
-            if (once) {
-              _.extend(eventMethods, { once: once });
-            }
+    if (once) {
+      _.extend(eventMethods, { once: once });
+    }
 
-            _.each(eventMethods, function (eventsConfigs, eventMethod) {
-              aptivator[eventMethod](_.mapValues(eventsConfigs, function (eventConfigs) {
-                return _defineProperty({}, stateName, eventConfigs);
-              }));
-            });
+    _.each(eventMethods, function (eventsConfigs, eventMethod) {
+      aptivator[eventMethod](_.mapValues(eventsConfigs, function (eventConfigs) {
+        return _defineProperty({}, stateName, eventConfigs);
+      }));
+    });
 
-            if (parallelStates) {
-              parallelStatesNormalizer(parallelStates, stateName);
-            }
+    if (parallelStates) {
+      parallelStatesNormalizer(parallelStates, stateName);
+    }
 
-            if (route) {
-              routeConfigurator(stateConfigs, parentConfigs);
-            }
+    if (route) {
+      routeConfigurator(stateConfigs, parentConfigs);
+    }
 
-            registry[stateName] = stateConfigs;
+    registry[stateName] = stateConfigs;
 
-            _.each(substates, function (stateConfigs, subStateName) {
-              aptivator.state(stateName + '.' + subStateName, stateConfigs);
-            });
+    _.each(substates, function (stateConfigs, subStateName) {
+      aptivator.state(stateName + '.' + subStateName, stateConfigs);
+    });
 
-            if (queue.length) {
-              aptivator.state.apply(aptivator, _toConsumableArray(queue.pop()));
-            }
-
-          case 20:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }))().catch(error$1.errorer);
+    if (queue.length) {
+      aptivator.state.apply(aptivator, _toConsumableArray(queue.pop()));
+    }
+  } catch (e) {
+    error$1.errorer(e);
+  }
 };
 
 var missingParentsAssembler = (function (queue) {

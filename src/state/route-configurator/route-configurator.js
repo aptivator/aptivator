@@ -8,7 +8,7 @@ import valuesAssertersAssembler from './lib/values-asserters-assembler';
 import {router} from '../../lib/vars';
 
 export default (stateConfigs, parentConfigs) => {
-  let {abstract, stateName, route} = stateConfigs;
+  let {abstract, stateName, route = {}} = stateConfigs;
   let {route: parentRoute = {}} = parentConfigs;
   
   if(_.isString(route)) {

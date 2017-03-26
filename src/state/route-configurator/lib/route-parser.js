@@ -3,8 +3,8 @@ import error from '../../../lib/error';
 
 const routePartCleanRx = /[\(\/\:\)\*]/g;
 
-export default (route, parentRoute) => {
-  let {path, standalone} = route;
+export default (route = {}, parentRoute) => {
+  let {path = '', standalone} = route;
   let parts = path.match(/\/?[^\/]+/g);
   let {hasSplat, hasOptional, parts: parentParts = []} = parentRoute;
   let names = parentParts.reduce((names, part) => {

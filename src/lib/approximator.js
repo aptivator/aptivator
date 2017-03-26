@@ -25,7 +25,8 @@ export default {
   },
   
   fromStateName(stateType, searchStateName) {
-    let otherRegistry = stateType === 'error' ? errorRegistry : transientRegistry;
+    let isError = stateType === 'error';
+    let otherRegistry = isError ? errorRegistry : transientRegistry;
     
     if(!searchStateName) {
       return otherRegistry.root;

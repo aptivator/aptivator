@@ -9,8 +9,8 @@ import routeConfigurator        from './route-configurator/route-configurator';
 
 import {errorRegistry, queue, registry, transientRegistry} from '../lib/vars';
 
-aptivator.state = (stateName, stateConfigs) => 
-  !async function() {
+aptivator.state = (stateName, stateConfigs) => {
+  try {
     if(registry[stateName]) {
       error_.throw(`state [${stateName}] has already been declared`, 'state declaration');
     }
@@ -72,4 +72,7 @@ aptivator.state = (stateName, stateConfigs) =>
     if(queue.length) {
       aptivator.state(...queue.pop());
     }
-  }().catch(error_.errorer);
+  } catch(e) {
+    error_.errorer(e);
+  }
+};

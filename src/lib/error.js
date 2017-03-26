@@ -8,7 +8,7 @@ export default {
   },
   
   warn(error, moduleName) {
-    console.warn(this.message(error, moduleName));
+    return console.warn(this.message(error, moduleName));
   },
   
   errorer: e => console.error(e)
