@@ -3,15 +3,6 @@ import _    from 'lodash';
 import {registry} from './vars';
 
 export default {
-  isStateAddress(address) {
-    if(!address.includes('@')) {
-      return true;
-    }
-    
-    let stateName = this.stateName(address);
-    return registry[stateName].uniqueAddress === address;
-  },
-  
   uniqueAddress(stateName) {
     return `${_.uniqueId('aptivator-id-')}@${stateName}`;
   },
