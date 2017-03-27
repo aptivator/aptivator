@@ -12,6 +12,9 @@ module.exports = {
   },
   'test_settings': {
     'unit': {
+      'globals': {
+        'asyncHookTimeout': 3000,
+      },
       'selenium': {
         'start_process': false,
         'start_session': false

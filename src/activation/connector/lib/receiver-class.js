@@ -15,7 +15,7 @@ export default class {
     let previous = Promise.resolve(data[storeAs]);
     let current = Promise.resolve(result);
     
-    data[storeAs] = previous.then(() => current).then(result => {
+    return previous.then(() => current).then(result => {
       data[storeAs] = result;
       
       if(complete) {
@@ -24,11 +24,11 @@ export default class {
         }
         
         if(reset) {
-          setTimeout(() => this.data = {});
+          this.data = {};
         }
       }
       
-      instance[method](_.clone(data));
+      instance[method](data);
     }).catch(e => errorer({type: e})).catch(_.noop);
   }
 }

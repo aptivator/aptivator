@@ -43,7 +43,8 @@
     "rollup-plugin-underscorify": "^1.0.0",
     "rollup-watch": "^3.2.2",
     "run-when-changed": "^2.0.3",
-    "selenium-download": "^2.0.9"
+    "selenium-download": "^2.0.9",
+    "sinon": "^2.1.0"
   },
   "scripts": {
     "test": "nightwatch -e unit",

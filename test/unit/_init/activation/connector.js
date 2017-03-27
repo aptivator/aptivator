@@ -34,7 +34,9 @@ module.exports = {
         record: {
           instance: _.extend({
             tester() {
-              return 'tester';
+              return new Promise(resolve => {
+                setTimeout(() => resolve('tester'));
+              });
             }
           }, Backbone.Events)
         }
