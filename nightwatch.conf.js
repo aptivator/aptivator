@@ -2,7 +2,7 @@ var seleniumPath = './node_modules/nightwatch/bin/selenium.jar';
 var phantomPath = './node_modules/phantomjs-prebuilt/bin/phantomjs';
 
 module.exports = {
-  'src_folders': ['./tests/unit'],
+  'src_folders': ['./test/unit'],
   'output_folder': false,
   'selenium': {
     'start_process': true,
@@ -16,7 +16,7 @@ module.exports = {
         'start_process': false,
         'start_session': false
       },
-      'filter': './tests/unit/**/*.js'
+      'filter': './test/unit/**/*.js'
     },
     'ui': {
       'globals': {
@@ -27,7 +27,7 @@ module.exports = {
         'javascriptEnabled': true,
         'phantomjs.binary.path': phantomPath,
       },
-      'filter': './tests/ui/**/*.js'
+      'filter': './test/ui/**/*.js'
     }
   }
 };

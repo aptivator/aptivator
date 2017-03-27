@@ -1,5 +1,4 @@
 var basePath = '../../../built/';
-
 var expect = require('chai').expect;
 var relations = require(basePath + 'lib/relations').default;
 var rootStateName = require(basePath + 'lib/vars').rootStateName;
@@ -7,8 +6,13 @@ var rootStateName = require(basePath + 'lib/vars').rootStateName;
 module.exports = {
   'lib :: relations': {
     'produces an array of all relations from a state name': function() {
-      let family = relations.family('app-2.form');
+      var family = relations.family('app-2.form');
       expect(family).to.eql([rootStateName, 'app-2', 'app-2.form']);
+    },
+    
+    'produces an array of all relations from a unique address': function() {
+      var family = relations.family('aptivator-id-1@app-2.form');
+      expect(family).to.eql([rootStateName, 'app-2', 'app-2.form', 'aptivator-id-1@app-2.form']);
     },
     
     'detects if a state name is root': function() {

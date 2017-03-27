@@ -1,6 +1,10 @@
 # TODOs
 
 * finalize state destruction api (can be useful when login out and wanting to clear states from memory)
+* finish end-to-end tests
+* finish ui tests
+* finish unit tests
+* is it necessary to trigger the hooks for the ancestor states?
 * **DONE** come up with a detailed plan for tests (nightwatch/selenium for everything?) (Yes, use nightwatch!)
 * **DONE** take a look again at state deactivation to make sure that entire spliced states clear when their parent is cleared
 * **DONE** optimize example build with watching and etc.

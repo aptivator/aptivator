@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default (values, asserters) => {
+export default (values, asserters = []) => {
   for(let [index, value] of values.entries()) {
     let asserter = asserters[index];
     

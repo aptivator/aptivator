@@ -33,7 +33,7 @@ export default (stateName, routeValues, activating) => {
     if(!routeAsserter(routeValues, asserters)) {
       if(activating) {
         errorStater();
-      } 
+      }
         
       error.throw('a route value did not pass validation', moduleName);
     }
@@ -48,7 +48,6 @@ export default (stateName, routeValues, activating) => {
 
     if(!routeValues[++index]) {
       if(required) {
-        console.log(part, routeValues);
         error.throw(`expecting a value for [${name}] parameter`, moduleName);
       }
       
