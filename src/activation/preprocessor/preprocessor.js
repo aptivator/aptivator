@@ -123,7 +123,7 @@ export default stateParams => {
     processed.push(stateName);
     
     if(startingStateName === stateName) {
-      let family = relations.family(startingStateName).slice(1);
+      let family = relations.family(stateName).slice(1);
       let remaining = _.difference(family, processed);
       _.each(remaining, stateName => preprocess(stateName));
     }
