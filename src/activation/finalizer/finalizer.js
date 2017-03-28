@@ -5,7 +5,7 @@ export default stateParams => {
   
   if(stateParams.time) {
     console.log(`%cruntime: ${_.now() - stateParams.time}ms`, 'color: green;');
-    delete stateParams.time;
+    stateParams.endTime = _.now();
   }
   
   return stateParams;
