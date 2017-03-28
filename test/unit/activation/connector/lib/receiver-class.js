@@ -71,7 +71,7 @@ module.exports = {
     
     'invokes a multiple-parameters receiver when all values are given and then resets': function(client, done) {
       let receiver = 'tester';
-      let instance = {tester(data) {console.log(data);}};
+      let instance = {tester(data) {}};
       let spy = sinon.spy(instance, 'tester');
       let params = ['val1', 'val2', 'val3'];
       let receiverConfigs = {
